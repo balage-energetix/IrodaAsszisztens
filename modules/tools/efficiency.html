@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hatékonyság Javítás - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .efficiency-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #3949ab 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(92, 107, 192, 0.2);
+        }
+
+        .method-card {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            transition: var(--transition);
+        }
+
+        .method-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .video-box {
+            background: #000;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt"
+                style="color:var(--accent);"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="efficiency-hero">
+            <h1 style="font-family:'Outfit'; font-weight:800; font-size: 3rem; margin-bottom: 1rem;">Hatékonyság Javító
+                Módszerek</h1>
+            <p style="font-size: 1.2rem; opacity: 0.9;">Optimalizálja munkafolyamatait a modern irodai menedzsment
+                eszközeivel.</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="method-card">
+                    <div class="step-num">01</div>
+                    <h4 style="font-family:'Outfit'; font-weight:800;">Időgazdálkodás</h4>
+                    <p class="text-muted">Használja a Pomodoro technikát vagy az Eisenhower-mátrixot a feladatok
+                        priorizálására. A fókuszált munkaidő 25 perces blokkokban a leghatékonyabb.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="method-card">
+                    <div class="step-num">02</div>
+                    <h4 style="font-family:'Outfit'; font-weight:800;">Folyamat Automatizálás</h4>
+                    <p class="text-muted">Azonosítsa az ismétlődő feladatokat. Használjon sablonokat, makrókat vagy AI
+                        eszközöket a rutinmunka kiváltására.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="method-card">
+                    <div class="step-num">03</div>
+                    <h4 style="font-family:'Outfit'; font-weight:800;">Kognitív Tehermentesítés</h4>
+                    <p class="text-muted">Ne próbáljon mindent észben tartani. Használja a Feljegyzések vagy Checklist
+                        modult a mentális kapacitás felszabadítására.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h3 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1.5rem;"><i
+                    class="fas fa-video text-primary me-2"></i>Oktató Videó: A Hatékonyság 5 Alappillére</h3>
+            <div class="video-box">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0"
+                    allowfullscreen></iframe>
+            </div>
+            <div class="mt-4">
+                <h5>Rövid összefoglaló:</h5>
+                <ul class="text-muted">
+                    <li>A környezet rendezettsége (5S rendszer alkalmazása).</li>
+                    <li>Az információs zaj szűrése (értesítések kezelése).</li>
+                    <li>A "Deep Work" koncepciója.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

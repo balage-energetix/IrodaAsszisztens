@@ -40,34 +40,41 @@ const App = {
 
         const navHtml = `
             <div class="header-nav" id="global-header-nav">
-                <div class="nav-cat" data-cat="műszaki">MŰSZAKI <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">MŰSZAKI <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/map/index.html" class="nav-item">Hiba Jelölő Térkép</a>
-                        <a href="${p}modules/publiclight/index.html" class="nav-item">Közvilágítás</a>
-                        <a href="${p}modules/gallery/index.html" class="nav-item">Éjszakai Drónfelvételek</a>
-                        <a href="${p}modules/tools/videolibrary.html" class="nav-item">Videótár</a>
-                        <a href="${p}modules/viz/index.html" class="nav-item">Vizualizáció</a>
-                        <a href="${p}modules/tools/weather_log.html" class="nav-item">Időjárás Napló</a>
+                        <a href="${p}modules/map/index.html" class="nav-dropdown-item">Hiba Jelölő Térkép</a>
+                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item">Közvilágítás</a>
+                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item">Éjszakai Drónfelvételek</a>
+                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item">Check-lista</a>
+                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item">Nyomtatványgenerátor</a>
                     </div>
                 </div>
-                <div class="nav-cat" data-cat="elszámolási">ELSZÁMOLÁSI <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/calc/index.html" class="nav-item">Számlázási Segéd</a>
-                        <a href="${p}modules/consumption/index.html" class="nav-item">Fogyasztási Helyek</a>
-                        <a href="${p}modules/tools/pdfeditor.html" class="nav-item">PDF Szerkesztő</a>
-                        <a href="${p}modules/tools/pdfreader.html" class="nav-item">PDF Kiolvasó</a>
-                        <a href="${p}modules/utils/index.html" class="nav-item">Gyorsító Eszközök</a>
-                        <a href="${p}modules/tools/checklist.html" class="nav-item">Check-lista</a>
-                        <a href="${p}modules/stocks/index.html" class="nav-item">Tőzsdei Árak</a>
+                        <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item">PDF Szerkesztő</a>
+                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item">PDF Kiolvasó</a>
+                        <a href="${p}modules/utils/index.html" class="nav-dropdown-item">Gyorsító Eszközök</a>
+                        <a href="${p}modules/tools/notes.html" class="nav-dropdown-item">Feljegyzés</a>
                     </div>
                 </div>
-                <div class="nav-cat" data-cat="információ">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/lean/index.html" class="nav-item">Billentyűkombinációk</a>
-                        <a href="${p}modules/tools/lean_office.html" class="nav-item">Irodai Lean</a>
-                        <a href="${p}modules/phonebook/index.html" class="nav-item">Telefonkönyv</a>
-                        <a href="${p}modules/links/index.html" class="nav-item">Linkgyűjtemény</a>
-                        <a href="${p}modules/tools/notes.html" class="nav-item">Feljegyzés</a>
+                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item">Közigazgatási Alapismeretek</a>
+                        <a href="${p}modules/lean/index.html" class="nav-dropdown-item">Billentyűkombinációk</a>
+                        <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item">Irodai Lean</a>
+                        <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item">Telefonkönyv</a>
+                        <a href="${p}modules/links/index.html" class="nav-dropdown-item">Linkgyűjtemény</a>
+                        <a href="${p}modules/tools/videolibrary.html" class="nav-dropdown-item">Videótár</a>
+                        <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item">Hatékonyság Javítás</a>
+                        <a href="${p}modules/viz/index.html" class="nav-dropdown-item">Vizualizáció</a>
+                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item">Időjárás Napló</a>
+                    </div>
+                </div>
+                <div class="nav-cat">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/calc/index.html" class="nav-dropdown-item">Számlázási Segéd</a>
+                        <a href="${p}modules/consumption/index.html" class="nav-dropdown-item">Fogyasztási Helyek</a>
+                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item">Tőzsdei Árak</a>
                     </div>
                 </div>
             </div>
@@ -90,12 +97,17 @@ const App = {
         // Click-to-open logic for Dropdowns
         document.querySelectorAll('.nav-cat').forEach(cat => {
             cat.addEventListener('click', (e) => {
+                // If the click is on a link inside the dropdown, do NOT toggle parent
+                if (e.target.closest('.nav-cat-dropdown')) return;
+
                 e.stopPropagation();
                 const isActive = cat.classList.contains('active');
                 document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
                 if (!isActive) cat.classList.add('active');
             });
         });
+
+        // Close when clicking outside
         document.addEventListener('click', () => {
             document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
         });
@@ -113,12 +125,14 @@ const App = {
     },
 
     getPath() {
-        // Simple relative path resolver
-        const depth = (window.location.pathname.split('/').length - (window.location.pathname.endsWith('/') ? 1 : 2));
-        let p = "";
-        if (depth > 2) p = "../../";
-        else if (depth > 1) p = "../";
-        return p;
+        const path = window.location.pathname;
+        if (path.includes('/modules/')) {
+            const parts = path.split('/modules/')[1].split('/');
+            // If parts length is 1 (e.g. tools.html), we need '../'
+            // If parts length is 2 (e.g. map/index.html), we need '../../'
+            return '../'.repeat(parts.length);
+        }
+        return '';
     },
 
     // --- Theme & Colors ---

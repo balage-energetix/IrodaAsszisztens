@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyomtatványgenerátor - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .gen-container {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-section {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .preview-box {
+            background: white;
+            border: 1px solid #ccc;
+            padding: 2cm;
+            min-height: 29.7cm;
+            width: 21cm;
+            margin: 2rem auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            color: black;
+            font-family: 'Times New Roman', serif;
+            position: relative;
+        }
+
+        .preview-box h2 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            font-size: 1.4rem;
+        }
+
+        .field-label {
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            background: white;
+        }
+
+        .btn-print {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            border: none;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        @media print {
+
+            .app-header,
+            .no-print {
+                display: none !important;
+            }
+
+            .preview-box {
+                margin: 0;
+                border: none;
+                box-shadow: none;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-file-invoice"
+                style="color:var(--primary);"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="row">
+            <div class="col-lg-4 no-print">
+                <div class="gen-container">
+                    <h3 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1.5rem;">Adatok Kitöltése</h3>
+
+                    <div class="form-section">
+                        <div class="input-group">
+                            <label class="field-label">Határozat Száma</label>
+                            <input type="text" id="doc-num" value="MŰSZ/123-4/2026" oninput="updatePreview()">
+                        </div>
+                        <div class="input-group">
+                            <label class="field-label">Kérelmező Neve</label>
+                            <input type="text" id="client-name" value="Minta János" oninput="updatePreview()">
+                        </div>
+                        <div class="input-group">
+                            <label class="field-label">Helyszín (Utca, házszám)</label>
+                            <input type="text" id="location" value="Kossuth Lajos utca 12." oninput="updatePreview()">
+                        </div>
+                        <div class="input-group">
+                            <label class="field-label">Munkálat Típusa</label>
+                            <select id="work-type" onchange="updatePreview()">
+                                <option value="vízvezeték javítás">Vízvezeték javítás</option>
+                                <option value="gázvezeték bekötés">Gázvezeték bekötés</option>
+                                <option value="elektromos hálózat fejlesztés">Elektromos hálózat fejlesztés</option>
+                                <option value="csatornázás">Csatornázás</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label class="field-label">Időtartam (nap)</label>
+                            <input type="number" id="duration" value="5" oninput="updatePreview()">
+                        </div>
+                    </div>
+
+                    <button class="btn-print w-100 justify-content-center" onclick="window.print()">
+                        <i class="fas fa-print"></i> NYOMTATÁS (PDF)
+                    </button>
+                    <p class="text-muted small mt-3"><i class="fas fa-info-circle me-1"></i>A nyomtatás gombbal mentheti
+                        el a dokumentumot végleges formában.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="preview-box" id="preview">
+                    <div style="text-align: right; font-size: 0.9rem;">Iktatószám: <span
+                            id="p-doc-num">MŰSZ/123-4/2026</span></div>
+                    <div style="margin-top: 2rem; font-weight: bold;">[TELEPÜLÉS NEVE] VÁROS JEGYZŐJE</div>
+                    <div style="margin-top: 1rem;">H-1234 [CÍM]</div>
+
+                    <h2 style="margin-top: 3rem;">HATÁROZAT</h2>
+
+                    <p style="text-indent: 1.5cm; text-align: justify; line-height: 1.5;">
+                        Alulírott jegyző, <strong><span id="p-client-name">Minta János</span></strong> kérelmére, a
+                        <strong><span id="p-location">Kossuth Lajos utca 12.</span></strong> szám alatti közterületen
+                        <strong><span id="p-work-type">vízvezeték javítás</span></strong> munkálatok elvégzéséhez
+                        szükséges közterület-felbontási hozzájárulást megadom.
+                    </p>
+
+                    <p style="text-indent: 1.5cm; text-align: justify; line-height: 1.5;">
+                        A munkálatok időtartama: <strong><span id="p-duration">5</span> munkanap</strong>. A kivitelező
+                        köteles a munkaterületet megfelelően elkeríteni és a biztonsági előírásokat betartani. A
+                        helyreállítás során az eredeti állapotot vissza kell állítani.
+                    </p>
+
+                    <p style="text-indent: 1.5cm; text-align: justify; line-height: 1.5; margin-top: 2rem;">
+                        <strong>Indokolás:</strong> A kérelem megfelel a helyi önkormányzati rendeletekben foglaltaknak.
+                        A közműkezelői hozzájárulások beszerzésre kerültek.
+                    </p>
+
+                    <div style="margin-top: 5rem; width: 300px; float: right; text-align: center;">
+                        <div style="border-top: 1px solid black; padding-top: 0.5rem;">Jegyző megbízásából</div>
+                        <div style="font-weight: bold; margin-top: 0.5rem;">Műszaki Iroda Vezetője</div>
+                    </div>
+
+                    <div style="clear: both; margin-top: 3rem; font-size: 0.8rem;">
+                        <strong>Dátum:</strong> <span id="p-date"></span><br>
+                        <strong>Melléklet:</strong> Helyszínrajz, Kezelői hozzájárulások
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function updatePreview() {
+            document.getElementById('p-doc-num').textContent = document.getElementById('doc-num').value;
+            document.getElementById('p-client-name').textContent = document.getElementById('client-name').value;
+            document.getElementById('p-location').textContent = document.getElementById('location').value;
+            document.getElementById('p-work-type').textContent = document.getElementById('work-type').value;
+            document.getElementById('p-duration').textContent = document.getElementById('duration').value;
+        }
+
+        const today = new Date();
+        document.getElementById('p-date').textContent = today.getFullYear() + ". " + (today.getMonth() + 1) + ". " + today.getDate() + ".";
+    </script>
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

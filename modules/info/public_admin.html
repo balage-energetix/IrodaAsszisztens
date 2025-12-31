@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Közigazgatási Alapismeretek - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .sidebar-nav {
+            position: sticky;
+            top: 110px;
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 0.75rem;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--bg-light);
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .admin-article {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 4rem;
+            border: 1px solid var(--border-color);
+            line-height: 1.8;
+            color: var(--text-main);
+            font-size: 1.05rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        }
+
+        .admin-article h1,
+        .admin-article h2,
+        .admin-article h3 {
+            font-family: 'Outfit';
+            font-weight: 800;
+            color: var(--primary);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-article p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .infobox {
+            background: var(--bg-light);
+            border-left: 5px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 0.5rem 1.5rem 1.5rem 0.5rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+        }
+
+        .law-quote {
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin: 2rem 0;
+            color: #555;
+            position: relative;
+            border: 1px solid #eee;
+        }
+
+        .law-quote::before {
+            content: "\f10d";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 2rem;
+            color: var(--primary);
+            opacity: 0.2;
+        }
+
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), transparent);
+            margin: 4rem 0;
+            opacity: 0.1;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        scroll-spy {
+            position: relative;
+        }
+
+        @media (max-width: 992px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-university"
+                style="color:var(--primary);"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container-fluid py-5 fade-in" style="max-width: 1400px; padding: 0 4rem;">
+        <div class="admin-layout">
+            <aside class="sidebar-nav no-print">
+                <h6
+                    style="font-family:'Outfit'; font-weight:800; margin-bottom: 1rem; padding-left: 1rem; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px;">
+                    Navigáció</h6>
+                <a href="#bevezetes">Bevezetés</a>
+                <a href="#allamszervezet">Államszervezet</a>
+                <a href="#jogforrasok">Jogforrási hierarchia</a>
+                <a href="#akr">Közigazgatási eljárás (Ákr.)</a>
+                <a href="#onkormanyzat">Önkormányzati rendszer</a>
+                <a href="#kozszolgalat">Közszolgálati etika</a>
+                <a href="#okmanyok">Hivatalos iratok</a>
+                <a href="#ugyfeljogok">Ügyféljogok és kötelezettségek</a>
+                <a href="#digitalis">Digitális államigazgatás</a>
+            </aside>
+
+            <article class="admin-article">
+                <div id="bevezetes">
+                    <h1 style="margin-top:0;">Közigazgatási Alapismeretek</h1>
+                    <p class="lead" style="font-size: 1.2rem; color: var(--text-muted);">Átfogó segédlet a közszférában
+                        dolgozók és az állampolgári ismeretek iránt érdeklődők számára.</p>
+                    <p>A közigazgatás az állam azon tevékenysége, amely a társadalom közös szükségleteinek kielégítésére
+                        irányul. Nem egyszerűen jogalkalmazás, hanem szervező, irányító és végrehajtó munka, amely
+                        biztosítja az állam mindennapi működését. Ebben a modulban részletesen áttekintjük a magyar
+                        közigazgatás pilléreit, a törvényi keretektől kezdve a gyakorlati ügyintézésig.</p>
+                    <div class="stat-grid">
+                        <div class="stat-card"><i class="fas fa-landmark"></i>
+                            <div style="font-weight:800;">Központi Szint</div>
+                            <div class="small text-muted">Kormány és minisztériumok</div>
+                        </div>
+                        <div class="stat-card"><i class="fas fa-map-location-dot"></i>
+                            <div style="font-weight:800;">Területi Szint</div>
+                            <div class="small text-muted">Kormányhivatalok</div>
+                        </div>
+                        <div class="stat-card"><i class="fas fa-home"></i>
+                            <div style="font-weight:800;">Helyi Szint</div>
+                            <div class="small text-muted">Önkormányzatok</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div id="allamszervezet">
+                    <h2>Az állam szerkezete és hatalmi ágak</h2>
+                    <p>Magyarország államformája köztársaság. A hatalommegosztás elve szerint három fő hatalmi ágat
+                        különítünk el, amelyek egymást ellenőrizve biztosítják a demokratikus működést:</p>
+                    <ul>
+                        <li><strong>Törvényhozó hatalom:</strong> Az Országgyűlés, amely törvényeket alkot és ellenőrzi
+                            a végrehajtó hatalmat.</li>
+                        <li><strong>Végrehajtó hatalom:</strong> A Kormány, amely irányítja az országot és a
+                            közigazgatást.</li>
+                        <li><strong>Bírói hatalom:</strong> Független bíróságok, amelyek az igazságszolgáltatást végzik.
+                        </li>
+                    </ul>
+                    <div class="infobox">
+                        <strong>Fontos tudni:</strong> A közigazgatás alapvetően a végrehajtó hatalom részét képezi, de
+                        szigorúan a törvényhozás által meghatározott keretek között mozoghat.
+                    </div>
+                </div>
+
+                <div id="jogforrasok">
+                    <h2>Jogforrási hierarchia</h2>
+                    <p>A magyar jogrendszerben a jogszabályok szigorú alá-fölérendeltségi viszonyban állnak. Alacsonyabb
+                        szintű jogszabály nem lehet ellentétes a magasabb szintűvel:</p>
+                    <ol>
+                        <li><strong>Alaptörvény:</strong> Az ország legfőbb törvénye, minden más jogszabály alapja.</li>
+                        <li><strong>Törvények:</strong> Az Országgyűlés által elfogadott normák.</li>
+                        <li><strong>Kormányrendeletek:</strong> A Kormány által kiadott szabályozások.</li>
+                        <li><strong>Miniszteri rendeletek:</strong> Szakpolitikai kérdések szabályozása.</li>
+                        <li><strong>Önkormányzati rendeletek:</strong> Csak a helyi közösség területére érvényesek.</li>
+                    </ol>
+                    <p>A közigazgatási tisztviselő számára kulcsfontosságú a hierarchia ismerete, mivel ütközés esetén
+                        mindig a magasabb szintű jogszabályt kell alkalmazni.</p>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div id="akr">
+                    <h2>Közigazgatási eljárási szabályok (Ákr.)</h2>
+                    <p>A 2016. évi CL. törvény (Ákr.) határozza meg, hogyan kell egy hivatali eljárást lefolytatni. Ez a
+                        "közigazgatás Bibliája".</p>
+                    <div class="law-quote">
+                        "A hatóság a tevékenysége során a törvényesség elvének megfelelően jár el. A hatóság jogkörét a
+                        jogszabályokban meghatározott célok megvalósítása érdekében, a jogszabályok keretei között
+                        gyakorolja."
+                    </div>
+                    <h3>Főbb határidők:</h3>
+                    <p>Az ügyintézési határidő az eljárás megindulását követő napon kezdődik. Fajtái:</p>
+                    <ul>
+                        <li><strong>Sommás eljárás:</strong> 8 nap (ha minden adat rendelkezésre áll).</li>
+                        <li><strong>Teljes eljárás:</strong> 60 nap (ha vizsgálat vagy szakhatósági közreműködés kell).
+                        </li>
+                    </ul>
+                    <p>A határidőbe nem számít bele a postázási idő, a hiánypótlási felhívástól annak teljesítéséig
+                        terjedő idő, vagy a szakértői vélemény készítésének időtartama.</p>
+                </div>
+
+                <div id="onkormanyzat">
+                    <h2>Az Önkormányzati Rendszer</h2>
+                    <p>Az önkormányzatiság lényege, hogy a helyi közösség maga választhatja meg vezetőit és dönthet a
+                        helyi közügyekben. Az önkormányzati feladatokat a Magyarország helyi önkormányzatairól szóló
+                        2011. évi CLXXXIX. törvény (Mötv.) rögzíti.</p>
+                    <p>Az önkormányzat szervei a képviselő-testület, a polgármester, a jegyző és a polgármesteri
+                        hivatal. Fontos megkülönböztetni az <em>önkormányzati feladatokat</em> (pl. helyi utak
+                        fenntartása) az <em>államigazgatási feladatoktól</em> (amit az állam bíz a jegyzőre, pl.
+                        építéshatósági ügyek).</p>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div id="kozszolgalat">
+                    <h2>Közszolgálati etika és magatartás</h2>
+                    <p>A hivatali munka nem csupán feladatellátás, hanem szolgálat. A tisztviselőktől elvárt a
+                        pártatlanság, az objektivitás és a feddhetetlenség. Tilos bármilyen megkülönböztetés az ügyfelek
+                        között, és kerülni kell minden olyan helyzetet, amely összeférhetetlenséget vagy korrupció
+                        gyanúját vetheti fel.</p>
+                    <div class="infobox" style="border-color: #4caf50;">
+                        <strong>Etikai alapelvek:</strong> Hűség az államhoz, szakmai alázat, átláthatóság és az
+                        adóvonzatok hatékony felhasználása.
+                    </div>
+                </div>
+
+                <div id="okmanyok">
+                    <h2>Hivatalos iratok és okmányok</h2>
+                    <p>A közszférában keletkező minden irat közokiratnak minősül. Ezek formai és tartalmi követelményei
+                        kötöttek. Kötelező elemek egy határozatban:</p>
+                    <ul>
+                        <li><strong>Fejléc:</strong> A hatóság megnevezése, iktatószám.</li>
+                        <li><strong>Rendelkező rész:</strong> Ami a döntést tartalmazza (jóváhagyás, elutasítás).</li>
+                        <li><strong>Indokolás:</strong> A tényállás ismertetése és a jogszabályhelyek megjelölése.</li>
+                        <li><strong>Záró rész:</strong> Aláírás, pecsét, jogorvoslati tájékoztató.</li>
+                    </ul>
+                </div>
+
+                <div id="ugyfeljogok">
+                    <h2>Ügyféljogok és kötelezettségek</h2>
+                    <p>Az ügyfél az eljárás ura. Jogában áll betekinteni az iratokba, nyilatkozatot tenni, képviselőt
+                        igénybe venni és jogorvoslattal élni (fellebbezés vagy bírósági felülvizsgálat).</p>
+                    <p>Ugyanakkor kötelessége jóhiszeműen eljárni, az igazat mondani és a kért adatokat szolgáltatni. A
+                        rosszhiszemű ügyfél eljárási bírsággal sújtható.</p>
+                </div>
+
+                <div id="digitalis">
+                    <h2>Digitális államigazgatás és e-ügyintézés</h2>
+                    <p>Napjainkban az ügymenet nagy része elektronikus úton zajlik. A gazdálkodó szervezetek számára
+                        kötelező a cégkapu, a magánszemélyek számára választható az ügyfélkapu használata.</p>
+                    <p>Az SZEÜSZ-ök (Szabályozott Elektronikus Ügyintézési Szolgáltatások) biztosítják az azonosítást, a
+                        hitelesítést és a biztonságos kézbesítést. A digitális átállás célja a papírmentesség és a
+                        gyorsabb reakcióidő.</p>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem; margin-top: 5rem;">
+        © 2026 Irodai Asszisztens | Oktatási Anyag | V3.12
+    </footer>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        // Simple ScrollSpy implementation for sidebar
+        const links = document.querySelectorAll('.sidebar-nav a');
+        const sections = document.querySelectorAll('article > div[id]');
+
+        window.addEventListener('scroll', () => {
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            links.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
