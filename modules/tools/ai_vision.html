@@ -133,12 +133,32 @@
 
             img.onload = async () => {
                 loader.style.display = 'flex';
-                if (!model) model = await cocoSsd.load();
+                // Higher base model for potentially better results
+                if (!model) model = await cocoSsd.load({ base: 'mobilenet_v2' });
 
-                const predictions = await model.detect(img);
+                const predictions = await model.detect(img, 10, 0.4); // Detect up to 10 items, min 40% conf
                 renderResults(predictions);
                 loader.style.display = 'none';
             };
+        };
+
+        const translateMap = {
+            'person': 'Személy', 'bicycle': 'Kerékpár', 'car': 'Autó', 'motorcycle': 'Motorkerékpár',
+            'airplane': 'Repülőgép', 'bus': 'Busz', 'train': 'Vonat', 'truck': 'Teherautó',
+            'boat': 'Hajó', 'traffic light': 'Jelzőlámpa', 'stop sign': 'Stop tábla', 'bench': 'Pad',
+            'bird': 'Madár', 'cat': 'Macska', 'dog': 'Kutya', 'horse': 'Ló', 'sheep': 'Juh',
+            'cow': 'Tehén', 'elephant': 'Elefánt', 'bear': 'Medve', 'zebra': 'Zebra', 'giraffe': 'Zsiráf',
+            'backpack': 'Hátizsák', 'umbrella': 'Esernyő', 'handbag': 'Kézitáska', 'tie': 'Nyakkendő',
+            'suitcase': 'Bőrönd', 'bottle': 'Palack', 'wine glass': 'Borospohár', 'cup': 'Csésze',
+            'fork': 'Villa', 'knife': 'Kés', 'spoon': 'Kanál', 'bowl': 'Tál', 'apple': 'Alma',
+            'sandwich': 'Szendvics', 'orange': 'Narancs', 'broccoli': 'Brokkoli', 'carrot': 'Sárgarépa',
+            'hot dog': 'Hot-dog', 'pizza': 'Pizza', 'donut': 'Fánk', 'cake': 'Torta', 'chair': 'Szék',
+            'couch': 'Kanapé', 'potted plant': 'Szobanövény', 'bed': 'Ágy', 'dining table': 'Étkezőasztal',
+            'toilet': 'Vécé', 'tv': 'TV', 'laptop': 'Laptop', 'mouse': 'Egér', 'remote': 'Távirányító',
+            'keyboard': 'Billentyűzet', 'cell phone': 'Mobiltelefon', 'microwave': 'Mikrohullámú',
+            'oven': 'Sütő', 'toaster': 'Pirító', 'sink': 'Mosogató', 'refrigerator': 'Hűtő',
+            'book': 'Könyv', 'clock': 'Óra', 'vase': 'Váza', 'scissors': 'Olló', 'teddy bear': 'Mackó',
+            'hair drier': 'Hajszárító', 'toothbrush': 'Fogkefe'
         };
 
         function renderResults(preds) {
@@ -148,25 +168,32 @@
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const top5 = preds.slice(0, 5);
-            top5.forEach(p => {
+            preds.forEach(p => {
                 const [x, y, w, h] = p.bbox;
                 const scaleX = canvas.width / img.naturalWidth;
                 const scaleY = canvas.height / img.naturalHeight;
+                const label = translateMap[p.class] || p.class.toUpperCase();
 
                 // Draw box
                 ctx.strokeStyle = '#5c6bc0';
-                ctx.lineWidth = 4;
+                ctx.lineWidth = 3;
                 ctx.strokeRect(x * scaleX, y * scaleY, w * scaleX, h * scaleY);
+
+                ctx.fillStyle = '#5c6bc0';
+                ctx.fillRect(x * scaleX, (y * scaleY) - 20, label.length * 10, 20);
+                ctx.fillStyle = 'white';
+                ctx.font = '12px Arial';
+                ctx.fillText(label, (x * scaleX) + 5, (y * scaleY) - 5);
 
                 // Add tag to list
                 resList.innerHTML += `
                     <div class="tag-item">
-                        <span><strong>${p.class.toUpperCase()}</strong></span>
+                        <span><strong>${label}</strong></span>
                         <span style="font-size:0.7rem; color:var(--primary);">${Math.round(p.score * 100)}% pontosság</span>
                     </div>
                 `;
             });
+            if (preds.length === 0) resList.innerHTML = "<p>Nem sikerült tárgyat azonosítani.</p>";
         }
     </script>
 </body>

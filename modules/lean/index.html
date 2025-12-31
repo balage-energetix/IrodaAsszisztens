@@ -80,65 +80,75 @@
                 class="fas fa-keyboard text-primary me-2"></i>Billentyűkombinációk</h2>
 
         <div class="hint">
-            <strong>Pro tipp:</strong> Az egér ráhúzásával láthatja a gombok fizikai benyomódását. Használja a
-            <code>Ctrl+F</code> billentyűket a kereséshez!
+            <strong>Pro tipp:</strong> Az első sor a legfontosabb navigációs parancsokat tartalmazza. Összesen 40
+            parancs áll rendelkezésére.
         </div>
 
-        <div class="kbd-grid" id="keys-container"></div>
+        <div class="kbd-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.75rem;">
+            <!-- Content injected by JS -->
+        </div>
     </main>
 
     <script src="../../js/main.js"></script>
     <script>
         const data = [
+            // FIRST ROW / CRITICAL
+            { k: ["Ctrl", "Shift", "T"], d: "Bezárt lap vissza" },
+            { k: ["Ctrl", "Z"], d: "Visszavonás" },
             { k: ["Win", "Nyíl"], d: "Ablak rendezés" },
+            { k: ["Ctrl", "Görgő"], d: "Nagyítás / Kicsinyítés" },
+
+            // SYSTEM
             { k: ["Ctrl", "C"], d: "Másolás" },
             { k: ["Ctrl", "V"], d: "Beillesztés" },
             { k: ["Ctrl", "X"], d: "Kivágás" },
-            { k: ["Ctrl", "Z"], d: "Visszavonás" },
-            { k: ["Ctrl", "Y"], d: "Mégis" },
             { k: ["Ctrl", "A"], d: "Mindet kijelöl" },
-            { k: ["Ctrl", "P"], d: "Nyomtatás" },
             { k: ["Ctrl", "S"], d: "Mentés" },
+            { k: ["Ctrl", "P"], d: "Nyomtatás" },
             { k: ["Win", "D"], d: "Asztal megjelenítése" },
             { k: ["Win", "E"], d: "Fájlkezelő" },
-            { k: ["Win", "L"], d: "Zárolás" },
-            { k: ["Win", "V"], d: "Vágólap előzmény" },
-            { k: ["Win", "R"], d: "Futtatás" },
-            { k: ["Win", "I"], d: "Gépház" },
+            { k: ["Win", "L"], d: "Gép zárolása" },
+            { k: ["Win", "V"], d: "Vágólap előzmények" },
             { k: ["Win", "Shift", "S"], d: "Képernyőmetszet" },
-            { k: ["Alt", "Tab"], d: "Váltás ablakok közt" },
-            { k: ["Alt", "F4"], d: "Ablak bezárása" },
             { k: ["Ctrl", "Shift", "Esc"], d: "Feladatkezelő" },
-            { k: ["Win", "P"], d: "Kivetítés" },
-            { k: ["Ctrl", "T"], d: "Új lap (Böngésző)" },
-            { k: ["Ctrl", "N"], d: "Új ablak" },
-            { k: ["Ctrl", "Shift", "T"], d: "Bezárt lap vissza" },
-            { k: ["Ctrl", "F"], d: "Keresés" },
-            { k: ["Ctrl", "H"], d: "Előzmények" },
-            { k: ["Ctrl", "J"], d: "Letöltések" },
-            { k: ["Ctrl", "L"], d: "Címsorra ugrás" },
-            { k: ["Ctrl", "K"], d: "Link beillesztése" },
-            { k: ["Ctrl", "B"], d: "Félkövér" },
-            { k: ["Ctrl", "I"], d: "Dőlt" },
-            { k: ["Ctrl", "U"], d: "Aláhúzott" },
-            { k: ["Win", "."], d: "Emoji panel" },
-            { k: ["Alt", "Space"], d: "Rendszermenü" },
-            { k: ["F2"], d: "Átnevezés" },
-            { k: ["F5"], d: "Frissítés" },
-            { k: ["Win", "S"], d: "Keresés (Start)" },
-            { k: ["Ctrl", "W"], d: "Lap bezárása" },
-            { k: ["Ctrl", "F4"], d: "Dokumentum bezárása" },
-            { k: ["Win", "+"], d: "Nagyító" },
-            { k: ["Win", "Pause"], d: "Rendszerinfó" }
+            { k: ["Alt", "F4"], d: "Ablak bezárása" },
+            { k: ["Alt", "Tab"], d: "Váltás ablakok közt" },
+            { k: ["Win", "R"], d: "Futtatás ablak" },
+            { k: ["Win", "I"], d: "Windows Gépház" },
+
+            // BROWSER
+            { k: ["Ctrl", "T"], d: "Új böngészőlap" },
+            { k: ["Ctrl", "N"], d: "Új böngészőablak" },
+            { k: ["Ctrl", "W"], d: "Aktuális lap bezárása" },
+            { k: ["Ctrl", "F"], d: "Keresés az oldalon" },
+            { k: ["Ctrl", "H"], d: "Böngészési előzmények" },
+            { k: ["Ctrl", "J"], d: "Letöltési előzmények" },
+            { k: ["Ctrl", "L"], d: "Címsor kijelölése" },
+            { k: ["F5"], d: "Oldal frissítése" },
+            { k: ["Ctrl", "F5"], d: "Kényszerített frissítés" },
+            { k: ["Ctrl", "D"], d: "Könyvjelző hozzáadása" },
+
+            // OFFICE / TEXT
+            { k: ["Ctrl", "B"], d: "Félkövér formázás" },
+            { k: ["Ctrl", "I"], d: "Dőlt formázás" },
+            { k: ["Ctrl", "U"], d: "Aláhúzott formázás" },
+            { k: ["Ctrl", "K"], d: "Hiperhivatkozás szo." },
+            { k: ["F2"], d: "Fájl átnevezése" },
+            { k: ["Win", "."], d: "Emoji választó" },
+            { k: ["Alt", "Space"], d: "Ablak menü" },
+            { k: ["Win", "G"], d: "Játékvezérlő pult" },
+            { k: ["Win", "K"], d: "Kapcsolódás (Cast)" },
+            { k: ["Win", "P"], d: "Kivetítés módja" }
         ];
 
-        const container = document.getElementById('keys-container');
+        const container = document.querySelector('.kbd-grid');
         data.forEach(item => {
             const keysHtml = item.k.map(key => `<span class="kbd-key">${key}</span>`).join('<span class="plus">+</span>');
             container.innerHTML += `
-                <div class="kbd-card">
-                    <div class="keys">${keysHtml}</div>
-                    <div class="desc">${item.d}</div>
+                <div class="kbd-card" style="border: 1px solid var(--border-color); border-radius: 1rem; margin:0; justify-content: space-between; padding: 1.25rem; background: var(--bg-card);">
+                    <div class="keys" style="display:flex; gap:5px; align-items:center;">${keysHtml}</div>
+                    <div class="desc" style="font-weight:700; font-size:0.85rem; color:var(--text-main);">${item.d}</div>
                 </div>
             `;
         });

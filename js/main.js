@@ -7,18 +7,21 @@ const App = {
         user: JSON.parse(localStorage.getItem('auth_user')),
         theme: localStorage.getItem('theme') || 'light',
         bgColor: localStorage.getItem('bg-color') || '#fdfcf0',
-        location: { lat: 46.229, lon: 17.365, name: 'Nagyatád' }
+        location: { lat: 46.229, lon: 17.365, name: 'Nagyatád' },
+        droneIndex: 1
     },
 
     init() {
+        this.checkLogin();
         this.applyTheme();
         this.applyBgColor();
         this.initClock();
         this.fetchWeather();
         this.injectGlobalNav();
-        this.setupAuth();
         this.initSearch();
-        console.log("Irodai Asszisztens Phase 3 initialized");
+        this.initHeaderDrone();
+        this.initInteractivity();
+        console.log("Irodai Asszisztens V3.3 initialized");
     },
 
     // --- Layout & Nav Injection ---
@@ -26,38 +29,86 @@ const App = {
         const header = document.querySelector('.app-header');
         if (!header) return;
 
-        // Ensure we don't inject twice
-        if (header.querySelector('.nav-dropdown')) return;
+        const p = this.getPath();
+        const logo = header.querySelector('.logo');
+        if (logo) {
+            logo.innerHTML = `<i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span>`;
+        }
+
+        const existingNav = header.querySelector('.header-nav');
+        if (existingNav) existingNav.remove();
 
         const navHtml = `
-            <div class="nav-dropdown">
-                <button style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="nav-dropdown-content">
-                    <a href="${this.getPath()}index.html" class="nav-dropdown-item"><i class="fas fa-home"></i> Műszerfal</a>
-                    <hr style="border:0; border-top:1px solid var(--border-color); margin:5px 0;">
-                    <a href="${this.getPath()}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map"></i> Hiba Jelölő Térkép</a>
-                    <a href="${this.getPath()}modules/calc/index.html" class="nav-dropdown-item"><i class="fas fa-calculator"></i> Számlázási Segéd</a>
-                    <a href="${this.getPath()}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line"></i> Tőzsdei Árak</a>
-                    <a href="${this.getPath()}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-camera"></i> Képtár</a>
-                    <a href="${this.getPath()}modules/tools/ai_vision.html" class="nav-dropdown-item"><i class="fas fa-brain"></i> Képfelismerő AI</a>
-                    <a href="${this.getPath()}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-file-pdf"></i> PDF Kiolvasó</a>
-                    <a href="${this.getPath()}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-signature"></i> PDF Szerkesztő</a>
-                    <a href="${this.getPath()}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard"></i> Billentyűkombinációk</a>
-                    <a href="${this.getPath()}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-graduation-cap"></i> Irodai Lean</a>
+            <div class="header-nav" id="global-header-nav">
+                <div class="nav-cat" data-cat="műszaki">MŰSZAKI <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/map/index.html" class="nav-item">Hiba Jelölő Térkép</a>
+                        <a href="${p}modules/publiclight/index.html" class="nav-item">Közvilágítás</a>
+                        <a href="${p}modules/gallery/index.html" class="nav-item">Éjszakai Drónfelvételek</a>
+                        <a href="${p}modules/tools/videolibrary.html" class="nav-item">Videótár</a>
+                        <a href="${p}modules/viz/index.html" class="nav-item">Vizualizáció</a>
+                        <a href="${p}modules/tools/weather_log.html" class="nav-item">Időjárás Napló</a>
+                    </div>
+                </div>
+                <div class="nav-cat" data-cat="elszámolási">ELSZÁMOLÁSI <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/calc/index.html" class="nav-item">Számlázási Segéd</a>
+                        <a href="${p}modules/consumption/index.html" class="nav-item">Fogyasztási Helyek</a>
+                        <a href="${p}modules/tools/pdfeditor.html" class="nav-item">PDF Szerkesztő</a>
+                        <a href="${p}modules/tools/pdfreader.html" class="nav-item">PDF Kiolvasó</a>
+                        <a href="${p}modules/utils/index.html" class="nav-item">Gyorsító Eszközök</a>
+                        <a href="${p}modules/tools/checklist.html" class="nav-item">Check-lista</a>
+                        <a href="${p}modules/stocks/index.html" class="nav-item">Tőzsdei Árak</a>
+                    </div>
+                </div>
+                <div class="nav-cat" data-cat="információ">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/lean/index.html" class="nav-item">Billentyűkombinációk</a>
+                        <a href="${p}modules/tools/lean_office.html" class="nav-item">Irodai Lean</a>
+                        <a href="${p}modules/phonebook/index.html" class="nav-item">Telefonkönyv</a>
+                        <a href="${p}modules/links/index.html" class="nav-item">Linkgyűjtemény</a>
+                        <a href="${p}modules/tools/notes.html" class="nav-item">Feljegyzés</a>
+                    </div>
                 </div>
             </div>
         `;
-        header.insertAdjacentHTML('beforeend', navHtml);
 
-        // Inject standardized back button in modules
+        const infoArea = header.querySelector('.header-info');
+        header.insertBefore(document.createRange().createContextualFragment(navHtml), infoArea);
+
+        // Reposition Theme Toggle to the right of info
+        infoArea.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                    <div id="header-weather" style="text-align: right; line-height: 1.2;"></div>
+                    <div id="global-clock" style="text-align: right; line-height: 1.2;"></div>
+                </div>
+                <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+            </div>
+        `;
+
+        // Click-to-open logic for Dropdowns
+        document.querySelectorAll('.nav-cat').forEach(cat => {
+            cat.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = cat.classList.contains('active');
+                document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
+                if (!isActive) cat.classList.add('active');
+            });
+        });
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
+        });
+
+        // Inject standardized back button in modules sub-header
         if (window.location.pathname.includes('/modules/')) {
-            const btn = document.createElement('a');
-            btn.href = this.getPath() + 'index.html';
-            btn.className = 'back-dash-btn';
-            btn.innerHTML = '<i class="fas fa-home"></i>';
-            document.body.prepend(btn);
+            const container = document.querySelector('main.container') || document.querySelector('main.container-fluid');
+            if (container) {
+                const subBar = document.createElement('div');
+                subBar.className = 'sub-nav-bar';
+                subBar.innerHTML = `<a href="${p}index.html" class="back-btn"><i class="fas fa-arrow-left"></i> VISSZA A MŰSZERFALRA</a>`;
+                container.parentNode.insertBefore(subBar, container);
+            }
         }
     },
 
@@ -95,6 +146,32 @@ const App = {
         this.state.bgColor = color;
         localStorage.setItem('bg-color', color);
         this.applyBgColor();
+        const picker = document.getElementById('spectrum-picker');
+        if (picker) picker.value = color;
+    },
+
+    toggleSettings() {
+        // Obsolete in 3.3
+    },
+
+    initHeaderDrone() {
+        const p = this.getPath();
+        const update = () => {
+            const rand = Math.floor(Math.random() * 86) + 1;
+            const imgUrl = `url('${p}pictures/(${rand}).jpg')`;
+            document.documentElement.style.setProperty('--bg-drone', imgUrl);
+        };
+        update();
+        setInterval(update, 60000); // 1 minute rotation
+    },
+
+    initInteractivity() {
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.documentElement.style.setProperty('--mouse-x', `${x}%`);
+            document.documentElement.style.setProperty('--mouse-y', `${y}%`);
+        });
     },
 
     // --- Core Features ---
@@ -153,20 +230,37 @@ const App = {
         return `Irodai_${type}_${d}_${t}.${ext}`;
     },
 
-    setupAuth() {
-        window.onload = () => {
+    checkLogin() {
+        const auth = localStorage.getItem('auth_id');
+        if (auth === btoa('7575')) {
+            this.state.user = { name: 'Admin' };
+        } else {
+            this.state.user = null;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('auth-overlay');
-            if (!overlay) return;
+            const main = document.getElementById('app-main');
+            if (!overlay || !main) return;
+
             if (this.state.user) {
                 overlay.style.display = 'none';
-                document.getElementById('app-main').style.display = 'block';
+                main.style.display = 'block';
+            } else {
+                overlay.style.display = 'flex';
+                main.style.display = 'none';
             }
-        };
+        });
     },
 
     login() {
-        localStorage.setItem('auth_user', JSON.stringify({ name: 'Admin' }));
-        location.reload();
+        const pass = prompt("Adja meg a belépési kódot:");
+        if (pass === '7575') {
+            localStorage.setItem('auth_id', btoa('7575'));
+            location.reload();
+        } else {
+            alert("Hibás kód!");
+        }
     }
 };
 

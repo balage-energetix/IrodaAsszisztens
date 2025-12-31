@@ -46,11 +46,36 @@
                 <h4 class="mb-4" style="font-family:'Outfit'; font-weight:800; color:var(--primary);"><i
                         class="fas fa-gas-pump"></i> HUDEX Natural Gas (2025-2026)</h4>
                 <div class="c-wrap"><canvas id="h-chart"></canvas></div>
+                <div class="mt-4" style="overflow-x: auto;">
+                    <table style="width:100%; font-size:0.8rem; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color); color:var(--text-muted);">
+                                <th style="padding:0.5rem;">Időszak</th>
+                                <th style="padding:0.5rem;">EUR/MWh</th>
+                                <th style="padding:0.5rem; background:rgba(92, 107, 192, 0.1);">Ft/kWh*</th>
+                            </tr>
+                        </thead>
+                        <tbody id="h-table-body"></tbody>
+                    </table>
+                    <div style="font-size:0.65rem; color:var(--text-muted); margin-top:0.5rem;">* 1 EUR = 410 Ft
+                        árfolyamon számolva</div>
+                </div>
             </div>
             <div class="stock-card">
                 <h4 class="mb-4" style="font-family:'Outfit'; font-weight:800; color:var(--secondary);"><i
                         class="fas fa-bolt"></i> Elektromos áram (30 napos)</h4>
                 <div class="c-wrap"><canvas id="e-chart"></canvas></div>
+                <div class="mt-4" style="overflow-x: auto; max-height: 250px;">
+                    <table style="width:100%; font-size:0.8rem; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color); color:var(--text-muted);">
+                                <th style="padding:0.5rem;">Nap</th>
+                                <th style="padding:0.5rem;">HUF/kWh</th>
+                            </tr>
+                        </thead>
+                        <tbody id="e-table-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
@@ -58,23 +83,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../js/main.js"></script>
     <script>
+        const hLabels = ['2025 Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Szept', 'Okt', 'Nov', 'Dec'];
+        const hPricesEUR = [32, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1];
+        const eurRate = 410;
+        const hPricesFt = hPricesEUR.map(p => (p * eurRate / 1000).toFixed(2));
+
         const ctxH = document.getElementById('h-chart').getContext('2d');
         new Chart(ctxH, {
             type: 'line',
             data: {
-                labels: ['2025 Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Szept', 'Okt', 'Nov', 'Dec'],
-                datasets: [{ label: 'Price (€/MWh)', data: [32, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1], borderColor: '#5c6bc0', fill: true }]
+                labels: hLabels,
+                datasets: [{ label: 'Gázár (Ft/kWh)', data: hPricesFt, borderColor: '#5c6bc0', fill: true, backgroundColor: 'rgba(92, 107, 192, 0.1)', tension: 0.3 }]
             },
             options: { maintainAspectRatio: false }
         });
 
+        // Fill Gas Table
+        const hTable = document.getElementById('h-table-body');
+        hLabels.forEach((label, i) => {
+            const row = hTable.insertRow();
+            const ftKwh = hPricesFt[i];
+            row.innerHTML = `<td style="padding:0.5rem;">${label}</td><td style="padding:0.5rem;">${hPricesEUR[i]}</td><td style="padding:0.5rem; font-weight:700;">${ftKwh}</td>`;
+        });
+
         const ctxE = document.getElementById('e-chart').getContext('2d');
         const labelsE = Array.from({ length: 30 }, (_, i) => `${i + 1}. nap`);
-        const dataE = Array.from({ length: 30 }, () => 80 + Math.random() * 40);
+        const dataE = Array.from({ length: 30 }, () => (80 + Math.random() * 40).toFixed(2));
         new Chart(ctxE, {
             type: 'line',
             data: { labels: labelsE, datasets: [{ label: 'Price (HUF/kWh)', data: dataE, borderColor: '#26a69a' }] },
             options: { maintainAspectRatio: false }
+        });
+
+        // Fill Power Table
+        const eTable = document.getElementById('e-table-body');
+        labelsE.forEach((label, i) => {
+            const row = eTable.insertRow();
+            row.innerHTML = `<td style="padding:0.5rem;">${label}</td><td style="padding:0.5rem;">${dataE[i]}</td>`;
         });
     </script>
 </body>

@@ -60,8 +60,16 @@
     </header>
 
     <main class="container-fluid py-4 fade-in">
-        <h2 class="mb-3" style="font-family:'Outfit'; font-weight:800; padding-left: 1rem;"><i
-                class="fas fa-map-marked-alt text-primary me-2"></i>Hiba jelölő térkép</h2>
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 0 1rem;">
+            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                    class="fas fa-map-marked-alt text-primary me-2"></i>Hiba jelölő térkép</h2>
+            <button class="back-btn"
+                style="position:static; padding:0.6rem 1.25rem; width:auto; height:auto; border-radius:1rem;"
+                onclick="exportMapPDF()">
+                <i class="fas fa-file-pdf me-2"></i> PDF EXPORT
+            </button>
+        </div>
         <div id="map-container"></div>
 
         <div id="map-context-menu" class="context-menu">
@@ -73,6 +81,8 @@
                     class="fas fa-person-walking-arrow-loop-left"></i> Járdahiba</div>
             <div onclick="addPointer('primary', 'fa-lightbulb')"><i class="fas fa-lightbulb"></i> Közvilágítás hiba
             </div>
+            <div onclick="addPointer('warning', 'fa-person-digging')"><i class="fas fa-person-digging"></i>
+                Közterületbontás</div>
         </div>
     </main>
 
@@ -80,6 +90,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="../../js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         const map = L.map('map-container').setView([46.229, 17.365], 15);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { crossOrigin: true }).addTo(map);
@@ -122,6 +133,18 @@
         }
 
         map.on(L.Draw.Event.CREATED, (e) => drawnItems.addLayer(e.layer));
+
+        function exportMapPDF() {
+            const element = document.getElementById('map-container');
+            const opt = {
+                margin: 0.5,
+                filename: App.getExportFileName('Map', 'pdf'),
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
     </script>
 </body>
 
