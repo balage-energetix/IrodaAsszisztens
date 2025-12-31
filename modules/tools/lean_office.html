@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Irodai Lean - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .lean-content {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .lean-section {
+            margin-bottom: 3rem;
+        }
+
+        .lean-section h3 {
+            color: var(--primary);
+            font-family: 'Outfit';
+            font-weight: 800;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .lean-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .lean-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            border-left: 5px solid var(--primary);
+        }
+
+        .lean-card h4 {
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+        }
+
+        .lean-card p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="lean-content" style="max-width: 1100px; margin: 0 auto;">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                        class="fas fa-graduation-cap text-primary me-2"></i>Irodai Lean Tananyag</h2>
+            </div>
+
+            <div class="hint">
+                <i class="fas fa-star me-2"></i><strong>Főszabály:</strong> Minden fájlt úgy kell lementeni, hogy 30
+                másodpercen belül bárki számára elérhető legyen. Használjon szabványos elnevezéseket
+                (Dátum_Tárgy_Verzió).
+            </div>
+
+            <div class="lean-section">
+                <h3>1. Alapvető Módszertanok</h3>
+                <div class="lean-grid">
+                    <div class="lean-card" style="border-color: #5c6bc0;">
+                        <h4>DMAIC Ciklus</h4>
+                        <p>Define (Meghatározás), Measure (Mérés), Analyze (Elemzés), Improve (Fejlesztés), Control
+                            (Ellenőrzés). A folyamatfejlesztés alapköve.</p>
+                    </div>
+                    <div class="lean-card" style="border-color: #26a69a;">
+                        <h4>5S az Irodában</h4>
+                        <p>Seiri (Válogatás), Seiton (Rendszerezés), Seiso (Tisztítás), Seiketsu (Szabványosítás),
+                            Shitsuke (Önfegyelem). A rendezett munkakörnyezetért.</p>
+                    </div>
+                    <div class="lean-card" style="border-color: #ffa726;">
+                        <h4>PDCA Ciklus</h4>
+                        <p>Plan (Tervezés), Do (Cselekvés), Check (Ellenőrzés), Act (Beavatkozás). A folyamatos javítás
+                            (Kaizen) motorja.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lean-section">
+                <h3>2. Problémamegoldó Eszközök</h3>
+                <div class="lean-grid">
+                    <div class="lean-card" style="border-color: #ef5350;">
+                        <h4>6 Szigma (Six Sigma)</h4>
+                        <p>Statisztikai alapú minőségirányítás. Célja a hibák számának minimalizálása (3,4 hiba /
+                            egymillió lehetőség).</p>
+                    </div>
+                    <div class="lean-card" style="border-color: #7e57c2;">
+                        <h4>Ishikawa (Halszálka)</h4>
+                        <p>Ok-okozati diagram. Segít feltárni a problémák gyökérokait különböző kategóriák (Gép, Ember,
+                            Módszer, Anyag) mentén.</p>
+                    </div>
+                    <div class="lean-card" style="border-color: #26c6da;">
+                        <h4>Pareto Elv (80/20)</h4>
+                        <p>A problémák 80%-át az okok 20%-a okozza. Segít a prioritások meghatározásában.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lean-section">
+                <h3>3. Irodai Veszteségek (Muda)</h3>
+                <table style="width:100%; border-collapse: collapse; margin-top:1rem;">
+                    <tr style="background: var(--bg-light);">
+                        <th style="padding:1rem; border:1px solid var(--border-color);">Típus</th>
+                        <th style="padding:1rem; border:1px solid var(--border-color);">Példa</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:1rem; border:1px solid var(--border-color);">Túltermelés</td>
+                        <td style="padding:1rem; border:1px solid var(--border-color);">Felesleges riportok készítése
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:1rem; border:1px solid var(--border-color);">Várakozás</td>
+                        <td style="padding:1rem; border:1px solid var(--border-color);">Jóváhagyásra váró dokumentumok
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:1rem; border:1px solid var(--border-color);">Hibák</td>
+                        <td style="padding:1rem; border:1px solid var(--border-color);">Rosszul kitöltött adatok,
+                            utómunka</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

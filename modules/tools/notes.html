@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feljegyzés - AGI Irodai Segédlet</title>
+    <title>Feljegyzés - Irodai Asszisztens</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
@@ -35,7 +35,7 @@
 
         .styled-textarea {
             resize: vertical;
-            min-height: 300px;
+            min-height: 250px;
         }
 
         .styled-input:focus,
@@ -45,15 +45,18 @@
             box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
         }
 
-        .save-btn {
-            width: 100%;
+        .btn-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .action-btn {
             padding: 1rem;
             border-radius: 1rem;
             border: none;
-            background: var(--primary);
             color: white;
             font-weight: 800;
-            font-size: 1.25rem;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
@@ -62,87 +65,137 @@
             gap: 0.75rem;
         }
 
-        .save-btn:hover {
-            background: var(--primary-dark);
+        .btn-txt {
+            background: var(--primary);
+        }
+
+        .btn-pdf {
+            background: var(--warning);
+            color: #000;
+        }
+
+        .action-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            filter: brightness(1.1);
         }
 
-        .module-header {
+        .case-number-container {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-        }
-
-        .back-btn {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
             gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .case-prefix {
+            font-weight: 800;
+            color: var(--text-muted);
         }
     </style>
 </head>
 
 <body>
     <header class="app-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
-        <nav style="display: flex; gap: 2rem; align-items: center;">
-            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+        <a href="../../index.html" class="logo"><i class="fas fa-briefcase"></i><span>Irodai Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather" class="weather-info"></div>
+            <div id="global-clock" class="item-group"></div>
             <button onclick="App.toggleTheme()"
-                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
                     id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </nav>
+        </div>
     </header>
 
     <main class="container py-5 fade-in">
         <div class="module-header" style="max-width: 800px; margin-inline: auto;">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Műszerfal</a>
             <h2 style="font-weight: 800;"><i class="fas fa-pencil-alt text-primary me-2"></i>Új Feljegyzés</h2>
         </div>
 
         <div class="note-card">
-            <label
-                style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Ügykör
-                / Téma</label>
-            <select id="category" class="styled-input">
-                <option>Közterület felbontás</option>
-                <option>Tervezői hozzájárulás</option>
-                <option>Közvilágítási hiba</option>
-                <option>Bérlői elszámolás</option>
-                <option>Egyéb</option>
-            </select>
+            <div class="case-number-container">
+                <div class="item-group" style="align-items: flex-start; flex: 1;">
+                    <label
+                        style="font-weight: 700; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Ügyiratszám</label>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                        <span class="case-prefix">MVG/</span>
+                        <input type="text" id="case-num" class="styled-input" style="margin: 0; padding: 0.5rem;"
+                            placeholder="123-12">
+                        <span class="case-prefix" id="case-year">/2026</span>
+                    </div>
+                </div>
+                <div class="item-group" style="align-items: flex-start; flex: 1;">
+                    <label
+                        style="font-weight: 700; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase;">Ügykör</label>
+                    <select id="category" class="styled-input" style="margin:0; padding: 0.5rem;">
+                        <option>Közterület felbontás</option>
+                        <option>Tervezői hozzájárulás</option>
+                        <option>Közvilágítási hiba</option>
+                        <option>Bérlői elszámolás</option>
+                    </select>
+                </div>
+            </div>
 
-            <label
-                style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Tartalom</label>
-            <textarea id="content" class="styled-textarea" placeholder="Ide írja a feljegyzést..."></textarea>
+            <textarea id="content" class="styled-textarea" placeholder="Írja ide a feljegyzés tartalmát..."></textarea>
 
-            <button class="save-btn" onclick="save()">
-                <i class="fas fa-floppy-disk"></i> Mentés (TXT)
-            </button>
+            <div class="btn-panel">
+                <button class="action-btn btn-txt" onclick="save('txt')"><i class="fas fa-file-lines"></i> Mentés
+                    (TXT)</button>
+                <button class="action-btn btn-pdf" onclick="save('pdf')"><i class="fas fa-file-pdf"></i> Mentés
+                    (PDF)</button>
+            </div>
+        </div>
+
+        <div id="pdf-template" style="display:none; padding: 40px; font-family: 'Outfit', sans-serif;">
+            <h1 style="color: #4361ee; border-bottom: 2px solid #4361ee; padding-bottom: 20px;">FELJEGYZÉS</h1>
+            <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+                <div><strong>Ügyiratszám:</strong> <span id="pdf-casenum"></span></div>
+                <div><strong>Dátum:</strong> <span id="pdf-date"></span></div>
+            </div>
+            <div style="margin-top: 10px;"><strong>Tárgy / Ügykör:</strong> <span id="pdf-cat"></span></div>
+            <hr style="margin-top: 30px; border: 0; border-top: 1px solid #ddd;">
+            <div id="pdf-content" style="margin-top: 30px; line-height: 1.6; white-space: pre-wrap;"></div>
+            <div
+                style="margin-top: 100px; border-top: 1px solid #ddd; padding-top: 10px; font-size: 0.8rem; color: #888;">
+                Készült az Irodai Asszisztens alkalmazással (V2.1) | Nagyatád
+            </div>
         </div>
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script>
-        function save() {
+        const currYear = new Date().getFullYear();
+        document.getElementById('case-year').innerText = `/${currYear}`;
+
+        function save(mode) {
+            const caseNum = `MVG/${document.getElementById('case-num').value}/${currYear}`;
             const cat = document.getElementById('category').value;
             const text = document.getElementById('content').value;
-            if (!text) return alert("Üres feljegyzést nem menthet!");
-
             const date = new Date().toLocaleString('hu-HU');
-            const blob = new Blob([
-                `FELJEGYZÉS\nDátum: ${date}\nÜgykör: ${cat}\n\n${text}\n\n---\nKészült az AGI Irodai Segédlettel`
-            ], { type: "text/plain" });
 
-            const a = document.createElement("a");
-            a.download = `Feljegyzes_${cat.replace(/\s/g, '_')}_${Date.now()}.txt`;
-            a.href = window.URL.createObjectURL(blob);
-            a.click();
+            if (!text) return alert("Hiba: Üres tartalom.");
+
+            if (mode === 'txt') {
+                const blob = new Blob([`FELJEGYZÉS\nIktatószám: ${caseNum}\nDátum: ${date}\nÜgykör: ${cat}\n\nTartalom:\n${text}`], { type: "text/plain" });
+                const a = document.createElement("a");
+                a.download = App.getExportFileName(`Feljegyzes_${cat}`, 'txt');
+                a.href = URL.createObjectURL(blob);
+                a.click();
+            } else {
+                const tpl = document.getElementById('pdf-template');
+                document.getElementById('pdf-casenum').innerText = caseNum;
+                document.getElementById('pdf-date').innerText = date;
+                document.getElementById('pdf-cat').innerText = cat;
+                document.getElementById('pdf-content').innerText = text;
+
+                tpl.style.display = 'block';
+                html2pdf().from(tpl).set({
+                    margin: 10,
+                    filename: App.getExportFileName(`Feljegyzes_${cat}`, 'pdf'),
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                }).save().then(() => tpl.style.display = 'none');
+            }
         }
     </script>
 </body>

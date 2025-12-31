@@ -4,159 +4,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Képtár - AGI Irodai Segédlet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Éjszakai drónfelvételek - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
-        .gallery-container {
+        .gallery-wrap {
             background: var(--bg-card);
-            border-radius: 1.5rem;
+            border-radius: 2rem;
             padding: 2rem;
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
-        .upload-btn {
-            display: inline-flex;
+        .main-viewer {
+            width: 100%;
+            height: 70vh;
+            background: #111;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            display: flex;
             align-items: center;
-            gap: 0.75rem;
-            background: var(--primary);
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            font-weight: 700;
-            transition: var(--transition);
-            border: none;
-        }
-
-        .upload-btn:hover {
-            background: var(--primary-dark);
-            transform: scale(1.02);
-        }
-
-        #viewer {
-            display: none;
-            margin-top: 2rem;
+            justify-content: center;
             position: relative;
         }
 
-        #main-img {
+        .main-viewer img {
             max-width: 100%;
-            max-height: 60vh;
-            border-radius: 1rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            max-height: 100%;
+            object-fit: contain;
         }
 
-        .thumb-strip {
+        .thumb-nav {
             display: flex;
-            gap: 0.5rem;
+            gap: 10px;
             overflow-x: auto;
-            padding: 1rem 0;
-            margin-top: 1rem;
+            padding: 1.5rem 0;
+            scroll-behavior: smooth;
         }
 
         .thumb {
             height: 80px;
             width: 120px;
+            border-radius: 0.75rem;
             object-fit: cover;
-            border-radius: 0.5rem;
             cursor: pointer;
+            border: 3px solid transparent;
             opacity: 0.6;
-            transition: var(--transition);
-            border: 2px solid transparent;
+            transition: 0.2s;
             flex-shrink: 0;
         }
 
-        .thumb:hover,
         .thumb.active {
-            opacity: 1;
             border-color: var(--primary);
+            opacity: 1;
+            transform: scale(1.05);
         }
 
-        .module-header {
+        .viewer-controls {
+            position: absolute;
+            bottom: 20px;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
+            gap: 1rem;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(5px);
         }
 
-        .back-btn {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .v-btn {
+            color: white;
+            border: none;
+            background: none;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
     <header class="app-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
-        <nav style="display: flex; gap: 2rem; align-items: center;">
-            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
-            <button onclick="App.toggleTheme()"
-                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
                     id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </nav>
+        </div>
     </header>
 
     <main class="container py-5 fade-in">
-        <div class="module-header">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
-            <h2 style="font-weight: 800;"><i class="fas fa-images text-primary me-2"></i>Képtár</h2>
-        </div>
-
-        <div class="gallery-container">
-            <label class="upload-btn">
-                <i class="fas fa-folder-open"></i> Mappa tallózása
-                <input type="file" id="folder-input" webkitdirectory directory multiple hidden>
-            </label>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">Válasszon egy mappát a helyi
-                lemezen a képek beolvasásához.</p>
-
-            <div id="viewer">
-                <img id="main-img" src="">
-                <div class="thumb-strip" id="thumbs"></div>
+        <div class="gallery-wrap">
+            <h2 class="mb-4" style="font-family:'Outfit'; font-weight:800;"><i
+                    class="fas fa-camera text-primary me-2"></i>Éjszakai drónfelvételek</h2>
+            <div class="main-viewer">
+                <img id="active-img" src="../../pictures/1.jpg"
+                    onerror="this.src='https://via.placeholder.com/800x600?text=Kép+betöltése...'">
+                <div class="viewer-controls">
+                    <button class="v-btn" onclick="move(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <span id="img-index" style="color:white; font-weight:800; min-width:60px; text-align:center;">1 /
+                        86</span>
+                    <button class="v-btn" onclick="move(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
             </div>
+            <div class="thumb-nav" id="thumb-strip"></div>
         </div>
     </main>
 
     <script src="../../js/main.js"></script>
     <script>
-        const input = document.getElementById('folder-input');
-        const viewer = document.getElementById('viewer');
-        const mainImg = document.getElementById('main-img');
-        const thumbStrip = document.getElementById('thumbs');
+        const total = 86;
+        let current = 1;
+        const strip = document.getElementById('thumb-strip');
+        const display = document.getElementById('active-img');
 
-        input.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
-            if (files.length === 0) return;
+        for (let i = 1; i <= total; i++) {
+            const img = document.createElement('img');
+            img.src = `../../pictures/${i}.jpg`;
+            img.className = 'thumb';
+            img.onclick = () => show(i);
+            img.onerror = () => img.style.display = 'none';
+            strip.appendChild(img);
+        }
 
-            viewer.style.display = 'block';
-            thumbStrip.innerHTML = '';
-
-            files.forEach((file, i) => {
-                const url = URL.createObjectURL(file);
-                const img = document.createElement('img');
-                img.src = url;
-                img.className = 'thumb' + (i === 0 ? ' active' : '');
-                img.onclick = () => {
-                    mainImg.src = url;
-                    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-                    img.classList.add('active');
-                };
-                thumbStrip.appendChild(img);
-                if (i === 0) mainImg.src = url;
+        function show(idx) {
+            current = idx;
+            display.src = `../../pictures/${current}.jpg`;
+            document.getElementById('img-index').innerText = `${current} / ${total}`;
+            document.querySelectorAll('.thumb').forEach((t, i) => {
+                t.classList.toggle('active', i + 1 === idx);
+                if (i + 1 === idx) t.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             });
-        });
+        }
+
+        function move(dir) {
+            current += dir;
+            if (current < 1) current = total;
+            if (current > total) current = 1;
+            show(current);
+        }
+
+        show(1);
     </script>
 </body>
 

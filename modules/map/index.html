@@ -4,140 +4,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Térképkezelő - AGI Irodai Segédlet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Hiba jelölő térkép - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="../../css/main.css">
     <style>
         #map-container {
-            height: 60vh;
-            border-radius: 1.5rem;
+            height: 75vh;
+            border-radius: 2rem;
+            border: 3px solid var(--border-color);
             overflow: hidden;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .context-menu {
             display: none;
-            position: absolute;
-            z-index: 2000;
+            position: fixed;
+            z-index: 5000;
             background: var(--bg-card);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-            min-width: 200px;
+            min-width: 180px;
             overflow: hidden;
         }
 
         .context-menu div {
             padding: 0.75rem 1rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            transition: var(--transition);
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .context-menu div:hover {
             background: var(--bg-light);
             color: var(--primary);
         }
-
-        .btn-panel {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            justify-content: flex-end;
-        }
-
-        .styled-btn {
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.75rem;
-            border: none;
-            background: var(--primary);
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .styled-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-        }
-
-        .back-btn {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
     </style>
 </head>
 
 <body>
     <header class="app-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
-        <nav style="display: flex; gap: 2rem; align-items: center;">
-            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
-            <button onclick="App.toggleTheme()"
-                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
                     id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </nav>
+        </div>
     </header>
 
-    <main class="container py-5 fade-in">
-        <div class="module-header">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
-            <h2 style="font-weight: 800;"><i class="fas fa-map-location-dot text-primary me-2"></i>Térképkezelő</h2>
-        </div>
-
-        <div class="btn-panel">
-            <button class="styled-btn" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Mentés PDF-be</button>
-        </div>
-
-        <div class="alert shadow-sm mb-4"
-            style="background: var(--bg-card); border-left: 4px solid var(--primary); padding: 1rem; border-radius: 0.75rem;">
-            <i class="fas fa-circle-info text-primary me-2"></i><strong>Tipp:</strong> Kattintson a <strong>jobb
-                egérgombbal</strong> a térképen jelölő elhelyezéséhez.
-        </div>
-
-        <div id="capture-area">
-            <div id="map-container"></div>
-        </div>
+    <main class="container-fluid py-4 fade-in">
+        <h2 class="mb-3" style="font-family:'Outfit'; font-weight:800; padding-left: 1rem;"><i
+                class="fas fa-map-marked-alt text-primary me-2"></i>Hiba jelölő térkép</h2>
+        <div id="map-container"></div>
 
         <div id="map-context-menu" class="context-menu">
-            <div onclick="addPointer('light')"><i class="fas fa-lightbulb text-warning"></i> Közvilágítás hiba</div>
-            <div onclick="addPointer('roadwork')"><i class="fas fa-digging text-primary"></i> Útburkolati hiba</div>
-            <div onclick="addPointer('hazard')"><i class="fas fa-triangle-exclamation text-danger"></i> Veszélyforrás
+            <div onclick="addPointer('danger', 'fa-exclamation-triangle')"><i class="fas fa-exclamation-triangle"></i>
+                Általános hiba</div>
+            <div onclick="addPointer('danger', 'fa-road-circle-exclamation')"><i
+                    class="fas fa-road-circle-exclamation"></i> Úthiba</div>
+            <div onclick="addPointer('danger', 'fa-person-walking-arrow-loop-left')"><i
+                    class="fas fa-person-walking-arrow-loop-left"></i> Járdahiba</div>
+            <div onclick="addPointer('primary', 'fa-lightbulb')"><i class="fas fa-lightbulb"></i> Közvilágítás hiba
             </div>
         </div>
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="../../js/main.js"></script>
     <script>
-        const map = L.map('map-container').setView([46.229, 17.365], 14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'OpenStreetMap',
-            crossOrigin: true
-        }).addTo(map);
+        const map = L.map('map-container').setView([46.229, 17.365], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { crossOrigin: true }).addTo(map);
+
+        // Street Search for Nagyatád
+        L.Control.geocoder({ defaultMarkGeocode: true, placeholder: "Keresés Nagyatádon..." }).addTo(map);
+
+        const drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+
+        const drawControl = new L.Control.Draw({
+            edit: { featureGroup: drawnItems },
+            draw: {
+                polyline: { shapeOptions: { color: '#ef233c', weight: 4 } },
+                polygon: false, circle: false, rectangle: false, marker: false, circlemarker: false
+            }
+        });
+        map.addControl(drawControl);
 
         const contextMenu = document.getElementById('map-context-menu');
         let lastLatlng = null;
@@ -146,40 +106,22 @@
             e.originalEvent.preventDefault();
             lastLatlng = e.latlng;
             contextMenu.style.display = 'block';
-            contextMenu.style.left = e.originalEvent.pageX + 'px';
-            contextMenu.style.top = e.originalEvent.pageY + 'px';
+            // FIXED OFFSET logic using fixed positioning
+            contextMenu.style.left = e.originalEvent.clientX + 'px';
+            contextMenu.style.top = e.originalEvent.clientY + 'px';
         });
 
         document.addEventListener('click', () => contextMenu.style.display = 'none');
 
-        function addPointer(type) {
-            let iconClass = 'fa-thumbtack';
-            let color = 'var(--primary)';
-            if (type === 'light') { iconClass = 'fa-lightbulb'; color = '#ffb703'; }
-            if (type === 'roadwork') { iconClass = 'fa-digging'; color = '#219ebc'; }
-            if (type === 'hazard') { iconClass = 'fa-triangle-exclamation'; color = '#ef233c'; }
-
-            const icon = L.divIcon({
-                html: `<i class="fas ${iconClass}" style="color:${color}; font-size:1.5rem; text-shadow: 0 0 5px white;"></i>`,
-                className: 'custom-icon',
-                iconSize: [24, 24],
-                iconAnchor: [12, 24]
+        function addPointer(color, icon) {
+            const customIcon = L.divIcon({
+                html: `<i class="fas ${icon}" style="color:#ef233c; font-size:2rem; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));"></i>`,
+                className: '', iconSize: [30, 30], iconAnchor: [15, 30]
             });
-
-            L.marker(lastLatlng, { icon }).addTo(map);
+            L.marker(lastLatlng, { icon: customIcon }).addTo(drawnItems);
         }
 
-        function exportPDF() {
-            const element = document.getElementById('capture-area');
-            const opt = {
-                margin: 5,
-                filename: 'Terkep_Export.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
+        map.on(L.Draw.Event.CREATED, (e) => drawnItems.addLayer(e.layer));
     </script>
 </body>
 

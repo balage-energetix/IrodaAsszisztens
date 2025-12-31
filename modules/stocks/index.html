@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tőzsdei árak - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .stock-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .stock-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .c-wrap {
+            height: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container-fluid py-4 fade-in">
+        <div class="stock-grid">
+            <div class="stock-card">
+                <h4 class="mb-4" style="font-family:'Outfit'; font-weight:800; color:var(--primary);"><i
+                        class="fas fa-gas-pump"></i> HUDEX Natural Gas (2025-2026)</h4>
+                <div class="c-wrap"><canvas id="h-chart"></canvas></div>
+            </div>
+            <div class="stock-card">
+                <h4 class="mb-4" style="font-family:'Outfit'; font-weight:800; color:var(--secondary);"><i
+                        class="fas fa-bolt"></i> Elektromos áram (30 napos)</h4>
+                <div class="c-wrap"><canvas id="e-chart"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../js/main.js"></script>
+    <script>
+        const ctxH = document.getElementById('h-chart').getContext('2d');
+        new Chart(ctxH, {
+            type: 'line',
+            data: {
+                labels: ['2025 Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Szept', 'Okt', 'Nov', 'Dec'],
+                datasets: [{ label: 'Price (€/MWh)', data: [32, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1], borderColor: '#5c6bc0', fill: true }]
+            },
+            options: { maintainAspectRatio: false }
+        });
+
+        const ctxE = document.getElementById('e-chart').getContext('2d');
+        const labelsE = Array.from({ length: 30 }, (_, i) => `${i + 1}. nap`);
+        const dataE = Array.from({ length: 30 }, () => 80 + Math.random() * 40);
+        new Chart(ctxE, {
+            type: 'line',
+            data: { labels: labelsE, datasets: [{ label: 'Price (HUF/kWh)', data: dataE, borderColor: '#26a69a' }] },
+            options: { maintainAspectRatio: false }
+        });
+    </script>
+</body>
+
+</html>

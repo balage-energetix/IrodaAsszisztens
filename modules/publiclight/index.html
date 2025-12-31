@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Közvilágítás - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .split-view {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        #light-map {
+            height: 60vh;
+            border-radius: 1.5rem;
+            border: 2px solid var(--border-color);
+        }
+
+        .naptar-img {
+            width: 100%;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container-fluid py-4 fade-in">
+        <h2 class="mb-4" style="font-family:'Outfit'; font-weight:800; padding-left:1rem;"><i
+                class="fas fa-lightbulb text-primary me-2"></i>Közvilágítás modul</h2>
+
+        <div class="split-view">
+            <div class="feature-card" style="padding:1rem; align-items:flex-start;">
+                <h4 class="mb-3"><i class="fas fa-map-marked-alt"></i> Helyszín kereső</h4>
+                <div id="light-map" style="width: 100%;"></div>
+            </div>
+
+            <div class="feature-card" style="padding:1rem; align-items:flex-start;">
+                <h4 class="mb-3"><i class="fas fa-calendar-alt"></i> Közvilágításnaptár</h4>
+                <img src="https://kozvilhiba.hu/document/KozvilNaptar/tAKozvilagitasiNaptar.php" class="naptar-img"
+                    onclick="window.open(this.src)">
+                <div class="hint" style="margin-top: 2rem; width: 100%;">
+                    <strong>Forrás:</strong> <a href="https://kozvilhiba.hu" target="_blank">kozvilhiba.hu</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="../../js/main.js"></script>
+    <script>
+        const map = L.map('light-map').setView([46.229, 17.365], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        L.Control.geocoder({ defaultMarkGeocode: true, placeholder: "Utca keresése..." }).addTo(map);
+    </script>
+</body>
+
+</html>

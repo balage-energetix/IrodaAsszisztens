@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telefonkönyv - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3.5rem;
+            border-radius: 1.5rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        .directory-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+        }
+
+        th {
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.05rem;
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        .phone-link {
+            color: var(--primary);
+            font-weight: 800;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .phone-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-briefcase"></i><span>Irodai Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather" class="weather-info"></div>
+            <div id="global-clock" class="item-group"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container-fluid py-5 fade-in">
+        <div class="module-header" style="max-width: 1000px; margin-inline: auto;">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Műszerfal</a>
+            <h2 style="font-weight: 800;"><i class="fas fa-address-book text-primary me-2"></i>Telefonkönyv</h2>
+        </div>
+
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search" placeholder="Keresés név, pozíció vagy szám alapján..." oninput="filter()">
+        </div>
+
+        <div class="directory-card" style="max-width: 1000px; margin-inline: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pozíció</th>
+                        <th>Név</th>
+                        <th>Telefonszám</th>
+                        <th>Megjegyzés</th>
+                    </tr>
+                </thead>
+                <tbody id="directory-body">
+                    <!-- Sample Data -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const members = [
+            { p: "Polgármester", n: "Dr. Kiss László", t: "06 30 123 4567", m: "Hivatal 1. emelet" },
+            { p: "Jegyző", n: "Nagy Tibor", t: "06 30 987 6543", m: "Hivatal 2. emelet" },
+            { p: "Műszaki Irodavezető", n: "Kovács János", t: "06 30 555 1234", m: "Energetika" },
+            { p: "E.ON Ügyelet", n: "Diszpécser", t: "06 80 210 210", m: "Általános hiba" },
+            { p: "Városüzemeltetés", n: "Szabó Erika", t: "06 30 444 8888", m: "Közvilágítás" }
+        ];
+
+        function render(data) {
+            const body = document.getElementById('directory-body');
+            body.innerHTML = data.map(m => `
+                <tr>
+                    <td style="font-weight:700;">${m.p}</td>
+                    <td>${m.n}</td>
+                    <td><a href="tel:${m.t.replace(/\s/g, '')}" class="phone-link"><i class="fas fa-phone-alt"></i> ${m.t}</a></td>
+                    <td style="color:var(--text-muted); font-style:italic;">${m.m}</td>
+                </tr>
+            `).join('');
+        }
+
+        function filter() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const filtered = members.filter(m =>
+                m.p.toLowerCase().includes(query) ||
+                m.n.toLowerCase().includes(query) ||
+                m.t.includes(query)
+            );
+            render(filtered);
+        }
+
+        render(members);
+    </script>
+</body>
+
+</html>

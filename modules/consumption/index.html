@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fogyasztási helyek - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            min-width: 150px;
+        }
+
+        .tab-btn i {
+            font-size: 1.25rem;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .data-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        th,
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05rem;
+            background: var(--bg-light);
+        }
+
+        tr:hover {
+            background: var(--bg-light);
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-briefcase"></i><span>Irodai Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather" class="weather-info"></div>
+            <div id="global-clock" class="item-group"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container-fluid py-5 fade-in">
+        <div class="module-header" style="max-width: 1200px; margin-inline: auto;">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Műszerfal</a>
+            <h2 style="font-weight: 800;"><i class="fas fa-building-circle-check text-primary me-2"></i>Fogyasztási hely
+                nyilvántartó</h2>
+        </div>
+
+        <div style="max-width: 1200px; margin-inline: auto;">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('elec', this)"><i class="fas fa-bolt"></i>
+                    Villanyórák</button>
+                <button class="tab-btn" onclick="switchTab('gas', this)"><i class="fas fa-fire"></i> Gázmérők</button>
+                <button class="tab-btn" onclick="switchTab('water', this)"><i class="fas fa-droplet"></i>
+                    Vízzmérők</button>
+                <button class="tab-btn" onclick="switchTab('heat', this)"><i class="fas fa-mitten"></i>
+                    Hőmennyiség</button>
+            </div>
+
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search" placeholder="Keresés cím, POD vagy gyári szám alapján..."
+                    oninput="filter()">
+            </div>
+
+            <div class="data-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cím</th>
+                            <th>Helyszín</th>
+                            <th>POD Azonosító</th>
+                            <th>Gyári szám</th>
+                            <th>Felszerelve</th>
+                            <th>Következő csere</th>
+                            <th>Utolsó állás</th>
+                            <th>Dátum</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const db = {
+            elec: [
+                { a: "Nagyatád, Kossuth u. 1.", l: "Főépület", p: "HU0001...", s: "12345678", i: "2020.05.10", n: "2028.05.10", v: "15420 kWh", d: "2025.12.01" },
+                { a: "Nagyatád, Bajcsy u. 5.", l: "Garázs", p: "HU0002...", s: "87654321", i: "2021.10.15", n: "2029.10.15", v: "3210 kWh", d: "2025.11.20" }
+            ],
+            gas: [
+                { a: "Nagyatád, Kossuth u. 1.", l: "Kazánház", p: "G0001...", s: "G-445566", i: "2019.03.20", n: "2029.03.20", v: "8500 m³", d: "2025.12.01" }
+            ],
+            water: [
+                { a: "Nagyatád, Kossuth u. 1.", l: "Udvar", p: "-", s: "W-112233", i: "2022.06.01", n: "2030.06.01", v: "450 m³", d: "2025.12.10" }
+            ],
+            heat: [
+                { a: "Nagyatád, Sport u. 2.", l: "Iroda", p: "H0009...", s: "H-998877", i: "2023.01.10", n: "2031.01.10", v: "125 GJ", d: "2025.12.15" }
+            ]
+        };
+
+        let currentTab = 'elec';
+
+        function render(data) {
+            const body = document.getElementById('data-body');
+            body.innerHTML = data.map(r => `
+                <tr>
+                    <td><strong>${r.a}</strong></td>
+                    <td style="color:var(--text-muted);">${r.l}</td>
+                    <td><code>${r.p}</code></td>
+                    <td>${r.s}</td>
+                    <td>${r.i}</td>
+                    <td style="color:var(--danger); font-weight:700;">${r.n}</td>
+                    <td>${r.v}</td>
+                    <td>${r.d}</td>
+                </tr>
+            `).join('');
+        }
+
+        function switchTab(tab, btn) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filter();
+        }
+
+        function filter() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const data = db[currentTab].filter(r =>
+                r.a.toLowerCase().includes(query) ||
+                r.p.toLowerCase().includes(query) ||
+                r.s.toLowerCase().includes(query)
+            );
+            render(data);
+        }
+
+        render(db.elec);
+    </script>
+</body>
+
+</html>

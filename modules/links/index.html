@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkgyűjtemény - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .link-category {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+
+        .link-category h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            font-weight: 800;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 0.5rem;
+            background: var(--bg-light);
+        }
+
+        .link-item:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .link-item i {
+            font-size: 1.25rem;
+            opacity: 0.7;
+        }
+
+        .link-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .link-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .link-url {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-briefcase"></i><span>Irodai Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather" class="weather-info"></div>
+            <div id="global-clock" class="item-group"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Műszerfal</a>
+            <h2 style="font-weight: 800;"><i class="fas fa-link text-primary me-2"></i>Linkgyűjtemény</h2>
+        </div>
+
+        <div class="links-grid">
+            <!-- 1. Energiakereskedők -->
+            <div class="link-category">
+                <h3><i class="fas fa-bolt"></i> Energiakereskedők</h3>
+                <a href="https://www.eon.hu/hu/lakossagi.html" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">E.ON Ügyfélszolgálat</span><span
+                            class="link-url">eon.hu</span></div>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                <a href="https://www.mvmnext.hu/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">MVM Ügyfélszolgálat</span><span
+                            class="link-url">mvmnext.hu</span></div>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                <a href="https://www.e2hungary.hu/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">E2 Hungary</span><span
+                            class="link-url">e2hungary.hu</span></div>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                <a href="https://www.drv.hu/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">DRV Ügyfélszolgálat</span><span
+                            class="link-url">drv.hu</span></div>
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+            </div>
+
+            <!-- 2. Távfelügyelet -->
+            <div class="link-category">
+                <h3><i class="fas fa-tower-observation"></i> Távfelügyelet</h3>
+                <a href="https://www.solarweb.com/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">Fronius Solar.web</span><span
+                            class="link-url">solarweb.com</span></div>
+                    <i class="fas fa-solar-panel"></i>
+                </a>
+                <a href="https://monitoring.solaredge.com/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">SolarEdge Monitoring</span><span
+                            class="link-url">solaredge.com</span></div>
+                    <i class="fas fa-solar-panel"></i>
+                </a>
+                <a href="https://www.siemens.com/syncoic" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">Siemens Synco IC</span><span
+                            class="link-url">siemens.com</span></div>
+                    <i class="fas fa-microchip"></i>
+                </a>
+            </div>
+
+            <!-- 3. Hasznos Eszközök -->
+            <div class="link-category">
+                <h3><i class="fas fa-toolbox"></i> Hasznos Eszközök</h3>
+                <a href="https://www.ilovepdf.com/hu" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">ILovePDF</span><span
+                            class="link-url">ilovepdf.com</span></div>
+                    <i class="fas fa-file-pdf"></i>
+                </a>
+                <a href="https://lunag.hu/kozvilagitas" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">Közvilágítás hibabejelentő</span><span
+                            class="link-url">lunag.hu</span></div>
+                    <i class="fas fa-lightbulb"></i>
+                </a>
+                <a href="https://njt.hu/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">Nemzeti Jogszabálytár</span><span
+                            class="link-url">njt.hu</span></div>
+                    <i class="fas fa-gavel"></i>
+                </a>
+                <a href="https://www.e-cegjegyzek.hu/" class="link-item" target="_blank">
+                    <div class="link-info"><span class="link-name">E-Cégjegyzék</span><span
+                            class="link-url">e-cegjegyzek.hu</span></div>
+                    <i class="fas fa-search"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

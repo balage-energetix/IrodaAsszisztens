@@ -4,32 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Számlázási Segéd - AGI Irodai Segédlet</title>
+    <title>Számlázási Segéd - Irodai Asszisztens</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
         .calc-card {
             background: var(--bg-card);
             border-radius: 1.5rem;
             padding: 2rem;
             border: 1px solid var(--border-color);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
         }
 
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
-        }
-
-        .styled-input {
+        .styled-input,
+        .styled-select {
             width: 100%;
             padding: 0.75rem 1rem;
             border-radius: 0.75rem;
@@ -41,17 +36,32 @@
             transition: var(--transition);
         }
 
-        .styled-input:focus {
+        .styled-input:focus,
+        .styled-select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
 
-        .result-box {
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .result-panel {
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             border-radius: 1rem;
+            margin-top: 2rem;
             text-align: center;
         }
 
@@ -61,191 +71,199 @@
             display: block;
         }
 
-        .provider-select {
+        .provider-tabs {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1.5rem;
         }
 
-        .provider-btn {
+        .tab-btn {
             flex: 1;
             padding: 0.75rem;
             border-radius: 0.75rem;
             border: 1px solid var(--border-color);
             background: var(--bg-card);
+            font-weight: 800;
             cursor: pointer;
             transition: var(--transition);
-            font-weight: 600;
         }
 
-        .provider-btn.active {
+        .tab-btn.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-
-        th,
-        td {
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            text-align: left;
-        }
-
-        th {
-            background: var(--bg-light);
-            font-weight: 700;
-        }
-
-        .module-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-        }
-
-        .back-btn {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        @media (max-width: 900px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
     <header class="app-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
-        <nav style="display: flex; gap: 2rem; align-items: center;">
-            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+        <a href="../../index.html" class="logo"><i class="fas fa-briefcase"></i><span>Irodai Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather" class="weather-info"></div>
+            <div id="global-clock" class="item-group"></div>
             <button onclick="App.toggleTheme()"
-                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
                     id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </nav>
+        </div>
     </header>
 
-    <main class="container py-5 fade-in" style="max-width: 900px;">
+    <main class="container py-5 fade-in">
         <div class="module-header">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Műszerfal</a>
             <h2 style="font-weight: 800;"><i class="fas fa-calculator text-primary me-2"></i>Számlázási Segéd</h2>
         </div>
 
-        <div class="calc-card">
-            <h4 class="mb-4">Gázátszámítás</h4>
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <label>Mennyiség (m³)</label>
-                        <input type="number" id="m3" class="styled-input" oninput="convert('m3')">
+        <div class="calc-grid">
+            <!-- 1. UNIT CONVERTER -->
+            <div class="calc-card">
+                <h4 class="mb-4"><i class="fas fa-sync me-2"></i>Gázátszámítás (Gázfűtőérték)</h4>
+                <div class="input-group">
+                    <label>Bemeneti Mennyiség</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="number" id="conv-val" class="styled-input" style="flex: 2;" oninput="syncConv()"
+                            value="1">
+                        <select id="conv-unit" class="styled-select" style="flex: 1;" onchange="syncConv()">
+                            <option value="m3">m³</option>
+                            <option value="kwh">kWh</option>
+                            <option value="mj">MJ</option>
+                        </select>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <label>Energia (kWh)</label>
-                        <input type="number" id="kwh" class="styled-input" oninput="convert('kwh')">
-                    </div>
+                <div class="hint" style="margin-top: 1rem;">
+                    <strong>Eredmények:</strong><br>
+                    <span id="res-m3">1</span> m³ | <span id="res-kwh">10.55</span> kWh | <span id="res-mj">34.0</span>
+                    MJ
                 </div>
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <label>Energia (MJ)</label>
-                        <input type="number" id="mj" class="styled-input" oninput="convert('mj')">
+                <div class="input-group" style="margin-top: 2rem;">
+                    <label>Faktorok (Szerkeszthető)</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <span style="font-size: 0.7rem; color: var(--text-muted);">kWh/m³</span>
+                            <input type="number" id="f-kwh" class="styled-input" value="10.55" step="0.01"
+                                oninput="syncConv()">
+                        </div>
+                        <div>
+                            <span style="font-size: 0.7rem; color: var(--text-muted);">MJ/m³</span>
+                            <input type="number" id="f-mj" class="styled-input" value="34.0" step="0.1"
+                                oninput="syncConv()">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div style="font-size: 0.85rem; color: var(--text-muted);">Faktorok: 10.55 kWh/m³, 34.0 MJ/m³</div>
-        </div>
 
-        <div class="calc-card">
-            <h4 class="mb-4">Számla Kalkulátor</h4>
-            <div class="provider-select">
-                <button class="provider-btn active" onclick="setProvider('MVM', this)">MVM</button>
-                <button class="provider-btn" onclick="setProvider('EON', this)">E.ON</button>
-                <button class="provider-btn" onclick="setProvider('E2', this)">E2</button>
-            </div>
-
-            <div class="row align-items-center">
-                <div class="col-md-7">
-                    <div class="input-group">
-                        <label>Elszámolandó mennyiség (kWh)</label>
-                        <input type="number" id="calcAmount" class="styled-input" oninput="calculate()">
-                    </div>
-                    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem;">A rezsicsökkentett
-                        limit: 6013 kWh/év (~501 kWh/hó)</div>
+            <!-- 2. INVOICE CALCULATOR -->
+            <div class="calc-card">
+                <h4 class="mb-4"><i class="fas fa-file-invoice-dollar me-2"></i>Univerzális Kalkulátor</h4>
+                <div class="provider-tabs">
+                    <button class="tab-btn active" onclick="setProvider('MVM', this)">MVM</button>
+                    <button class="tab-btn" onclick="setProvider('EON', this)">E.ON</button>
+                    <button class="tab-btn" onclick="setProvider('E2', this)">E2</button>
                 </div>
-                <div class="col-md-5">
-                    <div class="result-box">
-                        <span style="font-weight: 600; opacity: 0.9;">Fizetendő (Bruttó)</span>
-                        <span class="result-val" id="totalResult">0 Ft</span>
+
+                <div class="input-group">
+                    <label>Fogyasztás mértéke</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="number" id="bill-amount" class="styled-input" style="flex: 2;" oninput="calcBill()"
+                            value="0">
+                        <select id="bill-unit" class="styled-select" style="flex: 1;" onchange="calcBill()">
+                            <option value="kwh">kWh</option>
+                            <option value="m3">m³</option>
+                            <option value="mj">MJ</option>
+                        </select>
                     </div>
                 </div>
+
+                <div class="input-group">
+                    <label>Egységár és Mértékegység</label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="number" id="unit-price" class="styled-input" style="flex: 2;" oninput="calcBill()">
+                        <select id="price-unit" class="styled-select" style="flex: 1;" onchange="calcBill()">
+                            <option value="kwh">Ft / kWh</option>
+                            <option value="m3">Ft / m³</option>
+                            <option value="mj">Ft / MJ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="result-panel">
+                    <span style="font-weight: 700; opacity: 0.8; font-size: 0.9rem;">BECSÜLT ÖSSZEG (BRUTTÓ)</span>
+                    <span class="result-val" id="bill-res">0 Ft</span>
+                </div>
+                <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1rem;">*Az egységár az
+                    alapértelmezett tarifát tükrözi. A számítás 27% ÁFÁ-val történik.</p>
             </div>
         </div>
     </main>
 
     <script src="../../js/main.js"></script>
     <script>
-        const factors = { kwh: 10.55, mj: 34.0 };
-        const tariffs = {
-            MVM: { base: 10.20, market: 70.10, limit: 6013 },
-            EON: { base: 10.30, market: 72.00, limit: 6013 },
-            E2: { base: 10.15, market: 69.90, limit: 6013 }
+        const providerData = {
+            MVM: { price: 10.20, unit: 'kwh' },
+            EON: { price: 10.30, unit: 'kwh' },
+            E2: { price: 10.15, unit: 'kwh' }
         };
-        let currentProvider = 'MVM';
+        let currentP = 'MVM';
 
-        function convert(source) {
-            const m3 = document.getElementById('m3');
-            const kwh = document.getElementById('kwh');
-            const mj = document.getElementById('mj');
+        function syncConv() {
+            const val = parseFloat(document.getElementById('conv-val').value) || 0;
+            const unit = document.getElementById('conv-unit').value;
+            const fk = parseFloat(document.getElementById('f-kwh').value) || 10.55;
+            const fm = parseFloat(document.getElementById('f-mj').value) || 34.0;
 
-            if (source === 'm3') {
-                kwh.value = (m3.value * factors.kwh).toFixed(2);
-                mj.value = (m3.value * factors.mj).toFixed(2);
-            } else if (source === 'kwh') {
-                const val = kwh.value / factors.kwh;
-                m3.value = val.toFixed(2);
-                mj.value = (val * factors.mj).toFixed(2);
-            } else if (source === 'mj') {
-                const val = mj.value / factors.mj;
-                m3.value = val.toFixed(2);
-                kwh.value = (val * factors.kwh).toFixed(2);
-            }
-            // Szinkronizálás a számlával
-            document.getElementById('calcAmount').value = kwh.value;
-            calculate();
+            let m3 = 0;
+            if (unit === 'm3') m3 = val;
+            else if (unit === 'kwh') m3 = val / fk;
+            else if (unit === 'mj') m3 = val / fm;
+
+            document.getElementById('res-m3').innerText = m3.toFixed(2);
+            document.getElementById('res-kwh').innerText = (m3 * fk).toFixed(2);
+            document.getElementById('res-mj').innerText = (m3 * fm).toFixed(2);
         }
 
         function setProvider(p, btn) {
-            currentProvider = p;
-            document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('active'));
+            currentP = p;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            calculate();
+            document.getElementById('unit-price').value = providerData[p].price;
+            document.getElementById('price-unit').value = providerData[p].unit;
+            calcBill();
         }
 
-        function calculate() {
-            const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
-            const t = tariffs[currentProvider];
-            let total = 0;
+        function calcBill() {
+            const amount = parseFloat(document.getElementById('bill-amount').value) || 0;
+            const bUnit = document.getElementById('bill-unit').value;
+            const price = parseFloat(document.getElementById('unit-price').value) || 0;
+            const pUnit = document.getElementById('price-unit').value;
+            const fk = parseFloat(document.getElementById('f-kwh').value) || 10.55;
+            const fm = parseFloat(document.getElementById('f-mj').value) || 34.0;
 
-            if (amount <= t.limit / 12) { // Havi szintre vetített limit egyszerűsítés
-                total = amount * t.base * 1.27;
-            } else {
-                const limit = t.limit / 12;
-                total = (limit * t.base * 1.27) + ((amount - limit) * t.market * 1.27);
-            }
+            // Normalize amount to m3
+            let m3 = 0;
+            if (bUnit === 'm3') m3 = amount;
+            else if (bUnit === 'kwh') m3 = amount / fk;
+            else if (bUnit === 'mj') m3 = amount / fm;
 
-            document.getElementById('totalResult').innerText = Math.round(total).toLocaleString('hu-HU') + ' Ft';
+            // Normalize price to per m3
+            let pricePerM3 = 0;
+            if (pUnit === 'm3') pricePerM3 = price;
+            else if (pUnit === 'kwh') pricePerM3 = price * fk;
+            else if (pUnit === 'mj') pricePerM3 = price * fm;
+
+            const total = m3 * pricePerM3 * 1.27;
+            document.getElementById('bill-res').innerText = Math.round(total).toLocaleString('hu-HU') + ' Ft';
         }
+
+        // Init
+        document.getElementById('unit-price').value = providerData.MVM.price;
+        syncConv();
+        calcBill();
     </script>
 </body>
 

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Képfelismerő - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .ai-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 75vh;
+        }
+
+        .ai-panel {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #image-container {
+            position: relative;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #canvas-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .tag-list {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .tag-item {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 1rem;
+            border-left: 5px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container-fluid py-4 fade-in">
+        <h2 class="mb-4" style="font-family:'Outfit'; font-weight:800; padding-left: 1rem;"><i
+                class="fas fa-brain text-primary me-2"></i>Mesterséges Intelligencia: Képfelismerő</h2>
+
+        <div class="ai-layout">
+            <div class="ai-panel">
+                <div id="image-container">
+                    <img id="input-img" style="max-width: 100%; display: none;">
+                    <canvas id="canvas-overlay"></canvas>
+                    <label id="upload-label" class="upload-btn">
+                        <i class="fas fa-camera-retro me-2"></i> Kép feltöltése
+                        <input type="file" id="ai-input" accept="image/*" hidden>
+                    </label>
+                </div>
+                <div id="loading"
+                    style="display:none; position:absolute; inset:0; background:rgba(255,255,255,0.8); display:none; align-items:center; justify-content:center; flex-direction:column;">
+                    <i class="fas fa-spinner fa-spin fa-3x text-primary mb-3"></i>
+                    <strong>AI elemzés folyamatban...</strong>
+                </div>
+            </div>
+
+            <div class="ai-panel" style="align-items: flex-start; background: var(--bg-card);">
+                <div class="tag-list" id="res-list">
+                    <p style="color:var(--text-muted); text-align:center;">Töltse fel a képet az objektumok
+                        felismeréséhez.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- TensorFlow.js & COCO-SSD -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    <script src="../../js/main.js"></script>
+    <script>
+        const input = document.getElementById('ai-input');
+        const img = document.getElementById('input-img');
+        const canvas = document.getElementById('canvas-overlay');
+        const resList = document.getElementById('res-list');
+        const loader = document.getElementById('loading');
+        let model = null;
+
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            document.getElementById('upload-label').style.display = 'none';
+            img.src = URL.createObjectURL(file);
+            img.style.display = 'block';
+
+            img.onload = async () => {
+                loader.style.display = 'flex';
+                if (!model) model = await cocoSsd.load();
+
+                const predictions = await model.detect(img);
+                renderResults(predictions);
+                loader.style.display = 'none';
+            };
+        };
+
+        function renderResults(preds) {
+            resList.innerHTML = `<h4 style="font-family:'Outfit';">Észlelt tárgyak (${preds.length})</h4>`;
+            canvas.width = img.clientWidth;
+            canvas.height = img.clientHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const top5 = preds.slice(0, 5);
+            top5.forEach(p => {
+                const [x, y, w, h] = p.bbox;
+                const scaleX = canvas.width / img.naturalWidth;
+                const scaleY = canvas.height / img.naturalHeight;
+
+                // Draw box
+                ctx.strokeStyle = '#5c6bc0';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(x * scaleX, y * scaleY, w * scaleX, h * scaleY);
+
+                // Add tag to list
+                resList.innerHTML += `
+                    <div class="tag-item">
+                        <span><strong>${p.class.toUpperCase()}</strong></span>
+                        <span style="font-size:0.7rem; color:var(--primary);">${Math.round(p.score * 100)}% pontosság</span>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+
+</html>

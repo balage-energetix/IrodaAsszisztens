@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gyorsító eszközök - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .tools-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .tool-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .tool-header {
+            color: var(--primary);
+            font-family: 'Outfit';
+            font-weight: 800;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .styled-input,
+        .styled-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 0.8rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            font-family: inherit;
+        }
+
+        .res-display {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.8rem;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="tools-layout">
+            <!-- DÁTUM KALKULÁTOR -->
+            <div class="tool-card">
+                <div class="tool-header"><i class="fas fa-calendar-alt"></i> Dátum kalkulátor</div>
+                <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">KEZDŐ DÁTUM</label>
+                <input type="date" id="date1" class="styled-input" onchange="calcDate()">
+                <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">ZÁRÓ DÁTUM</label>
+                <input type="date" id="date2" class="styled-input" onchange="calcDate()">
+                <div class="res-display" id="date-res">0 nap</div>
+            </div>
+
+            <!-- GEOMETRIA MEGOLDÓ -->
+            <div class="tool-card">
+                <div class="tool-header"><i class="fas fa-shapes"></i> Geometria szakértő</div>
+                <select id="geo-type" class="styled-select" onchange="updateGeo()">
+                    <option value="rect">Téglalap</option>
+                    <option value="tri">Háromszög</option>
+                </select>
+                <div id="geo-inputs">
+                    <input type="number" id="side-a" class="styled-input" placeholder="A oldal (vagy alap)"
+                        oninput="calcGeo()">
+                    <input type="number" id="side-b" class="styled-input" placeholder="B oldal (vagy magasság)"
+                        oninput="calcGeo()">
+                </div>
+                <div class="res-display" id="geo-res">K: 0 | T: 0</div>
+                <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1rem;">*Adja meg az oldalakat a
+                    számításhoz.</p>
+            </div>
+
+            <!-- STOPPER & VISSZASZÁMLÁLÓ -->
+            <div class="tool-card">
+                <div class="tool-header"><i class="fas fa-stopwatch"></i> Időmérés</div>
+                <div id="timer-display"
+                    style="font-family:monospace; font-size: 3rem; text-align: center; margin-bottom: 1.5rem; font-weight: 800; color: var(--primary);">
+                    00:00.0</div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="feature-card" style="padding: 1rem; flex: 1;" onclick="startTimer()"><i
+                            class="fas fa-play" style="margin:0; font-size:1.2rem;"></i></button>
+                    <button class="feature-card" style="padding: 1rem; flex: 1;" onclick="stopTimer()"><i
+                            class="fas fa-pause" style="margin:0; font-size:1.2rem;"></i></button>
+                    <button class="feature-card" style="padding: 1rem; flex: 1;" onclick="resetTimer()"><i
+                            class="fas fa-redo" style="margin:0; font-size:1.2rem;"></i></button>
+                </div>
+                <div id="laps" style="margin-top: 1rem; max-height: 100px; overflow-y: auto; font-size: 0.8rem;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        function calcDate() {
+            const d1 = new Date(document.getElementById('date1').value);
+            const d2 = new Date(document.getElementById('date2').value);
+            if (!isNaN(d1) && !isNaN(d2)) {
+                const diff = Math.abs(d2 - d1);
+                document.getElementById('date-res').innerText = Math.round(diff / (1000 * 60 * 60 * 24)) + ' nap';
+            }
+        }
+        function updateGeo() {
+            const t = document.getElementById('geo-type').value;
+            document.getElementById('side-a').placeholder = t === 'rect' ? 'A oldal' : 'Alap';
+            document.getElementById('side-b').placeholder = t === 'rect' ? 'B oldal' : 'Magasság';
+            calcGeo();
+        }
+        function calcGeo() {
+            const t = document.getElementById('geo-type').value;
+            const a = parseFloat(document.getElementById('side-a').value) || 0;
+            const b = parseFloat(document.getElementById('side-b').value) || 0;
+            if (t === 'rect') {
+                document.getElementById('geo-res').innerText = `K: ${(2 * (a + b)).toFixed(1)} | T: ${(a * b).toFixed(1)}`;
+            } else {
+                document.getElementById('geo-res').innerText = `T: ${(a * b / 2).toFixed(1)}`;
+            }
+        }
+
+        let time = 0, timerObj = null;
+        function startTimer() { if (!timerObj) timerObj = setInterval(() => { time += 100; updateDisplay(); }, 100); }
+        function stopTimer() { clearInterval(timerObj); timerObj = null; }
+        function resetTimer() { stopTimer(); time = 0; updateDisplay(); document.getElementById('laps').innerHTML = ''; }
+        function updateDisplay() {
+            const s = Math.floor(time / 1000) % 60;
+            const m = Math.floor(time / 60000);
+            const ms = Math.floor((time % 1000) / 100);
+            document.getElementById('timer-display').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}.${ms}`;
+        }
+    </script>
+</body>
+
+</html>

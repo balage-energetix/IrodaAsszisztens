@@ -4,136 +4,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lean Trükkök - AGI Irodai Segédlet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Billentyűkombinációk - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Outfit:wght@800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
-        .shortcut-grid {
+        .kbd-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            background: var(--bg-card);
         }
 
-        .shortcut-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 1.25rem;
-            border-radius: 1rem;
+        .kbd-card {
+            padding: 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            transition: var(--transition);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .shortcut-card:hover {
-            border-color: var(--primary);
-            transform: translateX(5px);
+        .kbd-card:last-child {
+            border: none;
         }
 
-        .key-group {
+        .keys {
             display: flex;
             gap: 4px;
             align-items: center;
         }
 
-        .key {
-            background: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 2px 6px;
-            font-family: monospace;
-            font-size: 0.9rem;
+        .plus {
+            font-size: 0.8rem;
             font-weight: 800;
-            box-shadow: 0 2px 0 var(--border-color);
+            color: var(--text-muted);
         }
 
         .desc {
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             color: var(--text-main);
             text-align: right;
         }
 
-        .module-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
+        /* Keyboard feel */
+        .kbd-key {
+            transition: 0.1s;
         }
 
-        .back-btn {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .kbd-card:hover .kbd-key {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #bdbdbd;
         }
     </style>
 </head>
 
 <body>
     <header class="app-header">
-        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
-        <nav style="display: flex; gap: 2rem; align-items: center;">
-            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
-            <button onclick="App.toggleTheme()"
-                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
                     id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </nav>
+        </div>
     </header>
 
     <main class="container py-5 fade-in">
-        <div class="module-header">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
-            <h2 style="font-weight: 800;"><i class="fas fa-keyboard text-primary me-2"></i>Lean Trükkök</h2>
+        <h2 class="mb-4" style="font-family:'Outfit'; font-weight:800;"><i
+                class="fas fa-keyboard text-primary me-2"></i>Billentyűkombinációk</h2>
+
+        <div class="hint">
+            <strong>Pro tipp:</strong> Az egér ráhúzásával láthatja a gombok fizikai benyomódását. Használja a
+            <code>Ctrl+F</code> billentyűket a kereséshez!
         </div>
 
-        <div class="shortcut-grid" id="shortcut-container">
-            <!-- JS fills this -->
-        </div>
+        <div class="kbd-grid" id="keys-container"></div>
     </main>
 
     <script src="../../js/main.js"></script>
     <script>
-        const shortcuts = [
-            { k: ["Win", "Nyilak"], d: "Ablak igazítása" },
-            { k: ["Ctrl", "Z"], d: "Visszavonás" },
-            { k: ["Ctrl", "Shift", "T"], d: "Bezárt lap megnyitása" },
+        const data = [
+            { k: ["Win", "Nyíl"], d: "Ablak rendezés" },
             { k: ["Ctrl", "C"], d: "Másolás" },
             { k: ["Ctrl", "V"], d: "Beillesztés" },
             { k: ["Ctrl", "X"], d: "Kivágás" },
-            { k: ["Ctrl", "A"], d: "Mind kijelölése" },
+            { k: ["Ctrl", "Z"], d: "Visszavonás" },
+            { k: ["Ctrl", "Y"], d: "Mégis" },
+            { k: ["Ctrl", "A"], d: "Mindet kijelöl" },
             { k: ["Ctrl", "P"], d: "Nyomtatás" },
             { k: ["Ctrl", "S"], d: "Mentés" },
             { k: ["Win", "D"], d: "Asztal megjelenítése" },
             { k: ["Win", "E"], d: "Fájlkezelő" },
             { k: ["Win", "L"], d: "Zárolás" },
-            { k: ["Alt", "Tab"], d: "Programváltás" },
-            { k: ["Ctrl", "F"], d: "Keresés" },
+            { k: ["Win", "V"], d: "Vágólap előzmény" },
+            { k: ["Win", "R"], d: "Futtatás" },
+            { k: ["Win", "I"], d: "Gépház" },
             { k: ["Win", "Shift", "S"], d: "Képernyőmetszet" },
+            { k: ["Alt", "Tab"], d: "Váltás ablakok közt" },
+            { k: ["Alt", "F4"], d: "Ablak bezárása" },
+            { k: ["Ctrl", "Shift", "Esc"], d: "Feladatkezelő" },
+            { k: ["Win", "P"], d: "Kivetítés" },
+            { k: ["Ctrl", "T"], d: "Új lap (Böngésző)" },
+            { k: ["Ctrl", "N"], d: "Új ablak" },
+            { k: ["Ctrl", "Shift", "T"], d: "Bezárt lap vissza" },
+            { k: ["Ctrl", "F"], d: "Keresés" },
+            { k: ["Ctrl", "H"], d: "Előzmények" },
+            { k: ["Ctrl", "J"], d: "Letöltések" },
+            { k: ["Ctrl", "L"], d: "Címsorra ugrás" },
+            { k: ["Ctrl", "K"], d: "Link beillesztése" },
+            { k: ["Ctrl", "B"], d: "Félkövér" },
+            { k: ["Ctrl", "I"], d: "Dőlt" },
+            { k: ["Ctrl", "U"], d: "Aláhúzott" },
+            { k: ["Win", "."], d: "Emoji panel" },
+            { k: ["Alt", "Space"], d: "Rendszermenü" },
             { k: ["F2"], d: "Átnevezés" },
             { k: ["F5"], d: "Frissítés" },
-            { k: ["Alt", "F4"], d: "Ablak bezárása" },
-            { k: ["Ctrl", "W"], d: "Fül bezárása" },
-            { k: ["Win", "V"], d: "Vágólap előzmények" },
-            { k: ["Ctrl", "Shift", "Esc"], d: "Feladatkezelő" }
+            { k: ["Win", "S"], d: "Keresés (Start)" },
+            { k: ["Ctrl", "W"], d: "Lap bezárása" },
+            { k: ["Ctrl", "F4"], d: "Dokumentum bezárása" },
+            { k: ["Win", "+"], d: "Nagyító" },
+            { k: ["Win", "Pause"], d: "Rendszerinfó" }
         ];
 
-        const container = document.getElementById('shortcut-container');
-        shortcuts.forEach(sh => {
-            const card = document.createElement('div');
-            card.className = 'shortcut-card';
-
-            const keysHtml = sh.k.map(key => `<span class="key">${key}</span>`).join('<span style="color:var(--text-muted);font-weight:bold">+</span>');
-
-            card.innerHTML = `
-                <div class="key-group">${keysHtml}</div>
-                <div class="desc">${sh.d}</div>
+        const container = document.getElementById('keys-container');
+        data.forEach(item => {
+            const keysHtml = item.k.map(key => `<span class="kbd-key">${key}</span>`).join('<span class="plus">+</span>');
+            container.innerHTML += `
+                <div class="kbd-card">
+                    <div class="keys">${keysHtml}</div>
+                    <div class="desc">${item.d}</div>
+                </div>
             `;
-            container.appendChild(card);
         });
     </script>
 </body>

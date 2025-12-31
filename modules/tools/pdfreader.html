@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF kiolvasó - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .ocr-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            height: 75vh;
+        }
+
+        .ocr-panel {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+        }
+
+        #pdf-preview {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
+
+        #text-res {
+            flex: 1;
+            padding: 1.5rem;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            line-height: 1.6;
+        }
+
+        .upload-zone {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px dashed var(--border-color);
+            margin: 2rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container-fluid py-4 fade-in">
+        <h2 class="mb-4" style="font-family:'Outfit'; font-weight:800; padding-left: 1rem;"><i
+                class="fas fa-file-pdf text-primary me-2"></i>PDF kiolvasó & OCR</h2>
+
+        <div class="ocr-layout">
+            <div class="ocr-panel">
+                <div class="panel-header">PDF ELŐNÉZET <i class="fas fa-eye"></i></div>
+                <div id="pdf-container" style="flex: 1; display: flex; flex-direction: column;">
+                    <label class="upload-zone" id="drop-zone">
+                        <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                        <span>Kattintson vagy húzza ide a PDF-et</span>
+                        <input type="file" id="pdf-input" accept="application/pdf" hidden>
+                    </label>
+                    <iframe id="pdf-preview" style="display:none;"></iframe>
+                </div>
+            </div>
+
+            <div class="ocr-panel">
+                <div class="panel-header">KIOLVASOTT SZÖVEG
+                    <button class="feature-card" style="padding: 0.4rem 1rem; font-size: 0.7rem;"
+                        onclick="copyText()">MÁSOLÁS <i class="fas fa-copy"></i></button>
+                </div>
+                <textarea id="text-res" placeholder="A szöveg itt fog megjelenni..."></textarea>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script>
+        const input = document.getElementById('pdf-input');
+        const preview = document.getElementById('pdf-preview');
+        const textRes = document.getElementById('text-res');
+        const zone = document.getElementById('drop-zone');
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+        input.onchange = (e) => handleFile(e.target.files[0]);
+
+        async function handleFile(file) {
+            if (!file) return;
+            zone.style.display = 'none';
+            preview.style.display = 'block';
+            preview.src = URL.createObjectURL(file);
+
+            textRes.value = "Kiolvasás folyamatban... (Ez eltarthat egy ideig)";
+
+            const reader = new FileReader();
+            reader.onload = async function () {
+                const typedarray = new Uint8Array(this.result);
+                const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                let fullText = "";
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    fullText += content.items.map(item => item.str).join(' ') + "\n\n";
+                }
+                textRes.value = fullText || "Nem sikerült szöveget kiolvasni (kép alapú PDF?).";
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function copyText() {
+            textRes.select();
+            document.execCommand('copy');
+            alert("Szöveg a vágólapra másolva!");
+        }
+    </script>
+</body>
+
+</html>
