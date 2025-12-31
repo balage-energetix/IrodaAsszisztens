@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Képtár - AGI Irodai Segédlet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .gallery-container {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+        }
+
+        #viewer {
+            display: none;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        #main-img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .thumb-strip {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin-top: 1rem;
+        }
+
+        .thumb {
+            height: 80px;
+            width: 120px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            flex-shrink: 0;
+        }
+
+        .thumb:hover,
+        .thumb.active {
+            opacity: 1;
+            border-color: var(--primary);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+            <button onclick="App.toggleTheme()"
+                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </nav>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+            <h2 style="font-weight: 800;"><i class="fas fa-images text-primary me-2"></i>Képtár</h2>
+        </div>
+
+        <div class="gallery-container">
+            <label class="upload-btn">
+                <i class="fas fa-folder-open"></i> Mappa tallózása
+                <input type="file" id="folder-input" webkitdirectory directory multiple hidden>
+            </label>
+            <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-muted);">Válasszon egy mappát a helyi
+                lemezen a képek beolvasásához.</p>
+
+            <div id="viewer">
+                <img id="main-img" src="">
+                <div class="thumb-strip" id="thumbs"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const input = document.getElementById('folder-input');
+        const viewer = document.getElementById('viewer');
+        const mainImg = document.getElementById('main-img');
+        const thumbStrip = document.getElementById('thumbs');
+
+        input.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
+            if (files.length === 0) return;
+
+            viewer.style.display = 'block';
+            thumbStrip.innerHTML = '';
+
+            files.forEach((file, i) => {
+                const url = URL.createObjectURL(file);
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'thumb' + (i === 0 ? ' active' : '');
+                img.onclick = () => {
+                    mainImg.src = url;
+                    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+                    img.classList.add('active');
+                };
+                thumbStrip.appendChild(img);
+                if (i === 0) mainImg.src = url;
+            });
+        });
+    </script>
+</body>
+
+</html>

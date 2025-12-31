@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODUL_NEVE - AGI Irodai Segédlet</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="app-header">
+        <div class="logo">
+            <i class="fas fa-bolt"></i>
+            <span>AGI Irodai Segédlet</span>
+        </div>
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+            <button onclick="App.toggleTheme()"
+                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;">
+                <i id="theme-toggle-icon" class="fas fa-moon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header">
+            <a href="../../index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Vissza a főoldalra
+            </a>
+            <h2 style="font-weight: 800;">MODUL_NEVE</h2>
+        </div>
+
+        <div id="module-content">
+            <!-- Modul specifikus tartalom helye -->
+        </div>
+    </main>
+
+    <!-- Core Scripts -->
+    <script src="../../js/main.js"></script>
+    <script>
+        // Modul specifikus logika
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feljegyzés - AGI Irodai Segédlet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .note-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-inline: auto;
+        }
+
+        .styled-input,
+        .styled-textarea {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .styled-textarea {
+            resize: vertical;
+            min-height: 300px;
+        }
+
+        .styled-input:focus,
+        .styled-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 800;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .save-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(67, 97, 238, 0.3);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+            <button onclick="App.toggleTheme()"
+                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </nav>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header" style="max-width: 800px; margin-inline: auto;">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+            <h2 style="font-weight: 800;"><i class="fas fa-pencil-alt text-primary me-2"></i>Új Feljegyzés</h2>
+        </div>
+
+        <div class="note-card">
+            <label
+                style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Ügykör
+                / Téma</label>
+            <select id="category" class="styled-input">
+                <option>Közterület felbontás</option>
+                <option>Tervezői hozzájárulás</option>
+                <option>Közvilágítási hiba</option>
+                <option>Bérlői elszámolás</option>
+                <option>Egyéb</option>
+            </select>
+
+            <label
+                style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase;">Tartalom</label>
+            <textarea id="content" class="styled-textarea" placeholder="Ide írja a feljegyzést..."></textarea>
+
+            <button class="save-btn" onclick="save()">
+                <i class="fas fa-floppy-disk"></i> Mentés (TXT)
+            </button>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        function save() {
+            const cat = document.getElementById('category').value;
+            const text = document.getElementById('content').value;
+            if (!text) return alert("Üres feljegyzést nem menthet!");
+
+            const date = new Date().toLocaleString('hu-HU');
+            const blob = new Blob([
+                `FELJEGYZÉS\nDátum: ${date}\nÜgykör: ${cat}\n\n${text}\n\n---\nKészült az AGI Irodai Segédlettel`
+            ], { type: "text/plain" });
+
+            const a = document.createElement("a");
+            a.download = `Feljegyzes_${cat.replace(/\s/g, '_')}_${Date.now()}.txt`;
+            a.href = window.URL.createObjectURL(blob);
+            a.click();
+        }
+    </script>
+</body>
+
+</html>

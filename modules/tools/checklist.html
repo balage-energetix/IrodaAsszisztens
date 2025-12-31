@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-lista - AGI Irodai Segédlet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .list-card {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .list-card h4 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
+
+        .todo-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 4px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .add-task-btn {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 2px dashed var(--border-color);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .add-task-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn {
+            background: var(--warning);
+            color: #000;
+            font-weight: 800;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .export-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+            <button onclick="App.toggleTheme()"
+                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </nav>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="export-btn" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Export (PDF)</button>
+                <h2 style="font-weight: 800;"><i class="fas fa-list-check text-primary me-2"></i>Check-lista</h2>
+            </div>
+        </div>
+
+        <div id="capture-area" class="checklist-grid">
+            <div class="list-card">
+                <h4 style="border-color: var(--secondary);">Napi</h4>
+                <div id="list-daily"></div>
+                <button class="add-task-btn" onclick="addItem('daily')">+ Új feladat</button>
+            </div>
+            <div class="list-card">
+                <h4 style="border-color: var(--success);">Heti</h4>
+                <div id="list-weekly"></div>
+                <button class="add-task-btn" onclick="addItem('weekly')">+ Új feladat</button>
+            </div>
+            <div class="list-card">
+                <h4 style="border-color: var(--warning);">Havi</h4>
+                <div id="list-monthly"></div>
+                <button class="add-task-btn" onclick="addItem('monthly')">+ Új feladat</button>
+            </div>
+            <div class="list-card">
+                <h4 style="border-color: var(--danger);">Éves</h4>
+                <div id="list-yearly"></div>
+                <button class="add-task-btn" onclick="addItem('yearly')">+ Új feladat</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script>
+        const tasks = {
+            daily: ["Fűtésellenőrzés", "Közvil. hibajelentések"],
+            weekly: ["Heti fűtési adatok"],
+            monthly: ["Bérlői elszámolás", "Üzemeltetési díjak"],
+            yearly: ["Tűzoltókészülék vizsga", "Fűtés szezonindítás"]
+        };
+
+        function render() {
+            Object.keys(tasks).forEach(key => {
+                const cont = document.getElementById(`list-${key}`);
+                cont.innerHTML = tasks[key].map(t => `
+                    <div class="todo-item">
+                        <input type="checkbox">
+                        <span>${t}</span>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function addItem(type) {
+            const task = prompt("Új feladat:");
+            if (task) { tasks[type].push(task); render(); }
+        }
+
+        function exportPDF() {
+            const element = document.getElementById('capture-area');
+            html2pdf().from(element).save(`Checklist_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
+
+        render();
+    </script>
+</body>
+
+</html>

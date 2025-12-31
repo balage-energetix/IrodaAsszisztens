@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lean Trükkök - AGI Irodai Segédlet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .shortcut-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .shortcut-card:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .key-group {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .key {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            font-weight: 800;
+            box-shadow: 0 2px 0 var(--border-color);
+        }
+
+        .desc {
+            font-weight: 500;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="logo"><i class="fas fa-bolt"></i><span>AGI Irodai Segédlet</span></div>
+        <nav style="display: flex; gap: 2rem; align-items: center;">
+            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+            <button onclick="App.toggleTheme()"
+                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </nav>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header">
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Vissza</a>
+            <h2 style="font-weight: 800;"><i class="fas fa-keyboard text-primary me-2"></i>Lean Trükkök</h2>
+        </div>
+
+        <div class="shortcut-grid" id="shortcut-container">
+            <!-- JS fills this -->
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const shortcuts = [
+            { k: ["Win", "Nyilak"], d: "Ablak igazítása" },
+            { k: ["Ctrl", "Z"], d: "Visszavonás" },
+            { k: ["Ctrl", "Shift", "T"], d: "Bezárt lap megnyitása" },
+            { k: ["Ctrl", "C"], d: "Másolás" },
+            { k: ["Ctrl", "V"], d: "Beillesztés" },
+            { k: ["Ctrl", "X"], d: "Kivágás" },
+            { k: ["Ctrl", "A"], d: "Mind kijelölése" },
+            { k: ["Ctrl", "P"], d: "Nyomtatás" },
+            { k: ["Ctrl", "S"], d: "Mentés" },
+            { k: ["Win", "D"], d: "Asztal megjelenítése" },
+            { k: ["Win", "E"], d: "Fájlkezelő" },
+            { k: ["Win", "L"], d: "Zárolás" },
+            { k: ["Alt", "Tab"], d: "Programváltás" },
+            { k: ["Ctrl", "F"], d: "Keresés" },
+            { k: ["Win", "Shift", "S"], d: "Képernyőmetszet" },
+            { k: ["F2"], d: "Átnevezés" },
+            { k: ["F5"], d: "Frissítés" },
+            { k: ["Alt", "F4"], d: "Ablak bezárása" },
+            { k: ["Ctrl", "W"], d: "Fül bezárása" },
+            { k: ["Win", "V"], d: "Vágólap előzmények" },
+            { k: ["Ctrl", "Shift", "Esc"], d: "Feladatkezelő" }
+        ];
+
+        const container = document.getElementById('shortcut-container');
+        shortcuts.forEach(sh => {
+            const card = document.createElement('div');
+            card.className = 'shortcut-card';
+
+            const keysHtml = sh.k.map(key => `<span class="key">${key}</span>`).join('<span style="color:var(--text-muted);font-weight:bold">+</span>');
+
+            card.innerHTML = `
+                <div class="key-group">${keysHtml}</div>
+                <div class="desc">${sh.d}</div>
+            `;
+            container.appendChild(card);
+        });
+    </script>
+</body>
+
+</html>
