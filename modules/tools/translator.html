@@ -346,9 +346,27 @@
         let isRecording = false;
         let lastTranslation = "";
         let translateTimeout;
+        let voices = [];
+        const synth = window.speechSynthesis;
 
         recognition.interimResults = true;
         recognition.lang = document.getElementById('src-lang').value;
+
+        // Initialize voices with robust handling for mobile
+        function populateVoices() {
+            voices = synth.getVoices();
+        }
+
+        populateVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoices;
+        }
+
+        // Mobile retry interval for voices
+        const voiceRetry = setInterval(() => {
+            populateVoices();
+            if (voices.length > 0) clearInterval(voiceRetry);
+        }, 1000);
 
         recognition.onstart = () => {
             isRecording = true;
@@ -429,9 +447,22 @@
 
         function playTranslation() {
             if (!lastTranslation) return;
-            const ut = new SpeechSynthesisUtterance(lastTranslation);
-            ut.lang = document.getElementById('target-lang').value;
-            window.speechSynthesis.speak(ut);
+
+            // Critical for mobile: cancel any existing speech
+            synth.cancel();
+
+            const utterThis = new SpeechSynthesisUtterance(lastTranslation);
+            const targetLang = document.getElementById('target-lang').value;
+            utterThis.lang = targetLang;
+
+            // Find best matching voice for the target language
+            const voice = voices.find(v => v.lang === targetLang || v.lang.startsWith(targetLang.split('-')[0]));
+            if (voice) utterThis.voice = voice;
+
+            // Small delay helps stability on mobile browsers
+            setTimeout(() => {
+                synth.speak(utterThis);
+            }, 50);
         }
 
         function swapLangs() {

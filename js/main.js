@@ -340,26 +340,17 @@ const App = {
         animate();
 
         document.addEventListener('mousedown', (e) => {
-            // Create a "pop" bubble effect
-            const pop = document.createElement('div');
-            pop.className = 'cursor-pop';
-            pop.style.left = `${e.clientX}px`;
-            pop.style.top = `${e.clientY}px`;
-            document.body.appendChild(pop);
-
-            // Randomly add a few sparkles
-            for (let i = 0; i < 3; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'cursor-sparkle';
-                sparkle.innerHTML = '✨';
-                sparkle.style.left = `${e.clientX + (Math.random() - 0.5) * 40}px`;
-                sparkle.style.top = `${e.clientY + (Math.random() - 0.5) * 40}px`;
-                sparkle.style.fontSize = `${Math.random() * 10 + 10}px`;
-                document.body.appendChild(sparkle);
-                setTimeout(() => sparkle.remove(), 800);
+            // Create "water drop" ripples
+            for (let i = 0; i < 2; i++) {
+                setTimeout(() => {
+                    const ripple = document.createElement('div');
+                    ripple.className = 'cursor-ripple';
+                    ripple.style.left = `${e.clientX}px`;
+                    ripple.style.top = `${e.clientY}px`;
+                    document.body.appendChild(ripple);
+                    setTimeout(() => ripple.remove(), 1000);
+                }, i * 200);
             }
-
-            setTimeout(() => pop.remove(), 600);
 
             follower.style.transform = 'translate(-50%, -50%) scale(0.6)';
         });

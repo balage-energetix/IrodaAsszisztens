@@ -166,9 +166,9 @@ body {
 
 .cursor-follower {
     position: fixed;
-    width: 36px;
-    height: 36px;
-    border: 2.5px solid var(--accent-purple);
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid var(--accent-purple);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
@@ -176,61 +176,50 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+    opacity: 0.4;
+    transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s, opacity 0.3s;
 }
 
 .cursor-follower.hovering {
-    width: 50px;
-    height: 50px;
+    width: 32px;
+    height: 32px;
     background: rgba(123, 97, 255, 0.1);
     border-color: var(--primary-light);
-    border-width: 1.5px;
+    opacity: 0.8;
 }
 
 .cursor-pop {
-    position: fixed;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
-    border: 2px solid var(--accent-purple);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 10002;
-    transform: translate(-50%, -50%);
-    animation: popEffect 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    display: none;
+    /* Replaced by ripples */
 }
 
-@keyframes popEffect {
+/* Water Ripple Effect */
+.cursor-ripple {
+    position: fixed;
+    border: 1.5px solid var(--accent-purple);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    animation: rippleWave 1s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes rippleWave {
     0% {
-        transform: translate(-50%, -50%) scale(0.5);
-        opacity: 1;
-        border-width: 4px;
+        width: 0;
+        height: 0;
+        opacity: 0.8;
     }
 
     100% {
-        transform: translate(-50%, -50%) scale(2.5);
+        width: 120px;
+        height: 120px;
         opacity: 0;
-        border-width: 1px;
     }
 }
 
 .cursor-sparkle {
-    position: fixed;
-    pointer-events: none;
-    z-index: 10001;
-    animation: sparkleExit 0.8s ease-out forwards;
-}
-
-@keyframes sparkleExit {
-    0% {
-        transform: translateY(0) rotate(0deg) scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: translateY(-40px) rotate(180deg) scale(0);
-        opacity: 0;
-    }
+    display: none;
 }
 
 #flashlight-overlay {
@@ -664,23 +653,24 @@ h6 {
 
 /* Category Groups */
 .category-group {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border-radius: 1.5rem;
-    background: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.25);
     border: 1px solid transparent;
 }
 
 .group-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0.4rem;
     padding-left: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     text-transform: uppercase;
     letter-spacing: 0.05rem;
+    opacity: 0.8;
 }
 
 /* Dashboard Grid */
@@ -694,29 +684,48 @@ h6 {
 /* Feature Cards - Modern Premium Design */
 .feature-card {
     background: var(--bg-card) !important;
-    padding: 1.2rem;
-    border-radius: 1.75rem;
+    padding: 1rem;
+    border-radius: 1.5rem;
     border: 1px solid var(--border-color);
     position: relative;
     overflow: hidden;
     text-decoration: none;
     color: var(--text-main) !important;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    /* 3D Depth Shadow */
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.06),
+        0 2px 4px rgba(0, 0, 0, 0.04),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.6);
     z-index: 1;
     backface-visibility: hidden;
     transform: translateZ(0);
     -webkit-font-smoothing: antialiased;
 }
 
-/* Feature Cards - Dashboard Grid Specifics */
+/* Feature Cards - Dashboard Grid Specifics (Compact 3D) */
 .dashboard-grid .feature-card {
-    width: 150px;
-    height: 140px;
+    width: 130px;
+    height: 120px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
+}
+
+.feature-card i {
+    font-size: 1.6rem !important;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.1));
+}
+
+.feature-card h5 {
+    font-size: 0.75rem !important;
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 800;
+    text-align: center;
 }
 
 /* Fix for vertical line flickering - using a dedicated hardware-accelerated layer */
@@ -731,24 +740,40 @@ h6 {
 }
 
 .feature-card:hover {
-    transform: translateY(-10px) scale(1.05);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 3px var(--primary-light);
-    border-color: var(--primary-light) !important;
+    transform: translateY(-8px) translateZ(10px) scale(1.06);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.12),
+        0 0 0 3px var(--primary-light),
+        0 10px 15px rgba(0, 0, 0, 0.05);
     background: white !important;
+}
+
+.feature-card:hover i {
+    transform: scale(1.1);
 }
 
 [data-theme="dark"] .feature-card {
     background: #1a1a1a !important;
     border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 [data-theme="dark"] .feature-card:hover {
     background: #252525 !important;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 3px var(--primary-light);
 }
 
-[data-theme="dark"] .feature-card h5,
-[data-theme="dark"] .feature-card i {
+[data-theme="dark"] .feature-card h5 {
     color: #ffffff !important;
+}
+
+/* Icons retain the original colors provided via inline style */
+.feature-card i {
+    color: inherit;
 }
 
 .feature-card:hover h5 {
