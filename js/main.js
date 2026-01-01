@@ -22,7 +22,7 @@ const App = {
         this.initHeaderBgRotation();
         this.initWaveDirectionSwitcher();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.18 initialized");
+        console.log("Irodai Asszisztens V3.27 initialized");
     },
 
     // --- Wave Direction Switcher ---
@@ -54,6 +54,11 @@ const App = {
             if (isDeepModule) relativePath = '../../';
             else if (isModule) relativePath = '../';
 
+            // Fix for root index.html
+            if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
+                relativePath = '';
+            }
+
             bgLayer.style.opacity = '0';
             setTimeout(() => {
                 bgLayer.innerHTML = `<img src="${relativePath}${randomImg}" alt="Header background">`;
@@ -65,77 +70,81 @@ const App = {
         changeBg();
     },
 
-    // --- Layout & Nav Injection ---
+    // --- Global Navigation ---
     injectGlobalNav() {
         const header = document.querySelector('.app-header');
         if (!header) return;
 
-        const p = this.getPath();
+        const p = window.location.pathname.includes('/modules/') ? (window.location.pathname.match(/\//g).length > 2 ? '../../' : '../') : '';
+
+        // Force Android Icon and grass green branding
         const logo = header.querySelector('.logo');
         if (logo) {
             logo.innerHTML = `<i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span>`;
         }
 
-        const existingNav = header.querySelector('.header-nav');
-        if (existingNav) existingNav.remove();
-
         const navHtml = `
-            <div class="header-nav" id="global-header-nav">
-                <div class="nav-cat">MŰSZAKI <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+            <nav class="app-nav">
+                <div class="nav-cat">FELADATOK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/map/index.html" class="nav-dropdown-item">Hiba Jelölő Térkép</a>
-                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item">Közvilágítás</a>
-                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item">Éjszakai Drónfelvételek</a>
-                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item">Check-lista</a>
-                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item">Nyomtatványgenerátor</a>
+                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt"></i> Térkép</a>
+                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb"></i> Közvilágítás</a>
+                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images"></i> Drónfelvételek</a>
+                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check"></i> Check-lista</a>
+                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature"></i> Generátor</a>
+                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line"></i> Tőzsde</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item">PDF Szerkesztő</a>
-                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item">PDF Kiolvasó</a>
-                        <a href="${p}modules/utils/index.html" class="nav-dropdown-item">Gyorsító Eszközök</a>
-                       <a href="${p}modules/tools/notes.html" class="nav-dropdown-item">Gyors Feljegyzés</a>
+                        <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf"></i> PDF Szerkesztő</a>
+                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open"></i> PDF Kiolvasó</a>
+                        <a href="${p}modules/utils/index.html" class="nav-dropdown-item"><i class="fas fa-bolt"></i> Gyorsító</a>
+                        <a href="${p}modules/tools/notes.html" class="nav-dropdown-item"><i class="fas fa-sticky-note"></i> Feljegyzés</a>
+                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun"></i> Időjárás Napló</a>
                     </div>
                 </div>
                 <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item">Atádi Hírek</a>
-                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item">Helyi Időjárás</a>
-                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item">Közig. Alapismeretek</a>
-                        <a href="${p}modules/lean/index.html" class="nav-dropdown-item">Billentyűkombinációk</a>
-                        <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item">Irodai Lean</a>
-                        <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item">Telefonkönyv</a>
-                        <a href="${p}modules/links/index.html" class="nav-dropdown-item">Linkgyűjtemény</a>
-                        <a href="${p}modules/tools/videolibrary.html" class="nav-dropdown-item">Videótár</a>
-                        <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item">Hatékonyság Javítás</a>
-                        <a href="${p}modules/viz/index.html" class="nav-dropdown-item">Vizualizáció</a>
-                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item">Időjárás Napló</a>
+                        <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper"></i> Atádi Hírek</a>
+                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high"></i> Helyi Időjárás</a>
+                        <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book"></i> Telefonkönyv</a>
+                        <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link"></i> Linkek</a>
+                        <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie"></i> Vizualizáció</a>
                     </div>
                 </div>
-                <div class="nav-cat">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">ISMERETEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/calc/index.html" class="nav-dropdown-item">Számlázási Segéd</a>
-                        <a href="${p}modules/consumption/index.html" class="nav-dropdown-item">Fogyasztási Helyek</a>
-                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item">Tőzsdei Árak</a>
+                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university"></i> Közigazgatás</a>
+                        <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard"></i> Gyorsbillentyűk</a>
+                        <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling"></i> Irodai Lean</a>
+                        <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket"></i> Hatékonyság</a>
+                        <a href="${p}modules/videos/index.html" class="nav-dropdown-item"><i class="fas fa-play-circle"></i> Videótár</a>
                     </div>
                 </div>
-            </div>
+            </nav>
         `;
 
+        // Remove old nav if exists
+        const oldNav = header.querySelector('.app-nav');
+        if (oldNav) oldNav.remove();
+
+        // Inject nav after logo or before infoArea
         const infoArea = header.querySelector('.header-info');
-        header.insertBefore(document.createRange().createContextualFragment(navHtml), infoArea);
+        if (infoArea) {
+            header.insertBefore(document.createRange().createContextualFragment(navHtml), infoArea);
 
-        // Reposition Theme Toggle to the right of info
-        infoArea.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <div id="header-weather" style="text-align: right; line-height: 1.2;"></div>
-                    <div id="global-clock" style="text-align: right; line-height: 1.2;"></div>
+            // Restore horizontal weather + toggle
+            infoArea.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; border-right: 1px solid var(--border-color); padding-right: 1.5rem; margin-right: 0.5rem;">
+                        <div id="header-weather" style="text-align: right; line-height: 1.2; font-size: 0.85rem; font-weight: 600;"></div>
+                        <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--primary); font-weight: 700;"></div>
+                    </div>
+                    <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
                 </div>
-                <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
-            </div>
-        `;
+            `;
+        }
 
         // Click-to-open logic for Dropdowns
         document.querySelectorAll('.nav-cat').forEach(cat => {
@@ -162,6 +171,16 @@ const App = {
                 const subBar = document.createElement('div');
                 subBar.className = 'sub-nav-bar';
                 subBar.innerHTML = `<a href="${p}index.html" class="back-btn"><i class="fas fa-arrow-left"></i> VISSZA A MŰSZERFALRA</a>`;
+                // Add title to sub-bar if possible
+                const h2 = document.querySelector('h2');
+                if (h2) {
+                    const titleWrap = document.createElement('div');
+                    titleWrap.style.marginLeft = '2rem';
+                    titleWrap.style.fontWeight = '800';
+                    titleWrap.style.fontSize = '0.9rem';
+                    titleWrap.innerText = h2.innerText;
+                    subBar.appendChild(titleWrap);
+                }
                 container.parentNode.insertBefore(subBar, container);
             }
         }
@@ -249,8 +268,10 @@ const App = {
 
     async fetchWeather() {
         try {
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.state.location.lat}&longitude=${this.state.location.lon}&current=temperature_2m&daily=sunrise,sunset&timezone=auto`);
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.state.location.lat}&longitude=${this.state.location.lon}&current=temperature_2m,relative_humidity_2m,surface_pressure,wind_speed_10m&daily=sunrise,sunset&timezone=auto`);
             const data = await res.json();
+
+            // Update Header Weather
             const weatherEl = document.getElementById('header-weather');
             if (weatherEl && data.current) {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
@@ -260,7 +281,19 @@ const App = {
                     <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-sun"></i> ${sunrise} | <i class="fas fa-moon"></i> ${sunset}</div>
                 `;
             }
-        } catch (e) { console.error(e); }
+
+            // Sync with Local Weather Module elements
+            const tempVal = document.getElementById('weather-temp');
+            const windVal = document.getElementById('weather-wind');
+            const humidVal = document.getElementById('weather-humid');
+            const pressVal = document.getElementById('weather-press');
+
+            if (tempVal) tempVal.innerText = `${Math.round(data.current.temperature_2m)}°C`;
+            if (windVal) windVal.innerText = `${Math.round(data.current.wind_speed_10m)} km/h`;
+            if (humidVal) humidVal.innerText = `${data.current.relative_humidity_2m}%`;
+            if (pressVal) pressVal.innerText = `${Math.round(data.current.surface_pressure)} hPa`;
+
+        } catch (e) { console.error("Weather Sync Error:", e); }
     },
 
     initSearch() {

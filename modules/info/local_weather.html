@@ -65,11 +65,7 @@
     <header class="app-header">
         <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
         <div class="header-info">
-            <div id="header-weather"></div>
-            <div id="global-clock"></div>
-            <button onclick="App.toggleTheme()"
-                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
-                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+            <!-- Data injected by main.js -->
         </div>
     </header>
 
@@ -77,29 +73,28 @@
         <div class="d-flex justify-content-between align-items-center mb-5">
             <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
                     class="fas fa-temperature-high text-primary me-2"></i>Helyi Időjárás (Nagyatád)</h2>
-            <a href="../../index.html" class="btn btn-outline-primary rounded-pill"><i
-                    class="fas fa-home me-2"></i>Vezérlőpult</a>
+            <a href="../../index.html" class="btn btn-pill"><i class="fas fa-home me-2"></i>Vezérlőpult</a>
         </div>
 
         <div class="weather-stats" style="max-width: 900px; margin-inline: auto; margin-top: 4rem;">
             <div class="stat-card">
-                <i class="fas fa-thermometer-half fa-2x text-danger"></i>
-                <div class="stat-value">22°C</div>
+                <i class="fas fa-thermometer-half fa-2x text-danger" style="margin-bottom: 1rem;"></i>
+                <div id="weather-temp" class="stat-value">--°C</div>
                 <div class="stat-label">Hőmérséklet</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-wind fa-2x text-info"></i>
-                <div class="stat-value">14 km/h</div>
+                <i class="fas fa-wind fa-2x text-info" style="margin-bottom: 1rem;"></i>
+                <div id="weather-wind" class="stat-value">-- km/h</div>
                 <div class="stat-label">Szélsebesség</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-tint fa-2x text-primary"></i>
-                <div class="stat-value">65%</div>
+                <i class="fas fa-tint fa-2x text-primary" style="margin-bottom: 1rem;"></i>
+                <div id="weather-humid" class="stat-value">--%</div>
                 <div class="stat-label">Páratartalom</div>
             </div>
             <div class="stat-card">
-                <i class="fas fa-compress-arrows-alt fa-2x text-success"></i>
-                <div class="stat-value">1012 hPa</div>
+                <i class="fas fa-compress-arrows-alt fa-2x text-success" style="margin-bottom: 1rem;"></i>
+                <div id="weather-press" class="stat-value">-- hPa</div>
                 <div class="stat-label">Légnyomás</div>
             </div>
         </div>

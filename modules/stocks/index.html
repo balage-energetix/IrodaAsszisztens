@@ -42,8 +42,7 @@
 
 <body>
     <header class="app-header">
-        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
-                Asszisztens</span></a>
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
         <div class="header-info">
             <div id="header-weather"></div>
             <div id="global-clock"></div><button onclick="App.toggleTheme()"
@@ -58,8 +57,29 @@
             <div>
                 <div style="font-weight: 800; font-size: 1.1rem; color: var(--text-main);">Munkához rögzített árfolyam:
                 </div>
-                <div style="font-family: monospace; font-size: 1.2rem; color: var(--primary); font-weight: 800;">1 EUR =
-                    410 HUF</div>
+                <div style="font-family: monospace; font-size: 1.2rem; color: var(--primary);">
+                    <div class="stocks-card mt-3">
+                        <div class="highlight-info mb-2"
+                            style="background: rgba(92,107,192,0.05); border-left: 4px solid var(--primary); padding: 0.4rem 0.75rem; border-radius: 0.4rem; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+                            <i class="fas fa-info-circle me-1"></i> <strong>Tipp:</strong> AAPL, MSFT, GOOGL havi %-os
+                            változása az indexhez képest.
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="stocksChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="stocks-card mt-3">
+                        <div class="highlight-info mb-2"
+                            style="background: rgba(92,107,192,0.05); border-left: 4px solid var(--primary); padding: 0.4rem 0.75rem; border-radius: 0.4rem; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
+                            <i class="fas fa-info-circle me-1"></i> <strong>Tipp:</strong> Aktuális szektoronkénti
+                            megoszlás (Tech, Pénzügy, Energia).
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="portfolioChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

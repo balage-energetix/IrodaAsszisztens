@@ -1,6 +1,10 @@
+@import url('https://fonts.cdnfonts.com/css/biko');
+
 :root {
     /* Creamy, Harmonious Palette */
-    --primary: #5c6bc0;
+    --primary: #4361ee;
+    --primary-light: #2d5a27;
+    /* Darker Creamy Green branding */
     --primary-dark: #3949ab;
     --secondary: #26a69a;
     --accent: #ff7043;
@@ -21,9 +25,12 @@
     --cat-finance: #fff3e0;
     --cat-info: #f3e5f5;
 
-    --header-height: 90px;
-    /* Thicker header for info stacking */
+    --header-height: 110px;
+    /* Increased height for horizontal comfort */
     --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --font-main: 'Biko', 'Inter', sans-serif;
+    --font-title: 'Biko', 'Outfit', sans-serif;
 
     /* Interactive Background Variables */
     --mouse-x: 50%;
@@ -49,10 +56,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    text-transform: none;
+    /* Sentence case default */
 }
 
 body {
-    font-family: 'Inter', 'Outfit', sans-serif;
+    font-family: var(--font-main);
     background-color: var(--bg-creamy) !important;
     background-image: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--flashlight-color) 0%, transparent 40%);
     color: var(--text-main);
@@ -65,20 +74,74 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
+    top: -50%;
+    left: -50%;
     width: 200%;
     height: 200%;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cpath d='M0 522c121-5 137-54 227-64 77-8 114 44 263 24 167-22 173-100 310-108v226H0z' fill='%23ffffff' fill-opacity='0.1'%3E%3C/path%3E%3C/svg%3E") repeat;
-    background-size: 50% 50%;
+    /* Denser Sea Waves with Foam highlights */
+    background:
+        repeating-linear-gradient(var(--wave-deg, 45deg),
+            rgba(0, 75, 107, 0) 0%,
+            rgba(124, 252, 0, 0.04) 2.5%,
+            rgba(255, 255, 255, 0.08) 3%,
+            /* Foam peak */
+            rgba(124, 252, 0, 0.04) 3.5%,
+            transparent 5%),
+        repeating-linear-gradient(var(--wave-deg, 45deg),
+            transparent 0%,
+            rgba(67, 97, 238, 0.06) 7%,
+            rgba(255, 255, 255, 0.1) 7.5%,
+            /* Foam peak */
+            rgba(67, 97, 238, 0.06) 8%,
+            transparent 12%);
     z-index: -2;
-    animation: waveMove 40s linear infinite;
-    transition: transform 1.5s ease-in-out;
+    animation: waveMove 25s linear infinite;
+    pointer-events: none;
 }
 
-body.waves-reverse::before {
+body::after {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    /* Secondary foam layer */
+    background: repeating-linear-gradient(calc(var(--wave-deg, 45deg) + 90deg),
+            rgba(255, 255, 255, 0.03) 0%,
+            rgba(255, 255, 255, 0.07) 1%,
+            /* Small caps */
+            transparent 6%,
+            rgba(255, 255, 255, 0.03) 12%);
+    z-index: -1;
+    animation: waveMove 40s linear infinite reverse;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+@keyframes waveMove {
+    from {
+        transform: translate(0, 0);
+    }
+
+    to {
+        transform: translate(10%, 10%);
+    }
+}
+
+@keyframes auroraMove {
+    0% {
+        transform: translate(-30%, -30%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(0%, 0%) rotate(3deg);
+    }
+}
+
+body.waves-reverse::before,
+body.waves-reverse::after {
     animation-direction: reverse;
-    opacity: 0.15;
 }
 
 @keyframes waveMove {
@@ -125,8 +188,8 @@ body.waves-reverse::before {
     align-items: center;
     gap: 0.75rem;
     text-decoration: none;
-    color: var(--text-main);
-    padding-left: 1.5cm;
+    color: var(--primary-light) !important;
+    font-weight: 800;
 }
 
 /* Header Background Layer */
@@ -179,55 +242,85 @@ body.waves-reverse::before {
     text-transform: uppercase;
 }
 
+/* Header Styling & Category Menus */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--primary-light) !important;
+    font-weight: 800;
+    z-index: 10;
+}
+
 .logo i {
-    font-size: 1.5rem;
-    transition: var(--transition);
-}
-
-[data-theme="dark"] .logo i {
-    color: #fff !important;
-}
-
-[data-theme="light"] .logo i {
-    color: #0077be !important;
+    font-size: 2.3rem;
+    color: var(--primary-light) !important;
 }
 
 .logo span {
-    font-family: 'Outfit';
+    font-family: var(--font-title);
     font-weight: 800;
-    font-size: 0.9rem;
-    line-height: 1;
+    font-size: 0.85rem;
+    line-height: 1.1;
     text-transform: uppercase;
     display: flex;
     flex-direction: column;
+    color: var(--primary-light) !important;
 }
 
-/* Header Styling & Category Menus */
+/* Global Header Transform */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
 .app-header {
     height: var(--header-height);
     background: var(--bg-card);
     position: relative;
     border-bottom: 1px solid var(--border-color);
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
+    padding: 0 0 0 2rem;
+    /* Zero right padding for corner flush */
     position: sticky;
     top: 0;
     z-index: 1000;
-    /* overflow: hidden; */
 }
 
-.header-drone-bg {
+.header-info {
+    justify-self: flex-end;
+    /* Align to the right corner */
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-right: 2rem;
+    /* Buffer from edge */
+}
+
+.header-bg-layer {
     position: absolute;
     inset: 0;
     z-index: -1;
-    opacity: 0.45;
-    transition: background-image 1s ease-in-out;
-    background-size: cover;
-    background-position: center 30%;
-    /* Slice view */
-    filter: blur(2px) grayscale(20%);
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    background: #000;
+}
+
+.header-bg-layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: blur(2px) brightness(0.7);
 }
 
 .header-overlay {
@@ -242,10 +335,11 @@ body.waves-reverse::before {
     background: linear-gradient(90deg, var(--bg-card) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.6) 60%, var(--bg-card) 100%);
 }
 
-.header-nav {
+.app-nav {
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
     height: 100%;
+    align-items: center;
 }
 
 .nav-cat {
@@ -253,13 +347,15 @@ body.waves-reverse::before {
     height: 100%;
     display: flex;
     align-items: center;
-    padding: 0 0.75rem;
+    padding: 0 0.5rem;
     cursor: pointer;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-main);
     transition: var(--transition);
     user-select: none;
+    text-transform: uppercase;
+    /* Category labels in header are uppercase */
 }
 
 .nav-cat:hover,
@@ -286,28 +382,38 @@ body.waves-reverse::before {
     border-radius: 1.25rem;
     z-index: 1010;
     padding: 0.6rem;
-    /* Internal padding for button look */
-    margin-top: 0.1rem;
-    /* Closer to the label */
+    margin-top: 0;
+    /* Removed gap - seamless transition */
     animation: slideDown 0.3s ease-out;
 }
 
+/* Pseudo-element to ensure no hover-gap between header and menu */
+.nav-cat-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    background: transparent;
+}
+
 .nav-dropdown-item {
-    display: flex !important;
+    padding: 0.75rem 1.5rem;
+    display: flex;
     align-items: center;
-    width: auto !important;
-    /* Allow margin to work */
-    margin: 0.2rem 0;
-    padding: 0.75rem 1.25rem !important;
+    color: var(--text-main);
     text-decoration: none;
-    color: var(--text-main) !important;
-    font-weight: 600 !important;
-    /* Softened weight */
-    font-family: 'Outfit', sans-serif !important;
-    font-size: 0.85rem !important;
-    border-radius: 0.8rem;
-    /* Button shape */
-    transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.nav-dropdown-item i {
+    width: 18px;
+    margin-right: 0.5rem;
+    color: var(--primary);
+    font-size: 0.85rem;
+    text-align: center;
 }
 
 .nav-dropdown-item:hover {
@@ -495,6 +601,27 @@ body.waves-reverse::before {
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-muted);
+}
+
+/* Button styles for Atádi Hírek and others */
+.btn-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    border: 2px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-pill:hover {
+    background: var(--primary);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
 }
 
 /* Module Sub-Navigation Bar */
