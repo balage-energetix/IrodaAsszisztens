@@ -192,16 +192,102 @@
             </div>
         </div>
 
-        <div class="flow-container">
-            <h4 class="mb-4 text-center" style="font-weight:800;">AZ ENERGIAAUDIT FOLYAMATA</h4>
-            <div class="mermaid-mock">
-                <div class="step" style="color: black;">Adatgyűjtés</div>
-                <div class="arrow"></div>
-                <div class="step" style="color: black;">Mérés/Helyszín</div>
-                <div class="arrow"></div>
-                <div class="step" style="color: black;">Veszteségfeltárás</div>
-                <div class="arrow"></div>
-                <div class="step" style="color: black;">Javaslattétel</div>
+        <div class="energy-card mt-5" style="border-top: 4px solid var(--accent);">
+            <h3><i class="fas fa-network-wired me-2"></i>A Magyar Energiahálózat Jellemzése</h3>
+            <div
+                style="background: white; padding: 1.5rem; border-radius: 1rem; color: black; line-height: 1.7; border: 1px solid var(--border-color);">
+                <p>A magyar villamosenergia-rendszer (VER) egy komplex, hierarchikus struktúra, amelynek központjában a
+                    MAVIR Zrt., mint rendszerirányító áll. Az energia útja az erőművektől a fogyasztókig szigorúan
+                    szabályozott feszültségszinteken keresztül vezet, minimalizálva az átviteli veszteségeket.</p>
+
+                <div class="flow-container" style="background: var(--bg-light); border: 2px solid var(--primary);">
+                    <h5 class="text-center mb-4" style="font-weight:800;">AZ ENERGIA ÚTJA (ERŐMŰ -> FOGYASZTÓ)</h5>
+                    <div class="mermaid-mock">
+                        <div class="step" style="border-color: #d32f2f;">Erőművek (15-25 kV)</div>
+                        <div class="arrow"></div>
+                        <div class="step" style="border-color: #1976d2;">Alállomás (400/220 kV)</div>
+                        <div class="arrow"></div>
+                        <div class="step" style="border-color: #388e3c;">Főelosztó (120 kV)</div>
+                        <div class="arrow"></div>
+                        <div class="step" style="border-color: #fbc02d;">Középfesz (10-20 kV)</div>
+                        <div class="arrow"></div>
+                        <div class="step" style="border-color: #000;">Fogyasztó (0.4 kV)</div>
+                    </div>
+                </div>
+
+                <div style="column-count: 2; column-gap: 2rem; font-size: 0.9rem;">
+                    <p><strong>1. Termelés:</strong> Az erőművek (Paks, Mátra, gázturbinás egységek) 15-25 kV
+                        feszültségen termelnek.</p>
+                    <p><strong>2. Átvitel (Alappillérek):</strong> A távvezetékek 400 kV-os és 220 kV-os
+                        feszültségszinten alkotják a hálózat gerincét. Ez biztosítja a nagy távolságú transzportot.</p>
+                    <p><strong>3. Elosztás (Regionális):</strong> A 120 kV-os főelosztó hálózat köti össze az átviteli
+                        rendszert a regionális központokkal.</p>
+                    <p><strong>4. Középfeszültségű hálózat:</strong> Az ipari parkok és városi transzformátorállomások
+                        10, 20 vagy 35 kV-on kapják az energiát.</p>
+                    <p><strong>5. Kisfeszültségű elosztás:</strong> A háztartásokhoz az utcai trafóktól érkezik meg a
+                        230/400 V-os (0.4 kV) feszültség.</p>
+                    <p><strong>Hálózati veszteségek:</strong> A VER hatékonyságát a Joule-hő csökkenti. Minél magasabb a
+                        feszültség, annál kisebb az áramerősség és a veszteség.</p>
+                    <p><strong>Rendszerirányítás:</strong> Folyamatos egyensúlyt kell tartani a termelés és a fogyasztás
+                        között, 50 Hz-es frekvencián.</p>
+                    <p><strong>Import-Export:</strong> Magyarország jelentős importra szorul, a határkeresztező
+                        vezetékek kulcsfontosságúak.</p>
+                    <p><strong>Digitális hálózat:</strong> Az okos mérők és az automatizált alállomások növelik a
+                        rendszer rugalmasságát.</p>
+                    <p><strong>Energiatárolás:</strong> Jelenleg a legnagyobb kihívás, a szivattyús tározók és
+                        akkumulátorparkok fejlesztése zajlik.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="energy-card mt-4" style="border-top: 4px solid var(--secondary);">
+            <h3><i class="fas fa-chart-bar me-2"></i>Magyar Energiamérleg és Kapacitások</h3>
+            <div
+                style="background: white; padding: 1.5rem; border-radius: 1rem; color: black; line-height: 1.6; border: 1px solid var(--border-color); font-size: 0.9rem;">
+                <p>Magyarország beépített teljesítménye és tényleges termelése diverzifikált, de erősen függ az
+                    atomenergiától és a földgáztól. A hazai termelés gerincét a Paksi Atomerőmű adja.</p>
+
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead>
+                        <tr style="background: var(--bg-light); border-bottom: 2px solid var(--primary);">
+                            <th style="padding: 10px; text-align: left;">Erőmű Típusa</th>
+                            <th style="padding: 10px; text-align: left;">Példa / Helyszín</th>
+                            <th style="padding: 10px; text-align: center;">Kapacitás (MW)</th>
+                            <th style="padding: 10px; text-align: center;">Arány (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;"><strong>Atomenergia</strong></td>
+                            <td style="padding: 8px;">Paks I.</td>
+                            <td style="padding: 8px; text-align: center;">2000 MW</td>
+                            <td style="padding: 8px; text-align: center;">~35-40%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;"><strong>Földgáz (CCGT)</strong></td>
+                            <td style="padding: 8px;">Dunamenti, Gönyű, Csepel</td>
+                            <td style="padding: 8px; text-align: center;">~3500 MW</td>
+                            <td style="padding: 8px; text-align: center;">~25-30%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;"><strong>Megújuló (Nap)</strong></td>
+                            <td style="padding: 8px;">Országos hálózat</td>
+                            <td style="padding: 8px; text-align: center;">>6000 MW (beép.)</td>
+                            <td style="padding: 8px; text-align: center;">~15-20%</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;"><strong>Lignit / Szén</strong></td>
+                            <td style="padding: 8px;">Mátrai Erőmű (Visonta)</td>
+                            <td style="padding: 8px; text-align: center;">~950 MW</td>
+                            <td style="padding: 8px; text-align: center;">~5-8%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p class="mt-3"><strong>Fontosabb jellemzők:</strong> A paksi blokkok biztosítják az alapterhelést. A
+                    gázerőművek rugalmasan szabályozzák a napelemes termelés ingadozását. A Mátrai Erőmű tartalék
+                    szerepet tölt be, de modernizációja (gáz + PV) folyamatban van. Az ország nettó importőr, a
+                    fogyasztás ~25-30%-a külföldi forrásból származik.</p>
             </div>
         </div>
 

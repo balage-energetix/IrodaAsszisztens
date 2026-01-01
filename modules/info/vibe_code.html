@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vájb Kód Bevezető - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .vibe-content {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            margin-top: 2rem;
+            line-height: 1.8;
+            color: var(--text-main);
+        }
+
+        .step-box {
+            background: var(--bg-light);
+            border-left: 5px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 1rem 1rem 0;
+        }
+
+        .code-snippet {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .badge-step {
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            font-weight: 800;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+
+        h3 {
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-family:'Outfit'; font-weight:800;"><i class="fas fa-terminal text-primary me-3"></i>Vájb Kód
+                Bevezető</h2>
+            <div class="badge bg-secondary p-2 px-3 rounded-pill" style="font-size:0.8rem;">Developer Tutorial V1.0
+            </div>
+        </div>
+
+        <div class="vibe-content">
+            <p class="lead">Üdvözöllek a <strong>Vájb Kód</strong> világában! Ez a modul lépésről lépésre végigvezet az
+                Antigravity AI telepítésén, a modern webes fejlesztés alapjain és a projekted világméretű közzétételén.
+            </p>
+
+            <h3>1. Az Antigravity Telepítése</h3>
+            <p>Az Antigravity egy forradalmi AI kódoló asszisztens, amely közvetlenül a fájljaid között dolgozik.</p>
+            <div class="step-box">
+                <span class="badge-step">01</span> Telepítsd a <strong>VS Code</strong> szerkesztőt, ha még nincs meg.
+                <br><span class="badge-step">02</span> Az Antigravity jelenleg korai hozzáférésű; keresd fel az
+                Antigravity hivatalos portálját.
+                <br><span class="badge-step">03</span> Töltsd le az ügynök alkalmazást, és csatold a munkakörnyezetedhez
+                (Workspace).
+                <br><span class="badge-step">04</span> Hitelesítés után egyszerűen csak írd le magyarul: <em>"Hozz létre
+                    egy új modult!"</em>
+            </div>
+
+            <h3>2. Webapp Készítés: HTML, CSS és JS alapok</h3>
+            <p>Egy modern modul három fő pilléren nyugszik. Nézzünk egy egyszerű példát egy "Saját Jegyzet" modulon
+                keresztül:</p>
+
+            <div class="step-box">
+                <strong>A) HTML (Szerkezet):</strong> Ez adja meg az oldal vázát.
+                <div class="code-snippet">&lt;div class="card"&gt;<br>&nbsp;&nbsp;&lt;h1&gt;Saját
+                    Jegyzet&lt;/h1&gt;<br>&nbsp;&nbsp;&lt;textarea id="note"&gt;&lt;/textarea&gt;<br>&lt;/div&gt;</div>
+
+                <strong>B) CSS (Stílus):</strong> Ettől lesz prémium a megjelenés. Használj gradiens színeket és
+                lekerekített sarkokat!
+                <div class="code-snippet">.card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0
+                    10px 30px rgba(0,0,0,0.1); }</div>
+
+                <strong>C) JS (Logika):</strong> Ez teszi interaktívvá az oldalt (pl. mentés).
+                <div class="code-snippet">function save() { localStorage.setItem('myNote',
+                    document.getElementById('note').value); }</div>
+            </div>
+
+            <h3>3. Hosting a GitHub-on (Élesítés)</h3>
+            <p>Hogy mások is láthassák a munkádat, a GitHub Pages a legegyszerűbb megoldás.</p>
+            <div class="step-box">
+                <span class="badge-step">Lépés 1</span> Regisztrálj a <strong>github.com</strong> oldalon és hozz létre
+                egy új "Repository"-t (pl. <em>irodai-asszisztens</em>).
+                <br><span class="badge-step">Lépés 2</span> Töltsd fel a fájljaidat (Upload files), ügyelve rá, hogy
+                legyen egy <code>index.html</code> a főkönyvtárban.
+                <br><span class="badge-step">Lépés 3</span> Menj a <strong>Settings -> Pages</strong> menüpontba.
+                <br><span class="badge-step">Lépés 4</span> Válaszd ki a 'main' branch-et forrásnak, és ments rá.
+                <br><span class="badge-step">Eredmény</span> 1-2 perc múlva az oldalad elérhető lesz a
+                <code>https://felhasznalonev.github.io/irodai-asszisztens/</code> címen!
+            </div>
+
+            <div class="hint mt-4">
+                <strong>PRO TIPP:</strong> Használd az Antigravity-t a kódolás közben: <em>"Húzz egy üveg-effektust a
+                    kártyákra!"</em> - és ő megcsinálja helyetted a CSS-t.
+            </div>
+        </div>
+
+        <footer class="mt-5 pt-4 border-top text-center text-muted" style="font-size:0.8rem;">
+            Vájb Kód Tananyag - Készítette az Antigravity AI | 2026
+        </footer>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

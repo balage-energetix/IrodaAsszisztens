@@ -44,26 +44,41 @@ const App = {
             header.prepend(bgLayer);
         }
 
+        // Add overlay if missing
+        if (!header.querySelector('.header-overlay')) {
+            const overlay = document.createElement('div');
+            overlay.className = 'header-overlay';
+            header.prepend(overlay);
+        }
+
         const droneImages = Array.from({ length: 28 }, (_, i) => `pictures/(${i + 1}).jpg`);
 
         const changeBg = () => {
             const randomImg = droneImages[Math.floor(Math.random() * droneImages.length)];
-            const isModule = window.location.pathname.includes('/modules/');
-            const isDeepModule = (window.location.pathname.match(/\//g) || []).length > 2;
-            let relativePath = '';
-            if (isDeepModule) relativePath = '../../';
-            else if (isModule) relativePath = '../';
 
-            // Fix for root index.html
-            if (window.location.pathname === '/' || window.location.pathname.endsWith('index.html')) {
-                relativePath = '';
+            // Robust path detection
+            let p = '';
+            const pathParts = window.location.pathname.split('/');
+            const agiIndex = pathParts.indexOf('AGI');
+            if (agiIndex !== -1) {
+                const depth = pathParts.length - agiIndex - 2;
+                if (depth > 0) p = '../'.repeat(depth);
+            } else {
+                // Fallback for different environments
+                if (window.location.pathname.includes('/modules/')) {
+                    p = (window.location.pathname.match(/\//g).length > 2) ? '../../' : '../';
+                }
             }
 
-            bgLayer.style.opacity = '0';
-            setTimeout(() => {
-                bgLayer.innerHTML = `<img src="${relativePath}${randomImg}" alt="Header background">`;
-                bgLayer.style.opacity = '0.25';
-            }, 1500);
+            const img = new Image();
+            img.src = `${p}${randomImg}`;
+            img.onload = () => {
+                bgLayer.style.opacity = '0';
+                setTimeout(() => {
+                    bgLayer.innerHTML = `<img src="${img.src}" alt="Header background" style="width:100%; height:100%; object-fit:cover; filter:blur(2px) brightness(0.7);">`;
+                    bgLayer.style.opacity = '0.25';
+                }, 1000);
+            };
         };
 
         setInterval(changeBg, 20000);
@@ -121,6 +136,7 @@ const App = {
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university"></i> Közigazgatás</a>
                         <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station"></i> Energetika</a>
+                        <a href="${p}modules/info/vibe_code.html" class="nav-dropdown-item"><i class="fas fa-terminal"></i> Vájb Kód Bevezető</a>
                         <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard"></i> Gyorsbillentyűk</a>
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling"></i> Irodai Lean</a>
                         <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket"></i> Hatékonyság</a>

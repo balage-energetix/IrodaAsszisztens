@@ -15,6 +15,8 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
+            width: 100%;
+            margin: 0 auto;
         }
 
         #light-map {
@@ -28,6 +30,25 @@
             border-radius: 1rem;
             border: 1px solid var(--border-color);
             cursor: pointer;
+        }
+
+        /* Override global feature-card width and force absolute stability */
+        .split-view .feature-card {
+            width: 100%;
+            max-width: none;
+            transition: border-color var(--transition), background-color var(--transition), box-shadow var(--transition);
+            /* Remove transform from transition */
+            transform: none !important;
+            /* Force no transform */
+            will-change: auto;
+            backface-visibility: hidden;
+        }
+
+        .split-view .feature-card:hover {
+            transform: none !important;
+            /* Ensure no lift */
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
     </style>
 </head>
@@ -64,23 +85,23 @@
                 </div>
             </div>
 
-            <div class="feature-card" style="padding:1rem; align-items:flex-start;">
+            <div class="feature-card" style="padding:1rem; align-items:flex-start; min-height: 400px;">
                 <h4 class="mb-3"><i class="fas fa-calendar-alt"></i> Közvilágításnaptár</h4>
-                <img src="../../agi/KozVilNaptar.jpg" class="naptar-img" onclick="window.open(this.src)"
-                    onerror="this.src='https://kozvilhiba.hu/document/KozvilNaptar/tAKozvilagitasiNaptar.php'">
 
-                <div style="margin-top: 1rem; width: 100%;">
-                    <div
-                        style="border-radius: 1rem; overflow: hidden; border: 1px solid var(--border-color); margin-bottom: 2rem;">
-                        <img src="../../KozVilNaptar.jpg" style="width: 100%; display: block;"
-                            alt="Közvilágítási naptár">
-                    </div>
+                <div
+                    style="width: 100%; border-radius: 1rem; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-light); position: relative;">
+                    <img src="../../KozVilNaptar.jpg" class="naptar-img"
+                        style="display: block; width: 100%; min-height: 200px; object-fit: cover;"
+                        onclick="window.open(this.src)" alt="Közvilágítási naptár">
+                </div>
+
+                <div style="margin-top: 1.5rem; width: 100%;">
                     <button class="feature-card"
-                        style="width:100%; padding:1rem; background:var(--primary); color:white; border:none; border-radius:1rem; font-weight:800; cursor:pointer;"
+                        style="width:100%; padding:1rem; background:var(--primary); color:white; border:none; border-radius:1rem; font-weight:800; cursor:pointer; margin-bottom: 1rem;"
                         onclick="window.open('https://okoslezerzebra.hu/kozvilagitas/')">
                         <i class="fas fa-external-link-alt me-2"></i> KÖZVILÁGÍTÁS HIBABEJELENTŐ
                     </button>
-                    <div class="hint" style="margin-top: 1rem;">
+                    <div class="hint" style="margin-top: 0.5rem; margin-bottom: 0;">
                         <strong>TIPP:</strong> A bejelentéshez az oldal aljáig kell görgetni.
                     </div>
                 </div>
