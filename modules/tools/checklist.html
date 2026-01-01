@@ -148,8 +148,16 @@
         }
 
         function addItem(type) {
-            const task = prompt("Új feladat:");
-            if (task) { tasks[type].push(task); render(); }
+            App.showModal({
+                title: 'Új feladat hozzáadása',
+                placeholder: 'Írja be a feladatot...',
+                callback: (task) => {
+                    if (task) {
+                        tasks[type].push(task);
+                        render();
+                    }
+                }
+            });
         }
 
         function exportPDF() {

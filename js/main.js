@@ -22,7 +22,7 @@ const App = {
         this.initHeaderBgRotation();
         this.initWaveDirectionSwitcher();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.27 initialized");
+        console.log("Irodai Asszisztens V3.31 initialized");
     },
 
     // --- Wave Direction Switcher ---
@@ -83,6 +83,9 @@ const App = {
             logo.innerHTML = `<i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span>`;
         }
 
+        const authTier = sessionStorage.getItem('auth_tier') || 'guest';
+        const isAdmin = authTier === 'admin';
+
         const navHtml = `
             <nav class="app-nav">
                 <div class="nav-cat">FELADATOK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -95,7 +98,7 @@ const App = {
                         <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line"></i> Tőzsde</a>
                     </div>
                 </div>
-                <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf"></i> PDF Szerkesztő</a>
                         <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open"></i> PDF Kiolvasó</a>
@@ -104,7 +107,7 @@ const App = {
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun"></i> Időjárás Napló</a>
                     </div>
                 </div>
-                <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper"></i> Atádi Hírek</a>
                         <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high"></i> Helyi Időjárás</a>
@@ -141,7 +144,14 @@ const App = {
                         <div id="header-weather" style="text-align: right; line-height: 1.2; font-size: 0.85rem; font-weight: 600;"></div>
                         <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--primary); font-weight: 700;"></div>
                     </div>
-                    <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
+                        <button onclick="App.logout()" class="logout-btn" title="Kijelentkezés">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                        <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.1rem; color:var(--text-main); cursor:pointer;">
+                            <i id="theme-toggle-icon" class="fas fa-moon"></i>
+                        </button>
+                    </div>
                 </div>
             `;
         }
@@ -320,10 +330,48 @@ const App = {
         return `Irodai_${type}_${d}_${t}.${ext}`;
     },
 
+    // --- Custom Modal System ---
+    showModal({ title, placeholder, initialValue = '', inputType = 'text', callback }) {
+        const modalId = 'custom-modal-' + Date.now();
+        const modalHtml = `
+            <div id="${modalId}" class="custom-modal-overlay">
+                <div class="custom-modal-content">
+                    <h3>${title}</h3>
+                    <input type="${inputType}" id="${modalId}-input" value="${initialValue}" placeholder="${placeholder}" autofocus>
+                    <div class="modal-actions">
+                        <button class="modal-btn secondary" onclick="document.getElementById('${modalId}').remove()">Mégse</button>
+                        <button class="modal-btn primary" id="${modalId}-confirm">Megerősítés</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const input = document.getElementById(`${modalId}-input`);
+        const confirmBtn = document.getElementById(`${modalId}-confirm`);
+
+        const doCallback = () => {
+            const val = input.value.trim();
+            document.getElementById(modalId).remove();
+            if (callback) callback(val);
+        };
+
+        confirmBtn.onclick = doCallback;
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter') doCallback();
+            if (e.key === 'Escape') document.getElementById(modalId).remove();
+        };
+        input.focus();
+    },
+
     checkLogin() {
-        const auth = localStorage.getItem('auth_id');
-        if (auth === btoa('7575')) {
-            this.state.user = { name: 'Admin' };
+        const authId = sessionStorage.getItem('auth_id');
+        const authTier = sessionStorage.getItem('auth_tier');
+
+        if (authId === btoa('7575')) {
+            this.state.user = { name: 'Admin', tier: 'admin' };
+        } else if (authId === btoa('7474')) {
+            this.state.user = { name: 'Vendég', tier: 'guest' };
         } else {
             this.state.user = null;
         }
@@ -336,6 +384,7 @@ const App = {
             if (this.state.user) {
                 overlay.style.display = 'none';
                 main.style.display = 'block';
+                this.applyVisibilityFilters();
             } else {
                 overlay.style.display = 'flex';
                 main.style.display = 'none';
@@ -343,15 +392,52 @@ const App = {
         });
     },
 
+    applyVisibilityFilters() {
+        if (!this.state.user || this.state.user.tier === 'admin') return;
+
+        // Gray out restricted sections on dashboard
+        document.querySelectorAll('.category-group').forEach(group => {
+            const title = group.querySelector('.group-title').innerText.toLowerCase();
+            if (title.includes('eszközök') || title.includes('információ')) {
+                group.classList.add('disabled-access');
+            }
+        });
+    },
+
     login() {
-        const pass = prompt("Adja meg a belépési kódot:");
+        const input = document.getElementById('auth-password-input');
+        if (!input) return;
+
+        const pass = input.value;
         if (pass === '7575') {
-            localStorage.setItem('auth_id', btoa('7575'));
+            sessionStorage.setItem('auth_id', btoa('7575'));
+            sessionStorage.setItem('auth_tier', 'admin');
             location.reload();
-        } else {
-            alert("Hibás kód!");
+        } else if (pass === '7474') {
+            sessionStorage.setItem('auth_id', btoa('7474'));
+            sessionStorage.setItem('auth_tier', 'guest');
+            location.reload();
+        } else if (pass) {
+            alert('Hibás kód!');
+            input.value = '';
+            input.focus();
         }
+    },
+
+    logout() {
+        sessionStorage.clear();
+        location.reload();
     }
 };
+
+// Global Enter listener for login
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        const input = document.getElementById('auth-password-input');
+        if (input && document.activeElement === input) {
+            App.login();
+        }
+    }
+});
 
 document.addEventListener('DOMContentLoaded', () => App.init());
