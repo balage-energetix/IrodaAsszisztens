@@ -96,6 +96,8 @@ const App = {
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
+                        <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
+                        <a href="${p}modules/tools/relax_center.html" class="nav-dropdown-item"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i> Relax Center</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -176,16 +178,15 @@ const App = {
                 // Explicitly manage display for mobile
                 const dropdown = cat.querySelector('.nav-cat-dropdown');
                 if (dropdown && window.innerWidth <= 992) {
-                    dropdown.style.display = cat.classList.contains('active') ? 'block' : 'none';
+                    dropdown.style.display = cat.classList.contains('active') ? 'flex' : 'none';
                 }
             };
 
             cat.onclick = (e) => {
-                // Prevent navigation if clicking on a dropdown item
-                if (e.target.closest('.nav-dropdown-item')) return;
-
-                // On mobile or smaller screens, entire block toggles
+                // If on mobile, ANY click on the category row (that isn't a direct link click) toggles it
                 if (window.innerWidth <= 992) {
+                    if (e.target.closest('.nav-dropdown-item')) return;
+
                     e.preventDefault();
                     e.stopPropagation();
                     toggle();
@@ -312,12 +313,26 @@ const App = {
 
             // Hover effects for interactive elements
             const hovered = document.elementFromPoint(mouseX, mouseY);
-            if (hovered && (hovered.closest('.feature-card') || hovered.closest('a') || hovered.closest('button') || hovered.closest('.nav-cat'))) {
-                follower.classList.add('hovering');
-                dot.classList.add('hovering');
+
+            // Hide cursor effects over games (e.g. Breakout canvas)
+            const hideEffects = hovered && (hovered.id === 'breakout-canvas' || hovered.closest('.no-cursor-effects'));
+
+            if (hideEffects) {
+                dot.style.opacity = '0';
+                trail.style.opacity = '0';
+                follower.style.opacity = '0';
             } else {
-                follower.classList.remove('hovering');
-                dot.classList.remove('hovering');
+                dot.style.opacity = '1';
+                trail.style.opacity = '1';
+                follower.style.opacity = '0.4';
+
+                if (hovered && (hovered.closest('.feature-card') || hovered.closest('a') || hovered.closest('button') || hovered.closest('.nav-cat'))) {
+                    follower.classList.add('hovering');
+                    dot.classList.add('hovering');
+                } else {
+                    follower.classList.remove('hovering');
+                    dot.classList.remove('hovering');
+                }
             }
         });
 

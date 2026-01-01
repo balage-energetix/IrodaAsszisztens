@@ -38,7 +38,8 @@
         }
 
         .metric-card {
-            background: white;
+            background: var(--bg-card);
+            /* Theme aware background */
             padding: 1.5rem;
             border-radius: 1.5rem;
             border: 1px solid var(--border-color);
@@ -49,6 +50,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
             position: relative;
             overflow: hidden;
+            color: var(--text-main);
         }
 
         .metric-card:hover {
@@ -67,11 +69,20 @@
             flex-shrink: 0;
         }
 
+        .metric-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
         .metric-info h4 {
             font-size: 0.75rem;
             text-transform: uppercase;
-            color: #4b4b4b !important;
-            /* Force darker muted text */
+            color: var(--text-muted) !important;
             margin: 0;
             letter-spacing: 0.5px;
         }
@@ -79,15 +90,13 @@
         .metric-info .value {
             font-size: 1.5rem;
             font-weight: 800;
-            color: #000000 !important;
-            /* Force persistent black value */
+            color: var(--text-main) !important;
             line-height: 1.2;
         }
 
         .filters label,
         .filters select option[value="all"] {
-            color: #000000 !important;
-            /* Persistent black for summary label */
+            color: var(--text-main) !important;
         }
 
         [data-theme="dark"] .filters select {
@@ -107,7 +116,8 @@
             padding: 0.75rem 1.5rem;
             border-radius: 1rem;
             border: 1px solid var(--border-color);
-            background: white;
+            background: var(--bg-card);
+            color: var(--text-main);
             font-weight: 700;
             font-family: 'Outfit';
             cursor: pointer;
@@ -141,6 +151,14 @@
             font-size: 0.9rem;
         }
 
+        .savings-summary h4 {
+            font-family: 'Outfit';
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
         .eco-pill i {
             font-size: 1.25rem;
         }
@@ -152,6 +170,42 @@
 
             .metric-grid {
                 grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .glass-card,
+            .metric-card,
+            .chart-section {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+            }
+
+            h2,
+            h4,
+            .value,
+            .eco-pill span,
+            .text-muted {
+                color: black !important;
+            }
+
+            .styled-select,
+            .app-header,
+            .filters {
+                display: none !important;
+            }
+
+            .eco-pill {
+                background: white !important;
+                border: 1px solid #eee !important;
+                color: black !important;
             }
         }
     </style>

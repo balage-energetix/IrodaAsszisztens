@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relax Center - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+        }
+
+        .relax-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .relax-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 550px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .relax-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(67, 97, 238, 0.15);
+        }
+
+        .relax-card h4 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(67, 97, 238, 0.2);
+        }
+
+        .relax-content {
+            flex: 1;
+            position: relative;
+            background: #000;
+            border-radius: 1rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #breakout-canvas {
+            display: block;
+            background: #111;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            cursor: none;
+            /* Elrejti az egér kurzort */
+        }
+
+        /* --- Radio Styles --- */
+        .radio-list {
+            background: var(--bg-light);
+            height: 100%;
+            width: 100%;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .radio-item {
+            padding: 1.25rem;
+            background: var(--bg-card);
+            border-radius: 1rem;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text-main);
+        }
+
+        .radio-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .radio-item.active {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .radio-item.active i {
+            color: var(--primary);
+        }
+
+        .radio-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radio-name {
+            font-weight: 800;
+            font-family: 'Outfit';
+            font-size: 1.1rem;
+        }
+
+        .radio-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Tetris Styles --- */
+        #tetris-canvas {
+            background: #111;
+            display: block;
+            border: 2px solid var(--border-color);
+        }
+
+        .tetris-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .tetris-btn {
+            background: var(--bg-alt);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .tetris-btn:active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* --- Tic-Tac-Toe --- */
+        #ttt-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 300px;
+            height: 300px;
+        }
+
+        .ttt-cell {
+            background: var(--bg-alt);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: 'Outfit';
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+            width: 90px;
+            height: 90px;
+        }
+
+        .ttt-cell:hover {
+            background: var(--bg-hover);
+        }
+
+        .ttt-cell.x {
+            color: var(--primary);
+        }
+
+        .ttt-cell.o {
+            color: var(--danger);
+        }
+
+        .ttt-status {
+            color: var(--text-main);
+            margin-top: 1rem;
+            font-family: 'Outfit';
+            font-weight: 700;
+        }
+
+        .ttt-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .ttt-overlay.active {
+            display: flex;
+        }
+
+        /* --- Paint Styles --- */
+        #paint-canvas {
+            background: #fff;
+            display: block;
+            border-radius: 0.5rem;
+            cursor: crosshair;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 350px;
+        }
+
+        .paint-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            background: var(--bg-alt);
+            border-radius: 1rem;
+            margin-top: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .paint-tool {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-main);
+        }
+
+        .paint-tool input[type="color"] {
+            border: none;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+        }
+
+        .relax-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+        }
+
+        .relax-overlay.hidden {
+            display: none;
+        }
+
+        .overlay-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-light);
+        }
+
+        .overlay-text {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .relax-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .relax-card {
+                height: 500px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-mug-hot"
+                style="color:var(--accent);"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="module-header mb-3">
+            <h2 style="font-weight: 800;"><i class="fas fa-coffee text-primary me-2"></i>Relax Center</h2>
+            <p class="text-muted">Szusszanj egyet a legnépszerűbb magyar rádiókkal és mini játékokkal.</p>
+        </div>
+
+        <div class="relax-grid">
+            <!-- 1. Breakout Full -->
+            <div class="relax-card">
+                <h4><i class="fas fa-gamepad"></i> Téglatörő (Arcade)</h4>
+                <div class="relax-content" style="position: relative;">
+                    <canvas id="breakout-canvas" width="320" height="420"></canvas>
+                    <div id="breakout-overlay" class="relax-overlay">
+                        <div class="overlay-title">TÉGLATÖRŐ</div>
+                        <div class="overlay-text">Pattogtasd a golyót és törd szét a téglákat!<br>Használd az egeret a
+                            mozgatáshoz.</div>
+                        <button class="btn btn-primary" onclick="startBreakout()">START JÁTÉK</button>
+                    </div>
+                    <div id="breakout-result" class="relax-overlay hidden">
+                        <div class="overlay-title" id="bo-res-title">VÉGE A JÁTÉKNAK</div>
+                        <div class="overlay-text" id="bo-res-text">Pontszám: 0<br>Idő: 0:00</div>
+                        <button class="btn btn-primary" onclick="resetBreakout()">Újra</button>
+                    </div>
+                </div>
+                <div class="mt-2 text-center small text-muted">Ablak méret: 320x420 | Pont: <span
+                        id="bo-score-live">0</span> | Idő: <span id="bo-timer-live">0:00</span></div>
+            </div>
+
+            <!-- 4. Radio Center -->
+            <div class="relax-card">
+                <h4><i class="fas fa-broadcast-tower"></i> Magyar Rádiók</h4>
+                <div class="relax-content" style="background: var(--bg-alt);">
+                    <div class="radio-list">
+                        <div class="radio-item active" data-url="https://icast.connectmedia.hu/5201/live.mp3">
+                            <div class="radio-info">
+                                <span class="radio-name">Rádió 1</span>
+                                <span class="radio-tag">Csak az igazi mai sláger megy</span>
+                            </div>
+                            <i class="fas fa-play-circle fa-2x radio-play-btn"></i>
+                        </div>
+                        <div class="radio-item" data-url="https://icast.connectmedia.hu/4738/mr2.mp3">
+                            <div class="radio-info">
+                                <span class="radio-name">Petőfi Rádió</span>
+                                <span class="radio-tag">Akkor is. Most is.</span>
+                            </div>
+                            <i class="fas fa-play-circle fa-2x radio-play-btn"></i>
+                        </div>
+                        <div class="radio-item" data-url="https://icast.connectmedia.hu/5001/live.mp3">
+                            <div class="radio-info">
+                                <span class="radio-name">Retró Rádió</span>
+                                <span class="radio-tag">Minden idők legnagyobb slágerei</span>
+                            </div>
+                            <i class="fas fa-play-circle fa-2x radio-play-btn"></i>
+                        </div>
+                    </div>
+                </div>
+                <audio id="radio-player"></audio>
+                <div class="p-3 d-flex align-items-center gap-3 border-top" style="background: var(--bg-card);">
+                    <button class="btn btn-primary btn-round" onclick="toggleRadio()"><i id="radio-icon"
+                            class="fas fa-play"></i></button>
+                    <input type="range" class="form-range" min="0" max="1" step="0.1" value="0.5"
+                        oninput="setVolume(this.value)">
+                </div>
+            </div>
+
+            <!-- 4. Tic-Tac-Toe -->
+            <div class="relax-card">
+                <h4><i class="fas fa-times"></i> Amőba (3x3)</h4>
+                <div class="relax-content"
+                    style="background: var(--bg-dark); flex-direction: column; position: relative;">
+                    <div class="mb-2" style="z-index: 5;">
+                        <select id="ttt-difficulty" class="btn btn-sm btn-secondary"
+                            style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">
+                            <option value="easy">Könnyű</option>
+                            <option value="hard" selected>Nehéz</option>
+                        </select>
+                    </div>
+                    <div id="ttt-board">
+                        <div class="ttt-cell" data-i="0"></div>
+                        <div class="ttt-cell" data-i="1"></div>
+                        <div class="ttt-cell" data-i="2"></div>
+                        <div class="ttt-cell" data-i="3"></div>
+                        <div class="ttt-cell" data-i="4"></div>
+                        <div class="ttt-cell" data-i="5"></div>
+                        <div class="ttt-cell" data-i="6"></div>
+                        <div class="ttt-cell" data-i="7"></div>
+                        <div class="ttt-cell" data-i="8"></div>
+                    </div>
+                    <div class="ttt-status" id="ttt-status">Te jössz! (X)</div>
+                    <div id="ttt-overlay" class="ttt-overlay">
+                        <h2 id="ttt-result-title" style="color: var(--primary-light); font-weight: 800;">GYŐZTÉL!</h2>
+                        <button class="btn btn-primary mt-3" onclick="resetTTT()">Új játék</button>
+                    </div>
+                </div>
+                <div class="p-3 text-center border-top" style="background: var(--bg-card);">
+                </div>
+            </div>
+
+            <!-- 5. Savannah Live Stream -->
+            <div class="relax-card">
+                <h4><i class="fas fa-video"></i> Vadon Élőben (Afrika)</h4>
+                <div class="relax-content">
+                    <iframe id="savannah-stream" width="100%" height="100%"
+                        src="https://www.youtube.com/embed/ydYDqZQpim8?autoplay=1&mute=1&rel=0&modestbranding=1"
+                        title="Savannah Live Stream" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen></iframe>
+                </div>
+                <div class="p-3 text-center border-top" style="background: var(--bg-card);">
+                    <small class="text-muted">Élő természetközeli pillanatok Afrikából.</small>
+                </div>
+            </div>
+
+            <!-- 6. Paint Mini-Module -->
+            <div class="relax-card">
+                <h4><i class="fas fa-paint-brush"></i> Irodai Paint</h4>
+                <div class="relax-content" style="background: var(--bg-alt); flex-direction: column; padding: 1rem;">
+                    <canvas id="paint-canvas" width="300" height="350"></canvas>
+                    <div class="paint-toolbar">
+                        <div class="paint-tool">
+                            <i class="fas fa-palette"></i>
+                            <input type="color" id="paint-color" value="#4361ee">
+                        </div>
+                        <div class="paint-tool">
+                            <i class="fas fa-minus" style="font-size: 0.5rem;"></i>
+                            <input type="range" id="paint-size" min="1" max="20" value="5" style="width: 60px;">
+                            <i class="fas fa-minus" style="font-size: 1rem;"></i>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger" id="paint-clear" title="Törlés">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-3 text-center border-top" style="background: var(--bg-card);">
+                    <small class="text-muted">Skiccelj fel egy gyors ötletet!</small>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        // --- Breakout logic ---
+        const canvas = document.getElementById("breakout-canvas");
+        const ctx = canvas.getContext("2d");
+        const ballRadius = 8;
+        const paddleHeight = 10;
+        const paddleWidth = 75;
+
+        let x, y, dx, dy, paddleX, lives, score;
+        let gameRunning = false;
+        let animationId;
+        let gameStartTime;
+
+        function updateTimer() {
+            if (!gameRunning) return;
+            const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+            const m = Math.floor(elapsed / 60);
+            const s = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('bo-timer-live').innerText = `${m}:${s}`;
+        }
+
+        function initBreakout() {
+            x = canvas.width / 2;
+            y = canvas.height - 30;
+            dx = 5;
+            dy = -5;
+            paddleX = (canvas.width - paddleWidth) / 2;
+            lives = 3;
+            score = 0;
+            bricks = [];
+            for (let c = 0; c < brickColumnCount; c++) {
+                bricks[c] = [];
+                for (let r = 0; r < brickRowCount; r++) {
+                    bricks[c][r] = { x: 0, y: 0, status: 1, color: `hsl(${(r * 40) + 160}, 60%, 50%)` };
+                }
+            }
+        }
+
+        const brickRowCount = 6;
+        const brickColumnCount = 4;
+        const brickWidth = 70;
+        const brickHeight = 20;
+        const brickPadding = 5;
+        const brickOffsetTop = 40;
+        const brickOffsetLeft = 10;
+
+        let bricks = [];
+        for (let c = 0; c < brickColumnCount; c++) {
+            bricks[c] = [];
+            for (let r = 0; r < brickRowCount; r++) {
+                bricks[c][r] = { x: 0, y: 0, status: 1, color: `hsl(${(r * 40) + 160}, 60%, 50%)` };
+            }
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = "#4361ee";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawPaddle() {
+            ctx.beginPath();
+            ctx.roundRect(paddleX, canvas.height - paddleHeight - 5, paddleWidth, paddleHeight, 5);
+            ctx.fillStyle = "#2d5a27";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawBricks() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status == 1) {
+                        let bx = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+                        let by = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+                        bricks[c][r].x = bx;
+                        bricks[c][r].y = by;
+                        ctx.beginPath();
+                        ctx.roundRect(bx, by, brickWidth, brickHeight, 3);
+                        ctx.fillStyle = bricks[c][r].color;
+                        ctx.fill();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+
+        function drawScore() {
+            ctx.font = "bold 14px Inter";
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText("Pontszám: " + score, 10, 20);
+        }
+
+        function drawLives() {
+            ctx.font = "bold 14px Inter";
+            ctx.fillStyle = "#ffffff"; // Always white on dark game canvas
+            ctx.fillText("Életek: " + lives, canvas.width - 70, 20);
+        }
+
+        function collision() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status == 1) {
+                        let b = bricks[c][r];
+                        if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+                            dy = -dy;
+                            b.status = 0;
+                            score += 10;
+                            dx *= 1.01; // speed up
+                        }
+                    }
+                }
+            }
+        }
+
+        function startBreakout() {
+            document.getElementById('breakout-overlay').classList.add('hidden');
+            document.getElementById('breakout-result').classList.add('hidden');
+            initBreakout();
+            gameRunning = true;
+            gameStartTime = Date.now();
+            if (animationId) cancelAnimationFrame(animationId);
+            draw();
+        }
+
+        function resetBreakout() {
+            startBreakout();
+        }
+
+        function showBreakoutResult(won) {
+            gameRunning = false;
+            document.getElementById('breakout-result').classList.remove('hidden');
+            document.getElementById('bo-res-title').innerText = won ? "GRATULÁLUNK!" : "VÉGE A JÁTÉKNAK";
+            document.getElementById('bo-res-title').style.color = won ? "var(--success)" : "var(--danger)";
+            const elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+            const m = Math.floor(elapsed / 60);
+            const s = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('bo-res-text').innerText = `Pontszám: ${score}\nIdő: ${m}:${s}`;
+        }
+
+        function draw() {
+            if (!gameRunning) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            drawBall();
+            drawPaddle();
+            drawScore();
+            drawLives();
+            collision();
+            updateTimer();
+            document.getElementById('bo-score-live').innerText = score;
+
+            if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) dx = -dx;
+            if (y + dy < ballRadius) dy = -dy;
+            else if (y + dy > canvas.height - ballRadius - 5) {
+                if (x > paddleX && x < paddleX + paddleWidth) {
+                    dy = -dy;
+                } else {
+                    lives--;
+                    if (!lives) {
+                        showBreakoutResult(false);
+                        return;
+                    } else {
+                        x = canvas.width / 2;
+                        y = canvas.height - 30;
+                        dx = 5;
+                        dy = -5;
+                        paddleX = (canvas.width - paddleWidth) / 2;
+                    }
+                }
+            }
+
+            // Check if all bricks are gone
+            let allGone = true;
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status == 1) allGone = false;
+                }
+            }
+            if (allGone) {
+                showBreakoutResult(true);
+                return;
+            }
+
+            x += dx; y += dy;
+            animationId = requestAnimationFrame(draw);
+        }
+        canvas.onmousemove = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            paddleX = e.clientX - rect.left - paddleWidth / 2;
+            if (paddleX < 0) paddleX = 0;
+            if (paddleX > canvas.width - paddleWidth) paddleX = canvas.width - paddleWidth;
+        };
+        // remove standard draw call
+
+        // --- Paint Logic ---
+        const paintCanvas = document.getElementById('paint-canvas');
+        const paintCtx = paintCanvas.getContext('2d');
+        const colorPicker = document.getElementById('paint-color');
+        const brushSize = document.getElementById('paint-size');
+        const clearBtn = document.getElementById('paint-clear');
+
+        let painting = false;
+        let currentColor = '#000000';
+        let currentSize = 5;
+
+        paintCanvas.width = paintCanvas.offsetWidth;
+        paintCanvas.height = paintCanvas.offsetHeight;
+
+        paintCtx.lineWidth = currentSize;
+        paintCtx.lineCap = 'round';
+        paintCtx.strokeStyle = currentColor;
+
+        function startPosition(e) {
+            painting = true;
+            drawPaint(e);
+        }
+
+        function endPosition() {
+            painting = false;
+            paintCtx.beginPath();
+        }
+
+        function drawPaint(e) {
+            if (!painting) return;
+            const rect = paintCanvas.getBoundingClientRect();
+            // Support both MouseEvent and Touch
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            paintCtx.lineTo(clientX - rect.left, clientY - rect.top);
+            paintCtx.stroke();
+            paintCtx.beginPath();
+            paintCtx.moveTo(clientX - rect.left, clientY - rect.top);
+        }
+
+        paintCanvas.addEventListener('mousedown', startPosition);
+        paintCanvas.addEventListener('mouseup', endPosition);
+        paintCanvas.addEventListener('mousemove', drawPaint);
+        paintCanvas.addEventListener('mouseleave', endPosition);
+
+        // Touch support for Paint
+        paintCanvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startPosition(e);
+        });
+        paintCanvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            endPosition();
+        });
+        paintCanvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            drawPaint(e);
+        });
+
+        colorPicker.addEventListener('input', (e) => {
+            currentColor = e.target.value;
+            paintCtx.strokeStyle = currentColor;
+        });
+
+        brushSize.addEventListener('input', (e) => {
+            currentSize = e.target.value;
+            paintCtx.lineWidth = currentSize;
+        });
+
+        clearBtn.addEventListener('click', () => {
+            paintCtx.clearRect(0, 0, paintCanvas.width, paintCanvas.height);
+        });
+
+        // --- Tetris Logic ---
+        // Tetris module removed
+
+        // --- Radio Center ---
+        const player = document.getElementById('radio-player');
+        const items = document.querySelectorAll('.radio-item');
+        let playing = false;
+
+        items.forEach(item => {
+            item.onclick = (e) => {
+                items.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                player.src = item.dataset.url;
+                if (playing) player.play();
+            };
+            // Delegate click to parent if icon is clicked
+            const playBtn = item.querySelector('.radio-play-btn');
+            if (playBtn) {
+                playBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    item.click();
+                    if (!playing) toggleRadio();
+                }
+            }
+        });
+
+        function toggleRadio() {
+            const icon = document.getElementById('radio-icon');
+            if (playing) {
+                player.pause();
+                playing = false;
+                icon.className = 'fas fa-play';
+            } else {
+                if (!player.src) player.src = document.querySelector('.radio-item.active').dataset.url;
+                player.play().catch(e => console.error("Autoplay blocked or stream error:", e));
+                playing = true;
+                icon.className = 'fas fa-pause';
+            }
+        }
+        function setVolume(v) { player.volume = v; }
+
+        // --- Tic Tac Toe ---
+        let tttBoard = Array(9).fill(null);
+        let userTurn = true;
+        const cells = document.querySelectorAll('.ttt-cell');
+        const tttStatus = document.getElementById('ttt-status');
+
+        cells.forEach(cell => {
+            cell.onclick = () => {
+                const i = cell.dataset.i;
+                if (tttBoard[i] || !userTurn) return;
+                makeMove(i, 'x');
+                if (!checkWinner()) {
+                    userTurn = false;
+                    tttStatus.innerText = "Gép gondolkodik...";
+                    aiMove();
+                }
+            };
+        });
+
+        function makeMove(i, p) {
+            tttBoard[i] = p;
+            cells[i].innerText = p === 'x' ? 'X' : 'O';
+            cells[i].classList.add(p);
+        }
+
+        const difficultySelect = document.getElementById('ttt-difficulty');
+
+        function aiMove() {
+            if (!userTurn) return;
+            tttStatus.innerText = "Gép gondolkodik...";
+            tttStatus.style.opacity = "0.6";
+
+            setTimeout(() => {
+                let move = getBestMoveSmart(tttBoard);
+
+                if (move !== undefined) {
+                    makeMove(move, 'o');
+                    if (!checkWinner()) {
+                        userTurn = true;
+                        tttStatus.innerText = "Te jössz! (X)";
+                        tttStatus.style.opacity = "1";
+                    }
+                }
+            }, 500);
+        }
+
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // cols
+            [0, 4, 8], [2, 4, 6]           // diags
+        ];
+
+        function getBestMoveSmart(board) {
+            // Helper to check if a player can win or be blocked
+            const checkLine = (player) => {
+                for (let pattern of winPatterns) {
+                    const [a, b, c] = pattern;
+                    const line = [board[a], board[b], board[c]];
+                    const emptyIndex = line.indexOf(null);
+
+                    if (emptyIndex !== -1) { // If there's an empty spot
+                        const otherPlayerCount = line.filter(cell => cell === player).length;
+                        if (otherPlayerCount === 2) {
+                            return pattern[emptyIndex]; // Return the index of the empty spot
+                        }
+                    }
+                }
+                return null;
+            };
+
+            // 1. Can AI win?
+            let winningMove = checkLine('o');
+            if (winningMove !== null) return winningMove;
+
+            // 2. Can player win? Block them.
+            let blockingMove = checkLine('x');
+            if (blockingMove !== null) return blockingMove;
+
+            // 3. Take center
+            if (board[4] === null) return 4;
+
+            // 4. Take an available corner
+            const corners = [0, 2, 6, 8].filter(i => board[i] === null);
+            if (corners.length > 0) return corners[Math.floor(Math.random() * corners.length)];
+
+            // 5. Take an available edge
+            const edges = [1, 3, 5, 7].filter(i => board[i] === null);
+            if (edges.length > 0) return edges[Math.floor(Math.random() * edges.length)];
+
+            return undefined; // No moves left (shouldn't happen if game logic is correct)
+        }
+
+        function checkWinner() {
+            for (let pattern of winPatterns) {
+                let [a, b, c] = pattern;
+                if (tttBoard[a] && tttBoard[a] === tttBoard[b] && tttBoard[a] === tttBoard[c]) {
+                    showTTTResult(tttBoard[a] === 'x' ? "GYŐZTÉL!" : "GÉP NYERT!");
+                    userTurn = false; // Game over
+                    return true;
+                }
+            }
+            if (tttBoard.every(cell => cell !== null)) {
+                showTTTResult("DÖNTETLEN!");
+                userTurn = false; // Game over
+                return true;
+            }
+            return false;
+        }
+
+        function showTTTResult(msg) {
+            document.getElementById('ttt-result-title').innerText = msg;
+            document.getElementById('ttt-overlay').classList.add('active');
+        }
+
+        function resetTTT() {
+            tttBoard.fill(null);
+            cells.forEach(cell => {
+                cell.innerText = '';
+                cell.classList.remove('x', 'o');
+            });
+            document.getElementById('ttt-overlay').classList.remove('active');
+            userTurn = true;
+            tttStatus.innerText = "Te jössz! (X)";
+            tttStatus.style.opacity = "1";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teljesítmény Optimalizáló - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background: var(--bg-creamy);
+        }
+
+        :root {
+            --bg-pro: #f8fafc;
+            --accent-pro: #4361ee;
+            --danger-pro: #ef4444;
+            --success-pro: #10b981;
+            --warning-pro: #f59e0b;
+        }
+
+        [data-theme="dark"] {
+            --bg-pro: #1e293b;
+        }
+
+        .opt-container {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-input-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .month-input {
+            background: var(--bg-creamy) !important;
+            border: 1.5px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 700;
+            color: var(--text-main) !important;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .month-input.invalid {
+            border-color: var(--danger-pro) !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .styled-input,
+        .styled-select {
+            background: var(--bg-creamy) !important;
+            color: var(--text-main) !important;
+            border: 1.5px solid var(--border-color) !important;
+            padding: 0.75rem;
+            border-radius: 0.6rem;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .field-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            color: var(--text-main);
+            font-size: 0.85rem;
+        }
+
+        .pro-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+        }
+
+        .btn-calc {
+            background: var(--success-pro);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 800;
+            width: 100%;
+            cursor: pointer;
+            font-family: 'Outfit';
+            font-size: 1.1rem;
+            margin-top: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        #error-banner {
+            display: none;
+            background: var(--danger-pro);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .result-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.85rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #no-data-banner {
+            display: none;
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            border: 1px solid #fecaca;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .savings-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+            display: none;
+        }
+
+        .savings-box .save-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            opacity: 0.9;
+        }
+
+        .savings-box .save-value {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin: 0.25rem 0;
+        }
+
+        .savings-box .save-percent {
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+        }
+
+        .summary-box span {
+            display: block;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            line-height: 1.1;
+        }
+
+        .summary-box strong {
+            font-size: 1.1rem;
+            color: var(--accent-pro);
+            white-space: nowrap;
+        }
+
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cost-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .cost-row .label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .cost-row .value {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .announced-highlight {
+            border: 2px solid var(--success-pro) !important;
+            background: rgba(16, 185, 129, 0.05) !important;
+        }
+
+        .max-highlight {
+            border: 2px solid var(--warning-pro) !important;
+            background: rgba(245, 158, 11, 0.05) !important;
+        }
+
+        .info-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 2rem;
+            font-size: 0.85rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-item i {
+            color: var(--accent-pro);
+        }
+
+        .info-item strong {
+            color: var(--text-main);
+        }
+
+        .info-item .percentage {
+            background: var(--accent-pro);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 800;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo">
+            <i class="fab fa-android"></i>
+            <span>IRODAI<br>ASSZISZTENS</span>
+        </a>
+        <div class="header-info">
+            <!-- Data injected by main.js -->
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header mb-4">
+            <h2 style="font-weight: 800;">Lekötött Teljesítmény Optimalizáló</h2>
+            <p class="text-muted small">Precíziós kalkulátor bejelentési kockázatelemzéssel (MEKH 2025).</p>
+        </div>
+
+        <div id="error-banner"><i class="fas fa-warning me-2"></i> Saját téves érték! Kérjük ellenőrizze az adatokat
+            (Max 100 kW, csak számok).</div>
+        <div id="no-data-banner"><i class="fas fa-info-circle me-2"></i> Kérjük adjon meg legalább egy havi csúcsot az
+            optimalizáláshoz!</div>
+
+        <div class="info-bar" id="penalty-info-bar">
+            <div class="info-item">
+                <i class="fas fa-bullhorn"></i>
+                <div>
+                    <span>Bejelentett pótdíj:</span>
+                    <strong id="ann-factor-display">10%</strong>
+                    <span class="percentage">Ft/kW/hó: <span id="ann-money-display">--</span></span>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-bolt-lightning"></i>
+                <div>
+                    <span>Be nem jelentett pótdíj:</span>
+                    <strong id="unann-factor-display">25%</strong>
+                    <span class="percentage" style="background: var(--warning-pro);">Ft/kW/hó: <span
+                            id="unann-money-display">--</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="opt-container">
+            <div class="data-input-area">
+                <div class="pro-card">
+                    <h5 class="mb-3" style="font-weight: 800;">Beállítások</h5>
+
+                    <div class="mb-3">
+                        <label class="field-label">Tarifa (E.ON / MEKH 2025)</label>
+                        <select id="tariff-select" class="styled-select" onchange="updateTariffValue()">
+                            <option value="13248">KIF III - 13 248 Ft/kW/év</option>
+                            <option value="16608">KÖF - 16 608 Ft/kW/év</option>
+                            <option value="custom">Egyedi számítás...</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="field-label">Jelenlegi lekötött teljesítmény (kW)</label>
+                        <input type="number" id="current-contract-cap" value="45" class="styled-input"
+                            placeholder="Példa: 45">
+                    </div>
+
+                    <div id="custom-fee-block" class="mb-3" style="display:none;">
+                        <label class="field-label">Egyedi Éves Díj (Ft/kW/év)</label>
+                        <input type="number" id="annual-fee" value="13248" class="styled-input"
+                            oninput="updatePenaltyInfo()">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="field-label">Add meg az elmúlt időszakok havi csúcsteljesítményeit.</label>
+                        <textarea id="bulk-input" rows="2"
+                            placeholder="Példák: 52, 48.5, 30 vagy 45 60 55... (1.1.6.1 a mérőórán a kódja)"
+                            class="styled-input"></textarea>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem;">
+                            <button class="btn btn-primary btn-sm" onclick="parseBulkData()"
+                                style="flex: 4; padding: 0.5rem; font-size: 0.8rem; font-weight: 700;">
+                                <i class="fas fa-paste me-2"></i> Beillesztés
+                            </button>
+                            <button class="btn btn-sm" onclick="clearData()"
+                                style="flex: 1; padding: 0.5rem; background: #dc2626; color: white !important; border: none; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 0 #991b1b !important;">
+                                <i class="fas fa-trash-alt" style="color: white !important;"></i>
+                            </button>
+                        </div>
+                        <div id="calc-hint" class="mt-2 text-center"
+                            style="display: none; font-size: 0.75rem; color: var(--primary); font-weight: 700; font-style: italic; animation: pulse 2s infinite;">
+                            <i class="fas fa-arrow-down me-1"></i> Kattints az optimalizálás futtatására!
+                        </div>
+                    </div>
+
+                    <div id="calc-step" style="display:none;">
+                        <button class="btn-calc" onclick="calculateOptimum()">
+                            <i class="fas fa-calculator me-2"></i> OPTMALIZÁLÁS FUTTATÁSA
+                        </button>
+                    </div>
+
+                    <div class="mt-4 small text-muted">
+                        <p><i class="fas fa-info-circle me-1"></i> A program automatikusan a legkedvezőbb hónapokat
+                            jelöli bejelenthetőnek (3 vagy 6).</p>
+                    </div>
+                </div>
+
+                <div class="pro-card" style="overflow-y: auto; max-height: 500px;">
+                    <h5 class="mb-3" style="font-weight: 800;">Bemeneti Adatok (kW)</h5>
+                    <div class="month-grid" id="month-inputs">
+                        <!-- JS renders -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="results-area" style="display: none;">
+                <div class="result-summary-grid">
+                    <div class="summary-box">
+                        <span>ÁTLAG</span>
+                        <strong id="avg-val">-- kW</strong>
+                    </div>
+                    <div class="summary-box" style="border-color: var(--success-pro); border-width: 2px;">
+                        <span>OPTIMÁLIS LEKÖTÉS</span>
+                        <strong id="rec-val" style="color: var(--success-pro);">-- kW</strong>
+                    </div>
+                    <div class="summary-box" style="border-color: var(--warning-pro);">
+                        <span>MAX. CSÚCS</span>
+                        <strong id="max-peak-val" style="color: var(--warning-pro);">-- kW</strong>
+                    </div>
+                    <div class="summary-box">
+                        <span>LIMIT</span>
+                        <strong id="limit-val">-- hó</strong>
+                    </div>
+                    <div class="summary-box"
+                        style="border-color: var(--danger-pro); background: rgba(239, 68, 68, 0.05);">
+                        <span>ÉVES KOCKÁZAT</span>
+                        <strong id="risk-val" style="color: var(--danger-pro);">-- Ft</strong>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="pro-card">
+                            <h5 class="mb-4" style="font-weight: 800;">Összesített Mérleg</h5>
+                            <div class="cost-row">
+                                <span class="label">Éves Alapdíj (<span id="base-calc-label">--</span>)</span>
+                                <span class="value" id="base-cost-val">-- Ft</span>
+                            </div>
+                            <div class="cost-row">
+                                <span class="label">Éves Bejelentett Pótdíj</span>
+                                <span class="value" id="ann-penalty-val">-- Ft/év</span>
+                            </div>
+                            <div class="cost-row">
+                                <span class="label">Éves Bejelentés nélküli Pótdíj</span>
+                                <span class="value" id="unann-penalty-val">-- Ft/év</span>
+                            </div>
+                            <div class="mt-4 pt-3" style="border-top: 2px solid var(--border-color);">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                                    <div>
+                                        <span
+                                            style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted);">Optimalizált
+                                            Éves Díj:</span>
+                                        <div style="font-size: 0.65rem; color: var(--text-muted); line-height: 1;"
+                                            id="best-total-hint">Alapdíj + Évesített pótdíjak</div>
+                                    </div>
+                                    <span id="grand-total-val"
+                                        style="font-size: 2rem; font-weight: 900; color: var(--accent-pro); line-height: 1;">--
+                                        Ft/év</span>
+                                </div>
+                            </div>
+                            <div id="risk-info" class="mt-3 p-3 rounded"
+                                style="background: rgba(239, 68, 68, 0.1); font-size: 0.8rem; display: none;">
+                                <i class="fas fa-exclamation-circle text-danger me-2"></i>
+                                <strong>Figyelem!</strong> Magyarországon az elmaradt bejelentés esetén az éves költség
+                                <span id="worst-total-val" style="font-weight: 800;">-- Ft/év</span>-re emelkedik.
+                            </div>
+
+                            <div id="savings-box" class="savings-box">
+                                <div class="save-title">Becsült éves megtakarítás</div>
+                                <div class="save-value" id="savings-val">-- Ft</div>
+                                <div class="save-percent" id="savings-percent-val">--%</div>
+                                <div class="mt-2 small" style="opacity: 0.8; font-size: 0.7rem;">
+                                    A jelenlegi <span id="current-cap-ref">--</span> kW-os lekötéshez képest
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="pro-card" style="height: 100%;">
+                            <canvas id="opt-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const inputsDiv = document.getElementById('month-inputs');
+        let chartInstance = null;
+
+        for (let i = 0; i < 24; i++) {
+            const div = document.createElement('div');
+            div.id = `m-cont-${i}`;
+            div.className = "p-1 rounded";
+            div.style.position = "relative";
+            div.innerHTML = `<label class="field-label" style="font-size:0.6rem; margin-bottom:2px;">${i + 1}. HÓ</label>
+                             <input type="text" class="month-input" data-index="${i}" value="0" oninput="liveValidate(this)">`;
+            inputsDiv.appendChild(div);
+        }
+
+        // Demo parabolic data
+        const demoPeaks = [
+            32, 35, 38, 42, 45, 48, 52, 55, 58, 62, 65, 68,
+            68, 65, 62, 58, 55, 52, 48, 45, 42, 38, 35, 32
+        ];
+
+        function loadDemoData() {
+            const inputs = document.querySelectorAll('.month-input');
+            demoPeaks.forEach((v, i) => {
+                if (i < inputs.length) inputs[i].value = v;
+            });
+            document.getElementById('calc-step').style.display = 'block';
+            document.getElementById('calc-hint').style.display = 'block';
+        }
+
+        function clearData() {
+            document.querySelectorAll('.month-input').forEach(inp => {
+                inp.value = "0";
+                inp.classList.remove('invalid');
+            });
+            document.getElementById('error-banner').style.display = 'none';
+            document.getElementById('no-data-banner').style.display = 'none';
+            document.getElementById('results-area').style.display = 'none';
+            document.getElementById('calc-hint').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDemoData();
+            updatePenaltyInfo();
+            // Auto run once to show initial state
+            setTimeout(() => calculateOptimum(), 100);
+        });
+
+        function liveValidate(input) {
+            const valStr = input.value.trim();
+            const val = parseFloat(valStr);
+            const isOk = valStr === "" || (!isNaN(val) && val <= 100 && /^\d*\.?\d*$/.test(valStr));
+
+            if (!isOk) {
+                input.classList.add('invalid');
+                document.getElementById('error-banner').style.display = 'block';
+            } else {
+                input.classList.remove('invalid');
+                if (document.querySelectorAll('.month-input.invalid').length === 0) {
+                    document.getElementById('error-banner').style.display = 'none';
+                }
+            }
+        }
+
+        function updatePenaltyInfo() {
+            const sel = document.getElementById('tariff-select');
+            let rate = (sel.value === 'custom') ? parseFloat(document.getElementById('annual-fee').value) : parseFloat(sel.value);
+            if (isNaN(rate)) rate = 0;
+
+            const annMoney = Math.round(rate * 0.10);
+            const unannMoney = Math.round(rate * 0.25);
+
+            document.getElementById('ann-money-display').innerText = annMoney.toLocaleString('hu-HU') + " Ft";
+            document.getElementById('unann-money-display').innerText = unannMoney.toLocaleString('hu-HU') + " Ft";
+        }
+
+        function updateTariffValue() {
+            const sel = document.getElementById('tariff-select');
+            const block = document.getElementById('custom-fee-block');
+            const inp = document.getElementById('annual-fee');
+            if (sel.value === 'custom') {
+                block.style.display = 'block';
+            } else {
+                block.style.display = 'none';
+                inp.value = sel.value;
+            }
+            updatePenaltyInfo();
+        }
+
+        function parseBulkData() {
+            const val = document.getElementById('bulk-input').value;
+            const nums = val.split(/[,\s\n\t]+/).filter(s => s.trim() !== "");
+            const inputs = document.querySelectorAll('.month-input');
+            nums.forEach((n, i) => {
+                if (i < inputs.length) {
+                    inputs[i].value = n;
+                    liveValidate(inputs[i]);
+                }
+            });
+            document.getElementById('calc-step').style.display = 'block';
+            document.getElementById('calc-hint').style.display = 'block';
+            document.getElementById('results-area').style.display = 'none';
+        }
+
+        function calculateOptimum() {
+            document.getElementById('calc-hint').style.display = 'none';
+            const sel = document.getElementById('tariff-select');
+            let annualRate = (sel.value === 'custom') ? parseFloat(document.getElementById('annual-fee').value) : parseFloat(sel.value);
+
+            const inputs = document.querySelectorAll('.month-input');
+            let peaks = [];
+            let err = false;
+
+            inputs.forEach(inp => {
+                const s = inp.value.trim();
+                const v = parseFloat(s);
+                if (s !== "" && (isNaN(v) || v > 100 || !/^\d*\.?\d*$/.test(s))) err = true;
+                peaks.push(isNaN(v) ? 0 : v);
+            });
+
+            if (err) {
+                alert("Saját téves érték! Kérjük javítsa a hibás (piros) mezőket (Max 100 kW).");
+                return;
+            }
+
+            if (peaks.every(p => p === 0)) {
+                document.getElementById('no-data-banner').style.display = 'block';
+                document.getElementById('results-area').style.display = 'none';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            document.getElementById('no-data-banner').style.display = 'none';
+
+            document.getElementById('results-area').style.display = 'block';
+
+            const usedPeaks = peaks.filter(p => p > 0);
+            const maxPeak = Math.max(...peaks);
+            const avgVal = usedPeaks.length > 0 ? (usedPeaks.reduce((a, b) => a + b, 0) / usedPeaks.length) : 0;
+
+            // Determine years and announcement limit
+            // Rule: 6 announcements only if all 24 months are filled. Otherwise max 3.
+            const years = usedPeaks.length > 12 ? 2 : 1;
+            const annLimit = usedPeaks.length === 24 ? 6 : 3;
+
+            document.getElementById('avg-val').innerText = avgVal.toFixed(1) + " kW";
+            document.getElementById('max-peak-val').innerText = maxPeak.toFixed(1) + " kW";
+            document.getElementById('limit-val').innerText = annLimit + " hó / " + years + " év";
+
+            // TESTING RANGE: 1 to 100 kW as requested for smooth curve
+            let candidates = [];
+            for (let i = 1; i <= 100; i++) candidates.push(i);
+
+            let minSum = Infinity, bestCap = 0, bestBase = 0, bestAnnP = 0, bestUnannP = 0, bestWorstTotal = 0;
+            const chartData = [];
+
+            candidates.forEach(cap => {
+                let base = cap * annualRate;
+                let annP = 0, unannP = 0, worstP = 0;
+
+                let monthDetails = peaks.map((p, i) => {
+                    let exc = Math.max(0, p - cap);
+                    worstP += exc * annualRate * 0.25;
+                    return { idx: i, val: p, exc: exc };
+                });
+
+                let sortedExc = monthDetails.filter(m => m.exc > 0).sort((a, b) => b.exc - a.exc);
+                let annIdxs = sortedExc.slice(0, annLimit).map(m => m.idx);
+
+                monthDetails.forEach(m => {
+                    if (m.exc > 0) {
+                        if (annIdxs.includes(m.idx)) {
+                            annP += m.exc * annualRate * 0.10;
+                        } else {
+                            unannP += m.exc * annualRate * 0.25;
+                        }
+                    }
+                });
+
+                let total = base + (annP + unannP) / years;
+                if (total < minSum) {
+                    minSum = total;
+                    bestCap = cap;
+                    bestBase = base;
+                    bestAnnP = annP / years;
+                    bestUnannP = unannP / years;
+                    bestWorstTotal = base + worstP / years;
+                }
+                chartData.push({ x: cap, y: total });
+            });
+
+            // Calculate current contract cost for comparison
+            const currentCap = parseFloat(document.getElementById('current-contract-cap').value) || 0;
+            let currentTotal = 0;
+            if (currentCap > 0) {
+                let base = currentCap * annualRate;
+                let annP = 0, unannP = 0;
+                let monthDetails = peaks.map((p, i) => {
+                    let exc = Math.max(0, p - currentCap);
+                    return { idx: i, val: p, exc: exc };
+                });
+                let sortedExc = monthDetails.filter(m => m.exc > 0).sort((a, b) => b.exc - a.exc);
+                let annIdxs = sortedExc.slice(0, annLimit).map(m => m.idx);
+                monthDetails.forEach(m => {
+                    if (m.exc > 0) {
+                        if (annIdxs.includes(m.idx)) annP += m.exc * annualRate * 0.10;
+                        else unannP += m.exc * annualRate * 0.25;
+                    }
+                });
+                currentTotal = base + annP + unannP;
+            }
+
+            document.getElementById('rec-val').innerText = bestCap + " kW";
+            document.getElementById('base-calc-label').innerText = bestCap + " kW × " + Math.round(annualRate).toLocaleString('hu-HU') + " Ft";
+            document.getElementById('base-cost-val').innerText = Math.round(bestBase).toLocaleString('hu-HU') + " Ft";
+            document.getElementById('ann-penalty-val').innerText = Math.round(bestAnnP).toLocaleString('hu-HU') + " Ft/év";
+            document.getElementById('unann-penalty-val').innerText = Math.round(bestUnannP).toLocaleString('hu-HU') + " Ft/év";
+            document.getElementById('grand-total-val').innerText = Math.round(minSum).toLocaleString('hu-HU') + " Ft/év";
+
+            const risk = bestWorstTotal - minSum;
+            document.getElementById('risk-val').innerText = "+" + Math.round(risk).toLocaleString('hu-HU') + " Ft/év";
+            document.getElementById('worst-total-val').innerText = Math.round(bestWorstTotal).toLocaleString('hu-HU') + " Ft/év";
+            document.getElementById('risk-info').style.display = (risk > 100) ? 'block' : 'none';
+
+            // Savings calculation
+            if (currentTotal > minSum) {
+                const diff = currentTotal - minSum;
+                const pct = (diff / currentTotal) * 100;
+                document.getElementById('savings-box').style.display = 'block';
+                document.getElementById('savings-val').innerText = Math.round(diff).toLocaleString('hu-HU') + " Ft";
+                document.getElementById('savings-percent-val').innerText = pct.toFixed(1) + "% megtakarítás";
+                document.getElementById('current-cap-ref').innerText = currentTotal > 0 ? parseFloat(document.getElementById('current-contract-cap').value) : "--";
+            } else {
+                document.getElementById('savings-box').style.display = 'none';
+            }
+
+            const finalDetails = peaks.map(p => ({ val: p, exc: Math.max(0, p - bestCap) }));
+            const finalSort = finalDetails.map((d, i) => ({ ...d, idx: i })).filter(d => d.exc > 0).sort((a, b) => b.exc - a.exc);
+            const bestAnnIdxs = finalSort.slice(0, annLimit).map(d => d.idx);
+
+            inputsDiv.querySelectorAll('.p-1').forEach((cont, i) => {
+                cont.className = "p-1 rounded";
+                if (peaks[i] === maxPeak && maxPeak > 0) cont.classList.add('max-highlight');
+                if (bestAnnIdxs.includes(i)) cont.classList.add('announced-highlight');
+            });
+
+            renderChart(chartData, bestCap);
+            window.scrollTo({ top: document.getElementById('results-area').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function renderChart(data, best) {
+            const ctx = document.getElementById('opt-chart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            // Custom point styling to highlight the best capacity in red
+            const pointColors = data.map(d => (d.x === best) ? '#ef4444' : '#4361ee');
+            const pointRadii = data.map(d => (d.x === best) ? 8 : 2);
+            const pointOrders = data.map(d => (d.x === best) ? 2 : 1);
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.x),
+                    datasets: [{
+                        label: 'Éves Díj (Ft)',
+                        data: data.map(d => d.y),
+                        borderColor: '#4361ee',
+                        borderWidth: 2,
+                        pointBackgroundColor: pointColors,
+                        pointBorderColor: pointColors,
+                        pointRadius: pointRadii,
+                        pointHoverRadius: 10,
+                        fill: false,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (c) => ` ${c.parsed.x} kW: ${Math.round(c.parsed.y).toLocaleString()} Ft/év`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { callback: v => v.toLocaleString() + ' Ft' },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Lekötött Teljesítmény (kW)', font: { weight: 'bold' } },
+                            grid: { display: false },
+                            min: 1,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+        updateTariffValue();
+    </script>
+</body>
+
+</html>

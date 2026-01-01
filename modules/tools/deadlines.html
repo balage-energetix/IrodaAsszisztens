@@ -197,6 +197,41 @@
             opacity: 0.6;
             text-decoration: line-through;
         }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .deadline-card,
+            .deadline-table {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #000 !important;
+                box-shadow: none !important;
+            }
+
+            th,
+            td,
+            .fw-bold,
+            .countdown-cell {
+                color: black !important;
+            }
+
+            .deadline-form,
+            .app-header,
+            .btn,
+            .btn-link {
+                display: none !important;
+            }
+
+            .priority-badge {
+                border: 1px solid #ccc !important;
+                background: transparent !important;
+                color: black !important;
+            }
+        }
     </style>
 </head>
 

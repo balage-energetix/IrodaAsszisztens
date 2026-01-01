@@ -19,9 +19,9 @@
     --bg-light: #f1f7fd;
 
     --text-main: #000000;
-    /* Daytime black text */
-    --text-muted: #4b4b4b;
-    --border-color: rgba(0, 0, 0, 0.1);
+    --text-muted: #333333;
+    /* Darker gray for better readability in light mode */
+    --border-color: rgba(0, 0, 0, 0.15);
 
     /* Category Colors - Soft/Creamy accents */
     --cat-tech: #e3f2fd;
@@ -95,8 +95,9 @@ h2,
     --bg-card: #161616;
     --bg-light: #222222;
     --text-main: #ffffff !important;
-    --text-muted: #b0b0b0;
-    --border-color: #2a2a2a;
+    --text-muted: #f0f0f0;
+    /* Near white for dark mode */
+    --border-color: #333333;
     --flashlight-color: rgba(67, 238, 124, 0.15);
     /* Greenish flashlight */
 }
@@ -130,7 +131,7 @@ body {
     overflow-x: hidden;
     position: relative;
     cursor: none;
-    /* Hide default cursor to use custom follower */
+    line-height: 1.5;
 }
 
 /* Modern Cute Cursor Follower (Soft Bubble Trail) */
@@ -570,6 +571,7 @@ h6 {
     text-decoration: none;
     transition: all 0.2s;
     font-size: 0.9rem;
+    border-radius: 0.75rem;
 }
 
 .nav-dropdown-item i {
@@ -1401,7 +1403,7 @@ h6 {
         background: white !important;
         /* Force solid background */
         flex-direction: column;
-        padding: 2rem 1.5rem;
+        padding: 1rem 1rem;
         border-bottom: 1px solid var(--border-color);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         z-index: 2000;
@@ -1418,9 +1420,9 @@ h6 {
 
     .nav-cat {
         width: 100%;
-        padding: 0.5rem 1.25rem;
+        padding: 0.35rem 1rem;
         /* More compact */
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         justify-content: space-between;
         border-bottom: 1px solid var(--border-color);
     }
