@@ -193,7 +193,11 @@
         let voices = [];
 
         function populateVoiceList() {
-            voices = synth.getVoices().sort((a, b) => {
+            voices = synth.getVoices();
+            if (voices.length === 0) return;
+
+            // Sort voices
+            voices.sort((a, b) => {
                 const aname = a.name.toUpperCase();
                 const bname = b.name.toUpperCase();
                 if (aname < bname) return -1;
@@ -201,15 +205,17 @@
                 else return 0;
             });
 
+            const currentSelection = voiceSelect.value;
             voiceSelect.innerHTML = '';
 
-            // Filter for Hungarian first
-            const huVoices = voices.filter(v => v.lang.includes('hu'));
+            // Filter for Hungarian
+            const huVoices = voices.filter(v => v.lang.includes('hu') || v.lang.includes('HU'));
 
             if (huVoices.length > 0) {
                 huVoices.forEach(voice => {
                     const option = document.createElement('option');
                     option.textContent = `${voice.name} (${voice.lang})`;
+                    option.value = voice.name;
                     option.setAttribute('data-lang', voice.lang);
                     option.setAttribute('data-name', voice.name);
                     voiceSelect.appendChild(option);
@@ -218,48 +224,72 @@
                 voices.forEach(voice => {
                     const option = document.createElement('option');
                     option.textContent = `${voice.name} (${voice.lang})`;
-                    if (voice.default) option.textContent += ' -- DEFAULT';
+                    option.value = voice.name;
                     option.setAttribute('data-lang', voice.lang);
                     option.setAttribute('data-name', voice.name);
                     voiceSelect.appendChild(option);
                 });
             }
+
+            // Restore selection or pick first Hungarian as default
+            if (currentSelection) {
+                voiceSelect.value = currentSelection;
+            } else if (huVoices.length > 0) {
+                voiceSelect.value = huVoices[0].name;
+            }
         }
 
+        // Initial call + listener
         populateVoiceList();
         if (speechSynthesis.onvoiceschanged !== undefined) {
             speechSynthesis.onvoiceschanged = populateVoiceList;
         }
 
+        // Periodic check for voices (useful on some mobile browsers)
+        const voiceCheckInterval = setInterval(() => {
+            if (voices.length === 0) {
+                populateVoiceList();
+            } else {
+                clearInterval(voiceCheckInterval);
+            }
+        }, 1000);
+
         rateSelect.oninput = () => { rateVal.innerText = rateSelect.value; };
 
         playBtn.onclick = () => {
             if (synth.speaking) {
-                console.error('Már beszél...');
-                return;
+                synth.cancel(); // Cancel any current speech if clicked again
             }
 
             if (textInput.value !== '') {
+                // On mobile, some browsers require a brief synth.cancel() before starting
+                synth.cancel();
+
                 const utterThis = new SpeechSynthesisUtterance(textInput.value);
+                const selectedVoiceName = voiceSelect.value;
 
-                const selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
-                for (let i = 0; i < voices.length; i++) {
-                    if (voices[i].name === selectedOption) {
-                        utterThis.voice = voices[i];
-                    }
-                }
+                const voice = voices.find(v => v.name === selectedVoiceName);
+                if (voice) utterThis.voice = voice;
 
+                utterThis.lang = voice ? voice.lang : 'hu-HU';
                 utterThis.rate = rateSelect.value;
                 utterThis.pitch = 1;
 
                 utterThis.onstart = () => {
                     playBtn.disabled = true;
-                    // Setup highlighting
+                    playBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Olvasás...';
                 };
 
                 utterThis.onend = () => {
                     playBtn.disabled = false;
+                    playBtn.innerHTML = '<i class="fas fa-play"></i> Lejátszás';
                     resetHighlight();
+                };
+
+                utterThis.onerror = (e) => {
+                    console.error('SpeechSynthesis Error:', e);
+                    playBtn.disabled = false;
+                    playBtn.innerHTML = '<i class="fas fa-play"></i> Lejátszás';
                 };
 
                 utterThis.onboundary = (event) => {
@@ -268,7 +298,10 @@
                     }
                 };
 
-                synth.speak(utterThis);
+                // Small delay can help mobile stability
+                setTimeout(() => {
+                    synth.speak(utterThis);
+                }, 50);
             }
         };
 

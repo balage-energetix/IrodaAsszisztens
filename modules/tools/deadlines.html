@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Határidők - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .deadline-card {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .deadline-form {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr auto;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 1.5rem;
+            align-items: end;
+        }
+
+        @media (max-width: 992px) {
+            .deadline-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .task-list-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .deadline-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .deadline-table th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .deadline-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .priority-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.5rem;
+            font-weight: 800;
+            font-size: 0.75rem;
+            display: inline-block;
+        }
+
+        .priority-low {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .priority-medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .countdown-cell {
+            font-family: 'Consolas', monospace;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .status-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .completed-row {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-family:'Outfit'; font-weight:800;"><i
+                    class="fas fa-calendar-check text-primary me-3"></i>Határidők & Feladatok</h2>
+            <button class="btn btn-outline-primary rounded-pill px-4" onclick="clearCompleted()"><i
+                    class="fas fa-trash-alt me-2"></i>Kész feladatok törlése</button>
+        </div>
+
+        <div class="deadline-card">
+            <div class="deadline-form">
+                <div class="form-group">
+                    <label class="d-block mb-2 fw-bold small">FELADAT MEGNEVEZÉSE</label>
+                    <input type="text" id="task-input" class="styled-input" placeholder="Mit kell elvégezni?">
+                </div>
+                <div class="form-group">
+                    <label class="d-block mb-2 fw-bold small">HATÁRIDŐ (DÁTUM ÉS IDŐ)</label>
+                    <input type="datetime-local" id="deadline-input" class="styled-input">
+                </div>
+                <div class="form-group">
+                    <label class="d-block mb-2 fw-bold small">PRIORITÁS</label>
+                    <select id="priority-input" class="styled-select">
+                        <option value="low">Alacsony</option>
+                        <option value="medium" selected>Közepes</option>
+                        <option value="high">Magas</option>
+                    </select>
+                </div>
+                <button onclick="addTask()" class="btn btn-primary rounded-pill px-4 py-2" style="height: 45px;"><i
+                        class="fas fa-plus me-2"></i>Hozzáadás</button>
+            </div>
+
+            <div class="task-list-container">
+                <table class="deadline-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50px;">Állapot</th>
+                            <th>Feladat</th>
+                            <th>Határidő</th>
+                            <th>Hátralévő idő</th>
+                            <th>Prioritás</th>
+                            <th style="width: 50px;">Művelet</th>
+                        </tr>
+                    </thead>
+                    <tbody id="task-list">
+                        <!-- Tasks go here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('deadline_tasks')) || [];
+
+        function saveTasks() {
+            localStorage.setItem('deadline_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function addTask() {
+            const taskName = document.getElementById('task-input').value;
+            const deadline = document.getElementById('deadline-input').value;
+            const priority = document.getElementById('priority-input').value;
+
+            if (!taskName || !deadline) return alert('Kérlek töltsd ki a feladatot és a határidőt!');
+
+            const newTask = {
+                id: Date.now(),
+                name: taskName,
+                deadline: deadline,
+                priority: priority,
+                completed: false
+            };
+
+            tasks.push(newTask);
+            document.getElementById('task-input').value = '';
+            saveTasks();
+        }
+
+        function toggleTask(id) {
+            tasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+            saveTasks();
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            saveTasks();
+        }
+
+        function clearCompleted() {
+            tasks = tasks.filter(t => !t.completed);
+            saveTasks();
+        }
+
+        function getRemainingTime(deadlineStr) {
+            const now = new Date();
+            const deadline = new Date(deadlineStr);
+            const diff = deadline - now;
+
+            if (diff <= 0) return { text: "LEJÁRT", expired: true };
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+            return {
+                text: `${days}n ${hours}ó ${minutes}p`,
+                expired: false
+            };
+        }
+
+        function renderTasks() {
+            const list = document.getElementById('task-list');
+            list.innerHTML = '';
+
+            // Sort by deadline then priority
+            const sortedTasks = [...tasks].sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+
+            sortedTasks.forEach(t => {
+                const tr = document.createElement('tr');
+                if (t.completed) tr.className = 'completed-row';
+
+                const rem = getRemainingTime(t.deadline);
+                const priorityLabel = t.priority === 'low' ? 'Alacsony' : (t.priority === 'medium' ? 'Közepes' : 'Magas');
+
+                tr.innerHTML = `
+                    <td><input type="checkbox" class="status-checkbox" ${t.completed ? 'checked' : ''} onchange="toggleTask(${t.id})"></td>
+                    <td class="fw-bold">${t.name}</td>
+                    <td>${t.deadline.replace('T', ' ')}</td>
+                    <td class="countdown-cell ${rem.expired ? 'text-danger' : ''}">${rem.text}</td>
+                    <td><span class="priority-badge priority-${t.priority}">${priorityLabel}</span></td>
+                    <td><button onclick="deleteTask(${t.id})" class="btn btn-link text-danger p-0"><i class="fas fa-times-circle"></i></button></td>
+                `;
+                list.appendChild(tr);
+            });
+        }
+
+        // Live countdown update every minute
+        setInterval(renderTasks, 60000);
+        renderTasks();
+
+    </script>
+</body>
+
+</html>

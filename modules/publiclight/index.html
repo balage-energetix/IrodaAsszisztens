@@ -32,6 +32,43 @@
             cursor: pointer;
         }
 
+        /* Faults Table Styling */
+        .faults-table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        .faults-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            color: var(--text-main);
+        }
+
+        .faults-table th {
+            text-align: left;
+            padding: 0.75rem;
+            background: var(--bg-creamy);
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 800;
+        }
+
+        .faults-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .fault-status-pill {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            background: #fff9c4;
+            color: #fbc02d;
+        }
+
         /* Override global feature-card width and force absolute stability */
         .split-view .feature-card {
             width: 100%;
@@ -69,6 +106,15 @@
         <h2 class="mb-4" style="font-family:'Outfit'; font-weight:800; padding-left:1rem;"><i
                 class="fas fa-lightbulb text-primary me-2"></i>Közvilágítás modul</h2>
 
+        <div style="padding: 0 1rem; margin-bottom: 2rem;">
+            <button class="feature-card"
+                style="width:100%; padding:1.25rem; background:var(--primary); color:white; border:none; border-radius:1.25rem; font-weight:800; cursor:pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 1rem; box-shadow: 0 10px 20px rgba(0,0,0,0.1);"
+                onclick="window.open('https://okoslezerzebra.hu/kozvilagitas/')">
+                <i class="fas fa-external-link-alt" style="font-size: 1.5rem; color: white !important;"></i>
+                KÖZVILÁGÍTÁS HIBABEJELENTŐ (ONLINE)
+            </button>
+        </div>
+
         <div class="split-view">
             <div class="feature-card" style="padding:1rem; align-items:flex-start;">
                 <div
@@ -85,24 +131,67 @@
                 </div>
             </div>
 
-            <div class="feature-card" style="padding:1rem; align-items:flex-start; min-height: 400px;">
-                <h4 class="mb-3"><i class="fas fa-calendar-alt"></i> Közvilágításnaptár</h4>
-
+            <div class="feature-card" style="padding:1.5rem; align-items:flex-start; min-height: 400px;">
                 <div
-                    style="width: 100%; border-radius: 1rem; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-light); position: relative;">
-                    <img src="../../KozVilNaptar.jpg" class="naptar-img"
-                        style="display: block; width: 100%; min-height: 200px; object-fit: cover;"
-                        onclick="window.open(this.src)" alt="Közvilágítási naptár">
+                    style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 1rem;">
+                    <h4 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Aktuális hibahelyek</h4>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700;">E.ON HIBABEJELENTŐ
+                            (DÉL-DUNÁNTÚL)</div>
+                        <a href="tel:0680205020"
+                            style="color: var(--primary); font-weight: 800; text-decoration: none; font-size: 1.1rem;">06
+                            80 20 50 20</a>
+                    </div>
                 </div>
 
-                <div style="margin-top: 1.5rem; width: 100%;">
-                    <button class="feature-card"
-                        style="width:100%; padding:1rem; background:var(--primary); color:white; border:none; border-radius:1rem; font-weight:800; cursor:pointer; margin-bottom: 1rem;"
-                        onclick="window.open('https://okoslezerzebra.hu/kozvilagitas/')">
-                        <i class="fas fa-external-link-alt me-2"></i> KÖZVILÁGÍTÁS HIBABEJELENTŐ
-                    </button>
-                    <div class="hint" style="margin-top: 0.5rem; margin-bottom: 0;">
-                        <strong>TIPP:</strong> A bejelentéshez az oldal aljáig kell görgetni.
+                <div class="faults-table-container">
+                    <table class="faults-table">
+                        <thead>
+                            <tr>
+                                <th>Cím</th>
+                                <th>Db</th>
+                                <th>Hiba jellege</th>
+                                <th>Bejelentve</th>
+                                <th>Határidő</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Kossuth Lajos u. 12.</td>
+                                <td>1</td>
+                                <td>Lámpafej hiba</td>
+                                <td>2025.12.28.</td>
+                                <td><span class="fault-status-pill">Folyamatban</span></td>
+                            </tr>
+                            <tr>
+                                <td>Petőfi Sándor tér 4.</td>
+                                <td>3</td>
+                                <td>Szakasz hiba</td>
+                                <td>2025.12.30.</td>
+                                <td>2026.01.05.</td>
+                            </tr>
+                            <tr>
+                                <td>Deák Ferenc u. 45.</td>
+                                <td>1</td>
+                                <td>Bura törött</td>
+                                <td>2026.01.01.</td>
+                                <td>2026.01.07.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 2rem; width: 100%;">
+                    <h5 style="font-size: 0.8rem; margin-bottom: 0.5rem;"><i class="fas fa-calendar-alt"></i>
+                        Üzemeltetési Naptár</h5>
+                    <div
+                        style="width: 100%; border-radius: 0.75rem; overflow: hidden; border: 1px solid var(--border-color); background: var(--bg-light); position: relative;">
+                        <img src="../../KozVilNaptar.jpg" class="naptar-img"
+                            style="display: block; width: 100%; min-height: 100px; object-fit: cover;"
+                            onclick="window.open(this.src)" alt="Közvilágítási naptár">
+                    </div>
+                    <div class="hint" style="margin-top: 1rem; margin-bottom: 0;">
+                        <strong>TIPP:</strong> Sürgős esetekben (életveszély) hívja azonnal az E.ON ingyenes számát.
                     </div>
                 </div>
             </div>

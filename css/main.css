@@ -624,9 +624,8 @@ h6 {
 }
 
 .feature-card h5 {
-    font-size: 0.65rem;
-    font-weight: 500;
-    /* Reduced weight */
+    font-size: 0.8rem;
+    font-weight: 700;
     margin: 0;
     text-transform: uppercase;
     color: var(--text-main);
@@ -1027,7 +1026,7 @@ h6 {
         padding: 0;
         margin: 0;
         flex: 1;
-        justify-content: center;
+        justify-content: flex-start;
         border: none;
     }
 
@@ -1070,7 +1069,14 @@ h6 {
     }
 
     .menu-toggle {
+        display: block !important;
         order: 3;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-main);
+        cursor: pointer;
+        padding: 0.5rem;
     }
 
     .dashboard-grid {
@@ -1086,11 +1092,30 @@ h6 {
     }
 
     .feature-card h5 {
-        font-size: 0.75rem !important;
+        font-size: 0.8rem !important;
     }
 
     .feature-card i {
         font-size: 1.2rem !important;
+    }
+
+    /* Knowledge Module Responsive Fixes */
+    .admin-article {
+        padding: 2rem 1rem !important;
+        border-radius: 1rem !important;
+    }
+
+    .admin-layout {
+        gap: 1rem !important;
+    }
+
+    .sidebar-nav {
+        display: none !important;
+    }
+
+    .container-fluid {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
     }
 }
 

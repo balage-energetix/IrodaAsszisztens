@@ -48,10 +48,116 @@
             margin-right: 0.5rem;
         }
 
-        h3 {
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 0.5rem;
-            margin-top: 2.5rem;
+        /* Playground Styles */
+        .playground-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .editor-section,
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .editor-label,
+        .preview-label {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #css-editor {
+            width: 100%;
+            height: 250px;
+            background: #1e1e1e;
+            color: #9cdcfe;
+            font-family: 'Consolas', monospace;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: none;
+            resize: none;
+            outline: none;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .monitor-frame {
+            width: 100%;
+            height: 250px;
+            background: #fff;
+            border-radius: 1rem;
+            border: 8px solid #333;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .monitor-top {
+            height: 20px;
+            background: #333;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            gap: 5px;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .dot.red {
+            background: #ff5f56;
+        }
+
+        .dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .dot.green {
+            background: #27c93f;
+        }
+
+        .monitor-screen {
+            height: calc(100% - 20px);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            background: #f0f2f5;
+        }
+
+        #preview-box {
+            width: 100px;
+            height: 100px;
+            background: var(--primary);
+            border-radius: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .playground-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -75,21 +181,48 @@
                 Antigravity AI telepítésén, a modern webes fejlesztés alapjain és a projekted világméretű közzétételén.
             </p>
 
-            <h3>1. Az Antigravity Telepítése</h3>
-            <p>Az Antigravity egy forradalmi AI kódoló asszisztens, amely közvetlenül a fájljaid között dolgozik.</p>
+            <h3>1. Kezdés az Antigravity-vel</h3>
+            <p>Az Antigravity egy forradalmi AI kódoló asszisztens, amely közvetlenül a fájljaid között dolgozik, külön
+                szerkesztő telepítése nélkül is használható.</p>
             <div class="step-box">
-                <span class="badge-step">01</span> Telepítsd a <strong>VS Code</strong> szerkesztőt, ha még nincs meg.
-                <br><span class="badge-step">02</span> Az Antigravity jelenleg korai hozzáférésű; keresd fel az
-                Antigravity hivatalos portálját.
-                <br><span class="badge-step">03</span> Töltsd le az ügynök alkalmazást, és csatold a munkakörnyezetedhez
-                (Workspace).
-                <br><span class="badge-step">04</span> Hitelesítés után egyszerűen csak írd le magyarul: <em>"Hozz létre
+                <span class="badge-step">01</span> Nyisd meg a böngésződben az Antigravity felületét.
+                <br><span class="badge-step">02</span> Csatold a munkakörnyezetedet (Workspace) az AI-hoz.
+                <br><span class="badge-step">03</span> Hitelesítés után egyszerűen csak írd le magyarul: <em>"Hozz létre
                     egy új modult!"</em>
+                <br><span class="badge-step">04</span> Az AI azonnal generálja a kódot, amit rögtön tesztelhetsz is.
             </div>
 
-            <h3>2. Webapp Készítés: HTML, CSS és JS alapok</h3>
-            <p>Egy modern modul három fő pilléren nyugszik. Nézzünk egy egyszerű példát egy "Saját Jegyzet" modulon
-                keresztül:</p>
+            <h3>2. Interaktív Játszótér: CSS Élőben</h3>
+            <p>Próbáld ki, hogyan változik egy elem megjelenése a kód módosításával. Szerkeszd a bal oldali mezőt!</p>
+
+            <div class="playground-container">
+                <div class="editor-section">
+                    <div class="editor-label">CSS Szerkesztő</div>
+                    <textarea id="css-editor" spellcheck="false">/* Változtasd meg a színeket vagy a méretet! */
+#preview-box {
+    background: #4A90E2;
+    border-radius: 20px;
+    width: 120px;
+    height: 120px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transform: rotate(10deg);
+}</textarea>
+                </div>
+                <div class="preview-section">
+                    <div class="preview-label">Élő "Monitor" Előnézet</div>
+                    <div class="monitor-frame">
+                        <div class="monitor-top">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                        </div>
+                        <div class="monitor-screen">
+                            <style id="live-styles"></style>
+                            <div id="preview-box">VÁJB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="step-box">
                 <strong>A) HTML (Szerkezet):</strong> Ez adja meg az oldal vázát.
@@ -131,6 +264,18 @@
     </main>
 
     <script src="../../js/main.js"></script>
+    <script>
+        const editor = document.getElementById('css-editor');
+        const styleSheet = document.getElementById('live-styles');
+
+        function updateStyles() {
+            styleSheet.textContent = editor.value;
+        }
+
+        editor.addEventListener('input', updateStyles);
+        // Initial run
+        updateStyles();
+    </script>
 </body>
 
 </html>
