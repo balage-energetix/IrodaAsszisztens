@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felolvasó - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .speech-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .text-input-area {
+            width: 100%;
+            height: 300px;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-light);
+            color: var(--text-main);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 1.5rem;
+            font-family: inherit;
+        }
+
+        .text-input-area:focus {
+            border-color: var(--primary);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-item label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .styled-select,
+        .styled-range {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            color: var(--text-main);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-speech {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: none;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: 0.2s;
+        }
+
+        .btn-play {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-stop {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-speech:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-speech:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .highlight {
+            background-color: #ffcccc;
+            color: #d32f2f;
+            border-bottom: 2px solid #d32f2f;
+            transition: background-color 0.1s;
+        }
+
+        #display-area {
+            display: none;
+            position: absolute;
+            pointer-events: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: transparent;
+            z-index: 10;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-family:'Outfit'; font-weight:800;"><i
+                    class="fas fa-volume-up text-primary me-3"></i>Felolvasó</h2>
+            <div class="badge bg-primary p-2 px-3 rounded-pill" style="font-size:0.8rem;">Modern TTS System</div>
+        </div>
+
+        <div class="speech-container">
+            <div style="position: relative;">
+                <div id="display-area"></div>
+                <textarea id="text-to-read" class="text-input-area"
+                    placeholder="Másolja ide a felolvasni kívánt szöveget..."></textarea>
+            </div>
+
+            <div class="controls-grid">
+                <div class="control-item">
+                    <label>Hang kiválasztása</label>
+                    <select id="voice-select" class="styled-select">
+                        <option value="">Hangok betöltése...</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label>Sebesség (<span id="rate-val">1.0</span>x)</label>
+                    <input type="range" id="rate-select" class="styled-range" min="0.5" max="2" step="0.1" value="1.0">
+                </div>
+            </div>
+
+            <div class="action-btns">
+                <button id="play-btn" class="btn-speech btn-play"><i class="fas fa-play"></i> Lejátszás</button>
+                <button id="stop-btn" class="btn-speech btn-stop"><i class="fas fa-stop"></i> Megállítás</button>
+            </div>
+
+            <div class="hint mt-4">
+                <strong>TIPP:</strong> A legjobb élményért használjon Chrome vagy Edge böngészőt. Ha nem jelenik meg
+                magyar hang, ellenőrizze az operációs rendszer nyelvi beállításait.
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const synth = window.speechSynthesis;
+        const textInput = document.getElementById('text-to-read');
+        const voiceSelect = document.getElementById('voice-select');
+        const rateSelect = document.getElementById('rate-select');
+        const rateVal = document.getElementById('rate-val');
+        const playBtn = document.getElementById('play-btn');
+        const stopBtn = document.getElementById('stop-btn');
+
+        let voices = [];
+
+        function populateVoiceList() {
+            voices = synth.getVoices().sort((a, b) => {
+                const aname = a.name.toUpperCase();
+                const bname = b.name.toUpperCase();
+                if (aname < bname) return -1;
+                else if (aname > bname) return 1;
+                else return 0;
+            });
+
+            voiceSelect.innerHTML = '';
+
+            // Filter for Hungarian first
+            const huVoices = voices.filter(v => v.lang.includes('hu'));
+
+            if (huVoices.length > 0) {
+                huVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.setAttribute('data-lang', voice.lang);
+                    option.setAttribute('data-name', voice.name);
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                voices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    if (voice.default) option.textContent += ' -- DEFAULT';
+                    option.setAttribute('data-lang', voice.lang);
+                    option.setAttribute('data-name', voice.name);
+                    voiceSelect.appendChild(option);
+                });
+            }
+        }
+
+        populateVoiceList();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+
+        rateSelect.oninput = () => { rateVal.innerText = rateSelect.value; };
+
+        playBtn.onclick = () => {
+            if (synth.speaking) {
+                console.error('Már beszél...');
+                return;
+            }
+
+            if (textInput.value !== '') {
+                const utterThis = new SpeechSynthesisUtterance(textInput.value);
+
+                const selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+                for (let i = 0; i < voices.length; i++) {
+                    if (voices[i].name === selectedOption) {
+                        utterThis.voice = voices[i];
+                    }
+                }
+
+                utterThis.rate = rateSelect.value;
+                utterThis.pitch = 1;
+
+                utterThis.onstart = () => {
+                    playBtn.disabled = true;
+                    // Setup highlighting
+                };
+
+                utterThis.onend = () => {
+                    playBtn.disabled = false;
+                    resetHighlight();
+                };
+
+                utterThis.onboundary = (event) => {
+                    if (event.name === 'word') {
+                        highlightWord(event.charIndex, event.charLength);
+                    }
+                };
+
+                synth.speak(utterThis);
+            }
+        };
+
+        stopBtn.onclick = () => {
+            synth.cancel();
+            playBtn.disabled = false;
+            resetHighlight();
+        };
+
+        function highlightWord(charIndex, charLength) {
+            const text = textInput.value;
+            const before = text.substring(0, charIndex);
+            const word = text.substring(charIndex, charIndex + charLength);
+            const after = text.substring(charIndex + charLength);
+
+            // Since we can't easily style part of a textarea, we wrap the text in a hidden div with the same styles
+            const displayArea = document.getElementById('display-area');
+            displayArea.style.display = 'block';
+            displayArea.style.width = textInput.offsetWidth + 'px';
+            displayArea.style.height = textInput.offsetHeight + 'px';
+            displayArea.style.top = textInput.offsetTop + 'px';
+            displayArea.style.left = textInput.offsetLeft + 'px';
+
+            displayArea.innerHTML = `${escapeHTML(before)}<span class="highlight">${escapeHTML(word)}</span>${escapeHTML(after)}`;
+        }
+
+        function resetHighlight() {
+            const displayArea = document.getElementById('display-area');
+            displayArea.style.display = 'none';
+        }
+
+        function escapeHTML(str) {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        }
+
+        // Keep display area synced on resize
+        window.onresize = () => {
+            if (document.getElementById('display-area').style.display === 'block') {
+                highlightWord(0, 0); // Trigger reposition
+            }
+        };
+    </script>
+</body>
+
+</html>

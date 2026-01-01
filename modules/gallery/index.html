@@ -112,10 +112,15 @@
             <div class="lightbox-img-wrap">
                 <img id="lightbox-img" class="lightbox-img" src="">
             </div>
-            <div class="l-counter" id="l-counter">1 / 86</div>
-            <div class="lightbox-nav">
-                <button class="l-btn" onclick="changeImage(-1)"><i class="fas fa-chevron-left"></i></button>
-                <button class="l-btn" onclick="changeImage(1)"><i class="fas fa-chevron-right"></i></button>
+            <div class="lightbox-nav"
+                style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 2rem; background: rgba(0,0,0,0.5); padding: 0.5rem 2rem; border-radius: 2rem; backdrop-filter: blur(10px);">
+                <button class="l-btn" onclick="changeImage(-1)" style="font-size: 1.5rem;"><i
+                        class="fas fa-arrow-left"></i></button>
+                <div class="l-counter" id="l-counter"
+                    style="position: static; color: white; display: flex; align-items: center; font-weight: 800;">1 / 86
+                </div>
+                <button class="l-btn" onclick="changeImage(1)" style="font-size: 1.5rem;"><i
+                        class="fas fa-arrow-right"></i></button>
             </div>
         </div>
     </div>
@@ -148,6 +153,26 @@
             const img = document.getElementById('lightbox-img');
             img.src = `../../pictures/(${currentIdx}).jpg`;
             document.getElementById('l-counter').innerText = `${currentIdx} / ${total}`;
+        }
+
+        // Swipe support for mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        const lbContent = document.querySelector('.lightbox-content');
+        lbContent.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        lbContent.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const threshold = 50;
+            if (touchendX < touchstartX - threshold) changeImage(1); // Swipe left -> Next
+            if (touchendX > touchstartX + threshold) changeImage(-1); // Swipe right -> Prev
         }
 
         // Keyboard support

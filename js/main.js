@@ -111,16 +111,24 @@ const App = {
                         <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drónfelvételek</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
-                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#e91e63;"></i> Tőzsde</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i> PDF Szerkesztő</a>
                         <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open" style="color:#3f51b5;"></i> PDF Kiolvasó</a>
+                        <a href="${p}modules/tools/speech.html" class="nav-dropdown-item"><i class="fas fa-volume-up" style="color:#9c27b0;"></i> Felolvasó</a>
+                        <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Hangfelismerő</a>
                         <a href="${p}modules/utils/index.html" class="nav-dropdown-item"><i class="fas fa-bolt" style="color:#fbc02d;"></i> Gyorsító</a>
                         <a href="${p}modules/tools/notes.html" class="nav-dropdown-item"><i class="fas fa-sticky-note" style="color:#ffeb3b;"></i> Feljegyzés</a>
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
+                    </div>
+                </div>
+                <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/calc/index.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#2ecc71;"></i> Számlázási Segéd</a>
+                        <a href="${p}modules/consumption/index.html" class="nav-dropdown-item"><i class="fas fa-building-circle-check" style="color:#16a085;"></i> Fogyasztási Helyek</a>
+                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#ef5350;"></i> Tőzsde & Árak</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -328,10 +336,15 @@ const App = {
     initSearch() {
         const searchInput = document.getElementById('dashboard-search');
         if (!searchInput) return;
+
+        const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
         searchInput.addEventListener('input', (e) => {
-            const q = e.target.value.toLowerCase();
+            const q = normalize(e.target.value);
             document.querySelectorAll('.feature-card').forEach(card => {
-                const title = card.querySelector('h5').innerText.toLowerCase();
+                const titleEl = card.querySelector('h5');
+                if (!titleEl) return;
+                const title = normalize(titleEl.innerText);
                 card.style.display = title.includes(q) ? 'flex' : 'none';
             });
             // Hide empty categories
@@ -395,7 +408,7 @@ const App = {
             this.state.user = null;
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
+        const apply = () => {
             const overlay = document.getElementById('auth-overlay');
             const main = document.getElementById('app-main');
             if (!overlay || !main) return;
@@ -403,12 +416,20 @@ const App = {
             if (this.state.user) {
                 overlay.style.display = 'none';
                 main.style.display = 'block';
+                document.body.classList.add('authenticated');
                 this.applyVisibilityFilters();
             } else {
                 overlay.style.display = 'flex';
                 main.style.display = 'none';
+                document.body.classList.remove('authenticated');
             }
-        });
+        };
+
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', apply);
+        } else {
+            apply();
+        }
     },
 
     applyVisibilityFilters() {
@@ -445,7 +466,8 @@ const App = {
 
     logout() {
         sessionStorage.clear();
-        location.reload();
+        const p = this.getPath();
+        window.location.href = `${p}index.html`;
     },
 
     toggleMobileMenu() {

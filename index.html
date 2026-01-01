@@ -11,6 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.cdnfonts.com/css/biko" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    <style>
+        /* Prevention of content flickering before JS auth check */
+        body:not(.authenticated) #app-main {
+            display: none !important;
+        }
+
+        body.authenticated #auth-overlay {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -90,9 +100,17 @@
                             <i class="fas fa-file-pdf" style="color:#2980b9;"></i>
                             <h5>PDF Kiolvasó</h5>
                         </a>
+                        <a href="modules/tools/stt.html" class="feature-card">
+                            <i class="fas fa-microphone" style="color:#e91e63;"></i>
+                            <h5>Hangfelismerő</h5>
+                        </a>
                         <a href="modules/utils/index.html" class="feature-card">
                             <i class="fas fa-wand-magic-sparkles" style="color:#66bb6a;"></i>
                             <h5>Gyorsító Eszközök</h5>
+                        </a>
+                        <a href="modules/tools/speech.html" class="feature-card">
+                            <i class="fas fa-volume-up" style="color:#9b59b6;"></i>
+                            <h5>Szöveg Felolvasó</h5>
                         </a>
                         <a href="modules/tools/notes.html" class="feature-card">
                             <i class="fas fa-sticky-note" style="color:#ffee58;"></i>

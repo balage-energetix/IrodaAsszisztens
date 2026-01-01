@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangfelismerő - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .stt-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .recognition-box {
+            width: 100%;
+            min-height: 250px;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 2px dashed var(--border-color);
+            background: var(--bg-light);
+            color: var(--text-main);
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            text-align: left;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .recognition-box.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(255, 112, 67, 0.1);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+        .status-waiting {
+            background: #eee;
+            color: #666;
+        }
+
+        .status-listening {
+            background: #ffebee;
+            color: #d32f2f;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-mic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-mic.listening {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .action-btns {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .interim {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-bolt" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-family:'Outfit'; font-weight:800;"><i
+                    class="fas fa-microphone text-accent me-3"></i>Hangfelismerő</h2>
+            <div class="badge bg-accent p-2 px-3 rounded-pill" style="font-size:0.8rem; color:white;">Real-time
+                Hungarian STT</div>
+        </div>
+
+        <div class="stt-container">
+            <div id="status" class="status-indicator status-waiting">
+                <i class="fas fa-circle"></i> VÁRAKOZÁS...
+            </div>
+
+            <div id="output" class="recognition-box">
+                Kattintson a mikrofonra és kezdjen el beszélni...
+            </div>
+
+            <div class="controls">
+                <button id="mic-btn" class="btn-mic">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+
+            <div class="action-btns">
+                <button onclick="copyText()" class="btn-secondary"><i class="fas fa-copy me-2"></i> Szöveg
+                    másolása</button>
+                <button onclick="clearText()" class="btn-secondary"><i class="fas fa-trash-alt me-2"></i>
+                    Törlés</button>
+            </div>
+
+            <div class="hint mt-4" style="font-size: 0.8rem; color: var(--text-muted);">
+                <strong>Megjegyzés:</strong> A funkció használatához mikrofon engedély szükséges. A legjobb eredmény
+                érdekében használjon Chrome vagy Edge böngészőt.
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const micBtn = document.getElementById('mic-btn');
+        const output = document.getElementById('output');
+        const status = document.getElementById('status');
+
+        let recognition;
+        let isListening = false;
+        let finalTranscript = '';
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'hu-HU';
+
+            recognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('listening');
+                status.className = 'status-indicator status-listening';
+                status.innerHTML = '<i class="fas fa-circle"></i> FIGYELÉS...';
+                output.classList.add('active');
+                if (finalTranscript === '') output.innerText = '';
+            };
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        finalTranscript += event.results[i][0].transcript + ' ';
+                    } else {
+                        interimTranscript += event.results[i][0].transcript;
+                    }
+                }
+                output.innerHTML = finalTranscript + '<span class="interim">' + interimTranscript + '</span>';
+            };
+
+            recognition.onerror = (event) => {
+                console.error('STT Hiba:', event.error);
+                stopListening();
+            };
+
+            recognition.onend = () => {
+                if (isListening) recognition.start(); // Auto-restart if it was intentional
+            };
+
+        } else {
+            output.innerText = "Sajnos a böngészője nem támogatja a hangfelismerést.";
+            micBtn.disabled = true;
+        }
+
+        micBtn.onclick = () => {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        };
+
+        function startListening() {
+            finalTranscript = '';
+            recognition.start();
+        }
+
+        function stopListening() {
+            isListening = false;
+            recognition.stop();
+            micBtn.classList.remove('listening');
+            status.className = 'status-indicator status-waiting';
+            status.innerHTML = '<i class="fas fa-circle"></i> VÁRAKOZÁS...';
+            output.classList.remove('active');
+        }
+
+        function copyText() {
+            const text = output.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Szöveg a vágólapra másolva!');
+            });
+        }
+
+        function clearText() {
+            finalTranscript = '';
+            output.innerText = 'Kattintson a mikrofonra és kezdjen el beszélni...';
+            if (isListening) stopListening();
+        }
+    </script>
+</body>
+
+</html>
