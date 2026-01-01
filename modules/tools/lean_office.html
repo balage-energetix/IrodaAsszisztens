@@ -210,115 +210,127 @@
                     hanem egy olyan állapot fenntartása, ahol a hibák (pl. hiányzó mappa, elmaradt feladat) azonnal
                     szembeötlenek. A standardok teszik lehetővé, hogy bárki, bárhol tudja, mi a dolga.
                 </div>
-                <table style="width:100%; border-collapse: collapse; margin-top:1rem; font-size: 0.85rem;">
+                <div class="table-responsive">
+                    <table style="width:100%; border-collapse: collapse; margin-top:1rem; font-size: 0.85rem;">
+                        <thead>
+                            <tr style="background: var(--bg-light);">
+                                <th style="padding:1rem; border:1px solid var(--border-color);">Veszteség típusa</th>
+                                <th style="padding:1rem; border:1px solid var(--border-color);">Irodai Példa</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">
+                                    <strong>Túltermelés</strong>
+                                </td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Hosszabb riportok
+                                    készítése, mint amit kértek; információk küldése olyanoknak, akiknek nincs rá
+                                    szükségük.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">
+                                    <strong>Várakozás</strong>
+                                </td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Jóváhagyásra váró
+                                    dokumentumok; rendszerleállás miatti kényszerszünet; várakozás mások válaszára.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Felesleges
+                                        szállítás</strong></td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Többszöri email
+                                    fordítás;
+                                    dokumentumok fizikai mozgatása feleslegesen; csatolmányok küldése megosztott link
+                                    helyett.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Felesleges
+                                        mozgás</strong></td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Keresgélés a fájlok
+                                    között a rossz mappaszerkezet miatt; gyaloglás a távoli nyomtatóhoz.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Felesleges
+                                        feldolgozás</strong></td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Ugyanazon adatok
+                                    többszöri bevitele; feleslegesen magas minőség olyan helyen, ahol nem szükséges.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">
+                                    <strong>Készlet</strong>
+                                </td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Megválaszolatlan
+                                    emailek
+                                    tömege; elvégzésre váró, feltorlódott feladatok (backlog).</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Hiba /
+                                        Utómunka</strong></td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Hibás adatbevitel
+                                    miatti
+                                    korrekció; nem egyértelmű utasítások miatti félreértések javítása.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">
+                                    <strong>Kihasználatlan
+                                        tudás</strong></td>
+                                <td style="padding:0.75rem; border:1px solid var(--border-color);">Munkatársak
+                                    ötleteinek és
+                                    készségeinek figyelmen kívül hagyása; adminisztratív feladatokra pazarolt szaktudás.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table style="width:100%; border-collapse: collapse; margin-top:2rem; font-size: 0.85rem;">
                     <thead>
                         <tr style="background: var(--bg-light);">
-                            <th style="padding:1rem; border:1px solid var(--border-color);">Veszteség típusa</th>
-                            <th style="padding:1rem; border:1px solid var(--border-color);">Irodai Példa</th>
+                            <th style="padding:1rem; border:1px solid var(--border-color);">Kategória</th>
+                            <th style="padding:1rem; border:1px solid var(--border-color);">Lean Eszköz</th>
+                            <th style="padding:1rem; border:1px solid var(--border-color);">Cél</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">
-                                <strong>Túltermelés</strong>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Rendezettség</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">5S (Válogatás, Rendszer,
+                                Tisztítás, Standard, Fegyelem)</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Átlátható munkatér</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Hiba-megelőzés</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Poka-Yoke
+                                (Hibázásmentesítés)</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Balgaság elleni védelem
                             </td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Hosszabb riportok
-                                készítése, mint amit kértek; információk küldése olyanoknak, akiknek nincs rá szükségük.
+                        </tr>
+                        <tr>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Szabványosítás</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">SOP (Standard Operating
+                                Procedure)</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Azonos feladat azonos
+                                elvégzése</td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Vizuális menedzsment</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Kanban / Shadow board
                             </td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Azonnali
+                                állapotfelismerés</td>
                         </tr>
                         <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">
-                                <strong>Várakozás</strong>
-                            </td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Jóváhagyásra váró
-                                dokumentumok; rendszerleállás miatti kényszerszünet; várakozás mások válaszára.</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Felesleges
-                                    szállítás</strong></td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Többszöri email fordítás;
-                                dokumentumok fizikai mozgatása feleslegesen; csatolmányok küldése megosztott link
-                                helyett.</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Felesleges
-                                    mozgás</strong></td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Keresgélés a fájlok
-                                között a rossz mappaszerkezet miatt; gyaloglás a távoli nyomtatóhoz.</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Felesleges
-                                    feldolgozás</strong></td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Ugyanazon adatok
-                                többszöri bevitele; feleslegesen magas minőség olyan helyen, ahol nem szükséges.</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Készlet</strong>
-                            </td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Megválaszolatlan emailek
-                                tömege; elvégzésre váró, feltorlódott feladatok (backlog).</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Hiba /
-                                    Utómunka</strong></td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Hibás adatbevitel miatti
-                                korrekció; nem egyértelmű utasítások miatti félreértések javítása.</td>
-                        </tr>
-                        <tr>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);"><strong>Kihasználatlan
-                                    tudás</strong></td>
-                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Munkatársak ötleteinek és
-                                készségeinek figyelmen kívül hagyása; adminisztratív feladatokra pazarolt szaktudás.
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Problémafeltárás</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">5 Miért (Root Cause
+                                Analysis)</td>
+                            <td style="padding:0.75rem; border:1px solid var(--border-color);">Gyökérok meghatározása
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <table style="width:100%; border-collapse: collapse; margin-top:2rem; font-size: 0.85rem;">
-                <thead>
-                    <tr style="background: var(--bg-light);">
-                        <th style="padding:1rem; border:1px solid var(--border-color);">Kategória</th>
-                        <th style="padding:1rem; border:1px solid var(--border-color);">Lean Eszköz</th>
-                        <th style="padding:1rem; border:1px solid var(--border-color);">Cél</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Rendezettség</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">5S (Válogatás, Rendszer,
-                            Tisztítás, Standard, Fegyelem)</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Átlátható munkatér</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Hiba-megelőzés</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Poka-Yoke
-                            (Hibázásmentesítés)</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Balgaság elleni védelem
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Szabványosítás</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">SOP (Standard Operating
-                            Procedure)</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Azonos feladat azonos
-                            elvégzése</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Vizuális menedzsment</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Kanban / Shadow board
-                        </td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Azonnali
-                            állapotfelismerés</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Problémafeltárás</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">5 Miért (Root Cause
-                            Analysis)</td>
-                        <td style="padding:0.75rem; border:1px solid var(--border-color);">Gyökérok meghatározása
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
         </div>
     </main>

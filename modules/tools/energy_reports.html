@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energetikai Riportok - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.4);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: #ffffff;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .metric-info h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-info .value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #333;
+            line-height: 1.2;
+        }
+
+        .chart-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .styled-select {
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            font-weight: 700;
+            font-family: 'Outfit';
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .styled-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .eco-metrics {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .eco-pill {
+            background: rgba(46, 204, 113, 0.1);
+            padding: 1rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #27ae60;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .eco-pill i {
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .glass-card {
+                padding: 1.5rem;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+                <div>
+                    <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                            class="fas fa-solar-panel text-warning me-3"></i>Energetikai Riportok</h2>
+                    <p class="text-muted small mb-0">Napelemes rendszerek teljesítmény analitikája és környezeti hatása
+                    </p>
+                </div>
+                <div class="filters">
+                    <select id="yearFilter" class="styled-select" onchange="updateView()">
+                        <option value="all">Összesített adatok</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(67, 97, 238, 0.1); color: var(--primary);"><i
+                            class="fas fa-bolt"></i></div>
+                    <div class="metric-info">
+                        <h4>Összes Termelés</h4>
+                        <div id="totalEnergy" class="value">0 Wh</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(155, 89, 182, 0.1); color: #9b59b2;"><i
+                            class="fas fa-chart-line"></i></div>
+                    <div class="metric-info">
+                        <h4>Havi Átlag</h4>
+                        <div id="avgMonthly" class="value">0 Wh</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(241, 196, 15, 0.1); color: #f1c40f;"><i
+                            class="fas fa-crown"></i></div>
+                    <div class="metric-info">
+                        <h4>Csúcsteljesítmény</h4>
+                        <div id="peakMonth" class="value">-</div>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;"><i
+                            class="fas fa-coins"></i></div>
+                    <div class="metric-info">
+                        <h4>Megtakarítás</h4>
+                        <div id="savingsHuf" class="value">0 Ft</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <div style="height: 450px;">
+                    <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+
+            <div class="eco-metrics">
+                <div class="eco-pill">
+                    <i class="fas fa-leaf"></i>
+                    <span>Tiszta energia: <span id="ecoCo2">0</span> kg CO₂ csökkentés</span>
+                </div>
+                <div class="eco-pill">
+                    <i class="fas fa-tree"></i>
+                    <span>Életmentés: <span id="ecoTrees">0</span> beültetett fa egyenérték</span>
+                </div>
+                <div class="eco-pill" style="background: rgba(52, 152, 219, 0.1); color: #2980b9;">
+                    <i class="fas fa-plug"></i>
+                    <span>Elegendő: <span id="ecoHomes">0</span> háztartás napi ellátásához</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <p class="text-muted small"><i class="fas fa-info-circle me-1"></i> Az adatok a
+                `comparative-month-chart-data.csv` alapján kerültek generálásra.</p>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        let rawData = [];
+        let chart = null;
+
+        const CO2_FACTOR = 0.52; // kg per kWh (approx HU electricity mix)
+        const HUF_RATE = 70; // Ft per kWh
+        const TREE_ABSORPTION = 22; // kg CO2 per tree per year
+        const HOME_DAILY_USE = 10; // kWh per day per home
+
+        async function init() {
+            try {
+                // Adjusting path to project root relative to modules/tools/
+                const response = await fetch('../../comparative-month-chart-data.csv');
+                if (!response.ok) throw new Error("A CSV fájl nem található.");
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+
+                rawData = lines.slice(1).map(line => {
+                    const parts = line.split(',');
+                    const dateRaw = parts[0].replace(/"/g, '').trim();
+                    const valueRaw = parseInt(parts[1].replace(/"/g, '').trim()) || 0;
+                    return { date: dateRaw, value: valueRaw };
+                });
+
+                populateYearFilter();
+                updateView();
+            } catch (err) {
+                console.error("Hiba az adatok betöltésekor:", err);
+            }
+        }
+
+        function populateYearFilter() {
+            const years = [...new Set(rawData.map(d => d.date.split('.')[1]))].sort();
+            const filter = document.getElementById('yearFilter');
+            years.forEach(year => {
+                const opt = document.createElement('option');
+                opt.value = year;
+                opt.textContent = `${year} év termelése`;
+                filter.appendChild(opt);
+            });
+        }
+
+        function updateView() {
+            const selectedYear = document.getElementById('yearFilter').value;
+            const filtered = selectedYear === 'all'
+                ? rawData
+                : rawData.filter(d => d.date.endsWith(selectedYear));
+
+            const totalWh = filtered.reduce((a, b) => a + b.value, 0);
+            const totalKwh = totalWh / 1000;
+            const avgWh = totalWh / (filtered.length || 1);
+            const peak = [...filtered].sort((a, b) => b.value - a.value)[0];
+
+            // Metrics Update
+            document.getElementById('totalEnergy').textContent = formatWh(totalWh);
+            document.getElementById('avgMonthly').textContent = formatWh(avgWh);
+            document.getElementById('peakMonth').textContent = peak ? `${peak.date} (${formatWh(peak.value)})` : '-';
+            document.getElementById('savingsHuf').textContent = `${(totalKwh * HUF_RATE).toLocaleString('hu-HU')} Ft`;
+
+            // Eco Updates
+            const co2 = totalKwh * CO2_FACTOR;
+            document.getElementById('ecoCo2').textContent = co2.toLocaleString('hu-HU', { maximumFractionDigits: 1 });
+            document.getElementById('ecoTrees').textContent = (co2 / TREE_ABSORPTION).toFixed(1);
+            document.getElementById('ecoHomes').textContent = (totalKwh / HOME_DAILY_USE).toLocaleString('hu-HU', { maximumFractionDigits: 0 });
+
+            renderChart(filtered);
+        }
+
+        function formatWh(wh) {
+            if (wh > 1000000) return `${(wh / 1000000).toLocaleString('hu-HU', { maximumFractionDigits: 1 })} MWh`;
+            if (wh > 1000) return `${(wh / 1000).toLocaleString('hu-HU', { maximumFractionDigits: 1 })} kWh`;
+            return `${wh.toLocaleString('hu-HU')} Wh`;
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if (chart) chart.destroy();
+
+            const labels = data.map(d => d.date);
+            const values = data.map(d => d.value / 1000); // Display in kWh
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Havi Termelés (kWh)',
+                        data: values,
+                        backgroundColor: 'rgba(67, 97, 238, 0.6)',
+                        borderColor: 'rgba(67, 97, 238, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        hoverBackgroundColor: 'rgba(67, 97, 238, 0.8)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e1e1e',
+                            padding: 12,
+                            cornerRadius: 10,
+                            titleFont: { family: 'Outfit', size: 14 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { font: { family: 'Inter' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter' }, maxRotation: 45 }
+                        }
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

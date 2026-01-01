@@ -88,23 +88,22 @@ const App = {
             <nav class="app-nav">
                 <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Térkép</a>
-                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítás</a>
-                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drónfelvételek</a>
+                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
+                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
+                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drón fotók</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
                     </div>
                 </div>
-                <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
+                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open" style="color:#3f51b5;"></i> PDF kinyerő</a>
                         <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i> PDF Szerkesztő</a>
-                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open" style="color:#3f51b5;"></i> PDF Kiolvasó</a>
                         <a href="${p}modules/tools/speech.html" class="nav-dropdown-item"><i class="fas fa-volume-up" style="color:#9c27b0;"></i> Felolvasó</a>
-                        <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Hangfelismerő</a>
+                        <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Beszéd írnok</a>
                         <a href="${p}modules/tools/deadlines.html" class="nav-dropdown-item"><i class="fas fa-calendar-check" style="color:#ff9800;"></i> Határidők</a>
-                        <a href="${p}modules/utils/index.html" class="nav-dropdown-item"><i class="fas fa-bolt" style="color:#fbc02d;"></i> Gyorsító</a>
-                        <a href="${p}modules/tools/notes.html" class="nav-dropdown-item"><i class="fas fa-sticky-note" style="color:#ffeb3b;"></i> Feljegyzés</a>
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
+                        <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -174,8 +173,19 @@ const App = {
                 e.preventDefault();
                 e.stopPropagation();
                 const isActive = cat.classList.contains('active');
-                document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
-                if (!isActive) cat.classList.add('active');
+
+                // Close others
+                document.querySelectorAll('.nav-cat').forEach(c => {
+                    if (c !== cat) c.classList.remove('active');
+                });
+
+                cat.classList.toggle('active');
+
+                // Explicitly manage display for mobile
+                const dropdown = cat.querySelector('.nav-cat-dropdown');
+                if (dropdown && window.innerWidth <= 992) {
+                    dropdown.style.display = cat.classList.contains('active') ? 'block' : 'none';
+                }
             });
         });
 
