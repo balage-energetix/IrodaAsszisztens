@@ -50,6 +50,13 @@
                 class="fas fa-cloud-sun-rain text-primary me-2"></i>Időjárás Napló</h2>
 
         <div class="weather-card">
+            <h4 style="font-family:'Outfit';">Napi Középhőmérséklet Alakulása (Elmúlt 30 nap)</h4>
+            <div class="chart-container">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <div class="weather-card mt-5">
             <h4 style="font-family:'Outfit';">Havi Középhőmérsékleti Átlagok (MET Adatok Alapján)</h4>
             <div class="chart-container">
                 <canvas id="weatherChart"></canvas>
@@ -78,13 +85,6 @@
             </div>
             <div style="font-size:0.75rem; color:var(--text-muted); margin-top:1rem; text-align:center;">
                 <i class="fas fa-info-circle me-1"></i> Forrás: HungaroMet (MET.hu) Agrometeorológiai adatok
-            </div>
-        </div>
-
-        <div class="weather-card mt-5">
-            <h4 style="font-family:'Outfit';">Napi Középhőmérséklet Alakulása (Elmúlt 30 nap)</h4>
-            <div class="chart-container">
-                <canvas id="trendChart"></canvas>
             </div>
         </div>
 

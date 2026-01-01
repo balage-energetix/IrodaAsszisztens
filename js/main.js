@@ -95,7 +95,7 @@ const App = {
                         <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb"></i> Közvilágítás</a>
                         <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images"></i> Drónfelvételek</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check"></i> Check-lista</a>
-                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature"></i> Generátor</a>
+                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature"></i> Nyomtatvány generátor</a>
                         <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line"></i> Tőzsde</a>
                     </div>
                 </div>
@@ -120,6 +120,7 @@ const App = {
                 <div class="nav-cat">ISMERETEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university"></i> Közigazgatás</a>
+                        <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station"></i> Energetika</a>
                         <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard"></i> Gyorsbillentyűk</a>
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling"></i> Irodai Lean</a>
                         <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket"></i> Hatékonyság</a>
