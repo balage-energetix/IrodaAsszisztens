@@ -112,7 +112,8 @@
                         style="width: 100%; padding: 1.25rem; border-radius: 1rem; border: 2px solid var(--border-color); font-size: 1.1rem; font-family: var(--font-main); outline: none; transition: 0.2s;"
                         placeholder="Adja meg az oldalakat...">
                 </div>
-                <button class="btn-action" style="background:var(--accent); margin-top: 1rem;"
+                <button class="btn-action"
+                    style="background:var(--accent); margin-top: 1rem; box-shadow: 0 4px 0 #e64a19;"
                     onclick="splitPDF()">OLDALAK KINYERÉSE</button>
             </div>
         </div>
@@ -137,7 +138,7 @@
         }
 
         async function mergePDFs() {
-            if (mergeFiles.length < 2) return alert("Hiba: Legalább 2 fájl szükséges.");
+            if (mergeFiles.length < 2) return App.showToast("Hiba: Legalább 2 fájl szükséges.", "error");
             const mergedPdf = await PDFLib.PDFDocument.create();
             for (const f of mergeFiles) {
                 const pdf = await PDFLib.PDFDocument.load(await f.arrayBuffer());
@@ -149,9 +150,9 @@
         }
 
         async function splitPDF() {
-            if (!splitFile) return alert("Válasszon fájlt!");
+            if (!splitFile) return App.showToast("Válasszon fájlt!", "error");
             const rangeStr = document.getElementById('split-range').value;
-            if (!rangeStr) return alert("Adjon meg oldaltartományt!");
+            if (!rangeStr) return App.showToast("Adjon meg oldaltartományt!", "error");
 
             try {
                 const existingPdf = await PDFLib.PDFDocument.load(await splitFile.arrayBuffer());
@@ -176,7 +177,7 @@
                     }
                 });
 
-                if (pagesToExtract.length === 0) return alert("Hiba: Érvénytelen oldalszámok vagy tartomány.");
+                if (pagesToExtract.length === 0) return App.showToast("Hiba: Érvénytelen oldalszámok vagy tartomány.", "error");
 
                 // Deduplicate and sort
                 const uniquePages = [...new Set(pagesToExtract)].sort((a, b) => a - b);
@@ -189,7 +190,7 @@
                 download(pdfBytes, 'Darabolt.pdf');
             } catch (err) {
                 console.error(err);
-                alert("Hiba történt a PDF feldolgozása közben.");
+                App.showToast("Hiba történt a PDF feldolgozása közben.", "error");
             }
         }
 

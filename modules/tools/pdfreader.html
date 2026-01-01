@@ -106,8 +106,8 @@
 
             <div class="ocr-panel">
                 <div class="panel-header">KIOLVASOTT SZÖVEG
-                    <button class="feature-card" style="padding: 0.4rem 1rem; font-size: 0.7rem;"
-                        onclick="copyText()">MÁSOLÁS <i class="fas fa-copy"></i></button>
+                    <button class="btn" style="padding: 0.4rem 1rem; font-size: 0.7rem;" onclick="copyText()">MÁSOLÁS <i
+                            class="fas fa-copy ms-1"></i></button>
                 </div>
                 <textarea id="text-res" placeholder="A szöveg itt fog megjelenni..."></textarea>
             </div>
@@ -176,7 +176,7 @@
         function copyText() {
             textRes.select();
             document.execCommand('copy');
-            alert("Szöveg a vágólapra másolva!");
+            App.showToast("Szöveg a vágólapra másolva!");
         }
     </script>
 </body>

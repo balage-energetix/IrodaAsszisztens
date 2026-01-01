@@ -51,38 +51,20 @@ const App = {
             header.prepend(overlay);
         }
 
-        const droneImages = Array.from({ length: 28 }, (_, i) => `pictures/(${i + 1}).jpg`);
-
-        const changeBg = () => {
-            const randomImg = droneImages[Math.floor(Math.random() * droneImages.length)];
-
-            // Robust path detection
-            let p = '';
-            const pathParts = window.location.pathname.split('/');
-            const agiIndex = pathParts.indexOf('AGI');
-            if (agiIndex !== -1) {
-                const depth = pathParts.length - agiIndex - 2;
-                if (depth > 0) p = '../'.repeat(depth);
-            } else {
-                // Fallback for different environments
-                if (window.location.pathname.includes('/modules/')) {
-                    p = (window.location.pathname.match(/\//g).length > 2) ? '../../' : '../';
-                }
-            }
+        const setFixedBg = () => {
+            const p = this.getPath();
+            const imgPath = `${p}pictures/(17).jpg`;
 
             const img = new Image();
-            img.src = `${p}${randomImg}`;
+            img.src = imgPath;
             img.onload = () => {
-                bgLayer.style.opacity = '0';
-                setTimeout(() => {
-                    bgLayer.innerHTML = `<img src="${img.src}" alt="Header background" style="width:100%; height:100%; object-fit:cover; filter:blur(2px) brightness(0.7);">`;
-                    bgLayer.style.opacity = '0.25';
-                }, 1000);
+                bgLayer.innerHTML = `<img src="${img.src}" alt="Header background" style="width:100%; height:100%; object-fit:cover; filter:blur(2px) brightness(0.7);">`;
+                bgLayer.style.opacity = '0.4';
             };
         };
 
-        setInterval(changeBg, 20000);
-        changeBg();
+        // Rotation disabled as per request
+        setFixedBg();
     },
 
     // --- Global Navigation ---
@@ -476,6 +458,29 @@ const App = {
     toggleMobileMenu() {
         const nav = document.querySelector('.app-nav');
         if (nav) nav.classList.toggle('active');
+    },
+
+    showToast(message, type = 'success') {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+
+        const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+        toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'toastOut 0.4s ease forwards';
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
     }
 };
 

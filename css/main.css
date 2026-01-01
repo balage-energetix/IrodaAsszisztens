@@ -25,8 +25,8 @@
     --cat-finance: #fff3e0;
     --cat-info: #f3e5f5;
 
-    --header-height: 80px;
-    /* Reduced height */
+    --header-height: 110px;
+    /* Increased height for "thicker" band look */
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
     --font-main: 'Biko', 'Inter', sans-serif;
@@ -369,8 +369,15 @@ h6 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 30%;
-    filter: blur(2px) brightness(0.7);
+    object-position: center 25%;
+    filter: brightness(0.75);
+}
+
+/* Force black text for PDF exports */
+.pdf-export-mode,
+.pdf-export-mode * {
+    color: #1a1a1a !important;
+    background-color: white !important;
 }
 
 .header-overlay {
@@ -614,8 +621,14 @@ h6 {
 
 .feature-card:hover {
     border-color: var(--primary);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     background: var(--bg-light);
+    transform: translateY(-2px);
+}
+
+.feature-card:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .feature-card i {
@@ -683,25 +696,156 @@ h6 {
     color: var(--text-muted);
 }
 
+/* Global 3D Button Style */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    border: none;
+    background: var(--primary);
+    color: white !important;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 0 var(--primary-dark), 0 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    top: 0;
+    outline: none;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 var(--primary-dark), 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--primary-dark), 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline-primary {
+    background: transparent !important;
+    color: var(--primary) !important;
+    border: 2px solid var(--primary) !important;
+    box-shadow: 0 4px 0 var(--primary) !important;
+}
+
+.btn-outline-primary:active {
+    box-shadow: 0 1px 0 var(--primary) !important;
+}
+
+/* Global Toast Notification System */
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--bg-card);
+    color: var(--text-main);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    border-left: 5px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    min-width: 300px;
+    pointer-events: auto;
+    animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.toast.error {
+    border-left-color: #f44336;
+}
+
+.toast.success {
+    border-left-color: #4caf50;
+}
+
+.toast.info {
+    border-left-color: #2196f3;
+}
+
+@keyframes toastIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes toastOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
 /* Button styles for Atádi Hírek and others */
 .btn-pill {
     display: inline-flex;
     align-items: center;
     padding: 0.6rem 1.5rem;
     border-radius: 50px;
-    border: 2px solid var(--primary);
-    background: transparent;
-    color: var(--primary);
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-pill:hover {
+    border: none;
     background: var(--primary);
     color: white !important;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 0 var(--primary-dark), 0 8px 15px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    position: relative;
+    top: 0;
+}
+
+.btn-pill:hover,
+.btn:hover,
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 var(--primary-dark), 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-pill:active,
+.btn:active,
+.btn-action:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--primary-dark), 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 0 var(--primary-dark);
+    position: relative;
+    top: 0;
+    text-transform: uppercase;
 }
 
 /* Module Sub-Navigation Bar */
@@ -731,6 +875,20 @@ h6 {
     font-size: 0.75rem !important;
     text-transform: uppercase !important;
     transition: 0.2s !important;
+    border: none !important;
+    box-shadow: 0 4px 0 var(--primary-dark) !important;
+    position: relative;
+    top: 0;
+}
+
+.back-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 var(--primary-dark) !important;
+}
+
+.back-btn:active {
+    transform: translateY(3px) !important;
+    box-shadow: 0 1px 0 var(--primary-dark) !important;
 }
 
 /* Hint & Keyboard */
@@ -925,19 +1083,33 @@ h6 {
     border: none;
     font-weight: 800;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.1s;
     font-family: var(--font-title);
     text-transform: uppercase;
+    position: relative;
+    top: 0;
 }
 
 .modal-btn.primary {
     background: var(--primary);
     color: white;
+    box-shadow: 0 4px 0 var(--primary-dark);
+}
+
+.modal-btn.primary:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--primary-dark);
 }
 
 .modal-btn.secondary {
-    background: var(--bg-creamy);
-    color: var(--text-muted);
+    background: #e0e0e0;
+    color: #666;
+    box-shadow: 0 4px 0 #bcbcbc;
+}
+
+.modal-btn.secondary:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #bcbcbc;
 }
 
 .section-title {

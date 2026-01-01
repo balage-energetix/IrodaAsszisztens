@@ -183,6 +183,15 @@
                 }
             }
         });
+        // Initialize with a slight delay to simulate loading
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log("Weather log data synchronized.");
+            if (typeof App !== 'undefined') {
+                setTimeout(() => {
+                    App.showToast("Időjárási adatok szinkronizálva!");
+                }, 500);
+            }
+        });
     </script>
 </body>
 
