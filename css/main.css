@@ -9,8 +9,8 @@
     --secondary: #26a69a;
     --accent: #ff7043;
 
-    --bg-creamy: #004b6b;
-    /* Reverted to Deep Sea Blue */
+    --bg-creamy: #002d41;
+    /* Darkened from #004b6b */
     --bg-card: rgba(255, 255, 255, 0.95);
     --bg-light: #f1f7fd;
 
@@ -107,10 +107,12 @@ h2,
 
 body {
     font-family: var(--font-main);
-    background-color: var(--bg-creamy) !important;
-    background-image: radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--flashlight-color) 0%, transparent 40%);
+    background-color: var(--bg-creamy);
+    background-image: radial-gradient(circle 120px at var(--mouse-x) var(--mouse-y), var(--flashlight-color) 0%, transparent 100%);
+    /* Focused spotlight */
+    background-attachment: fixed;
+    transition: background 0.5s ease;
     color: var(--text-main);
-    transition: background-color var(--transition);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
@@ -1183,8 +1185,9 @@ h6 {
 
     .nav-cat {
         width: 100%;
-        padding: 0.65rem 1.5rem;
-        /* Reduced height */
+        padding: 0.5rem 1.25rem;
+        /* More compact */
+        font-size: 0.85rem;
         justify-content: space-between;
         border-bottom: 1px solid var(--border-color);
     }
@@ -1207,6 +1210,7 @@ h6 {
 
     .nav-cat.active .nav-cat-dropdown {
         display: block;
+        animation: fadeIn 0.3s ease;
     }
 
     .header-info {
@@ -1215,7 +1219,8 @@ h6 {
         padding: 0;
         margin: 0;
         flex: 1;
-        justify-content: flex-start;
+        justify-content: flex-end;
+        /* Right align info */
         border: none;
     }
 
@@ -1227,10 +1232,11 @@ h6 {
         border: none !important;
         padding: 0 !important;
         margin: 0 !important;
-        flex-direction: row;
-        /* Side-by-side for mobile */
-        gap: 0.75rem !important;
-        align-items: center !important;
+        flex-direction: column;
+        /* Stacked for better fit */
+        gap: 0.25rem !important;
+        align-items: flex-end !important;
+        /* Right align fields */
     }
 
     #header-weather,
@@ -1251,7 +1257,15 @@ h6 {
     }
 
     .header-actions {
-        display: none !important;
+        display: flex !important;
+        /* Show theme toggle on mobile */
+        order: 2;
+        margin-left: 0.5rem;
+    }
+
+    .header-actions .btn-theme-toggle {
+        padding: 0.5rem;
+        font-size: 1rem;
     }
 
     .logo {
@@ -1317,6 +1331,13 @@ h6 {
 
 .menu-toggle {
     display: none;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
 }
 
 .fade-in {

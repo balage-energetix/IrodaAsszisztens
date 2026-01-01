@@ -16,18 +16,18 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
         }
 
         .glass-card {
-            background: #ffffff;
+            background: var(--bg-card);
+            /* Theme aware */
             border-radius: 2rem;
             border: 1px solid var(--border-color);
             padding: 2.5rem;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
             margin-bottom: 2rem;
-            color: #333;
+            color: var(--text-main);
         }
 
         .metric-grid {
@@ -70,7 +70,8 @@
         .metric-info h4 {
             font-size: 0.75rem;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: #4b4b4b !important;
+            /* Force darker muted text */
             margin: 0;
             letter-spacing: 0.5px;
         }
@@ -78,12 +79,24 @@
         .metric-info .value {
             font-size: 1.5rem;
             font-weight: 800;
-            color: #333;
+            color: #000000 !important;
+            /* Force persistent black value */
             line-height: 1.2;
         }
 
+        .filters label,
+        .filters select option[value="all"] {
+            color: #000000 !important;
+            /* Persistent black for summary label */
+        }
+
+        [data-theme="dark"] .filters select {
+            background: #1e1e1e;
+            color: white;
+        }
+
         .chart-section {
-            background: white;
+            background: var(--bg-card);
             border-radius: 1.5rem;
             padding: 1.5rem;
             border: 1px solid var(--border-color);
@@ -237,31 +250,45 @@
         let rawData = [];
         let chart = null;
 
-        const CO2_FACTOR = 0.52; // kg per kWh (approx HU electricity mix)
-        const HUF_RATE = 70; // Ft per kWh
-        const TREE_ABSORPTION = 22; // kg CO2 per tree per year
-        const HOME_DAILY_USE = 10; // kWh per day per home
+        const CO2_FACTOR = 0.52;
+        const HUF_RATE = 70;
+        const TREE_ABSORPTION = 22;
+        const HOME_DAILY_USE = 10;
+
+        const SOLAR_DATA = [
+            { "date": "01.2021", "value": 0 }, { "date": "02.2021", "value": 0 }, { "date": "03.2021", "value": 0 },
+            { "date": "04.2021", "value": 0 }, { "date": "05.2021", "value": 0 }, { "date": "06.2021", "value": 0 },
+            { "date": "07.2021", "value": 0 }, { "date": "08.2021", "value": 0 }, { "date": "09.2021", "value": 15495 },
+            { "date": "10.2021", "value": 2791739 }, { "date": "11.2021", "value": 1643157 }, { "date": "12.2021", "value": 1024405 },
+            { "date": "01.2022", "value": 1810811 }, { "date": "02.2022", "value": 2825295 }, { "date": "03.2022", "value": 4219599 },
+            { "date": "04.2022", "value": 4256964 }, { "date": "05.2022", "value": 5141717 }, { "date": "06.2022", "value": 6012757 },
+            { "date": "07.2022", "value": 5893771 }, { "date": "08.2022", "value": 4724873 }, { "date": "09.2022", "value": 3283249 },
+            { "date": "10.2022", "value": 2767277 }, { "date": "11.2022", "value": 1033729 }, { "date": "12.2022", "value": 711871 },
+            { "date": "01.2023", "value": 940470 }, { "date": "02.2023", "value": 2103830 }, { "date": "03.2023", "value": 3545418 },
+            { "date": "04.2023", "value": 3947011 }, { "date": "05.2023", "value": 5187980 }, { "date": "06.2023", "value": 6624997 },
+            { "date": "07.2023", "value": 7124654 }, { "date": "08.2023", "value": 5917789 }, { "date": "09.2023", "value": 5072216 },
+            { "date": "10.2023", "value": 3442411 }, { "date": "11.2023", "value": 1832867 }, { "date": "12.2023", "value": 997179 },
+            { "date": "01.2024", "value": 1538358 }, { "date": "02.2024", "value": 2716877 }, { "date": "03.2024", "value": 4330163 },
+            { "date": "04.2024", "value": 5660901 }, { "date": "05.2024", "value": 6361055 }, { "date": "06.2024", "value": 5870281 },
+            { "date": "07.2024", "value": 6837237 }, { "date": "08.2024", "value": 6335484 }, { "date": "09.2024", "value": 3720597 },
+            { "date": "10.2024", "value": 3216972 }, { "date": "11.2024", "value": 1560732 }, { "date": "12.2024", "value": 937170 },
+            { "date": "01.2025", "value": 1340041 }, { "date": "02.2025", "value": 2512973 }, { "date": "03.2025", "value": 4082737 },
+            { "date": "04.2025", "value": 5154405 }, { "date": "05.2025", "value": 5814795 }, { "date": "06.2025", "value": 7164447 },
+            { "date": "07.2025", "value": 5351130 }, { "date": "08.2025", "value": 5989129 }, { "date": "09.2025", "value": 4237108 },
+            { "date": "10.2025", "value": 3009985 }, { "date": "11.2025", "value": 1519357 }, { "date": "12.2025", "value": 764624 },
+            { "date": "01.2026", "value": 47045 }, { "date": "02.2026", "value": 0 }, { "date": "03.2026", "value": 0 },
+            { "date": "04.2026", "value": 0 }, { "date": "05.2026", "value": 0 }, { "date": "06.2026", "value": 0 },
+            { "date": "07.2026", "value": 0 }, { "date": "08.2026", "value": 0 }, { "date": "09.2026", "value": 0 },
+            { "date": "10.2026", "value": 0 }, { "date": "11.2026", "value": 0 }, { "date": "12.2026", "value": 0 }
+        ];
 
         async function init() {
             try {
-                // Adjusting path to project root relative to modules/tools/
-                const response = await fetch('../../comparative-month-chart-data.csv');
-                if (!response.ok) throw new Error("A CSV fájl nem található.");
-                const text = await response.text();
-                const lines = text.split('\n').filter(line => line.trim() !== '');
-
-                rawData = lines.slice(1).map(line => {
-                    const parts = line.split(',');
-                    const dateRaw = parts[0].replace(/"/g, '').trim();
-                    const valueRaw = parseInt(parts[1].replace(/"/g, '').trim()) || 0;
-                    return { date: dateRaw, value: valueRaw };
-                });
-
+                rawData = SOLAR_DATA;
                 populateYearFilter();
                 updateView();
-            } catch (err) {
-                console.error("Hiba az adatok betöltésekor:", err);
-            }
+                console.log("Energetikai adatok betöltve.");
+            } catch (e) { console.error(e); }
         }
 
         function populateYearFilter() {
@@ -311,6 +338,11 @@
             const ctx = document.getElementById('mainChart').getContext('2d');
             if (chart) chart.destroy();
 
+            // Create Gradient
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(67, 97, 238, 0.9)');
+            gradient.addColorStop(1, 'rgba(155, 89, 182, 0.4)');
+
             const labels = data.map(d => d.date);
             const values = data.map(d => d.value / 1000); // Display in kWh
 
@@ -321,34 +353,58 @@
                     datasets: [{
                         label: 'Havi Termelés (kWh)',
                         data: values,
-                        backgroundColor: 'rgba(67, 97, 238, 0.6)',
-                        borderColor: 'rgba(67, 97, 238, 1)',
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        hoverBackgroundColor: 'rgba(67, 97, 238, 0.8)',
+                        backgroundColor: gradient,
+                        borderColor: '#4361ee',
+                        borderWidth: 1,
+                        borderRadius: 12,
+                        hoverBackgroundColor: '#4361ee',
+                        hoverBorderWidth: 3,
+                        barPercentage: 0.6
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutElastic'
+                    },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            backgroundColor: '#1e1e1e',
-                            padding: 12,
-                            cornerRadius: 10,
-                            titleFont: { family: 'Outfit', size: 14 }
+                            backgroundColor: 'rgba(30, 30, 30, 0.9)',
+                            titleFont: { family: 'Outfit', size: 16, weight: '800' },
+                            bodyFont: { family: 'Inter', size: 14 },
+                            padding: 15,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return `Termelés: ${context.parsed.y.toLocaleString('hu-HU')} kWh`;
+                                }
+                            }
                         }
                     },
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'rgba(0,0,0,0.05)' },
-                            ticks: { font: { family: 'Inter' } }
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: { family: 'Outfit', size: 12, weight: '600' },
+                                color: '#666',
+                                callback: value => value + ' kWh'
+                            }
                         },
                         x: {
                             grid: { display: false },
-                            ticks: { font: { family: 'Inter' }, maxRotation: 45 }
+                            ticks: {
+                                font: { family: 'Outfit', size: 11, weight: '600' },
+                                color: '#666',
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
                         }
                     }
                 }

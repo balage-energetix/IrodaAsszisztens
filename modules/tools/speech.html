@@ -242,17 +242,27 @@
         // Initial call + listener
         populateVoiceList();
         if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = populateVoiceList;
+            speechSynthesis.onvoiceschanged = () => {
+                console.log("Voices changed triggered");
+                populateVoiceList();
+            };
         }
 
-        // Periodic check for voices (useful on some mobile browsers)
+        // Periodic check for voices (crucial on mobile browsers like Chrome/Safari)
+        let voiceCheckCount = 0;
         const voiceCheckInterval = setInterval(() => {
-            if (voices.length === 0) {
-                populateVoiceList();
-            } else {
+            voiceCheckCount++;
+            populateVoiceList();
+            if (voices.length > 0 || voiceCheckCount > 10) {
                 clearInterval(voiceCheckInterval);
             }
-        }, 1000);
+        }, 500);
+
+        // Add manual refresh button logic if you want, but for now just auto-retry
+        window.addEventListener('load', () => {
+            setTimeout(populateVoiceList, 1000);
+            setTimeout(populateVoiceList, 3000);
+        });
 
         rateSelect.oninput = () => { rateVal.innerText = rateSelect.value; };
 

@@ -93,6 +93,7 @@ const App = {
                         <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drón fotók</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
+                        <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -103,7 +104,6 @@ const App = {
                         <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Beszéd írnok</a>
                         <a href="${p}modules/tools/deadlines.html" class="nav-dropdown-item"><i class="fas fa-calendar-check" style="color:#ff9800;"></i> Határidők</a>
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
-                        <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -165,28 +165,33 @@ const App = {
             `;
         }
 
-        // Click-to-open logic for Dropdowns
-        document.querySelectorAll('.nav-cat').forEach(cat => {
-            cat.addEventListener('click', (e) => {
-                if (e.target.closest('.nav-dropdown-item')) return;
-
-                e.preventDefault();
-                e.stopPropagation();
-                const isActive = cat.classList.contains('active');
-
-                // Close others
-                document.querySelectorAll('.nav-cat').forEach(c => {
-                    if (c !== cat) c.classList.remove('active');
-                });
-
+        // Unified dropdown logic
+        header.querySelectorAll('.nav-cat').forEach(cat => {
+            const toggle = () => {
+                header.querySelectorAll('.nav-cat').forEach(c => { if (c !== cat) c.classList.remove('active'); });
                 cat.classList.toggle('active');
-
                 // Explicitly manage display for mobile
                 const dropdown = cat.querySelector('.nav-cat-dropdown');
                 if (dropdown && window.innerWidth <= 992) {
                     dropdown.style.display = cat.classList.contains('active') ? 'block' : 'none';
                 }
-            });
+            };
+
+            cat.onclick = (e) => {
+                // Prevent navigation if clicking on a dropdown item
+                if (e.target.closest('.nav-dropdown-item')) return;
+
+                // On mobile or smaller screens, entire block toggles
+                if (window.innerWidth <= 992) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggle();
+                }
+            };
+
+            // Allow hover on desktop, but click for mobile
+            cat.onmouseenter = () => { if (window.innerWidth > 992) cat.classList.add('active'); };
+            cat.onmouseleave = () => { if (window.innerWidth > 992) cat.classList.remove('active'); };
         });
 
         // Close when clicking outside
