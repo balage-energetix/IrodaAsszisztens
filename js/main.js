@@ -15,6 +15,7 @@ const App = {
         this.checkLogin();
         this.applyTheme();
         this.applyBgColor();
+        this.initCursor();
         this.initClock();
         this.fetchWeather();
         this.injectGlobalNav();
@@ -22,7 +23,8 @@ const App = {
         this.initHeaderBgRotation();
         this.initWaveDirectionSwitcher();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.33 initialized");
+        console.log("Irodai Asszisztens V3.35 initialized");
+        setTimeout(() => document.body.classList.add('ready'), 300);
     },
 
     // --- Wave Direction Switcher ---
@@ -103,7 +105,6 @@ const App = {
                         <a href="${p}modules/tools/speech.html" class="nav-dropdown-item"><i class="fas fa-volume-up" style="color:#9c27b0;"></i> Felolvasó</a>
                         <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Beszéd írnok</a>
                         <a href="${p}modules/tools/deadlines.html" class="nav-dropdown-item"><i class="fas fa-calendar-check" style="color:#ff9800;"></i> Határidők</a>
-                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -117,6 +118,8 @@ const App = {
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper" style="color:#607d8b;"></i> Atádi Hírek</a>
                         <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás</a>
+                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
+                        <a href="${p}modules/tools/translator.html" class="nav-dropdown-item"><i class="fas fa-language" style="color:#4caf50;"></i> Fordító Segéd</a>
                         <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book" style="color:#795548;"></i> Telefonkönyv</a>
                         <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link" style="color:#009688;"></i> Linkek</a>
                         <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie" style="color:#673ab7;"></i> Vizualizáció</a>
@@ -151,14 +154,14 @@ const App = {
                 <div class="info-wrapper" style="display: flex; align-items: center; gap: 1.5rem;">
                     <div class="weather-clock-group" style="display: flex; align-items: center; gap: 1rem; border-right: 1px solid var(--border-color); padding-right: 1.5rem; margin-right: 0.5rem;">
                         <div id="header-weather" style="text-align: right; line-height: 1.2; font-size: 0.85rem; font-weight: 600;"></div>
-                        <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--primary); font-weight: 700;"></div>
+                        <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--accent-purple); font-weight: 700; text-shadow: 0 0 10px rgba(123, 97, 255, 0.3);"></div>
                     </div>
                     <div class="header-actions" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
                         <button onclick="App.logout()" class="logout-btn" title="Kijelentkezés">
-                            <i class="fas fa-sign-out-alt" style="color:#d32f2f;"></i>
+                            <i class="fas fa-sign-out-alt" style="color:#7b61ff;"></i>
                         </button>
                         <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.1rem; color:var(--text-main); cursor:pointer;">
-                            <i id="theme-toggle-icon" class="fas fa-moon" style="color:#fbc02d;"></i>
+                            <i id="theme-toggle-icon" class="fas fa-moon" style="color:var(--accent-purple);"></i>
                         </button>
                     </div>
                 </div>
@@ -278,6 +281,94 @@ const App = {
         setInterval(update, 60000); // 1 minute rotation
     },
 
+    initCursor() {
+        const create = (id, cls) => {
+            let el = document.getElementById(id);
+            if (!el) {
+                el = document.createElement('div');
+                el.id = id;
+                el.className = cls;
+                document.body.appendChild(el);
+            }
+            return el;
+        };
+
+        const dot = create('cursor-dot', 'cursor-dot');
+        const trail = create('cursor-trail', 'cursor-trail');
+        const follower = create('cursor-follower', 'cursor-follower');
+
+        let mouseX = 0, mouseY = 0;
+        let trailX = 0, trailY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Immediate dot
+            dot.style.left = `${mouseX}px`;
+            dot.style.top = `${mouseY}px`;
+            dot.style.display = 'block'; // Ensure visibility
+
+            // Hover effects for interactive elements
+            const hovered = document.elementFromPoint(mouseX, mouseY);
+            if (hovered && (hovered.closest('.feature-card') || hovered.closest('a') || hovered.closest('button') || hovered.closest('.nav-cat'))) {
+                follower.classList.add('hovering');
+                dot.classList.add('hovering');
+            } else {
+                follower.classList.remove('hovering');
+                dot.classList.remove('hovering');
+            }
+        });
+
+        // Smooth trailing animation loop
+        const animate = () => {
+            // Smoothly move trail towards mouse
+            trailX += (mouseX - trailX) * 0.2;
+            trailY += (mouseY - trailY) * 0.2;
+            trail.style.left = `${trailX}px`;
+            trail.style.top = `${trailY}px`;
+
+            // Smoothly move follower towards trail (more delay)
+            followerX += (trailX - followerX) * 0.15;
+            followerY += (trailY - followerY) * 0.15;
+            follower.style.left = `${followerX}px`;
+            follower.style.top = `${followerY}px`;
+
+            requestAnimationFrame(animate);
+        };
+        animate();
+
+        document.addEventListener('mousedown', (e) => {
+            // Create a "pop" bubble effect
+            const pop = document.createElement('div');
+            pop.className = 'cursor-pop';
+            pop.style.left = `${e.clientX}px`;
+            pop.style.top = `${e.clientY}px`;
+            document.body.appendChild(pop);
+
+            // Randomly add a few sparkles
+            for (let i = 0; i < 3; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'cursor-sparkle';
+                sparkle.innerHTML = '✨';
+                sparkle.style.left = `${e.clientX + (Math.random() - 0.5) * 40}px`;
+                sparkle.style.top = `${e.clientY + (Math.random() - 0.5) * 40}px`;
+                sparkle.style.fontSize = `${Math.random() * 10 + 10}px`;
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 800);
+            }
+
+            setTimeout(() => pop.remove(), 600);
+
+            follower.style.transform = 'translate(-50%, -50%) scale(0.6)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            follower.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+    },
+
     initInteractivity() {
         document.addEventListener('mousemove', (e) => {
             const x = (e.clientX / window.innerWidth) * 100;
@@ -285,6 +376,10 @@ const App = {
             document.documentElement.style.setProperty('--mouse-x', `${x}%`);
             document.documentElement.style.setProperty('--mouse-y', `${y}%`);
         });
+    },
+
+    initFlashlight() {
+        // Obsolete - Replaced by initCursor
     },
 
     // --- Core Features ---
@@ -314,8 +409,8 @@ const App = {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 weatherEl.innerHTML = `
-                    <div style="font-weight:800; font-size:0.9rem;"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> ${Math.round(data.current.temperature_2m)}°C</div>
-                    <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-sun" style="color:#fbc02d;"></i> ${sunrise} | <i class="fas fa-moon" style="color:#3f51b5;"></i> ${sunset}</div>
+                    <div style="font-weight:800; font-size:0.9rem; color:var(--accent-purple); text-shadow: 0 0 10px rgba(123, 97, 255, 0.3);"><i class="fas fa-temperature-high"></i> ${Math.round(data.current.temperature_2m)}°C</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-sun" style="color:var(--accent-purple);"></i> ${sunrise} | <i class="fas fa-moon" style="color:var(--accent-purple);"></i> ${sunset}</div>
                 `;
             }
 

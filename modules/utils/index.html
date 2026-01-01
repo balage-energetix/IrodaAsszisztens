@@ -149,6 +149,50 @@
                     style="margin-top: 1.5rem; max-height: 120px; overflow-y: auto; font-size: 0.8rem; border-top: 1px dashed var(--border-color); padding-top: 1rem;">
                 </div>
             </div>
+            <!-- SZÁMOLÓGÉP -->
+            <div class="tool-card">
+                <div class="tool-header"><i class="fas fa-calculator"></i> Számológép</div>
+                <div id="calc-display"
+                    style="background: #111; color: #00ff00; padding: 1.5rem; text-align: right; border-radius: 1rem; font-family: 'Courier New', Courier, monospace; font-size: 2rem; margin-bottom: 1rem; box-shadow: inset 0 0 10px #000; overflow: hidden; white-space: nowrap;">
+                    0</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem;">
+                    <button class="feature-card"
+                        style="padding: 1rem; margin:0; background: #e74c3c!important; color: white;"
+                        onclick="calcClear()">C</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('(')">(</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput(')')">)</button>
+                    <button class="feature-card"
+                        style="padding: 1rem; margin:0; background: var(--primary)!important; color: white;"
+                        onclick="calcInput('/')">÷</button>
+
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('7')">7</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('8')">8</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('9')">9</button>
+                    <button class="feature-card"
+                        style="padding: 1rem; margin:0; background: var(--primary)!important; color: white;"
+                        onclick="calcInput('*')">×</button>
+
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('4')">4</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('5')">5</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('6')">6</button>
+                    <button class="feature-card"
+                        style="padding: 1rem; margin:0; background: var(--primary)!important; color: white;"
+                        onclick="calcInput('-')">-</button>
+
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('1')">1</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('2')">2</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('3')">3</button>
+                    <button class="feature-card"
+                        style="padding: 1rem; margin:0; background: var(--primary)!important; color: white;"
+                        onclick="calcInput('+')">+</button>
+
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('0')">0</button>
+                    <button class="feature-card" style="padding: 1rem; margin:0;" onclick="calcInput('.')">.</button>
+                    <button class="feature-card"
+                        style="padding: 1rem; margin:0; flex: 2; grid-column: span 2; background: #27ae60!important; color: white;"
+                        onclick="calcSolve()">=</button>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -233,6 +277,30 @@
             const s = Math.floor(t / 1000) % 60;
             const m = Math.floor(t / 60000);
             document.getElementById('cd-display').innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // CALCULATOR LOGIC
+        let calcExpr = "";
+        const calcDisplay = document.getElementById('calc-display');
+        function calcInput(val) {
+            if (calcExpr === "0" && val !== ".") calcExpr = "";
+            calcExpr += val;
+            calcDisplay.innerText = calcExpr || "0";
+        }
+        function calcClear() {
+            calcExpr = "";
+            calcDisplay.innerText = "0";
+        }
+        function calcSolve() {
+            try {
+                // Basic sanitation and evaluation
+                const result = eval(calcExpr.replace('×', '*').replace('÷', '/'));
+                calcExpr = result.toString();
+                calcDisplay.innerText = calcExpr;
+            } catch (e) {
+                calcDisplay.innerText = "Error";
+                calcExpr = "";
+            }
         }
     </script>
 </body>

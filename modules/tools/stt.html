@@ -130,6 +130,24 @@
             color: var(--text-muted);
             opacity: 0.7;
         }
+
+        @media (max-width: 768px) {
+            .stt-container {
+                padding: 1.5rem !important;
+                margin: 1rem auto !important;
+            }
+
+            .recognition-box {
+                min-height: 180px !important;
+                font-size: 1rem !important;
+            }
+
+            .btn-mic {
+                width: 60px !important;
+                height: 60px !important;
+                font-size: 1.5rem !important;
+            }
+        }
     </style>
 </head>
 
@@ -153,6 +171,10 @@
                 <i class="fas fa-circle"></i> VÁRAKOZÁS...
             </div>
 
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 0.5rem;">
+                <button onclick="copyText()" class="btn-secondary" style="padding: 0.4rem 1rem; font-size: 0.8rem;"><i
+                        class="fas fa-copy me-2"></i> Másolás</button>
+            </div>
             <div id="output" class="recognition-box">
                 Kattintson a mikrofonra és kezdjen el beszélni...
             </div>
@@ -201,7 +223,9 @@
                 status.className = 'status-indicator status-listening';
                 status.innerHTML = '<i class="fas fa-circle"></i> FIGYELÉS...';
                 output.classList.add('active');
-                if (finalTranscript === '') output.innerText = '';
+                if (output.innerText.includes('Kattintson a mikrofonra')) {
+                    output.innerText = '';
+                }
             };
 
             recognition.onresult = (event) => {
