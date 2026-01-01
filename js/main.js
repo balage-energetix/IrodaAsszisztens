@@ -106,41 +106,41 @@ const App = {
             <nav class="app-nav">
                 <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt"></i> Térkép</a>
-                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb"></i> Közvilágítás</a>
-                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images"></i> Drónfelvételek</a>
-                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check"></i> Check-lista</a>
-                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature"></i> Nyomtatvány generátor</a>
-                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line"></i> Tőzsde</a>
+                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Térkép</a>
+                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítás</a>
+                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drónfelvételek</a>
+                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
+                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
+                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#e91e63;"></i> Tőzsde</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf"></i> PDF Szerkesztő</a>
-                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open"></i> PDF Kiolvasó</a>
-                        <a href="${p}modules/utils/index.html" class="nav-dropdown-item"><i class="fas fa-bolt"></i> Gyorsító</a>
-                        <a href="${p}modules/tools/notes.html" class="nav-dropdown-item"><i class="fas fa-sticky-note"></i> Feljegyzés</a>
-                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun"></i> Időjárás Napló</a>
+                        <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i> PDF Szerkesztő</a>
+                        <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open" style="color:#3f51b5;"></i> PDF Kiolvasó</a>
+                        <a href="${p}modules/utils/index.html" class="nav-dropdown-item"><i class="fas fa-bolt" style="color:#fbc02d;"></i> Gyorsító</a>
+                        <a href="${p}modules/tools/notes.html" class="nav-dropdown-item"><i class="fas fa-sticky-note" style="color:#ffeb3b;"></i> Feljegyzés</a>
+                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper"></i> Atádi Hírek</a>
-                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high"></i> Helyi Időjárás</a>
-                        <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book"></i> Telefonkönyv</a>
-                        <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link"></i> Linkek</a>
-                        <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie"></i> Vizualizáció</a>
+                        <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper" style="color:#607d8b;"></i> Atádi Hírek</a>
+                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás</a>
+                        <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book" style="color:#795548;"></i> Telefonkönyv</a>
+                        <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link" style="color:#009688;"></i> Linkek</a>
+                        <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie" style="color:#673ab7;"></i> Vizualizáció</a>
                     </div>
                 </div>
                 <div class="nav-cat">ISMERETEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university"></i> Közigazgatás</a>
-                        <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station"></i> Energetika</a>
-                        <a href="${p}modules/info/vibe_code.html" class="nav-dropdown-item"><i class="fas fa-terminal"></i> Vájb Kód Bevezető</a>
-                        <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard"></i> Gyorsbillentyűk</a>
-                        <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling"></i> Irodai Lean</a>
-                        <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket"></i> Hatékonyság</a>
-                        <a href="${p}modules/videos/index.html" class="nav-dropdown-item"><i class="fas fa-play-circle"></i> Videótár</a>
+                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university" style="color:#546e7a;"></i> Közigazgatás</a>
+                        <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station" style="color:#ff9800;"></i> Energetika</a>
+                        <a href="${p}modules/info/vibe_code.html" class="nav-dropdown-item"><i class="fas fa-terminal" style="color:#4caf50;"></i> Vájb Kód Bevezető</a>
+                        <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard" style="color:#9e9e9e;"></i> Gyorsbillentyűk</a>
+                        <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling" style="color:#4caf50;"></i> Irodai Lean</a>
+                        <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket" style="color:#ff5722;"></i> Hatékonyság</a>
+                        <a href="${p}modules/videos/index.html" class="nav-dropdown-item"><i class="fas fa-play-circle" style="color:#f44336;"></i> Videótár</a>
                     </div>
                 </div>
             </nav>
@@ -165,10 +165,10 @@ const App = {
                     </div>
                     <div class="header-actions" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
                         <button onclick="App.logout()" class="logout-btn" title="Kijelentkezés">
-                            <i class="fas fa-sign-out-alt"></i>
+                            <i class="fas fa-sign-out-alt" style="color:#d32f2f;"></i>
                         </button>
                         <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.1rem; color:var(--text-main); cursor:pointer;">
-                            <i id="theme-toggle-icon" class="fas fa-moon"></i>
+                            <i id="theme-toggle-icon" class="fas fa-moon" style="color:#fbc02d;"></i>
                         </button>
                     </div>
                 </div>
@@ -306,8 +306,8 @@ const App = {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 weatherEl.innerHTML = `
-                    <div style="font-weight:800; font-size:0.9rem;"><i class="fas fa-temperature-high"></i> ${Math.round(data.current.temperature_2m)}°C</div>
-                    <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-sun"></i> ${sunrise} | <i class="fas fa-moon"></i> ${sunset}</div>
+                    <div style="font-weight:800; font-size:0.9rem;"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> ${Math.round(data.current.temperature_2m)}°C</div>
+                    <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-sun" style="color:#fbc02d;"></i> ${sunrise} | <i class="fas fa-moon" style="color:#3f51b5;"></i> ${sunset}</div>
                 `;
             }
 

@@ -518,12 +518,14 @@ h6 {
     gap: 0.75rem;
 }
 
-/* Feature Cards */
+/* Feature Cards - Glassmorphism style */
 .feature-card {
-    background: var(--bg-card);
+    background: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     padding: 0.85rem;
-    border-radius: 1rem;
-    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     text-decoration: none;
     color: var(--text-main);
     display: flex;
@@ -532,9 +534,13 @@ h6 {
     justify-content: center;
     text-align: center;
     transition: var(--transition);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
     width: 140px;
-    /* Standardized width for more columns */
+}
+
+[data-theme="dark"] .feature-card {
+    background: rgba(30, 30, 30, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .feature-card:hover {
