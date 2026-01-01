@@ -25,6 +25,18 @@
         .c-wrap {
             height: 300px;
         }
+
+        .fx-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 
@@ -41,7 +53,17 @@
     </header>
 
     <main class="container-fluid py-4 fade-in">
-        <div class="stock-grid">
+        <div class="fx-info fade-in">
+            <i class="fas fa-coins text-warning fa-2x"></i>
+            <div>
+                <div style="font-weight: 800; font-size: 1.1rem; color: var(--text-main);">Munkához rögzített árfolyam:
+                </div>
+                <div style="font-family: monospace; font-size: 1.2rem; color: var(--primary); font-weight: 800;">1 EUR =
+                    410 HUF</div>
+            </div>
+        </div>
+
+        <div class="row g-4">
             <div class="stock-card">
                 <h4 class="mb-4" style="font-family:'Outfit'; font-weight:800; color:var(--primary);"><i
                         class="fas fa-gas-pump"></i> HUDEX Natural Gas (2025-2026)</h4>

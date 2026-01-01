@@ -53,13 +53,25 @@
                 Asszisztens</span></a>
         <div class="header-info">
             <div id="header-weather"></div>
-            <div id="global-clock"></div><button onclick="App.toggleTheme()"
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
                 style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
                     id="theme-toggle-icon" class="fas fa-moon"></i></button>
         </div>
     </header>
 
     <main class="container-fluid py-4 fade-in">
+        <!-- Használati Tippek Sáv -->
+        <div class="tips-bar"
+            style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.75rem 1.5rem; border-radius: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
+            <i class="fas fa-lightbulb text-warning"></i>
+            <strong>Használati tippek:</strong>
+            <span><i class="fas fa-mouse-pointer me-1"></i> Jobb klikk a térképen: Jelölő elhelyezése</span>
+            <span class="ms-3"><i class="fas fa-draw-polygon me-1"></i> Bal oldali eszköztár: Terület/Vonal
+                rajzolása</span>
+            <span class="ms-3"><i class="fas fa-trash-alt me-1"></i> Jelölő törlése: Kattintson a jelölőre</span>
+        </div>
+
         <div
             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 0 1rem;">
             <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i

@@ -19,9 +19,37 @@ const App = {
         this.fetchWeather();
         this.injectGlobalNav();
         this.initSearch();
-        this.initHeaderDrone();
+        this.initHeaderBgRotation();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.3 initialized");
+        console.log("Irodai Asszisztens V3.15 initialized");
+    },
+
+    // --- Dynamic Header Background ---
+    initHeaderBgRotation() {
+        const header = document.querySelector('.app-header');
+        if (!header) return;
+
+        let bgLayer = header.querySelector('.header-bg-layer');
+        if (!bgLayer) {
+            bgLayer = document.createElement('div');
+            bgLayer.className = 'header-bg-layer';
+            header.prepend(bgLayer);
+        }
+
+        const droneImages = Array.from({ length: 28 }, (_, i) => `pictures/(${i + 1}).jpg`);
+
+        const changeBg = () => {
+            const randomImg = droneImages[Math.floor(Math.random() * droneImages.length)];
+            const relativePath = App.state.isModule ? '../../' : '';
+            bgLayer.style.opacity = '0';
+            setTimeout(() => {
+                bgLayer.innerHTML = `<img src="${relativePath}${randomImg}" alt="Header background">`;
+                bgLayer.style.opacity = '0.25';
+            }, 1500);
+        };
+
+        setInterval(changeBg, 20000);
+        changeBg();
     },
 
     // --- Layout & Nav Injection ---
@@ -54,7 +82,7 @@ const App = {
                         <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item">PDF Szerkesztő</a>
                         <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item">PDF Kiolvasó</a>
                         <a href="${p}modules/utils/index.html" class="nav-dropdown-item">Gyorsító Eszközök</a>
-                        <a href="${p}modules/tools/notes.html" class="nav-dropdown-item">Feljegyzés</a>
+                       <a href="${p}modules/tools/notes.html" class="nav-dropdown-item">Gyors Feljegyzés</a>
                     </div>
                 </div>
                 <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>

@@ -36,13 +36,36 @@
             </a>
             <div class="header-info">
                 <!-- Data injected by main.js -->
+                <div class="search-wrap mb-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" id="dashboard-search" class="form-control"
+                            placeholder="Keresés a modulok között...">
+                    </div>
+                </div>
+
+                <!-- Hírek & Frissítések Mező -->
+                <div class="news-container fade-in">
+                    <h5 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1rem;"><i
+                            class="fas fa-newspaper text-primary me-2"></i> Hírek & Frissítések</h5>
+                    <div class="news-item">
+                        <span class="news-tag" style="background: #e3f2fd; color: #1976d2;">Rendszer</span>
+                        <div class="news-text">Megérkezett a <strong>V3.15</strong>-ös frissítés! Új látványelemek és
+                            bővített modulok.</div>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-tag" style="background: #f1f8e9; color: #388e3c;">Új Adat</span>
+                        <div class="news-text">Az Időjárás Napló mostantól 24 órás nagyatádi automata adatokat is mutat.
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-tag" style="background: #fff3e0; color: #f57c00;">Info</span>
+                        <div class="news-text">A Tőzsdei Árak modulban rögzítettük az elszámoláshoz használt 410 Ft/EUR
+                            árfolyamot.</div>
+                    </div>
+                </div>
             </div>
         </header>
-
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="dashboard-search" placeholder="Keressen a modulok között...">
-        </div>
 
         <main class="container py-4">
             <main class="dashboard-content fade-in">
@@ -91,7 +114,7 @@
                         </a>
                         <a href="modules/tools/notes.html" class="feature-card">
                             <i class="fas fa-sticky-note" style="color:#ffee58;"></i>
-                            <h5>Feljegyzés</h5>
+                            <h5>Gyors Feljegyzés</h5>
                         </a>
                     </div>
                 </div>
@@ -201,7 +224,7 @@
 
             <footer
                 style="text-align: center; padding: 3rem 2rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color); margin-top: 2rem;">
-                © 2024-2025 Irodai Asszisztens | V3.13.1 | Minden jog fenntartva.
+                © 2024-2025 Irodai Asszisztens | V3.16 | Minden jog fenntartva.
             </footer>
     </div>
 
