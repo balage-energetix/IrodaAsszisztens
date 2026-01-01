@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atádi Hírek - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .news-card {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .article-summary {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .article-summary:last-child {
+            border: none;
+        }
+
+        .article-summary h3 {
+            font-family: 'Outfit';
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-box {
+            background: rgba(67, 97, 238, 0.05);
+            border-left: 5px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 1rem 1rem 0;
+        }
+
+        .date-tag {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                    class="fas fa-newspaper text-primary me-2"></i>Atádi Hírek (Összefoglaló)</h2>
+            <a href="../../index.html" class="btn btn-outline-primary rounded-pill"><i
+                    class="fas fa-home me-2"></i>Vezérlőpult</a>
+        </div>
+
+        <div class="news-card">
+            <h4 class="mb-4" style="font-family:'Outfit'; color:var(--text-muted);">Havi Összefoglaló: 2025. December
+            </h4>
+
+            <div class="article-summary">
+                <span class="date-tag">2025. DECEMBER 28.</span>
+                <h3>Ünnepi fények és rendezvények Nagyatádon</h3>
+                <p>Nagyatád városában az idén is sikeresen zajlottak az adventi programsorozatok. A kulturális központ
+                    előtti téren felállított Betlehem és a városi karácsonyfa rengeteg látogatót vonzott.</p>
+                <div class="highlight-box">
+                    <strong>Főbb momentumok:</strong> A jótékonysági forraltbor-osztás során rekordmennyiségű adomány
+                    gyűlt össze a helyi rászoruló családok javára.
+                </div>
+            </div>
+
+            <div class="article-summary">
+                <span class="date-tag">2025. DECEMBER 20.</span>
+                <h3>Fejlesztések a városi infrastruktúrában</h3>
+                <p>Lezárult a legutóbbi útfelújítási szakasz a belvárosban. Az új aszfaltréteg mellett korszerűsítették
+                    a csapadékvíz-elvezető rendszert is, ami jelentősen javítja a közlekedésbiztonságot.</p>
+                <div class="highlight-box">
+                    <strong>Eredmény:</strong> Közel 1.5 kilométernyi útszakasz újult meg, tehermentesítve a
+                    mellékutcákat a megnövekedett forgalomtól.
+                </div>
+            </div>
+
+            <div class="article-summary">
+                <span class="date-tag">2025. DECEMBER 12.</span>
+                <h3>Sikeres sportév Nagyatádon</h3>
+                <p>Az évzáró sportgálán díjazták a város legeredményesebb sportolóit. Külön kiemelték a triatlonosok és
+                    a kézilabdázók rendkívüli teljesítményét az országos bajnokságokon.</p>
+                <div class="highlight-box">
+                    <strong>Várakozások:</strong> A 2026-os ExtremeMan versenyre már most rekordszámú nevezés érkezett,
+                    ami nemzetközi szinten is erősíti a város hírnevét.
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; color:var(--text-muted); font-size:0.8rem;">
+            <i class="fas fa-info-circle me-1"></i> Forrás: atadhir.hu alapján készített összefoglaló
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

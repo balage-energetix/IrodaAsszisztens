@@ -20,8 +20,16 @@ const App = {
         this.injectGlobalNav();
         this.initSearch();
         this.initHeaderBgRotation();
+        this.initWaveDirectionSwitcher();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.15 initialized");
+        console.log("Irodai Asszisztens V3.18 initialized");
+    },
+
+    // --- Wave Direction Switcher ---
+    initWaveDirectionSwitcher() {
+        setInterval(() => {
+            document.body.classList.toggle('waves-reverse');
+        }, 20000);
     },
 
     // --- Dynamic Header Background ---
@@ -40,7 +48,12 @@ const App = {
 
         const changeBg = () => {
             const randomImg = droneImages[Math.floor(Math.random() * droneImages.length)];
-            const relativePath = App.state.isModule ? '../../' : '';
+            const isModule = window.location.pathname.includes('/modules/');
+            const isDeepModule = (window.location.pathname.match(/\//g) || []).length > 2;
+            let relativePath = '';
+            if (isDeepModule) relativePath = '../../';
+            else if (isModule) relativePath = '../';
+
             bgLayer.style.opacity = '0';
             setTimeout(() => {
                 bgLayer.innerHTML = `<img src="${relativePath}${randomImg}" alt="Header background">`;
@@ -87,7 +100,9 @@ const App = {
                 </div>
                 <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item">Közigazgatási Alapismeretek</a>
+                        <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item">Atádi Hírek</a>
+                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item">Helyi Időjárás</a>
+                        <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item">Közig. Alapismeretek</a>
                         <a href="${p}modules/lean/index.html" class="nav-dropdown-item">Billentyűkombinációk</a>
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item">Irodai Lean</a>
                         <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item">Telefonkönyv</a>

@@ -36,36 +36,13 @@
             </a>
             <div class="header-info">
                 <!-- Data injected by main.js -->
-                <div class="search-wrap mb-4">
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                        <input type="text" id="dashboard-search" class="form-control"
-                            placeholder="Keresés a modulok között...">
-                    </div>
-                </div>
-
-                <!-- Hírek & Frissítések Mező -->
-                <div class="news-container fade-in">
-                    <h5 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1rem;"><i
-                            class="fas fa-newspaper text-primary me-2"></i> Hírek & Frissítések</h5>
-                    <div class="news-item">
-                        <span class="news-tag" style="background: #e3f2fd; color: #1976d2;">Rendszer</span>
-                        <div class="news-text">Megérkezett a <strong>V3.15</strong>-ös frissítés! Új látványelemek és
-                            bővített modulok.</div>
-                    </div>
-                    <div class="news-item">
-                        <span class="news-tag" style="background: #f1f8e9; color: #388e3c;">Új Adat</span>
-                        <div class="news-text">Az Időjárás Napló mostantól 24 órás nagyatádi automata adatokat is mutat.
-                        </div>
-                    </div>
-                    <div class="news-item">
-                        <span class="news-tag" style="background: #fff3e0; color: #f57c00;">Info</span>
-                        <div class="news-text">A Tőzsdei Árak modulban rögzítettük az elszámoláshoz használt 410 Ft/EUR
-                            árfolyamot.</div>
-                    </div>
-                </div>
             </div>
         </header>
+
+        <div class="search-container fade-in" style="max-width: 600px; margin-inline: auto; margin-bottom: 2.5rem;">
+            <i class="fas fa-search"></i>
+            <input type="text" id="dashboard-search" placeholder="Keressen a modulok között...">
+        </div>
 
         <main class="container py-4">
             <main class="dashboard-content fade-in">
@@ -160,42 +137,47 @@
                 <div class="category-group cat-info">
                     <div class="group-title"><i class="fas fa-info-circle"></i> Információk & Lean</div>
                     <div class="dashboard-grid">
-                        <a href="modules/info/public_admin.html" class="feature-card">
-                            <i class="fas fa-university" style="color:#e67e22;"></i>
-                            <h5>Közigazgatási Alapismeretek</h5>
+                        <a href="modules/info/atadhir.html" class="feature-card">
+                            <i class="fas fa-newspaper" style="color:#e91e63;"></i>
+                            <h5>Atádi Hírek</h5>
                         </a>
-                        <a href="modules/lean/index.html" class="feature-card">
-                            <i class="fas fa-keyboard" style="color:#5c6bc0;"></i>
-                            <h5>Billentyűkombinációk</h5>
-                        </a>
-                        <a href="modules/tools/lean_office.html" class="feature-card">
-                            <i class="fas fa-graduation-cap" style="color:#26a69a;"></i>
-                            <h5>Irodai Lean</h5>
-                        </a>
-                        <a href="modules/phonebook/index.html" class="feature-card">
-                            <i class="fas fa-address-book" style="color:#8d6e63;"></i>
-                            <h5>Telefonkönyv</h5>
-                        </a>
-                        <a href="modules/links/index.html" class="feature-card">
-                            <i class="fas fa-link" style="color:#42a5f5;"></i>
-                            <h5>Linkgyűjtemény</h5>
-                        </a>
-                        <a href="modules/tools/videolibrary.html" class="feature-card">
-                            <i class="fas fa-play-circle" style="color:#e74c3c;"></i>
-                            <h5>Videótár</h5>
-                        </a>
-                        <a href="modules/tools/efficiency.html" class="feature-card">
-                            <i class="fas fa-bolt" style="color:#f1c40f;"></i>
-                            <h5>Hatékonyság Javítás</h5>
-                        </a>
-                        <a href="modules/gallery/index.html" class="feature-card">
-                            <i class="fas fa-images" style="color:#9b59b6;"></i>
-                            <h5>Vizualizáció</h5>
-                        </a>
-                        <a href="modules/tools/weather_log.html" class="feature-card">
-                            <i class="fas fa-cloud-sun" style="color:#3498db;"></i>
-                            <h5>Időjárás Napló</h5>
-                        </a>
+                        <a href="modules/info/local_weather.html" class="feature-card">
+                            <a href="modules/info/public_admin.html" class="feature-card">
+                                <i class="fas fa-university" style="color:#e67e22;"></i>
+                                <h5>Közigazgatási Alapismeretek</h5>
+                            </a>
+                            <a href="modules/lean/index.html" class="feature-card">
+                                <i class="fas fa-keyboard" style="color:#5c6bc0;"></i>
+                                <h5>Billentyűkombinációk</h5>
+                            </a>
+                            <a href="modules/tools/lean_office.html" class="feature-card">
+                                <i class="fas fa-graduation-cap" style="color:#26a69a;"></i>
+                                <h5>Irodai Lean</h5>
+                            </a>
+                            <a href="modules/phonebook/index.html" class="feature-card">
+                                <i class="fas fa-address-book" style="color:#8d6e63;"></i>
+                                <h5>Telefonkönyv</h5>
+                            </a>
+                            <a href="modules/links/index.html" class="feature-card">
+                                <i class="fas fa-link" style="color:#42a5f5;"></i>
+                                <h5>Linkgyűjtemény</h5>
+                            </a>
+                            <a href="modules/tools/videolibrary.html" class="feature-card">
+                                <i class="fas fa-play-circle" style="color:#e74c3c;"></i>
+                                <h5>Videótár</h5>
+                            </a>
+                            <a href="modules/tools/efficiency.html" class="feature-card">
+                                <i class="fas fa-bolt" style="color:#f1c40f;"></i>
+                                <h5>Hatékonyság Javítás</h5>
+                            </a>
+                            <a href="modules/gallery/index.html" class="feature-card">
+                                <i class="fas fa-images" style="color:#9b59b6;"></i>
+                                <h5>Vizualizáció</h5>
+                            </a>
+                            <a href="modules/tools/weather_log.html" class="feature-card">
+                                <i class="fas fa-cloud-sun" style="color:#3498db;"></i>
+                                <h5>Időjárás Napló</h5>
+                            </a>
                     </div>
                 </div>
 
@@ -222,9 +204,23 @@
                 </div>
             </main>
 
+            <!-- Hírek & Frissítések az oldal alján -->
+            <div class="news-container fade-in" style="max-width: 500px; margin-inline: auto; margin-top: 4rem;">
+                <div class="news-item">
+                    <span class="news-tag" style="background: #e3f2fd; color: #1976d2; font-size: 0.7rem;">Hír</span>
+                    <div class="news-text" style="font-size: 0.8rem;">V3.19: Atádi Hírek modul és javított
+                        modul-fejlécek.</div>
+                </div>
+                <div class="news-item">
+                    <span class="news-tag" style="background: #f1f8e9; color: #388e3c; font-size: 0.7rem;">Infó</span>
+                    <div class="news-text" style="font-size: 0.8rem;">A hírek mező az olvashatóság érdekében az oldal
+                        aljára került.</div>
+                </div>
+            </div>
+
             <footer
                 style="text-align: center; padding: 3rem 2rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color); margin-top: 2rem;">
-                © 2024-2025 Irodai Asszisztens | V3.16 | Minden jog fenntartva.
+                © 2024-2025 Irodai Asszisztens | V3.19 | Minden jog fenntartva.
             </footer>
     </div>
 

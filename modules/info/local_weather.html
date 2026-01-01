@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helyi Időjárás - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .radar-card {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .radar-frame {
+            width: 100%;
+            height: 500px;
+            border-radius: 1rem;
+            border: none;
+        }
+
+        .weather-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                    class="fas fa-temperature-high text-primary me-2"></i>Helyi Időjárás (Nagyatád)</h2>
+            <a href="../../index.html" class="btn btn-outline-primary rounded-pill"><i
+                    class="fas fa-home me-2"></i>Vezérlőpult</a>
+        </div>
+
+        <div class="weather-stats" style="max-width: 900px; margin-inline: auto; margin-top: 4rem;">
+            <div class="stat-card">
+                <i class="fas fa-thermometer-half fa-2x text-danger"></i>
+                <div class="stat-value">22°C</div>
+                <div class="stat-label">Hőmérséklet</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-wind fa-2x text-info"></i>
+                <div class="stat-value">14 km/h</div>
+                <div class="stat-label">Szélsebesség</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-tint fa-2x text-primary"></i>
+                <div class="stat-value">65%</div>
+                <div class="stat-label">Páratartalom</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-compress-arrows-alt fa-2x text-success"></i>
+                <div class="stat-value">1012 hPa</div>
+                <div class="stat-label">Légnyomás</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>
