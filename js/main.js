@@ -22,7 +22,7 @@ const App = {
         this.initHeaderBgRotation();
         this.initWaveDirectionSwitcher();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.31 initialized");
+        console.log("Irodai Asszisztens V3.33 initialized");
     },
 
     // --- Wave Direction Switcher ---
@@ -87,8 +87,9 @@ const App = {
         const isAdmin = authTier === 'admin';
 
         const navHtml = `
+            <button class="menu-toggle" onclick="App.toggleMobileMenu()"><i class="fas fa-bars"></i></button>
             <nav class="app-nav">
-                <div class="nav-cat">FELADATOK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt"></i> Térkép</a>
                         <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb"></i> Közvilágítás</a>
@@ -128,23 +129,24 @@ const App = {
             </nav>
         `;
 
-        // Remove old nav if exists
+        // Remove old bits
         const oldNav = header.querySelector('.app-nav');
         if (oldNav) oldNav.remove();
+        const oldToggle = header.querySelector('.menu-toggle');
+        if (oldToggle) oldToggle.remove();
 
-        // Inject nav after logo or before infoArea
         const infoArea = header.querySelector('.header-info');
         if (infoArea) {
             header.insertBefore(document.createRange().createContextualFragment(navHtml), infoArea);
 
-            // Restore horizontal weather + toggle
+            // Restore/Update infoArea content
             infoArea.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 1.5rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem; border-right: 1px solid var(--border-color); padding-right: 1.5rem; margin-right: 0.5rem;">
+                <div class="info-wrapper" style="display: flex; align-items: center; gap: 1.5rem;">
+                    <div class="weather-clock-group" style="display: flex; align-items: center; gap: 1rem; border-right: 1px solid var(--border-color); padding-right: 1.5rem; margin-right: 0.5rem;">
                         <div id="header-weather" style="text-align: right; line-height: 1.2; font-size: 0.85rem; font-weight: 600;"></div>
                         <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--primary); font-weight: 700;"></div>
                     </div>
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
+                    <div class="header-actions" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
                         <button onclick="App.logout()" class="logout-btn" title="Kijelentkezés">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
@@ -427,6 +429,11 @@ const App = {
     logout() {
         sessionStorage.clear();
         location.reload();
+    },
+
+    toggleMobileMenu() {
+        const nav = document.querySelector('.app-nav');
+        if (nav) nav.classList.toggle('active');
     }
 };
 

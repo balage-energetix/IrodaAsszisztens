@@ -773,3 +773,21 @@ h6 {
 .logout-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
 .logout-btn:hover { color: var(--primary); transform: scale(1.1); }
 .custom-modal-overlay { position: fixed; inset: 0; background: rgba(0, 30, 60, 0.4); backdrop-filter: blur(8px); z-index: 3000; display: flex; align-items: center; justify-content: center; } .custom-modal-content { background: var(--bg-card); padding: 2.5rem; border-radius: 2rem; width: 90%; max-width: 450px; border: 1px solid var(--border-color); text-align: center; } .custom-modal-content h3 { margin-bottom: 2rem; font-family: var(--font-title); font-weight: 800; color: var(--primary); text-transform: uppercase; } .custom-modal-content input { width: 100%; padding: 1.25rem; border-radius: 1rem; border: 2px solid var(--border-color); background: var(--bg-creamy); font-size: 1.1rem; margin-bottom: 2rem; font-family: var(--font-main); outline: none; transition: 0.2s; } .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; } .modal-btn { padding: 1rem; border-radius: 1rem; border: none; font-weight: 800; cursor: pointer; transition: 0.2s; font-family: var(--font-title); text-transform: uppercase; } .modal-btn.primary { background: var(--primary); color: white; } .modal-btn.secondary { background: var(--bg-creamy); color: var(--text-muted); }
+
+.section-title { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 1.25rem 0; width: 100%; color: var(--primary); text-align: center; font-size: 1.4rem; }
+
+/* Mobile Responsiveness */
+@media (max-width: 992px) {
+    .app-header { display: flex; justify-content: space-between; padding: 0 1.5rem; height: auto; padding-top: 1rem; padding-bottom: 1rem; }
+    .header-info { display: none; }
+    .app-nav { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-card); flex-direction: column; padding: 1rem 0; border-bottom: 1px solid var(--border-color); box-shadow: 0 10px 20px rgba(0,0,0,0.1); z-index: 1000; }
+    .app-nav.active { display: flex; }
+    .nav-cat { width: 100%; padding: 1rem 1.5rem; justify-content: space-between; border-bottom: 1px solid var(--border-color); }
+    .nav-cat-dropdown { position: static; width: 100%; box-shadow: none; border-radius: 0; padding-left: 1rem; display: none; }
+    .nav-cat.active .nav-cat-dropdown { display: block; }
+    .menu-toggle { display: block !important; background: none; border: none; font-size: 1.5rem; color: var(--text-main); cursor: pointer; }
+}
+
+.container, .container-fluid { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+.menu-toggle { display: none; }
+

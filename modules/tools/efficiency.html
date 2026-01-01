@@ -77,41 +77,47 @@
                 <div class="method-card">
                     <h3 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1.5rem;"><i
                             class="fas fa-layer-group text-primary me-2"></i>Eisenhower-mátrix</h3>
-                    <p>A feladatok osztályozása fontosság és sürgősség alapján:</p>
-                    <ul class="list-group list-group-flush" style="background: transparent;">
-                        <li class="list-group-item"
-                            style="background: transparent; border-color: var(--border-color); color: var(--text-main);">
-                            <span class="badge bg-danger me-2">Sürgős & Fontos</span> Azonnali cselekvés (tűzoltás).
-                        </li>
-                        <li class="list-group-item"
-                            style="background: transparent; border-color: var(--border-color); color: var(--text-main);">
-                            <span class="badge bg-primary me-2">Nem Sürgős & Fontos</span> Tervezés, stratégiai munka.
-                            Ebbe kell a legtöbb időt fektetni.
-                        </li>
-                        <li class="list-group-item"
-                            style="background: transparent; border-color: var(--border-color); color: var(--text-main);">
-                            <span class="badge bg-warning text-dark me-2">Sürgős & Nem Fontos</span> Delegálás.
-                            Megszakítások, meetingek.
-                        </li>
-                        <li class="list-group-item"
-                            style="background: transparent; border-color: var(--border-color); color: var(--text-main);">
-                            <span class="badge bg-secondary me-2">Nem Sürgős & Nem Fontos</span> Eliminálás. Időrabló
-                            tevékenységek.
-                        </li>
-                    </ul>
+
+                    <!-- Mátrix Vizualizáció -->
+                    <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; background: var(--border-color); padding: 5px; border-radius: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: #ffebee; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <div style="font-weight: 800; color: #c62828; font-size: 0.7rem;">SÜRGŐS & FONTOS</div>
+                            <div style="font-size: 0.8rem; font-weight: 700;">TEDD MEG MOST</div>
+                        </div>
+                        <div style="background: #e3f2fd; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <div style="font-weight: 800; color: #1565c0; font-size: 0.7rem;">NEM SÜRGŐS & FONTOS</div>
+                            <div style="font-size: 0.8rem; font-weight: 700;">ÜTEMEZZED BE</div>
+                        </div>
+                        <div style="background: #fff3e0; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <div style="font-weight: 800; color: #ef6c00; font-size: 0.7rem;">SÜRGŐS & NEM FONTOS</div>
+                            <div style="font-size: 0.8rem; font-weight: 700;">DELEGÁLD</div>
+                        </div>
+                        <div style="background: #f5f5f5; padding: 1rem; border-radius: 0.5rem; text-align: center;">
+                            <div style="font-weight: 800; color: #616161; font-size: 0.7rem;">NEM SÜRGŐS & NEM FONTOS
+                            </div>
+                            <div style="font-size: 0.8rem; font-weight: 700;">HAGYD EL</div>
+                        </div>
+                    </div>
+
+                    <p>A feladatok osztályozása fontosság és sürgősség alapján segít a fókusz megtartásában és a kiégés
+                        megelőzésében. A legtöbb időt a <strong>kék (stratégiai)</strong> negyedben kellene töltenünk.
+                    </p>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="method-card">
+                <div class="method-card" style="border-right: 5px solid var(--accent);">
                     <h3 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1.5rem;"><i
-                            class="fas fa-clock text-primary me-2"></i>A 2-perces szabály</h3>
-                    <p>David Allen (Getting Things Done) egyik legerősebb módszere:</p>
-                    <div class="p-3 mb-3"
-                        style="background: var(--bg-light); border-radius: 1rem; border-left: 5px solid var(--primary);">
-                        <em>"Ha egy feladat elvégezhető kevesebb mint két perc alatt, ne halogasd, ne írd fel a listára,
-                            hanem végezd el azonnal!"</em>
+                            class="fas fa-brain text-accent me-2"></i>Deep Work (Mély munka)</h3>
+                    <p>Cal Newport koncepciója szerint a zavartalan, magas koncentrációt igénylő munka az egyetlen módja
+                        a komplex értékteremtésnek.</p>
+                    <div class="p-3 mb-3" style="background: var(--bg-light); border-radius: 1rem;">
+                        <ul style="padding-left: 1.25rem; font-size: 0.9rem;">
+                            <li>Nincs multitasking (e-mailek, telefon).</li>
+                            <li>Minimum 90 perces blokkok.</li>
+                            <li>Kognitív képességek határainak feszegetése.</li>
+                        </ul>
                     </div>
-                    <p>Ez megelőzi a mikrotaszkok felhalmozódását és a mentális clutter kialakulását.</p>
                 </div>
             </div>
         </div>
@@ -121,24 +127,21 @@
                 <div class="method-card">
                     <h3 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1.5rem;"><i
                             class="fas fa-stopwatch text-primary me-2"></i>Pomodoro Technika</h3>
-                    <p>A fókuszált munkavégzés klasszikus módszere:</p>
-                    <ol class="list-group list-group-numbered" style="background: transparent;">
-                        <li class="list-group-item"
-                            style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
-                            Válasszon ki egyetlen feladatot.</li>
-                        <li class="list-group-item"
-                            style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
-                            Állítson be egy időzítőt <strong>25 percre</strong> (egy "Pomodoro").</li>
-                        <li class="list-group-item"
-                            style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
-                            Dolgozzon megállás nélkül, amíg az óra le nem jár.</li>
-                        <li class="list-group-item"
-                            style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
-                            Tartson <strong>5 perc</strong> rövid szünetet.</li>
-                        <li class="list-group-item"
-                            style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
-                            Minden 4. ciklus után tartson egy hosszabb, <strong>15-30 perces</strong> szünetet.</li>
-                    </ol>
+                    <p>A fókuszált munkavégzés klasszikus módszere. Segít leküzdeni a halogatást azáltal, hogy a nagy
+                        feladatokat emészthető, 25 perces szakaszokra bontja:</p>
+                    <div style="display: flex; justify-content: space-around; align-items: center; margin: 1.5rem 0;">
+                        <div style="text-align: center;"><i class="fas fa-brain fa-2x text-primary"></i>
+                            <div style="font-size:0.7rem; font-weight:800;">25' FÓKUSZ</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                        <div style="text-align: center;"><i class="fas fa-mug-hot fa-2x text-success"></i>
+                            <div style="font-size:0.7rem; font-weight:800;">5' SZÜNET</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-muted"></i>
+                        <div style="text-align: center;"><i class="fas fa-rotate fa-2x text-primary"></i>
+                            <div style="font-size:0.7rem; font-weight:800;">4x ISMÉTLÉS</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -150,15 +153,18 @@
                         <li class="list-group-item"
                             style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
                             <i class="fas fa-bell-slash me-2 text-muted"></i> <strong>Hard Audit:</strong> Minden
-                            felesleges push-értesítés kikapcsolása.</li>
+                            felesleges push-értesítés kikapcsolása.
+                        </li>
                         <li class="list-group-item"
                             style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
                             <i class="fas fa-hourglass-start me-2 text-muted"></i> <strong>Időkeret:</strong> Napi fix
-                            időpontok az e-mailek és hírek checkingjére.</li>
+                            időpontok az e-mailek és hírek checkingjére.
+                        </li>
                         <li class="list-group-item"
                             style="background: transparent; color: var(--text-main); border-color: var(--border-color);">
                             <i class="fas fa-moon me-2 text-muted"></i> <strong>Offline zónák:</strong> Meetingek és
-                            ebédidő alatt a telefon elrakása.</li>
+                            ebédidő alatt a telefon elrakása.
+                        </li>
                     </ul>
                 </div>
             </div>
