@@ -605,6 +605,11 @@ h6 {
 [data-theme="dark"] .feature-card {
     background: rgba(30, 30, 30, 0.6) !important;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #000000 !important;
+}
+
+[data-theme="dark"] .feature-card h5 {
+    color: #000000 !important;
 }
 
 .feature-card:hover {
@@ -1017,33 +1022,75 @@ h6 {
     }
 
     .header-info {
+        display: flex !important;
+        order: 2;
+        padding: 0;
+        margin: 0;
+        flex: 1;
+        justify-content: center;
+        border: none;
+    }
+
+    .info-wrapper {
+        gap: 0.5rem !important;
+    }
+
+    .weather-clock-group {
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        flex-direction: column;
+        gap: 0 !important;
+        align-items: center !important;
+    }
+
+    #header-weather,
+    #global-clock {
+        text-align: center !important;
+    }
+
+    #header-weather {
+        font-size: 0.6rem !important;
+    }
+
+    #global-clock .clock-time {
+        font-size: 0.75rem !important;
+    }
+
+    #global-clock .clock-date {
+        display: none;
+    }
+
+    .header-actions {
         display: none !important;
     }
 
-    .logo span {
-        font-size: 0.65rem;
-        /* Even smaller for very small screens */
+    .logo {
+        order: 1;
     }
 
     .menu-toggle {
-        display: block !important;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: var(--text-main);
-        cursor: pointer;
-        padding: 0.5rem;
-        margin-right: -0.5rem;
+        order: 3;
     }
 
     .dashboard-grid {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 0.75rem;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem !important;
     }
 
     .feature-card {
         width: 100% !important;
-        min-height: 100px;
+        min-height: 90px !important;
+        padding: 0.5rem !important;
+    }
+
+    .feature-card h5 {
+        font-size: 0.75rem !important;
+    }
+
+    .feature-card i {
+        font-size: 1.2rem !important;
     }
 }
 

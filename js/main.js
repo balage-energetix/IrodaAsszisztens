@@ -186,9 +186,9 @@ const App = {
         // Click-to-open logic for Dropdowns
         document.querySelectorAll('.nav-cat').forEach(cat => {
             cat.addEventListener('click', (e) => {
-                // If the click is on a link inside the dropdown, do NOT toggle parent
-                if (e.target.closest('.nav-cat-dropdown')) return;
+                if (e.target.closest('.nav-dropdown-item')) return;
 
+                e.preventDefault();
                 e.stopPropagation();
                 const isActive = cat.classList.contains('active');
                 document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
@@ -197,8 +197,10 @@ const App = {
         });
 
         // Close when clicking outside
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.nav-cat')) {
+                document.querySelectorAll('.nav-cat').forEach(c => c.classList.remove('active'));
+            }
         });
 
         // Inject standardized back button in modules sub-header
