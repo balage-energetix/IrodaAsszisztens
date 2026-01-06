@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Közmű Szünetek - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .outage-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .outage-item {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            border-left: 8px solid #eee;
+        }
+
+        .outage-item.water {
+            border-left-color: #2196f3;
+        }
+
+        .outage-item.power {
+            border-left-color: #fbc02d;
+        }
+
+        .outage-item.gas {
+            border-left-color: #f44336;
+        }
+
+        .outage-icon {
+            font-size: 2.5rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .outage-details h4 {
+            margin: 0 0 0.5rem 0;
+            font-family: 'Outfit';
+        }
+
+        .outage-time {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .city-tag {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-plug-circle-exclamation"
+                style="color:var(--accent);"></i><span>Irodai Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                    class="fas fa-bullhorn text-warning me-2"></i>Közmű szolgáltatási szünetek</h2>
+        </div>
+
+        <div class="alert alert-info border-0 shadow-sm mb-5" style="border-radius: 1rem; background: var(--bg-light);">
+            <i class="fas fa-info-circle me-2"></i> Aktuális karbantartási és szolgáltatási szünet értesítések
+            <strong>Nagyatád</strong> területén.
+        </div>
+
+        <div class="outage-list">
+            <!-- DRV -->
+            <div class="outage-item water">
+                <div class="outage-icon"><i class="fas fa-faucet text-primary"></i></div>
+                <div class="outage-details">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="city-tag">DRV Zrt.</span>
+                        <span class="outage-time">2026. JANUÁR 12. | 08:00 - 14:00</span>
+                    </div>
+                    <h4>Vízvezeték hálózat öblítés</h4>
+                    <p class="text-muted m-0">Nagyatád egész területén nyomáscsökkenés és vízzavarosodás várható
+                        karbantartási munkálatok miatt.</p>
+                </div>
+            </div>
+
+            <!-- E.ON Áram -->
+            <div class="outage-item power">
+                <div class="outage-icon"><i class="fas fa-bolt text-warning"></i></div>
+                <div class="outage-details">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="city-tag">E.ON Áram</span>
+                        <span class="outage-time">2026. FEBRUÁR 05. | 09:00 - 15:00</span>
+                    </div>
+                    <h4>Tervezett hálózatfejlesztés</h4>
+                    <p class="text-muted m-0">Érintett terület: Szent István park és környéke. A munkálatok idején az
+                        áramszolgáltatás szünetel.</p>
+                </div>
+            </div>
+
+            <!-- E.ON Gáz -->
+            <div class="outage-item gas">
+                <div class="outage-icon"><i class="fas fa-fire text-danger"></i></div>
+                <div class="outage-details">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="city-tag">E.ON Gáz</span>
+                        <span class="outage-time">Jelenleg nincs aktív szünet</span>
+                    </div>
+                    <h4>Gázhálózat biztonsági ellenőrzés</h4>
+                    <p class="text-muted m-0">Nincs bejelentett üzemszünet Nagyatád területén.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 p-4 text-center" style="background: rgba(0,0,0,0.02); border-radius: 1.5rem;">
+            <p class="small text-muted mb-0">Az adatok tájékoztató jellegűek. Pontos információkért látogassa meg a
+                szolgáltatók hivatalos weboldalait.</p>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

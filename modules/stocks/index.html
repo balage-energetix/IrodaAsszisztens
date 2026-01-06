@@ -81,6 +81,7 @@
                                 <th style="padding:0.5rem;">EUR/MWh</th>
                                 <th style="padding:0.5rem; background:rgba(92, 107, 192, 0.1);">Ft/kWh*</th>
                                 <th style="padding:0.5rem; background:rgba(239, 83, 80, 0.1);">Ft/MJ</th>
+                                <th style="padding:0.5rem; background:rgba(255, 152, 0, 0.1);">E2 (Ft/MJ)</th>
                             </tr>
                         </thead>
                         <tbody id="h-table-body"></tbody>
@@ -100,6 +101,7 @@
                                 <th style="padding:0.5rem;">Nap</th>
                                 <th style="padding:0.5rem;">EUR/MWh</th>
                                 <th style="padding:0.5rem; background:rgba(38, 166, 154, 0.1);">Ft/kWh*</th>
+                                <th style="padding:0.5rem; background:rgba(255, 152, 0, 0.1);">E2 (Ft/kWh)</th>
                             </tr>
                         </thead>
                         <tbody id="e-table-body"></tbody>
@@ -164,22 +166,37 @@
         const eurRate = 410;
         const hPricesFt = hPricesEUR.map(p => (p * eurRate / 1000).toFixed(2));
         const hPricesMJ = hPricesFt.map(p => (p / 3.6).toFixed(4));
+        const hPricesE2MJ = hPricesEUR.map(p => ((p + 20) * eurRate / 3600).toFixed(4));
 
         const ctxH = document.getElementById('h-chart').getContext('2d');
         new Chart(ctxH, {
             type: 'line',
             data: {
                 labels: hLabels,
-                datasets: [{
-                    label: 'Gázár (Ft/MJ)',
-                    data: hPricesMJ,
-                    borderColor: '#ef5350',
-                    fill: true,
-                    backgroundColor: 'rgba(239, 83, 80, 0.1)',
-                    tension: 0.3
-                }]
+                datasets: [
+                    {
+                        label: 'Piaci ár (Ft/MJ)',
+                        data: hPricesMJ,
+                        borderColor: '#ef5350',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'E2 tarifa (+20 EUR/MWh)',
+                        data: hPricesE2MJ,
+                        borderColor: '#ff9800',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.3
+                    }
+                ]
             },
-            options: { maintainAspectRatio: false }
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
         });
 
         // Fill Gas Table
@@ -189,28 +206,44 @@
             row.innerHTML = `<td style="padding:0.5rem;">${label}</td>
                              <td style="padding:0.5rem;">${hPricesEUR[i]}</td>
                              <td style="padding:0.5rem; font-weight:700; color:#5c6bc0;">${hPricesFt[i]}</td>
-                             <td style="padding:0.5rem; font-weight:700; color:#ef5350;">${hPricesMJ[i]}</td>`;
+                             <td style="padding:0.5rem; font-weight:700; color:#ef5350;">${hPricesMJ[i]}</td>
+                             <td style="padding:0.5rem; font-weight:700; color:#ff9800;">${hPricesE2MJ[i]}</td>`;
         });
 
         const ctxE = document.getElementById('e-chart').getContext('2d');
         const labelsE = Array.from({ length: 30 }, (_, i) => `${i + 1}. nap`);
         const dataE_EUR = Array.from({ length: 30 }, () => (70 + Math.random() * 50).toFixed(2));
         const dataE_Ft = dataE_EUR.map(p => (p * eurRate / 1000).toFixed(2));
+        const dataE_E2Ft = dataE_EUR.map(p => ((parseFloat(p) + 20) * eurRate / 1000).toFixed(2));
 
         new Chart(ctxE, {
             type: 'line',
             data: {
                 labels: labelsE,
-                datasets: [{
-                    label: 'Áramár (Ft/kWh)',
-                    data: dataE_Ft,
-                    borderColor: '#26a69a',
-                    backgroundColor: 'rgba(38, 166, 154, 0.1)',
-                    fill: true,
-                    tension: 0.3
-                }]
+                datasets: [
+                    {
+                        label: 'Piaci ár (Ft/kWh)',
+                        data: dataE_Ft,
+                        borderColor: '#26a69a',
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'E2 tarifa (+20 EUR/MWh)',
+                        data: dataE_E2Ft,
+                        borderColor: '#ff9800',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.3
+                    }
+                ]
             },
-            options: { maintainAspectRatio: false }
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: false }
+                }
+            }
         });
 
         // Fill Power Table
@@ -219,7 +252,8 @@
             const row = eTable.insertRow();
             row.innerHTML = `<td style="padding:0.5rem;">${label}</td>
                              <td style="padding:0.5rem;">${dataE_EUR[i]}</td>
-                             <td style="padding:0.5rem; font-weight:700; color:#26a69a;">${dataE_Ft[i]}</td>`;
+                             <td style="padding:0.5rem; font-weight:700; color:#26a69a;">${dataE_Ft[i]}</td>
+                             <td style="padding:0.5rem; font-weight:700; color:#ff9800;">${dataE_E2Ft[i]}</td>`;
         });
     </script>
 </body>

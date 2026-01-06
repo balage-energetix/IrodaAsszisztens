@@ -65,17 +65,33 @@
         }
 
         .export-btn {
-            background: var(--warning);
-            color: #000;
+            background: var(--primary);
+            color: #fff !important;
             font-weight: 800;
             border: none;
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             transition: var(--transition);
+            box-shadow: 0 4px 0 var(--primary-dark);
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--primary-dark);
+        }
+
+        .export-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 var(--primary-dark);
+        }
+
+        [data-theme="dark"] .export-btn {
+            background: var(--primary);
+            color: #fff !important;
         }
     </style>
 </head>
@@ -128,10 +144,34 @@
     <script src="../../js/main.js"></script>
     <script>
         const tasks = {
-            daily: ["Fűtésellenőrzés", "Közvil. hibajelentések"],
-            weekly: ["Heti fűtési adatok"],
-            monthly: ["Bérlői elszámolás", "Üzemeltetési díjak"],
-            yearly: ["Tűzoltókészülék vizsga", "Fűtés szezonindítás"]
+            daily: [
+                "Fűtésellenőrzés 5 intézménynél (szezonális)",
+                "Közműcsatlakozási kérelmek eljárása",
+                "Távleolvasási mérési adatok felügyelete",
+                "Közvilágítási hibák jelzése"
+            ],
+            weekly: [
+                "Fűtési intervallumok felülvizsgálata (szezonális)",
+                "Napelemek távfelügyeleti ellenőrzése",
+                "E-közmű rendszer kérelmek ellenőrzése"
+            ],
+            monthly: [
+                "Két ülés közti jelentés leadása",
+                "Közvilágítási hibaelhárítás ellenőrzése",
+                "Bérlői elszámolások készítése, továbbszámlázások",
+                "Üzemeltetési díjak igazolása (Lunag, Gejzír)",
+                "E2 Intermet felületén végzendő diktálások",
+                "Közüzemi számlák igazolása, fogyasztási mennyiség ellenőrzése"
+            ],
+            yearly: [
+                "Extrememen molinók felszereltetése (augusztus)",
+                "Tűzoltókészülékek éves ellenőrzése",
+                "Érintésvédelmi felülvizsgálati jegyzőkönyvek",
+                "EMIT éves megtakarítási jelentések összeállítása és feltöltése",
+                "Techem távhő hőmennyiségmérők leolvasása (tavasz - 8.sz. épület)",
+                "70 kW feletti rendszerek energetikai felülvizsgálati jelentésének benyújtatása",
+                "Geowatt hőszivattyúk éves garanciális szervizének megrendelése, felügyelete"
+            ]
         };
 
         function render() {

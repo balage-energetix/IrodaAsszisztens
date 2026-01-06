@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geotermális Fűtés - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .info-card {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .thermal-icon {
+            font-size: 3rem;
+            color: #ff5722;
+            margin-bottom: 1.5rem;
+        }
+
+        .principle-box {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border-left: 5px solid var(--primary);
+            margin-top: 1.5rem;
+        }
+
+        .diagram-placeholder {
+            width: 100%;
+            height: 300px;
+            background: #eee;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #aaa;
+            margin: 2rem 0;
+            border: 2px dashed #ccc;
+        }
+
+        [data-theme="dark"] .diagram-placeholder {
+            background: #222;
+            border-color: #444;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-hot-tub" style="color:var(--accent);"></i><span>Irodai
+                Asszisztens</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                    class="fas fa-fire-alt text-danger me-2"></i>Geotermális fűtési rendszer</h2>
+            <a href="../../index.html" class="back-btn"><i class="fas fa-arrow-left me-2"></i>Vissza</a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="info-card">
+                    <h4><i class="fas fa-swimming-pool me-2"></i>Gyógyfürdő hulladékhő hasznosítás</h4>
+                    <p>A geotermális energia egyik leggazdaságosabb formája a gyógyfürdők elfolyó vizének
+                        (hulladékhőnek) a hasznosítása. Nagyatád és környéke kiváló adottságokkal rendelkezik ezen a
+                        téren.</p>
+
+                    <div class="principle-box">
+                        <h5>Működési elv:</h5>
+                        <p>A fürdőzés után távozó 30-35°C-os vizet nem közvetlenül a csatornába vezetik, hanem
+                            hőcserélőkön keresztül kinyerik belőle a maradék hőt. Ez a hőenergia elegendő
+                            közintézmények, társasházak alapfűtésére vagy használati melegvíz előállítására.</p>
+                    </div>
+
+                    <h4 class="mt-4"><i class="fas fa-compress-arrows-alt me-2"></i>Hőszivattyús rendszer</h4>
+                    <p>Amennyiben a forrásvíz hőmérséklete nem elegendő a közvetlen fűtéshez, hőszivattyúkat
+                        alkalmazunk. A hőszivattyú "munkát végezve" képes az alacsonyabb hőmérsékletű közegből hőt
+                        elvonni és azt magasabb hőmérsékleten a fűtési körbe juttatni.</p>
+
+                    <ul class="mt-3">
+                        <li><strong>Környezetbarát:</strong> Nincs közvetlen károsanyag-kibocsátás.</li>
+                        <li><strong>Hatékony:</strong> 1 egység elektromos energiából 3-5 egység hőenergiát állít elő
+                            (COP érték).</li>
+                        <li><strong>Fenntartható:</strong> A földhőt és a vizet mint megújuló forrást használja.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="info-card text-center">
+                    <i class="fas fa-leaf thermal-icon"></i>
+                    <h5>Zöld Megoldás</h5>
+                    <p class="small text-muted">A geotermális rendszerek karbonlábnyoma minimális, így hosszú távú
+                        megoldást jelentenek az energiaválságra.</p>
+                    <hr>
+                    <div class="text-start">
+                        <h6>Előnyök:</h6>
+                        <div class="badge bg-success mb-1 w-100 p-2">Alacsony rezsi</div>
+                        <div class="badge bg-primary mb-1 w-100 p-2">Függetlenség</div>
+                        <div class="badge bg-orange mb-1 w-100 p-2" style="background:#ff9800;">Stabil forrás</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

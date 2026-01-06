@@ -6,7 +6,7 @@ const App = {
     state: {
         user: JSON.parse(localStorage.getItem('auth_user')),
         theme: localStorage.getItem('theme') || 'light',
-        bgColor: localStorage.getItem('bg-color') || '#fdfcf0',
+        bgColor: localStorage.getItem('bg-color') || '#f5f5f5',
         location: { lat: 46.229, lon: 17.365, name: 'Nagyatád' },
         droneIndex: 1
     },
@@ -15,24 +15,17 @@ const App = {
         this.checkLogin();
         this.applyTheme();
         this.applyBgColor();
-        this.initCursor();
         this.initClock();
         this.fetchWeather();
         this.injectGlobalNav();
         this.initSearch();
         this.initHeaderBgRotation();
-        this.initWaveDirectionSwitcher();
         this.initInteractivity();
         console.log("Irodai Asszisztens V3.35 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
     },
 
-    // --- Wave Direction Switcher ---
-    initWaveDirectionSwitcher() {
-        setInterval(() => {
-            document.body.classList.toggle('waves-reverse');
-        }, 20000);
-    },
+    // --- Wave Direction Switcher removed ---
 
     // --- Dynamic Header Background ---
     initHeaderBgRotation() {
@@ -92,18 +85,18 @@ const App = {
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
                         <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
-                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drón fotók</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
-                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
-                        <a href="${p}modules/tools/relax_center.html" class="nav-dropdown-item"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i> Relax Center</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
+                        <a href="${p}modules/gallery/index.html" class="nav-dropdown-item"><i class="fas fa-images" style="color:#2196f3;"></i> Drón fotók</a>
                         <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open" style="color:#3f51b5;"></i> PDF kinyerő</a>
                         <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i> PDF Szerkesztő</a>
+                        <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
+                        <a href="${p}modules/tools/text_to_image.html" class="nav-dropdown-item"><i class="fas fa-paint-brush" style="color:#ff4081;"></i> Text to Image</a>
                         <a href="${p}modules/tools/speech.html" class="nav-dropdown-item"><i class="fas fa-volume-up" style="color:#9c27b0;"></i> Felolvasó</a>
                         <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Beszéd írnok</a>
                         <a href="${p}modules/tools/deadlines.html" class="nav-dropdown-item"><i class="fas fa-calendar-check" style="color:#ff9800;"></i> Határidők</a>
@@ -125,6 +118,9 @@ const App = {
                         <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book" style="color:#795548;"></i> Telefonkönyv</a>
                         <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link" style="color:#009688;"></i> Linkek</a>
                         <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie" style="color:#673ab7;"></i> Vizualizáció</a>
+                        <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
+                        <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
+                        <a href="${p}modules/info/nagyatad_ai.html" class="nav-dropdown-item"><i class="fas fa-robot" style="color:#2196f3;"></i> Nagyatád AI</a>
                     </div>
                 </div>
                 <div class="nav-cat">ISMERETEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -136,6 +132,7 @@ const App = {
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling" style="color:#4caf50;"></i> Irodai Lean</a>
                         <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket" style="color:#ff5722;"></i> Hatékonyság</a>
                         <a href="${p}modules/videos/index.html" class="nav-dropdown-item"><i class="fas fa-play-circle" style="color:#f44336;"></i> Videótár</a>
+                        <a href="${p}modules/tools/relax_center.html" class="nav-dropdown-item"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i> Relax Center</a>
                     </div>
                 </div>
             </nav>
@@ -282,98 +279,7 @@ const App = {
         setInterval(update, 60000); // 1 minute rotation
     },
 
-    initCursor() {
-        const create = (id, cls) => {
-            let el = document.getElementById(id);
-            if (!el) {
-                el = document.createElement('div');
-                el.id = id;
-                el.className = cls;
-                document.body.appendChild(el);
-            }
-            return el;
-        };
-
-        const dot = create('cursor-dot', 'cursor-dot');
-        const trail = create('cursor-trail', 'cursor-trail');
-        const follower = create('cursor-follower', 'cursor-follower');
-
-        let mouseX = 0, mouseY = 0;
-        let trailX = 0, trailY = 0;
-        let followerX = 0, followerY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-
-            // Immediate dot
-            dot.style.left = `${mouseX}px`;
-            dot.style.top = `${mouseY}px`;
-            dot.style.display = 'block'; // Ensure visibility
-
-            // Hover effects for interactive elements
-            const hovered = document.elementFromPoint(mouseX, mouseY);
-
-            // Hide cursor effects over games (e.g. Breakout canvas)
-            const hideEffects = hovered && (hovered.id === 'breakout-canvas' || hovered.closest('.no-cursor-effects'));
-
-            if (hideEffects) {
-                dot.style.opacity = '0';
-                trail.style.opacity = '0';
-                follower.style.opacity = '0';
-            } else {
-                dot.style.opacity = '1';
-                trail.style.opacity = '1';
-                follower.style.opacity = '0.4';
-
-                if (hovered && (hovered.closest('.feature-card') || hovered.closest('a') || hovered.closest('button') || hovered.closest('.nav-cat'))) {
-                    follower.classList.add('hovering');
-                    dot.classList.add('hovering');
-                } else {
-                    follower.classList.remove('hovering');
-                    dot.classList.remove('hovering');
-                }
-            }
-        });
-
-        // Smooth trailing animation loop
-        const animate = () => {
-            // Smoothly move trail towards mouse
-            trailX += (mouseX - trailX) * 0.2;
-            trailY += (mouseY - trailY) * 0.2;
-            trail.style.left = `${trailX}px`;
-            trail.style.top = `${trailY}px`;
-
-            // Smoothly move follower towards trail (more delay)
-            followerX += (trailX - followerX) * 0.15;
-            followerY += (trailY - followerY) * 0.15;
-            follower.style.left = `${followerX}px`;
-            follower.style.top = `${followerY}px`;
-
-            requestAnimationFrame(animate);
-        };
-        animate();
-
-        document.addEventListener('mousedown', (e) => {
-            // Create "water drop" ripples
-            for (let i = 0; i < 2; i++) {
-                setTimeout(() => {
-                    const ripple = document.createElement('div');
-                    ripple.className = 'cursor-ripple';
-                    ripple.style.left = `${e.clientX}px`;
-                    ripple.style.top = `${e.clientY}px`;
-                    document.body.appendChild(ripple);
-                    setTimeout(() => ripple.remove(), 1000);
-                }, i * 200);
-            }
-
-            follower.style.transform = 'translate(-50%, -50%) scale(0.6)';
-        });
-
-        document.addEventListener('mouseup', () => {
-            follower.style.transform = 'translate(-50%, -50%) scale(1)';
-        });
-    },
+    // --- Cursor Follower removed ---
 
     initInteractivity() {
         document.addEventListener('mousemove', (e) => {
