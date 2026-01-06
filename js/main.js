@@ -120,7 +120,6 @@ const App = {
                         <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie" style="color:#673ab7;"></i> Vizualizáció</a>
                         <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
                         <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
-                        <a href="${p}modules/info/nagyatad_ai.html" class="nav-dropdown-item"><i class="fas fa-robot" style="color:#2196f3;"></i> Nagyatád AI</a>
                     </div>
                 </div>
                 <div class="nav-cat">ISMERETEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -282,12 +281,7 @@ const App = {
     // --- Cursor Follower removed ---
 
     initInteractivity() {
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            document.documentElement.style.setProperty('--mouse-x', `${x}%`);
-            document.documentElement.style.setProperty('--mouse-y', `${y}%`);
-        });
+        // Interactivity (flashlight/cursor effects) removed as per request
     },
 
     initFlashlight() {

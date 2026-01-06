@@ -35,12 +35,6 @@
 
     --font-main: 'Biko', 'Inter', sans-serif;
     --font-title: 'Biko', 'Outfit', sans-serif;
-
-    /* Interactive Background Variables */
-    --mouse-x: 50%;
-    --mouse-y: 50%;
-    --flashlight-color: rgba(92, 107, 192, 0.15);
-    /* Adjusted for light mode */
 }
 
 /* Global Smooth Loading Animations */
