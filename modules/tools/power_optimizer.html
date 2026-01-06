@@ -283,9 +283,22 @@
     </header>
 
     <main class="container py-5 fade-in">
-        <div class="module-header mb-4">
-            <h2 style="font-weight: 800;">Lekötött Teljesítmény Optimalizáló</h2>
-            <p class="text-muted small">Precíziós kalkulátor bejelentési kockázatelemzéssel (MEKH 2025).</p>
+        <div class="module-header mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 style="font-weight: 800;">Lekötött Teljesítmény Optimalizáló</h2>
+                <p class="text-muted small">Precíziós kalkulátor bejelentési kockázatelemzéssel (MEKH 2025).</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary"
+                    style="border-radius:1rem; padding: 0.75rem 1.5rem; background: var(--accent-pro);"
+                    onclick="exportPowerReport()">
+                    <i class="fas fa-file-pdf me-2"></i> RIPORT EXPORT
+                </button>
+                <button class="btn btn-warning" style="border-radius:1rem; padding: 0.75rem 1.5rem; font-weight:800;"
+                    onclick="window.open('https://www.eon.hu/hu/lakossagi/ugyintezes/muszaki-ugyek/teljesitmeny-valtoztatas.html', '_blank')">
+                    <i class="fas fa-bolt me-2"></i> E.ON VÁLTOZÁSBEJELENTŐ
+                </button>
+            </div>
         </div>
 
         <div id="error-banner"><i class="fas fa-warning me-2"></i> Saját téves érték! Kérjük ellenőrizze az adatokat
@@ -762,6 +775,97 @@
                         }
                     }
                 }
+            });
+        }
+        function exportPowerReport() {
+            const resultsArea = document.getElementById('results-area');
+            if (resultsArea.style.display === 'none') return alert('Kérjük futtassa le az optimalizálást az exportáláshoz!');
+
+            // Capture the chart as image
+            const chartCanvas = document.getElementById('opt-chart');
+            const chartImg = chartCanvas.toDataURL('image/png');
+
+            const element = document.createElement('div');
+            element.style.padding = '30px';
+            element.style.background = '#ffffff';
+            element.style.width = '800px'; // Consistent width for export
+            element.style.fontFamily = 'Inter, sans-serif';
+
+            element.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:4px solid #4361ee; padding-bottom:15px; margin-bottom:20px;">
+                    <div style="font-size:20px; font-weight:900; color:#4361ee; font-family:Outfit;">IRODAI ASSZISZTENS</div>
+                    <div style="text-align:right;">
+                        <div style="font-weight:800; font-size:16px;">SZAKMAI ENERGETIKAI JAVASLAT</div>
+                        <div style="color:#666; font-size:10px;">Generálva: ${new Date().toLocaleString('hu-HU')}</div>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <div style="background:#f1f5f9; padding:15px; border-radius:10px; text-align:center; border:1px solid #e2e8f0;">
+                         <div style="font-size:10px; color:#64748b; font-weight:800; margin-bottom:5px;">JAVASOLT LEKÖTÉS</div>
+                         <div style="font-size:24px; font-weight:900; color:#10b981;">${document.getElementById('rec-val').innerText}</div>
+                    </div>
+                    <div style="background:#f1f5f9; padding:15px; border-radius:10px; text-align:center; border:1px solid #e2e8f0;">
+                         <div style="font-size:10px; color:#64748b; font-weight:800; margin-bottom:5px;">ÉVES MEGTAKARÍTÁS</div>
+                         <div style="font-size:20px; font-weight:900; color:#4361ee;">${document.getElementById('savings-val').innerText}</div>
+                    </div>
+                    <div style="background:#f1f5f9; padding:15px; border-radius:10px; text-align:center; border:1px solid #e2e8f0;">
+                         <div style="font-size:10px; color:#64748b; font-weight:800; margin-bottom:5px;">MAX. MÉRT CSÚCS</div>
+                         <div style="font-size:20px; font-weight:900; color:#f59e0b;">${document.getElementById('max-peak-val').innerText}</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:20px; text-align:center;">
+                    <div style="font-size:12px; font-weight:800; color:#1e293b; margin-bottom:10px; text-transform:uppercase;">Költséggörbe és Optimalizációs Tartomány</div>
+                    <img src="${chartImg}" style="width:100%; max-height:250px; border-radius:10px; border:1px solid #e2e8f0; padding:10px;">
+                </div>
+
+                <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px;">
+                    <div>
+                        <h4 style="font-size:14px; border-left:4px solid #4361ee; padding-left:10px; margin-bottom:15px;">SZAKMAI INDOKLÁS</h4>
+                        <div style="font-size:12px; line-height:1.5; color:#334155;">
+                            <p style="margin-bottom:8px;"><strong>Hálózati Hatékonyság:</strong> A mért csúcsértékek eloszlása alapján a fenti lekötési szint biztosítja a legalacsonyabb fajlagos költséget.</p>
+                            <p style="margin-bottom:8px;"><strong>Kockázati Puffer:</strong> A kalkuláció figyelembe veszi a szezonális ingadozásokat, így elkerülhetővé válnak a bejelentés nélküli túllépések magas büntetési tételei.</p>
+                            <p><strong>Pénzügyi Mérleg:</strong> Az éves alapdíj csökkenése jelentősen meghaladja a kalkulált alkalmi túllépési díjakat, így a módosítás gazdaságilag indokolt.</p>
+                        </div>
+                    </div>
+                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0;">
+                        <h4 style="font-size:12px; text-align:center; margin-bottom:10px;">KÖLTSÉG ÖSSZESÍTŐ</h4>
+                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+                            <span>Éves alapdíj:</span>
+                            <span style="font-weight:700;">${document.getElementById('base-cost-val').innerText}</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+                            <span>Tervezett pótdíjak:</span>
+                            <span style="font-weight:700;">${(parseInt(document.getElementById('ann-penalty-val').innerText.replace(/\s/g, '')) + parseInt(document.getElementById('unann-penalty-val').innerText.replace(/\s/g, ''))).toLocaleString('hu-HU')} Ft</span>
+                        </div>
+                        <div style="margin-top:10px; padding-top:10px; border-top:2px solid #cbd5e1; display:flex; justify-content:space-between; font-size:14px; font-weight:900; color:#4361ee;">
+                            <span>Mindösszesen:</span>
+                            <span>${document.getElementById('grand-total-val').innerText}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:30px; padding:15px; background:#fff7ed; border:1px solid #ffedd5; border-radius:10px; font-size:10px; color:#9a3412;">
+                    <strong>NYILATKOZAT:</strong> Ez a riport havi mérési adatokon alapuló szimuláció. A végleges döntés előtt javasolt az aktuális csatlakozási szerződés és a műszaki feltételek felülvizsgálata.
+                </div>
+            `;
+
+            // Style fixes to ensure visible rendering before capture if needed
+            element.style.position = 'absolute';
+            element.style.left = '-9999px';
+            document.body.appendChild(element);
+
+            const opt = {
+                margin: 10,
+                filename: App.getExportFileName('Teljesitmeny_Riport', 'pdf'),
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 3, useCORS: true, logging: false },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.body.removeChild(element);
             });
         }
         updateTariffValue();

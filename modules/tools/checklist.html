@@ -201,11 +201,27 @@
 
         function exportPDF() {
             const element = document.getElementById('capture-area');
-            html2pdf().from(element).set({
+
+            // Temporary style for 2-column portrait print
+            const originalStyle = element.getAttribute('style') || '';
+            element.style.gridTemplateColumns = '1fr 1fr';
+            element.querySelectorAll('.list-card').forEach(card => {
+                card.style.pageBreakInside = 'avoid';
+                card.style.marginBottom = '1rem';
+            });
+
+            const opt = {
                 margin: 10,
                 filename: App.getExportFileName('Checklist', 'pdf'),
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            }).save();
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save().then(() => {
+                element.setAttribute('style', originalStyle);
+                element.querySelectorAll('.list-card').forEach(card => card.style.pageBreakInside = '');
+            });
         }
 
         render();

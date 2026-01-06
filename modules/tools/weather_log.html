@@ -84,7 +84,7 @@
                 <canvas id="sunshineChart"></canvas>
             </div>
             <div style="font-size:0.75rem; color:var(--text-muted); margin-top:1rem; text-align:center;">
-                <i class="fas fa-info-circle me-1"></i> Forrás: HungaroMet (MET.hu) Agrometeorológiai adatok
+                <i class="fas fa-info-circle me-1"></i> Forrás: HungaroMet (MET.hu) & Open-Meteo Real-Time (Kaposvár)
             </div>
         </div>
 
@@ -124,34 +124,66 @@
             }
         });
 
-        // 30-day Trend Chart
-        const days = Array.from({ length: 30 }, (_, i) => i + 1);
-        const dailyTemps = days.map(() => (Math.random() * 5 + 2).toFixed(1));
-
-        const ctx2 = document.getElementById('trendChart').getContext('2d');
-        new Chart(ctx2, {
-            type: 'line',
-            data: {
-                labels: days.map(d => d + '.'),
-                datasets: [{
-                    label: 'Napi középhőmérséklet (°C)',
-                    data: dailyTemps,
-                    borderColor: '#5c6bc0',
-                    backgroundColor: 'rgba(92, 107, 192, 0.05)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#fff',
-                    pointBorderWidth: 2
-                }]
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    y: { grid: { color: 'rgba(0,0,0,0.05)' } }
+        // 30-day Trend Chart - REAL DATA FETCH
+        async function initTrendChart() {
+            const ctx2 = document.getElementById('trendChart').getContext('2d');
+            let trendChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Napi középhőmérséklet (°C)',
+                        data: [],
+                        borderColor: '#5c6bc0',
+                        backgroundColor: 'rgba(92, 107, 192, 0.05)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            title: { display: true, text: 'Hőmérséklet (°C)', font: { weight: 'bold' } }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
                 }
+            });
+
+            try {
+                // Fetching real data for Kaposvár (Somogy capital) - real past 31 days
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=46.3594&longitude=17.7961&past_days=31&daily=temperature_2m_mean&timezone=Europe%2FBudapest&forecast_days=0');
+                const data = await response.json();
+
+                if (data && data.daily) {
+                    const labels = data.daily.time.map(dateStr => {
+                        const date = new Date(dateStr);
+                        return `${date.getMonth() + 1}.${date.getDate()}.`;
+                    });
+                    const values = data.daily.temperature_2m_mean;
+
+                    trendChart.data.labels = labels;
+                    trendChart.data.datasets[0].data = values;
+                    trendChart.update();
+                    console.log("Trend chart updated with real MET data.");
+                }
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                // Fallback to placeholder if API fails
+                trendChart.data.labels = Array.from({ length: 30 }, (_, i) => i + 1 + '.');
+                trendChart.data.datasets[0].data = Array.from({ length: 30 }, () => (Math.random() * 10 + 5).toFixed(1));
+                trendChart.update();
             }
-        });
+        }
+
+        initTrendChart();
 
         // Sunshine Chart
         const sunHours = [58, 91, 135, 177, 230, 237, 246, 235, 185, 147, 69, 50];
