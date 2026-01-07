@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.cdnfonts.com/css/biko" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
     <style>
         /* Prevention of content flickering before JS auth check */
         body:not(.authenticated) #app-main {
@@ -75,6 +77,10 @@
                             <i class="fas fa-lightbulb" style="color:#fbc02d;"></i>
                             <h5>Közvilágítási térkép</h5>
                         </a>
+                        <div class="feature-card" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
+                            <i class="fas fa-map" style="color:#999;"></i>
+                            <h5 style="color:#999;">Alaptérkép gyorsbetöltő</h5>
+                        </div>
                         <a href="modules/tools/checklist.html" class="feature-card">
                             <i class="fas fa-clipboard-check" style="color:#ff9800;"></i>
                             <h5>Check-lista</h5>
@@ -86,6 +92,22 @@
                         <a href="modules/tools/power_optimizer.html" class="feature-card">
                             <i class="fas fa-chart-line" style="color:#f44336;"></i>
                             <h5>Teljesítmény Optimalizáló</h5>
+                        </a>
+                        <a href="modules/info/geothermal.html" class="feature-card">
+                            <i class="fas fa-hot-tub" style="color:#ff5722;"></i>
+                            <h5>Geotermális fűtés</h5>
+                        </a>
+                        <a href="modules/info/message_board.html" class="feature-card">
+                            <i class="fas fa-bullhorn" style="color:#ff4081;"></i>
+                            <h5>Üzenőfal</h5>
+                        </a>
+                        <a href="modules/registers/index.html" class="feature-card">
+                            <i class="fas fa-database" style="color:#2196f3;"></i>
+                            <h5>Nyilvántartások</h5>
+                        </a>
+                        <a href="modules/info/outages.html" class="feature-card">
+                            <i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i>
+                            <h5>Közmű szünetek</h5>
                         </a>
                     </div>
                 </div>
@@ -109,10 +131,7 @@
                             <i class="fas fa-images" style="color:#2196f3;"></i>
                             <h5>Drón fotók</h5>
                         </a>
-                        <a href="modules/tools/text_to_image.html" class="feature-card">
-                            <i class="fas fa-paint-brush" style="color:#ff4081;"></i>
-                            <h5>Text to Image</h5>
-                        </a>
+
                         <a href="modules/tools/speech.html" class="feature-card">
                             <i class="fas fa-volume-up" style="color:#9c27b0;"></i>
                             <h5>Szöveg Felolvasó</h5>
@@ -132,6 +151,10 @@
                         <a href="modules/tools/notes.html" class="feature-card">
                             <i class="fas fa-sticky-note" style="color:#ffee58;"></i>
                             <h5>Gyors Feljegyzés</h5>
+                        </a>
+                        <a href="modules/tools/translator.html" class="feature-card">
+                            <i class="fas fa-language" style="color:#4caf50;"></i>
+                            <h5>Fordító Segéd</h5>
                         </a>
                     </div>
                 </div>
@@ -155,19 +178,31 @@
                             <i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i>
                             <h5>POLC (Számlatár)</h5>
                         </a>
+                        <a href="modules/tenants/index.html" class="feature-card">
+                            <i class="fas fa-file-invoice" style="color:#e91e63;"></i>
+                            <h5>Bérlői elszámolások</h5>
+                        </a>
+                        <a href="modules/tools/heating.html" class="feature-card">
+                            <i class="fas fa-temperature-arrow-up" style="color:#d32f2f;"></i>
+                            <h5>Fűtésvezérlés</h5>
+                        </a>
                     </div>
                 </div>
 
                 <div class="category-group cat-info">
                     <div class="group-title"><i class="fas fa-info-circle"></i> INFORMÁCIÓ</div>
                     <div class="dashboard-grid">
-                        <a href="modules/info/atadhir.html" class="feature-card">
-                            <i class="fas fa-newspaper" style="color:#607d8b;"></i>
-                            <h5>Atádi Hírek</h5>
-                        </a>
                         <a href="modules/info/local_weather.html" class="feature-card">
                             <i class="fas fa-temperature-high" style="color:#ff5722;"></i>
                             <h5>Helyi Időjárás</h5>
+                        </a>
+                        <a href="modules/tools/weather_log.html" class="feature-card">
+                            <i class="fas fa-cloud-sun" style="color:#03a9f4;"></i>
+                            <h5>Időjárás Napló</h5>
+                        </a>
+                        <a href="modules/info/atadhir.html" class="feature-card">
+                            <i class="fas fa-newspaper" style="color:#607d8b;"></i>
+                            <h5>Atádi Hírek</h5>
                         </a>
                         <a href="modules/phonebook/index.html" class="feature-card">
                             <i class="fas fa-address-book" style="color:#795548;"></i>
@@ -180,22 +215,6 @@
                         <a href="modules/viz/index.html" class="feature-card">
                             <i class="fas fa-chart-pie" style="color:#673ab7;"></i>
                             <h5>Adat Vizualizáció</h5>
-                        </a>
-                        <a href="modules/tools/translator.html" class="feature-card">
-                            <i class="fas fa-language" style="color:#4caf50;"></i>
-                            <h5>Fordító Segéd</h5>
-                        </a>
-                        <a href="modules/tools/weather_log.html" class="feature-card">
-                            <i class="fas fa-cloud-sun" style="color:#03a9f4;"></i>
-                            <h5>Időjárás Napló</h5>
-                        </a>
-                        <a href="modules/info/geothermal.html" class="feature-card">
-                            <i class="fas fa-hot-tub" style="color:#ff5722;"></i>
-                            <h5>Geotermális fűtés</h5>
-                        </a>
-                        <a href="modules/info/outages.html" class="feature-card">
-                            <i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i>
-                            <h5>Közmű szünetek</h5>
                         </a>
                     </div>
                 </div>
@@ -255,7 +274,7 @@
 
             <footer
                 style="text-align: center; padding: 3rem 2rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color); margin-top: 2rem;">
-                © 2024-2025 Irodai Asszisztens | V3.33 | Minden jog fenntartva.
+                © 2024-2025 Irodai Asszisztens | V3.37 | Minden jog fenntartva.
             </footer>
     </div>
 

@@ -1,20 +1,24 @@
 @import url('https://fonts.cdnfonts.com/css/biko');
 
 :root {
-    /* Creamy, Harmonious Palette */
-    --primary: #2d5a27;
-    /* Dark Forest Green */
-    --primary-light: #4caf50;
-    /* Fresh Green */
-    --primary-dark: #1b3d18;
-    --secondary: #66bb6a;
-    --accent: #81c784;
+    /* Dark Blue & Purple Palette */
+    --primary: #1a237e;
+    /* Indigo / Dark Blue */
+    --primary-light: #3949ab;
+    /* Medium Blue */
+    --primary-dark: #000051;
+    /* Deep Navy */
+    --secondary: #7b1fa2;
+    /* Purple */
+    --accent: #9c27b0;
+    /* Magenta/Purple */
     --accent-purple: #7b61ff;
-    /* New Highlight Color */
-    --accent-blue: #4facfe;
+    /* Vivid Purple */
+    --accent-blue: #2979ff;
+    /* Bright Blue */
 
-    --bg-creamy: #f5f5f5;
-    /* Matt White */
+    --bg-creamy: #fcfaff;
+    /* Very light purple tint */
     --bg-card: rgba(255, 255, 255, 0.98);
     --bg-light: #eeeeee;
 
@@ -83,17 +87,17 @@ h2,
 }
 
 [data-theme="dark"] {
-    --bg-creamy: #0a1310;
-    /* Deeper dark green base */
-    --bg-dark-gradient: linear-gradient(135deg, #0a1310 0%, #06112a 50%, #161616 100%);
-    --bg-card: #161616;
-    --bg-light: #222222;
+    --bg-creamy: #050a1a;
+    /* Deep dark blue base */
+    --bg-dark-gradient: linear-gradient(135deg, #050a1a 0%, #1a0a2e 50%, #000000 100%);
+    --bg-card: #0c1222;
+    --bg-light: #161c2e;
     --text-main: #ffffff !important;
     --text-muted: #f0f0f0;
     /* Near white for dark mode */
-    --border-color: #333333;
-    --flashlight-color: rgba(67, 238, 124, 0.15);
-    /* Greenish flashlight */
+    --border-color: rgba(255, 255, 255, 0.1);
+    --flashlight-color: rgba(123, 97, 255, 0.15);
+    /* Purple flashlight */
 }
 
 [data-theme="dark"] body {
@@ -185,9 +189,9 @@ body {
     height: 100%;
     z-index: -1;
     overflow: hidden;
-    background: linear-gradient(135deg, #1b3d18 0%, #4caf50 50%, #2d5a27 100%) !important;
+    background: linear-gradient(135deg, #1a237e 0%, #7b61ff 50%, #4a148c 100%) !important;
     opacity: 1 !important;
-    box-shadow: inset 0 0 50px rgba(67, 238, 124, 0.2);
+    box-shadow: inset 0 0 50px rgba(123, 97, 255, 0.2);
 }
 
 .header-bg-layer img {
@@ -236,8 +240,8 @@ body {
     color: var(--primary-light) !important;
     font-weight: 800;
     z-index: 10;
-    text-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
-    filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.2));
+    text-shadow: 0 0 15px rgba(123, 97, 255, 0.4);
+    filter: drop-shadow(0 0 5px rgba(123, 97, 255, 0.2));
 }
 
 .logo i {
@@ -415,6 +419,22 @@ h6 {
     color: var(--primary) !important;
     transform: translateX(5px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark Mode Header Menu Hover Effects */
+[data-theme="dark"] .nav-cat:hover,
+[data-theme="dark"] .nav-cat.active {
+    color: #7b61ff !important;
+    /* Accent purple */
+    text-shadow: 0 0 10px rgba(123, 97, 255, 0.8) !important;
+}
+
+[data-theme="dark"] .nav-dropdown-item:hover {
+    color: #7b61ff !important;
+    background: rgba(123, 97, 255, 0.1);
+    text-shadow: 0 0 10px rgba(123, 97, 255, 0.8) !important;
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Settings Panel Styling */
@@ -740,6 +760,19 @@ h6 {
     color: var(--text-muted);
 }
 
+/* Global button and UI spacing */
+.btn,
+.tab-btn,
+.nav-btn,
+.sub-nav-bar a,
+.actions button {
+    margin: 4px;
+}
+
+.sub-nav-bar {
+    margin-bottom: 8px !important;
+}
+
 /* Global 3D Button Style */
 .btn {
     display: inline-flex;
@@ -781,66 +814,87 @@ h6 {
     box-shadow: 0 1px 0 var(--primary) !important;
 }
 
-/* Global Toast Notification System */
+/* Professional Global Notifications (Toasts) */
 .toast-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
+    top: 24px;
+    right: 24px;
+    z-index: 10000;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     pointer-events: none;
 }
 
 .toast {
-    background: var(--bg-card);
-    color: var(--text-main);
-    padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     border-radius: 1rem;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-    border-left: 5px solid var(--primary);
+    padding: 1rem 1.5rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-weight: 700;
+    gap: 12px;
     min-width: 300px;
+    border: 1px solid var(--border-color);
+    animation: toastIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     pointer-events: auto;
-    animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-.toast.error {
-    border-left-color: #f44336;
 }
 
 .toast.success {
-    border-left-color: #4caf50;
+    border-left: 5px solid #10b981;
+}
+
+.toast.error {
+    border-left: 5px solid #ef4444;
 }
 
 .toast.info {
-    border-left-color: #2196f3;
+    border-left: 5px solid #3b82f6;
+}
+
+.toast i {
+    font-size: 1.25rem;
+}
+
+.toast.success i {
+    color: #10b981;
+}
+
+.toast.error i {
+    color: #ef4444;
+}
+
+.toast.info i {
+    color: #3b82f6;
+}
+
+.toast .toast-message {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
 }
 
 @keyframes toastIn {
     from {
-        transform: translateX(100%);
+        transform: translateX(100%) scale(0.8);
         opacity: 0;
     }
 
     to {
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
         opacity: 1;
     }
 }
 
 @keyframes toastOut {
     from {
-        transform: translateX(0);
+        transform: translateX(0) scale(1);
         opacity: 1;
     }
 
     to {
-        transform: translateX(100%);
+        transform: translateX(100%) scale(0.8);
         opacity: 0;
     }
 }
