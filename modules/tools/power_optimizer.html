@@ -295,7 +295,7 @@
                     <i class="fas fa-file-pdf me-2"></i> RIPORT EXPORT
                 </button>
                 <button class="btn btn-warning" style="border-radius:1rem; padding: 0.75rem 1.5rem; font-weight:800;"
-                    onclick="window.open('https://www.eon.hu/hu/lakossagi/ugyintezes/muszaki-ugyek/teljesitmeny-valtoztatas.html', '_blank')">
+                    onclick="window.open('https://www.eon.hu/hu/egyeb/forms/leopold.html', '_blank')">
                     <i class="fas fa-bolt me-2"></i> E.ON VÁLTOZÁSBEJELENTŐ
                 </button>
             </div>
@@ -785,6 +785,18 @@
             const chartCanvas = document.getElementById('opt-chart');
             const chartImg = chartCanvas.toDataURL('image/png');
 
+            // Build the input data table for the report
+            let inputDataTable = '<div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:2px; font-size:8px; margin-top:5px; margin-bottom:15px;">';
+            const monthInputs = document.querySelectorAll('.month-input');
+            monthInputs.forEach((inp, i) => {
+                const val = inp.value;
+                inputDataTable += `<div style="text-align:center; padding:2px; background:#f8fafc; border:1px solid #e2e8f0;">
+                    <div style="color:#64748b; font-weight:800;">${i + 1}.hó</div>
+                    <div style="font-weight:700;">${val}</div>
+                </div>`;
+            });
+            inputDataTable += '</div>';
+
             const element = document.createElement('div');
             element.style.padding = '30px';
             element.style.background = '#ffffff';
@@ -798,6 +810,11 @@
                         <div style="font-weight:800; font-size:16px;">SZAKMAI ENERGETIKAI JAVASLAT</div>
                         <div style="color:#666; font-size:10px;">Generálva: ${new Date().toLocaleString('hu-HU')}</div>
                     </div>
+                </div>
+
+                <div style="margin-bottom:10px;">
+                    <div style="font-size:10px; font-weight:800; color:#1e293b; text-transform:uppercase;">Bemeneti Adatok (Mért Havi Csúcsok kW)</div>
+                    ${inputDataTable}
                 </div>
 
                 <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:20px;">

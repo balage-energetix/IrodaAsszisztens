@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLC - Online OLC System - Irodai Asszisztens</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Core Styles -->
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        :root {
+            --tree-width: 400px;
+            --sidebar-bg: rgba(255, 255, 255, 0.5);
+            --node-hover: rgba(52, 152, 219, 0.1);
+            --node-selected: rgba(52, 152, 219, 0.2);
+        }
+
+        /* User Request: Dark mode text should be black */
+        [data-theme="dark"] body,
+        [data-theme="dark"] .tree-node,
+        [data-theme="dark"] .node-label,
+        [data-theme="dark"] .premium-table td,
+        [data-theme="dark"] .premium-table th,
+        [data-theme="dark"] h2,
+        [data-theme="dark"] h4,
+        [data-theme="dark"] small,
+        [data-theme="dark"] span {
+            color: #000000 !important;
+        }
+
+        /* Ensure some visibility in dark mode if text is black */
+        [data-theme="dark"] .tree-column,
+        [data-theme="dark"] .invoice-column {
+            background: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .polc-layout {
+            display: flex;
+            gap: 2rem;
+            height: calc(100vh - 200px);
+            min-height: 600px;
+        }
+
+        /* User Request: Remove the back button bar injected by main.js */
+        .sub-nav-bar {
+            display: none !important;
+        }
+
+        /* Tree Styles */
+        .tree-column {
+            width: var(--tree-width);
+            min-width: var(--tree-width);
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tree-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .search-box {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        #tree-view {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .tree-node {
+            margin-bottom: 0.25rem;
+        }
+
+        .node-content {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .node-content:hover {
+            background: var(--node-hover);
+        }
+
+        .node-content.selected {
+            background: var(--node-selected);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .node-icon {
+            margin-right: 0.75rem;
+            width: 1rem;
+            text-align: center;
+        }
+
+        .node-label {
+            font-size: 0.9rem;
+        }
+
+        .toggler {
+            width: 1.25rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            color: var(--text-muted);
+        }
+
+        .node-children {
+            padding-left: 1.5rem;
+            margin-top: 0.25rem;
+            border-left: 1px dashed var(--border-color);
+            margin-left: 0.6rem;
+        }
+
+        .collapsed .node-children {
+            display: none;
+        }
+
+        /* Invoice Container Styles */
+        .invoice-column {
+            flex: 1;
+            background: white;
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .invoice-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #invoice-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .premium-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .premium-table th {
+            background: var(--bg-main);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .premium-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+
+        .premium-table tr:hover td {
+            background: rgba(248, 249, 250, 0.5);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-rhd {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-energia {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .badge-víz {
+            background: #e1f5fe;
+            color: #0288d1;
+        }
+
+        .badge-csatorna {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .badge-gas {
+            background: #fbe9e7;
+            color: #d84315;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: right;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            color: var(--primary);
+            background: var(--node-hover);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            color: var(--primary);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="app-header">
+        <a href="../../index.html" class="logo">
+            <i class="fab fa-android"></i>
+            <span>IRODAI<br>ASSZISZTENS</span>
+        </a>
+        <div class="header-info">
+            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
+            <button onclick="App.toggleTheme()"
+                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;">
+                <i id="theme-toggle-icon" class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header">
+            <h2 style="font-weight: 800;"><i class="fas fa-file-invoice-dollar text-primary me-2"></i>POLC - Fogyasztás
+                & Számlák</h2>
+        </div>
+
+        <div class="polc-layout">
+            <div class="tree-column">
+                <div class="tree-header">
+                    <h4 style="margin: 0; font-weight: 700;">Intézmények</h4>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="tree-search" placeholder="Keresés az intézmények között...">
+                    </div>
+                </div>
+                <div id="tree-view">
+                    <!-- Tree content injected by JS -->
+                </div>
+            </div>
+
+            <div class="invoice-column">
+                <div class="invoice-header">
+                    <div>
+                        <h4 style="margin: 0; font-weight: 700;">Számlalista</h4>
+                        <small id="selected-pod-title" style="color: var(--text-muted);">Válasszon egy fogyasztási
+                            helyet</small>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-primary btn-sm" onclick="PolcApp.exportPDF()">
+                            <i class="fas fa-file-export"></i> Exportálás
+                        </button>
+                    </div>
+                </div>
+                <div id="invoice-list">
+                    <div class="empty-state">
+                        <i class="fas fa-file-invoice"></i>
+                        <p>A számlák megtekintéséhez válasszon ki egy konkrét azonosítót (POD) a bal oldali listából.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="polc.js"></script>
+</body>
+
+</html>
