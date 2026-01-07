@@ -21,7 +21,7 @@ const App = {
         this.initSearch();
         this.initHeaderBgRotation();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.35 initialized");
+        console.log("Irodai Asszisztens V3.37 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
     },
 
@@ -72,7 +72,7 @@ const App = {
         // Force Android Icon and grass green branding
         const logo = header.querySelector('.logo');
         if (logo) {
-            logo.innerHTML = `<i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span>`;
+            logo.innerHTML = `<i class="fab fa-android" style="color:var(--accent-purple) !important;"></i><span style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span>`;
         }
 
         const authTier = sessionStorage.getItem('auth_tier') || 'guest';
@@ -96,7 +96,6 @@ const App = {
                         <a href="${p}modules/tools/pdfreader.html" class="nav-dropdown-item"><i class="fas fa-book-open" style="color:#3f51b5;"></i> PDF kinyerő</a>
                         <a href="${p}modules/tools/pdfeditor.html" class="nav-dropdown-item"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i> PDF Szerkesztő</a>
                         <a href="${p}modules/tools/generator.html" class="nav-dropdown-item"><i class="fas fa-file-signature" style="color:#9c27b0;"></i> Nyomtatvány generátor</a>
-                        <a href="${p}modules/tools/text_to_image.html" class="nav-dropdown-item"><i class="fas fa-paint-brush" style="color:#ff4081;"></i> Text to Image</a>
                         <a href="${p}modules/tools/speech.html" class="nav-dropdown-item"><i class="fas fa-volume-up" style="color:#9c27b0;"></i> Felolvasó</a>
                         <a href="${p}modules/tools/stt.html" class="nav-dropdown-item"><i class="fas fa-microphone" style="color:#e91e63;"></i> Beszéd írnok</a>
                         <a href="${p}modules/tools/deadlines.html" class="nav-dropdown-item"><i class="fas fa-calendar-check" style="color:#ff9800;"></i> Határidők</a>
@@ -107,10 +106,13 @@ const App = {
                         <a href="${p}modules/calc/index.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#2ecc71;"></i> Számlázási Segéd</a>
                         <a href="${p}modules/consumption/index.html" class="nav-dropdown-item"><i class="fas fa-building-circle-check" style="color:#16a085;"></i> Fogyasztási Helyek</a>
                         <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#ef5350;"></i> Tőzsde & Árak</a>
+                        <a href="${p}modules/polc/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i> POLC (Számlatár)</a>
+                        <a href="${p}modules/tenants/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice" style="color:#e91e63;"></i> Bérlői elszámolások</a>
                     </div>
                 </div>
                 <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
+                        <a href="${p}modules/info/nagyatad_hu.html" class="nav-dropdown-item"><i class="fas fa-university" style="color:#3f51b5;"></i> Nagyatád.hu Info</a>
                         <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper" style="color:#607d8b;"></i> Atádi Hírek</a>
                         <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás</a>
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
@@ -119,6 +121,8 @@ const App = {
                         <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link" style="color:#009688;"></i> Linkek</a>
                         <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie" style="color:#673ab7;"></i> Vizualizáció</a>
                         <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
+                        <a href="${p}modules/info/message_board.html" class="nav-dropdown-item"><i class="fas fa-bullhorn" style="color:#ff4081;"></i> Üzenőfal</a>
+                        <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
                         <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
                     </div>
                 </div>
@@ -296,7 +300,7 @@ const App = {
             const clockEl = document.getElementById('global-clock');
             if (clockEl) {
                 clockEl.innerHTML = `
-                    <div class="clock-time" style="color:var(--primary); font-family:monospace; font-weight:800; font-size:1.1rem;">${now.toLocaleTimeString('hu-HU')}</div>
+                    <div class="clock-time" style="color:var(--accent-purple); font-family:monospace; font-weight:800; font-size:1.1rem;">${now.toLocaleTimeString('hu-HU')}</div>
                     <div class="clock-date" style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">${now.toLocaleDateString('hu-HU')}, ${days[now.getDay()]}</div>
                 `;
             }
@@ -459,7 +463,7 @@ const App = {
             sessionStorage.setItem('auth_tier', 'guest');
             location.reload();
         } else if (pass) {
-            alert('Hibás kód!');
+            this.notify('Hibás kód!', 'error');
             input.value = '';
             input.focus();
         }
@@ -477,6 +481,10 @@ const App = {
     },
 
     showToast(message, type = 'success') {
+        this.notify(message, type);
+    },
+
+    notify(message, type = 'info') {
         let container = document.getElementById('toast-container');
         if (!container) {
             container = document.createElement('div');
@@ -489,15 +497,16 @@ const App = {
         toast.className = `toast ${type}`;
 
         const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
-        toast.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+        toast.innerHTML = `<i class="fas ${icon}"></i><span class="toast-message">${message}</span>`;
 
         container.appendChild(toast);
 
+        // Auto remove
         setTimeout(() => {
             toast.style.animation = 'toastOut 0.4s ease forwards';
             setTimeout(() => toast.remove(), 400);
-        }, 3000);
-    }
+        }, 4000);
+    },
 };
 
 // Global Enter listener for login
