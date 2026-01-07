@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyilvántartások - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        /* Modern Data Table Styles - Optimized for Dark Mode by default logic */
+
+        .registry-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .file-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .file-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-tab.active {
+            background: rgba(123, 97, 255, 0.15);
+            color: var(--accent-purple);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 15px rgba(123, 97, 255, 0.2);
+        }
+
+        .table-wrapper {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 0;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 75vh;
+            overflow: hidden;
+        }
+
+        .table-header-title {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin: 0;
+            background: var(--bg-card);
+        }
+
+        /* Top Scrollbar Fake Container */
+        .top-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-card);
+            flex: 0 0 auto;
+        }
+
+        .top-scroll-content {
+            height: 1px;
+        }
+
+        .table-scroll-container {
+            overflow: auto;
+            flex: 1;
+            border-radius: 0 0 1rem 1rem;
+            position: relative;
+        }
+
+        /* 3D Scrollbar Styling */
+        ::-webkit-scrollbar {
+            height: 14px;
+            /* Slightly thinner */
+            width: 14px;
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0c1222;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #445, #223);
+            border-radius: 6px;
+            border: 2px solid #0c1222;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #556, #334);
+        }
+
+        ::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(180deg, #223, #112);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        /* End Scrollbar */
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            white-space: normal;
+            /* Allow wrapping */
+        }
+
+        .data-table th {
+            text-align: left;
+            padding: 0.8rem 0.5rem;
+            border-bottom: 1px solid rgba(123, 97, 255, 0.4);
+            border-right: 1px solid rgba(123, 97, 255, 0.2);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            position: sticky;
+            top: 0;
+            background: var(--bg-card);
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            /* Enhance sticky feel */
+        }
+
+        .data-table td {
+            padding: 0.35rem 0.5rem;
+            border-bottom: 1px solid rgba(123, 97, 255, 0.3);
+            /* Glowing purple line */
+            border-right: 1px solid rgba(123, 97, 255, 0.15);
+            /* Fainter vertical line */
+            color: var(--text-main);
+            transition: background 0.3s;
+            font-weight: 400;
+            vertical-align: top;
+            line-height: 1.4;
+            min-width: 120px;
+            max-width: 400px;
+            /* Subtle glow effect on the border itself */
+            box-shadow: inset 0 0 1px rgba(123, 97, 255, 0.05);
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table th:last-child,
+        .data-table td:last-child {
+            border-right: none;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        [data-theme="light"] .data-table tr:hover td {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .data-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .data-link:hover {
+            color: var(--primary-light);
+            border-bottom-color: currentColor;
+        }
+
+        /* Color tag simulation for colored cells */
+        .color-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-muted);
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 500px;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 2.5rem 0.8rem 1.2rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Highlighting Effect */
+        @keyframes glowPulse {
+            0% {
+                box-shadow: 0 0 5px var(--accent), inset 0 0 5px var(--accent);
+                background: rgba(156, 39, 176, 0.1);
+            }
+
+            50% {
+                box-shadow: 0 0 15px var(--accent), inset 0 0 10px var(--accent);
+                background: rgba(156, 39, 176, 0.3);
+            }
+
+            100% {
+                box-shadow: 0 0 5px var(--accent), inset 0 0 5px var(--accent);
+                background: rgba(156, 39, 176, 0.1);
+            }
+        }
+
+        .highlight-match {
+            animation: glowPulse 1.5s infinite;
+            border-radius: 4px;
+            color: #fff !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title mb-0"><i class="fas fa-database me-2" style="color:#2196f3;"></i>Központi
+                Nyilvántartás</h2>
+            <div class="search-box">
+                <input type="text" id="tableSearch" placeholder="Keresés a táblázatban..." onkeyup="searchTable()">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+
+        <div class="registry-container">
+            <div class="file-tabs" id="fileTabs">
+                <!-- TABS INJECTED HERE -->
+            </div>
+
+            <div id="tablesContainer">
+                <!-- TABLES INJECTED HERE -->
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/registry_data.js"></script>
+    <script>
+        let currentTableId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabsContainer = document.getElementById('fileTabs');
+            const tablesContainer = document.getElementById('tablesContainer');
+
+            const data = window.REGISTRY_DATA;
+
+            if (!data || data.length === 0) {
+                tablesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open fa-3x mb-3"></i>
+                        <h3>Nincs betöltött adat</h3>
+                        <p>A "nyilvantartas" mappa üres vagy nem tartalmaz feldolgozható HTML fájlokat.</p>
+                        <small>Futtasd az "extract_registry.py" szkriptet az adatok frissítéséhez.</small>
+                    </div>`;
+                return;
+            }
+
+            // Create Tabs
+            data.forEach((file, index) => {
+                const tab = document.createElement('div');
+                tab.className = `file-tab ${index === 0 ? 'active' : ''}`;
+                tab.innerHTML = `<i class="fas fa-file-alt"></i> ${file.title || file.filename}`;
+                tab.onclick = () => switchTab(index);
+                tabsContainer.appendChild(tab);
+            });
+
+            // Initial Render
+            renderFile(data[0]);
+
+            window.switchTab = (index) => {
+                document.querySelectorAll('.file-tab').forEach((t, i) => {
+                    if (i === index) t.classList.add('active');
+                    else t.classList.remove('active');
+                });
+                renderFile(data[index]);
+            };
+
+            function renderFile(fileData) {
+                tablesContainer.innerHTML = '';
+
+                if (!fileData.tables || fileData.tables.length === 0) {
+                    tablesContainer.innerHTML = '<div class="empty-state">Ebben a fájlban nem található táblázat.</div>';
+                    return;
+                }
+
+                fileData.tables.forEach((table, tIndex) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'table-wrapper fade-in';
+
+                    const uniqueId = `table-scroll-${tIndex}`;
+
+                    const topScroll = document.createElement('div');
+                    topScroll.className = 'top-scroll-wrapper';
+                    topScroll.id = `top-${uniqueId}`;
+                    topScroll.innerHTML = `<div class="top-scroll-content"></div>`; // Inner width set later
+
+                    const scrollContainer = document.createElement('div');
+                    scrollContainer.className = 'table-scroll-container';
+                    scrollContainer.id = `bottom-${uniqueId}`;
+
+                    let html = `<table class="data-table" id="dataTable-${tIndex}">`;
+
+                    // Headers
+                    if (table.headers && table.headers.length > 0) {
+                        html += `<thead><tr>`;
+                        table.headers.forEach(h => html += `<th>${h}</th>`);
+                        html += `</tr></thead>`;
+                    }
+
+                    // Rows
+                    html += `<tbody>`;
+                    table.rows.forEach((row, rowIndex) => {
+                        html += `<tr>`;
+                        row.forEach(cell => {
+                            let content = '';
+                            let style = '';
+                            let cellText = '';
+
+                            if (typeof cell === 'object' && cell !== null) {
+                                if (cell.bgcolor || (cell.style && cell.style.includes('background'))) {
+                                    const rawColor = cell.bgcolor || '#333';
+                                    style = `background: ${rawColor}; color: white;`;
+                                }
+
+                                if (cell.isLink) {
+                                    content = `<a href="${cell.href}" class="data-link" target="_blank">${cell.text}</a>`;
+                                    cellText = cell.text;
+                                } else {
+                                    content = cell.text || '';
+                                    cellText = content;
+                                }
+                            } else {
+                                content = cell;
+                                cellText = String(cell);
+                            }
+
+                            // Dynamic coloring for ALL rows (identifying patterns), excluding links
+                            const isLink = (typeof cell === 'object' && cell !== null && cell.isLink);
+
+                            if (!isLink && cellText.trim().length > 0) {
+                                const color = stringToPastelColor(cellText);
+                                style += `color: ${color};`;
+                            }
+
+                            html += `<td style="${style}">${content}</td>`;
+                        });
+                        html += `</tr>`;
+                    });
+                    html += `</tbody></table>`;
+
+                    scrollContainer.innerHTML = html;
+
+                    // Custom Title Logic
+                    let title = `Adattábla #${tIndex + 1}`;
+                    if (tIndex === 0 && fileData.filename.includes('Adatgyűjtő')) {
+                        title = '70 kW feletti fűtési rendszerrel üzemelő ingatlanok műszaki adattáblája';
+                    } else if (tIndex === 0) {
+                        // Fallback if filename match fails but user wants it generally
+                        title = '70 kW feletti fűtési rendszerrel üzemelő ingatlanok műszaki adattáblája';
+                    }
+
+                    // Assemble
+                    wrapper.innerHTML = `<h4 class="table-header-title">${title}</h4>`;
+                    wrapper.appendChild(topScroll);
+                    wrapper.appendChild(scrollContainer);
+                    tablesContainer.appendChild(wrapper);
+
+                    // Sync logic after render
+                    setTimeout(() => {
+                        const tableEl = document.getElementById(`dataTable-${tIndex}`);
+                        const topContent = topScroll.querySelector('.top-scroll-content');
+                        if (tableEl && topContent) {
+                            // Set fake width
+                            topContent.style.width = tableEl.offsetWidth + 'px';
+
+                            // Sync events
+                            topScroll.onscroll = () => {
+                                scrollContainer.scrollLeft = topScroll.scrollLeft;
+                            };
+                            scrollContainer.onscroll = () => {
+                                topScroll.scrollLeft = scrollContainer.scrollLeft;
+                            };
+
+                            currentTableId = `dataTable-${tIndex}`; // Track for search
+                        }
+                    }, 100);
+                });
+            }
+
+            function stringToPastelColor(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                const h = Math.abs(hash) % 360;
+                // Muted pastel: 60-80% saturation, 70-85% lightness
+                return `hsl(${h}, 70%, 75%)`;
+            }
+        });
+
+        function searchTable() {
+            const input = document.getElementById('tableSearch');
+            const filter = input.value.toLowerCase();
+
+            // Search in all tables currently visible
+            const table = document.querySelector('.data-table');
+            if (!table) return;
+
+            const cells = table.getElementsByTagName('td');
+            let firstMatch = null;
+
+            for (let i = 0; i < cells.length; i++) {
+                const cell = cells[i];
+                const txtValue = cell.textContent || cell.innerText;
+
+                if (filter && txtValue.toLowerCase().indexOf(filter) > -1) {
+                    cell.classList.add('highlight-match');
+                    if (!firstMatch) {
+                        firstMatch = cell;
+                        // Optional: Scroll to first match
+                        // cell.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+                    }
+                } else {
+                    cell.classList.remove('highlight-match');
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

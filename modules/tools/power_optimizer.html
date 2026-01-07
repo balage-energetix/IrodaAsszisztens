@@ -9,7 +9,10 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -268,6 +271,301 @@
             font-size: 0.7rem;
             font-weight: 800;
         }
+
+        /* PRINTING MODE STYLES */
+        body.printing-mode {
+            background-color: white !important;
+            color: black !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        body.printing-mode * {
+            color: black !important;
+            border-color: black !important;
+            text-shadow: none !important;
+            opacity: 1 !important;
+            /* Fix grayness from opacity */
+            box-shadow: none !important;
+            transition: none !important;
+            /* Prevent animations during capture */
+        }
+
+        /* Essential overrides for full visibility */
+        body.printing-mode .pro-card,
+        body.printing-mode .opt-container,
+        body.printing-mode .info-bar,
+        body.printing-mode input,
+        body.printing-mode select,
+        body.printing-mode textarea {
+            background-color: white !important;
+            background: white !important;
+            border: 1px solid #000 !important;
+            box-shadow: none !important;
+            max-height: none !important;
+            /* CRITICAL FIX for cropping */
+            overflow: visible !important;
+            /* CRITICAL FIX for scrolling */
+            height: auto !important;
+        }
+
+        /* Ensure input area expands fully */
+        body.printing-mode .data-input-area {
+            display: block !important;
+            /* Stack columns for better vertical fit if needed, or keep grid */
+            margin-bottom: 20px !important;
+        }
+
+        body.printing-mode .month-grid {
+            /* Ensure grid cells are visible */
+            page-break-inside: avoid;
+        }
+
+        body.printing-mode .savings-box {
+            background: white !important;
+            color: black !important;
+            border: 2px solid #000 !important;
+            display: block !important;
+            /* Ensure visibility if relevant */
+        }
+
+        /* Hide UI elements */
+        body.printing-mode button,
+        body.printing-mode .app-header,
+        body.printing-mode #calc-hint,
+        body.printing-mode .no-print,
+        body.printing-mode #bulk-input,
+        /* Hide bulk text area, just show inputs */
+        body.printing-mode .mt-4.small.text-muted {
+            /* Hide help text */
+            display: none !important;
+        }
+
+        body.printing-mode .module-header {
+            margin-bottom: 20px !important;
+        }
+
+        body.printing-mode canvas {
+            background-color: white !important;
+        }
+
+        /* Ensure container fits A4 width approx */
+        body.printing-mode .container {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 20px !important;
+            /* More padding */
+            margin: 0 !important;
+        }
+
+        /* STACK EVERYTHING VERTICALLY FOR SAFETY */
+        body.printing-mode .row {
+            display: block !important;
+            margin: 0 !important;
+        }
+
+        body.printing-mode .col-md-5,
+        body.printing-mode .col-md-7,
+        body.printing-mode .col-12 {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: none !important;
+            padding: 0 !important;
+            margin-bottom: 20px !important;
+        }
+
+        /* Fix overlapping inputs area */
+        body.printing-mode .data-input-area {
+            display: block !important;
+        }
+
+        body.printing-mode .data-input-area>div {
+            margin-bottom: 20px !important;
+        }
+
+        /* Fix Result Summary Grid - Allow wrapping */
+        body.printing-mode .result-summary-grid {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            justify-content: space-between !important;
+        }
+
+        body.printing-mode .summary-box {
+            flex: 1 1 18% !important;
+            /* Approx 5 items per row if fit, or wrap */
+            min-width: 100px !important;
+        }
+
+        /* HEADER SPACING FIX - Force non-overlapping stack but COMPACT */
+        body.printing-mode .module-header {
+            margin-bottom: 25px !important;
+            display: block !important;
+            height: auto !important;
+            position: relative !important;
+            padding-bottom: 5px !important;
+        }
+
+        body.printing-mode .module-header h2 {
+            margin-bottom: 15px !important;
+            /* Increased from 5px to prevent overlap */
+            padding-bottom: 5px !important;
+            line-height: 1.3 !important;
+            font-size: 22px !important;
+            /* Smaller font */
+            display: block !important;
+            color: #000 !important;
+            border-bottom: 1px solid #eee !important;
+        }
+
+        body.printing-mode .module-header p {
+            margin-top: 0 !important;
+            /* Compacted */
+            margin-bottom: 15px !important;
+            display: block !important;
+            color: #444 !important;
+            font-size: 12px !important;
+            /* Smaller font */
+            line-height: 1.3 !important;
+        }
+
+        /* COMPACT INPUT GRID FOR SINGLE PAGE FIT */
+        body.printing-mode .month-grid {
+            grid-template-columns: repeat(6, 1fr) !important;
+            /* More columns = less rows */
+            gap: 4px !important;
+        }
+
+        body.printing-mode .month-input {
+            padding: 2px !important;
+            font-size: 10px !important;
+            height: auto !important;
+        }
+
+        body.printing-mode .field-label {
+            font-size: 8px !important;
+            margin-bottom: 0 !important;
+        }
+
+        body.printing-mode #m-cont-0,
+        body.printing-mode #m-cont-1,
+        body.printing-mode .p-1 {
+            padding: 1px !important;
+        }
+
+        /* INPUT / SELECT / TEXTAREA COLOR FIX */
+        /* Specificity override to ensure browser forms don't override color */
+        body.printing-mode select,
+        body.printing-mode input,
+        body.printing-mode textarea,
+        body.printing-mode .styled-input,
+        body.printing-mode .styled-select {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+            /* Some webkits need this */
+            border: 1px solid #000 !important;
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            opacity: 1 !important;
+            font-weight: 700 !important;
+            font-size: 11px !important;
+            /* Smaller font */
+            padding: 4px !important;
+            /* Compact padding */
+            min-height: 0 !important;
+            height: auto !important;
+        }
+
+        /* Reduce general card padding in print */
+        body.printing-mode .pro-card {
+            padding: 10px !important;
+            margin-bottom: 10px !important;
+            border: 1px solid #ccc !important;
+        }
+
+        body.printing-mode h5 {
+            font-size: 14px !important;
+            margin-bottom: 8px !important;
+        }
+
+        body.printing-mode .data-input-area {
+            margin-bottom: 10px !important;
+            gap: 10px !important;
+        }
+
+        body.printing-mode .data-input-area>div {
+            margin-bottom: 10px !important;
+        }
+
+        /* Ensure dropdown arrows or icons don't create white space issues */
+        body.printing-mode select {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            background-image: none !important;
+            /* Remove custom arrows if any */
+        }
+
+        /* CHART RESIZE - Make it smaller to fit */
+        body.printing-mode .pro-card {
+            height: auto !important;
+            /* Allow expansion */
+        }
+
+        body.printing-mode canvas {
+            max-width: 90% !important;
+            max-height: 250px !important;
+            /* Force shorter chart */
+            width: auto !important;
+            height: auto !important;
+            margin: 0 auto !important;
+            display: block !important;
+        }
+
+        /* Hide spacer elements if any */
+        body.printing-mode .mb-3,
+        body.printing-mode .mb-4 {
+            margin-bottom: 5px !important;
+        }
+
+        /* Info Bar wrapping */
+        body.printing-mode .info-bar {
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            padding: 5px !important;
+            margin-bottom: 10px !important;
+            height: auto !important;
+        }
+
+        /* PRINT SPECIFIC HEADER (Logo + Date) */
+        .print-header-only {
+            display: none;
+        }
+
+        body.printing-mode .print-header-only {
+            display: flex !important;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        body.printing-mode .print-header-only .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        body.printing-mode .print-header-only i {
+            font-size: 2rem;
+            color: #000;
+        }
+
+        body.printing-mode .print-header-only .print-date {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-left: auto;
+        }
     </style>
 </head>
 
@@ -283,6 +581,15 @@
     </header>
 
     <main class="container py-5 fade-in">
+        <!-- Print Only Header -->
+        <div class="print-header-only">
+            <div class="logo-section">
+                <i class="fab fa-android"></i>
+                <div style="line-height:1.2; font-weight:800;">IRODAI<br>ASSZISZTENS</div>
+            </div>
+            <div class="print-date" id="print-date-display"></div>
+        </div>
+
         <div class="module-header mb-4 d-flex justify-content-between align-items-center">
             <div>
                 <h2 style="font-weight: 800;">Lekötött Teljesítmény Optimalizáló</h2>
@@ -292,7 +599,7 @@
                 <button class="btn btn-primary"
                     style="border-radius:1rem; padding: 0.75rem 1.5rem; background: var(--accent-pro);"
                     onclick="exportPowerReport()">
-                    <i class="fas fa-file-pdf me-2"></i> RIPORT EXPORT
+                    <i class="fas fa-print me-2"></i> PDF NYOMTATÁS
                 </button>
                 <button class="btn btn-warning" style="border-radius:1rem; padding: 0.75rem 1.5rem; font-weight:800;"
                     onclick="window.open('https://www.eon.hu/hu/egyeb/forms/leopold.html', '_blank')">
@@ -303,7 +610,8 @@
 
         <div id="error-banner"><i class="fas fa-warning me-2"></i> Saját téves érték! Kérjük ellenőrizze az adatokat
             (Max 100 kW, csak számok).</div>
-        <div id="no-data-banner"><i class="fas fa-info-circle me-2"></i> Kérjük adjon meg legalább egy havi csúcsot az
+        <div id="no-data-banner" style="background: #fff3cd; color: #856404; border-color: #ffeeba;"><i
+                class="fas fa-info-circle me-2"></i> Adjon meg legalább 5 hónap csúcsteljesítmény adatot a pontos
             optimalizáláshoz!</div>
 
         <div class="info-bar" id="penalty-info-bar">
@@ -381,7 +689,8 @@
 
                     <div class="mt-4 small text-muted">
                         <p><i class="fas fa-info-circle me-1"></i> A program automatikusan a legkedvezőbb hónapokat
-                            jelöli bejelenthetőnek (3 vagy 6).</p>
+                            jelöli bejelenthetőnek (3 vagy 6). A bejelentés elmulasztása (ideiglenes lekötött
+                            teljesítmény túllépés bejelentésének elmulasztása) jelentős pótdíjjal jár.</p>
                     </div>
                 </div>
 
@@ -451,7 +760,8 @@
                             <div id="risk-info" class="mt-3 p-3 rounded"
                                 style="background: rgba(239, 68, 68, 0.1); font-size: 0.8rem; display: none;">
                                 <i class="fas fa-exclamation-circle text-danger me-2"></i>
-                                <strong>Figyelem!</strong> Magyarországon az elmaradt bejelentés esetén az éves költség
+                                <strong>Figyelem!</strong> Magyarországon az ideiglenes lekötött teljesítmény túllépés
+                                bejelentésének elmulasztása esetén az éves költség
                                 <span id="worst-total-val" style="font-weight: 800;">-- Ft/év</span>-re emelkedik.
                             </div>
 
@@ -521,7 +831,7 @@
             loadDemoData();
             updatePenaltyInfo();
             // Auto run once to show initial state
-            setTimeout(() => calculateOptimum(), 100);
+            setTimeout(() => calculateOptimum(false), 100);
         });
 
         function liveValidate(input) {
@@ -580,7 +890,7 @@
             document.getElementById('results-area').style.display = 'none';
         }
 
-        function calculateOptimum() {
+        function calculateOptimum(scroll = true) {
             document.getElementById('calc-hint').style.display = 'none';
             const sel = document.getElementById('tariff-select');
             let annualRate = (sel.value === 'custom') ? parseFloat(document.getElementById('annual-fee').value) : parseFloat(sel.value);
@@ -619,6 +929,11 @@
             // Rule: 6 announcements only if all 24 months are filled. Otherwise max 3.
             const years = usedPeaks.length > 12 ? 2 : 1;
             const annLimit = usedPeaks.length === 24 ? 6 : 3;
+
+            if (usedPeaks.length < 5) {
+                alert("Az optimalizáláshoz legalább 5 hónap adata szükséges a pontos eredményhez! (Jelenleg: " + usedPeaks.length + " hó)");
+                return;
+            }
 
             document.getElementById('avg-val').innerText = avgVal.toFixed(1) + " kW";
             document.getElementById('max-peak-val').innerText = maxPeak.toFixed(1) + " kW";
@@ -722,7 +1037,9 @@
             });
 
             renderChart(chartData, bestCap);
-            window.scrollTo({ top: document.getElementById('results-area').offsetTop - 100, behavior: 'smooth' });
+            if (scroll) {
+                window.scrollTo({ top: document.getElementById('results-area').offsetTop - 100, behavior: 'smooth' });
+            }
         }
 
         function renderChart(data, best) {
@@ -777,113 +1094,56 @@
                 }
             });
         }
-        function exportPowerReport() {
-            const resultsArea = document.getElementById('results-area');
-            if (resultsArea.style.display === 'none') return alert('Kérjük futtassa le az optimalizálást az exportáláshoz!');
+        async function exportPowerReport() {
+            // Confirm we have data
+            if (document.getElementById('results-area').style.display === 'none') {
+                App.notify('Kérjük futtassa az optimalizálást előbb!', 'warning');
+                return;
+            }
 
-            // Capture the chart as image
-            const chartCanvas = document.getElementById('opt-chart');
-            const chartImg = chartCanvas.toDataURL('image/png');
+            App.notify('Generálás...', 'info');
 
-            // Build the input data table for the report
-            let inputDataTable = '<div style="display:grid; grid-template-columns: repeat(12, 1fr); gap:2px; font-size:8px; margin-top:5px; margin-bottom:15px;">';
-            const monthInputs = document.querySelectorAll('.month-input');
-            monthInputs.forEach((inp, i) => {
-                const val = inp.value;
-                inputDataTable += `<div style="text-align:center; padding:2px; background:#f8fafc; border:1px solid #e2e8f0;">
-                    <div style="color:#64748b; font-weight:800;">${i + 1}.hó</div>
-                    <div style="font-weight:700;">${val}</div>
-                </div>`;
-            });
-            inputDataTable += '</div>';
+            // 0. Scroll to top to ensure capture starts correctly
+            window.scrollTo(0, 0);
 
-            const element = document.createElement('div');
-            element.style.padding = '30px';
-            element.style.background = '#ffffff';
-            element.style.width = '800px'; // Consistent width for export
-            element.style.fontFamily = 'Inter, sans-serif';
+            // 0.5 Set Print Date
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('hu-HU', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('print-date-display').innerText = dateStr;
 
-            element.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:4px solid #4361ee; padding-bottom:15px; margin-bottom:20px;">
-                    <div style="font-size:20px; font-weight:900; color:#4361ee; font-family:Outfit;">IRODAI ASSZISZTENS</div>
-                    <div style="text-align:right;">
-                        <div style="font-weight:800; font-size:16px;">SZAKMAI ENERGETIKAI JAVASLAT</div>
-                        <div style="color:#666; font-size:10px;">Generálva: ${new Date().toLocaleString('hu-HU')}</div>
-                    </div>
-                </div>
+            // 1. Enter Print Mode
+            document.body.classList.add('printing-mode');
 
-                <div style="margin-bottom:10px;">
-                    <div style="font-size:10px; font-weight:800; color:#1e293b; text-transform:uppercase;">Bemeneti Adatok (Mért Havi Csúcsok kW)</div>
-                    ${inputDataTable}
-                </div>
+            // Wait for styles/repaint
+            setTimeout(() => {
+                const element = document.querySelector('main');
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-bottom:20px;">
-                    <div style="background:#f1f5f9; padding:15px; border-radius:10px; text-align:center; border:1px solid #e2e8f0;">
-                         <div style="font-size:10px; color:#64748b; font-weight:800; margin-bottom:5px;">JAVASOLT LEKÖTÉS</div>
-                         <div style="font-size:24px; font-weight:900; color:#10b981;">${document.getElementById('rec-val').innerText}</div>
-                    </div>
-                    <div style="background:#f1f5f9; padding:15px; border-radius:10px; text-align:center; border:1px solid #e2e8f0;">
-                         <div style="font-size:10px; color:#64748b; font-weight:800; margin-bottom:5px;">ÉVES MEGTAKARÍTÁS</div>
-                         <div style="font-size:20px; font-weight:900; color:#4361ee;">${document.getElementById('savings-val').innerText}</div>
-                    </div>
-                    <div style="background:#f1f5f9; padding:15px; border-radius:10px; text-align:center; border:1px solid #e2e8f0;">
-                         <div style="font-size:10px; color:#64748b; font-weight:800; margin-bottom:5px;">MAX. MÉRT CSÚCS</div>
-                         <div style="font-size:20px; font-weight:900; color:#f59e0b;">${document.getElementById('max-peak-val').innerText}</div>
-                    </div>
-                </div>
+                const opt = {
+                    margin: [10, 10],
+                    filename: App.getExportFileName('Teljesitmeny_Optimalizalo', 'pdf'),
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: '#ffffff',
+                        windowWidth: document.body.scrollWidth,
+                        windowHeight: document.body.scrollHeight
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
 
-                <div style="margin-bottom:20px; text-align:center;">
-                    <div style="font-size:12px; font-weight:800; color:#1e293b; margin-bottom:10px; text-transform:uppercase;">Költséggörbe és Optimalizációs Tartomány</div>
-                    <img src="${chartImg}" style="width:100%; max-height:250px; border-radius:10px; border:1px solid #e2e8f0; padding:10px;">
-                </div>
-
-                <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:20px;">
-                    <div>
-                        <h4 style="font-size:14px; border-left:4px solid #4361ee; padding-left:10px; margin-bottom:15px;">SZAKMAI INDOKLÁS</h4>
-                        <div style="font-size:12px; line-height:1.5; color:#334155;">
-                            <p style="margin-bottom:8px;"><strong>Hálózati Hatékonyság:</strong> A mért csúcsértékek eloszlása alapján a fenti lekötési szint biztosítja a legalacsonyabb fajlagos költséget.</p>
-                            <p style="margin-bottom:8px;"><strong>Kockázati Puffer:</strong> A kalkuláció figyelembe veszi a szezonális ingadozásokat, így elkerülhetővé válnak a bejelentés nélküli túllépések magas büntetési tételei.</p>
-                            <p><strong>Pénzügyi Mérleg:</strong> Az éves alapdíj csökkenése jelentősen meghaladja a kalkulált alkalmi túllépési díjakat, így a módosítás gazdaságilag indokolt.</p>
-                        </div>
-                    </div>
-                    <div style="background:#f8fafc; padding:15px; border-radius:10px; border:1px solid #e2e8f0;">
-                        <h4 style="font-size:12px; text-align:center; margin-bottom:10px;">KÖLTSÉG ÖSSZESÍTŐ</h4>
-                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
-                            <span>Éves alapdíj:</span>
-                            <span style="font-weight:700;">${document.getElementById('base-cost-val').innerText}</span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
-                            <span>Tervezett pótdíjak:</span>
-                            <span style="font-weight:700;">${(parseInt(document.getElementById('ann-penalty-val').innerText.replace(/\s/g, '')) + parseInt(document.getElementById('unann-penalty-val').innerText.replace(/\s/g, ''))).toLocaleString('hu-HU')} Ft</span>
-                        </div>
-                        <div style="margin-top:10px; padding-top:10px; border-top:2px solid #cbd5e1; display:flex; justify-content:space-between; font-size:14px; font-weight:900; color:#4361ee;">
-                            <span>Mindösszesen:</span>
-                            <span>${document.getElementById('grand-total-val').innerText}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin-top:30px; padding:15px; background:#fff7ed; border:1px solid #ffedd5; border-radius:10px; font-size:10px; color:#9a3412;">
-                    <strong>NYILATKOZAT:</strong> Ez a riport havi mérési adatokon alapuló szimuláció. A végleges döntés előtt javasolt az aktuális csatlakozási szerződés és a műszaki feltételek felülvizsgálata.
-                </div>
-            `;
-
-            // Style fixes to ensure visible rendering before capture if needed
-            element.style.position = 'absolute';
-            element.style.left = '-9999px';
-            document.body.appendChild(element);
-
-            const opt = {
-                margin: 10,
-                filename: App.getExportFileName('Teljesitmeny_Riport', 'pdf'),
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 3, useCORS: true, logging: false },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                document.body.removeChild(element);
-            });
+                html2pdf().from(element).set(opt).save()
+                    .then(() => {
+                        document.body.classList.remove('printing-mode');
+                        App.notify('Sikeres letöltés!', 'success');
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        document.body.classList.remove('printing-mode');
+                        App.notify('Hiba történt.', 'error');
+                    });
+            }, 500);
         }
         updateTariffValue();
     </script>

@@ -12,6 +12,8 @@
 
     <!-- Core Styles -->
     <link rel="stylesheet" href="../../css/main.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
     <style>
         :root {
             --tree-width: 400px;
@@ -20,23 +22,41 @@
             --node-selected: rgba(52, 152, 219, 0.2);
         }
 
-        /* User Request: Dark mode text should be black */
-        [data-theme="dark"] body,
+        /* User Request: Dark mode refinements */
+        [data-theme="dark"] .module-header h2 {
+            color: #ffffff !important;
+        }
+
+        [data-theme="dark"] .tree-column,
+        [data-theme="dark"] .invoice-column {
+            background: #2d2d2d !important;
+            border-color: #444444 !important;
+        }
+
         [data-theme="dark"] .tree-node,
         [data-theme="dark"] .node-label,
         [data-theme="dark"] .premium-table td,
         [data-theme="dark"] .premium-table th,
-        [data-theme="dark"] h2,
         [data-theme="dark"] h4,
         [data-theme="dark"] small,
-        [data-theme="dark"] span {
-            color: #000000 !important;
+        [data-theme="dark"] span:not(.badge) {
+            color: #ffffff !important;
         }
 
-        /* Ensure some visibility in dark mode if text is black */
-        [data-theme="dark"] .tree-column,
-        [data-theme="dark"] .invoice-column {
-            background: rgba(255, 255, 255, 0.9) !important;
+        [data-theme="dark"] .tree-header,
+        [data-theme="dark"] .invoice-header {
+            background: #333333 !important;
+            border-bottom-color: #444444 !important;
+        }
+
+        [data-theme="dark"] .search-box input {
+            background: #444444 !important;
+            color: #ffffff !important;
+            border-color: #555555 !important;
+        }
+
+        [data-theme="dark"] .premium-table tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .polc-layout {

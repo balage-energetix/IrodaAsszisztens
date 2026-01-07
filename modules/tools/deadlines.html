@@ -361,6 +361,20 @@
             // Remove actions column from export
             element.querySelectorAll('.btn-link, th:last-child, td:last-child').forEach(e => e.remove());
 
+            // Print Shield
+            element.style.cssText = `
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                padding: 20px;
+                width: 100%;
+            `;
+            const allEls = element.querySelectorAll('*');
+            allEls.forEach(el => {
+                el.style.color = '#000000';
+                el.style.borderColor = '#000000';
+                el.style.backgroundColor = '#ffffff'; // remove dark backgrounds
+            });
+
             const opt = {
                 margin: 10,
                 filename: App.getExportFileName('Hataridok_Riport', 'pdf'),

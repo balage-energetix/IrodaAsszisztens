@@ -191,18 +191,45 @@
                 data: { labels: months, datasets },
                 options: {
                     responsive: true,
-                    plugins: { legend: { labels: { color: App.state.theme === 'dark' ? '#f8f9fa' : '#2b2d42', font: { family: 'Outfit', weight: 'bold' } } } }
+                    plugins: { legend: { labels: { color: '#000000', font: { family: 'Outfit', weight: 'bold' } } } }
                 }
             });
         }
 
-        function exportPDF() {
-            html2pdf().from(document.getElementById('capture-area')).set({
-                margin: 10,
-                filename: App.getExportFileName('Vizualizacio', 'pdf'),
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            }).save();
+        const element = document.getElementById('capture-area');
+        const opt = {
+            margin: 10,
+            filename: App.getExportFileName('Vizualizacio', 'pdf'),
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        };
+
+        // Inject Print Shield
+        const originalStyle = element.getAttribute('style');
+        element.style.cssText = `
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                padding: 20px;
+                width: 100%;
+            `;
+
+        // Force text colors on children
+        const allElements = element.getElementsByTagName('*');
+        const originalColors = [];
+        for (let el of allElements) {
+            originalColors.push(el.style.color);
+            el.style.color = '#000000';
+            if (el.style.borderColor) el.style.borderColor = '#000000';
         }
+
+        html2pdf().from(element).set(opt).save().then(() => {
+            // Restore styles
+            element.setAttribute('style', originalStyle || '');
+            for (let i = 0; i < allElements.length; i++) {
+                allElements[i].style.color = originalColors[i];
+            }
+        });
 
         addRow();
     </script>

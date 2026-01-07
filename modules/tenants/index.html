@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bérlői elszámolások státusza - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
+    <style>
+        .tenant-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .type-pill {
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 700;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .type-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
+        }
+
+        .table-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-light);
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .tenant-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 0.9rem;
+        }
+
+        .tenant-table th {
+            text-align: left;
+            padding: 1rem;
+            background: var(--bg-light);
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tenant-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: 0.2s;
+        }
+
+        .tenant-table tr:hover td {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .pod-pill {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        .status-ok {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"
+                style="color:var(--accent-purple) !important;"></i><span
+                style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                    class="fas fa-file-invoice text-primary me-2"></i>Bérlői elszámolások státusza</h2>
+            <button class="btn btn-primary" onclick="exportPDF()"><i class="fas fa-file-pdf me-2"></i> PDF
+                EXPORT</button>
+        </div>
+
+        <div class="tenant-selector" id="type-selector">
+            <div class="type-pill active" onclick="switchType('ELECTRIC', this)"><i class="fas fa-bolt"></i>
+                Villamosenergia</div>
+            <div class="type-pill" onclick="switchType('GAS', this)"><i class="fas fa-fire"></i> Földgáz</div>
+            <div class="type-pill" onclick="switchType('WATER', this)"><i class="fas fa-droplet"></i> Víz / Csatorna
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="tenant-search" placeholder="Keresés helyszín vagy POD alapján..."
+                    oninput="filterTable()">
+            </div>
+            <div class="table-responsive">
+                <table class="tenant-table">
+                    <thead>
+                        <tr>
+                            <th>Helyszín</th>
+                            <th>Bérlő Neve</th>
+                            <th>POD Azonosító</th>
+                            <th>Gyári Szám</th>
+                            <th>Utolsó Állás</th>
+                            <th>Utolsó Számla</th>
+                            <th>Záródátum</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tenant-body">
+                        <!-- Content injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const tenantData = [
+            { t: 'ELECTRIC', l: 'Ady E. u. 1/a ép.', b: 'Városi Könyvtár', p: 'HU000120-11-S-4331', s: '83921029', v: '12402 kWh', n: 'RF-2024/011', d: '2024.12.31' },
+            { t: 'ELECTRIC', l: 'Baross Gábor utca 1', b: 'Tourinform Iroda', p: 'HU000120-11-S-9807', s: '72819201', v: '4521 kWh', n: 'RF-2024/012', d: '2024.12.31' },
+            { t: 'ELECTRIC', l: 'Széchenyi tér 25.', b: 'Múzeum Kávézó', p: 'HU000120-11-S-4899', s: '99201822', v: '89201 kWh', n: 'RF-2024/015', d: '2024.11.20' },
+            { t: 'GAS', l: 'Árpád utca 1.', b: 'Helyi Pékség', p: 'HU000120-GAS-0033', s: 'GA-99201', v: '12050 m3', n: 'GZ-2024/88', d: '2024.12.15' },
+            { t: 'WATER', l: 'Kiszely László utca 7.', b: 'Virágbolt', p: 'HU-WTR-004830', s: 'W-002931', v: '430 m3', n: 'VZ-2024/05', d: '2024.12.01' },
+            { t: 'ELECTRIC', l: 'Kossuth L. u. 3.', b: 'Ügyvédi Iroda', p: 'HU000120-11-S-5329', s: '33910211', v: '560 kWh', n: 'RF-2024/018', d: '2024.12.31' },
+            { t: 'ELECTRIC', l: 'Korányi Sándor utca 5.', b: 'Sportegyesület', p: 'HU000120-11-S-4387', s: '12039122', v: '3200 kWh', n: 'RF-2024/019', d: '2024.12.28' }
+        ];
+
+        let currentType = 'ELECTRIC';
+
+        function renderTable() {
+            const body = document.getElementById('tenant-body');
+            const search = document.getElementById('tenant-search').value.toLowerCase();
+
+            const filtered = tenantData.filter(d =>
+                d.t === currentType &&
+                (d.l.toLowerCase().includes(search) || d.p.toLowerCase().includes(search))
+            );
+
+            body.innerHTML = filtered.map(row => `
+                <tr>
+                    <td style="font-weight:700;">${row.l}</td>
+                    <td style="font-weight:600; color:var(--primary);">${row.b}</td>
+                    <td><span class="pod-pill">${row.p}</span></td>
+                    <td>${row.s}</td>
+                    <td style="font-weight:700;">${row.v}</td>
+                    <td style="color:var(--text-muted); font-size:0.8rem;">${row.n}</td>
+                    <td><span class="status-badge status-ok">${row.d}</span></td>
+                </tr>
+            `).join('');
+
+            if (filtered.length === 0) {
+                body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);"><i class="fas fa-search-minus me-2"></i> Nincs a keresési feltételnek megfelelő találat.</td></tr>';
+            }
+        }
+
+        function switchType(type, el) {
+            currentType = type;
+            document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            renderTable();
+        }
+
+        function filterTable() {
+            renderTable();
+        }
+
+        function exportPDF() {
+            const element = document.querySelector('.table-card');
+
+            const opt = {
+                margin: 10,
+                filename: `Berloi_Elszamolasok_${new Date().toISOString().slice(0, 10)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            };
+
+            // Print Shield
+            const originalStyle = element.getAttribute('style');
+            element.style.cssText = `
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 20px;
+            `;
+
+            // Force table text
+            const textElements = element.querySelectorAll('th, td, span, div');
+            textElements.forEach(el => {
+                el.dataset.printColor = el.style.color;
+                el.style.color = '#000000';
+            });
+
+            App.notify('PDF generálása folyamatban...', 'info');
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.setAttribute('style', originalStyle || '');
+                textElements.forEach(el => {
+                    el.style.color = el.dataset.printColor || '';
+                });
+                App.notify('Sikeres exportálás!', 'success');
+            }).catch(err => {
+                console.error(err);
+                element.setAttribute('style', originalStyle || '');
+                textElements.forEach(el => {
+                    el.style.color = el.dataset.printColor || '';
+                });
+                App.notify('Hiba az exportálás során.', 'error');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTable);
+    </script>
+</body>
+
+</html>
+<!-- Module refreshed -->

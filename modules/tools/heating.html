@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fűtésvezérlés Felügyelet - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
+    <style>
+        .heating-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .heating-table th {
+            background: var(--bg-light);
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .heating-table td {
+            padding: 1.25rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .mode-gas {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .mode-pump {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .temp-val {
+            font-family: 'Outfit';
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .curve-val {
+            background: var(--bg-light);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.4rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .row-warning {
+            background: #fff5f5 !important;
+        }
+
+        [data-theme="dark"] .row-warning {
+            background: #2d0000 !important;
+        }
+
+        .warning-icon {
+            color: #ef4444;
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"
+                style="color:var(--accent-purple) !important;"></i><span
+                style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+            <div>
+                <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                        class="fas fa-temperature-arrow-up text-primary me-2"></i>Fűtésvezérlés Felügyelet</h2>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Intézményi fűtési rendszerek valós idejű
+                    paraméterei és állapotjelzései.</p>
+            </div>
+            <button class="btn btn-primary" onclick="App.notify('Paraméterek frissítése...', 'info')"><i
+                    class="fas fa-sync-alt me-2"></i> FRISSÍTÉS</button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="heating-table">
+                <thead>
+                    <tr>
+                        <th width="50"></th>
+                        <th>Intézmény / Cím</th>
+                        <th>Fűtési Mód</th>
+                        <th>Beállított Hőm.</th>
+                        <th>Meredekség</th>
+                        <th>Eltolás</th>
+                        <th>Állapot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td><strong>Polgármesteri Hivatal</strong><br><small>Baross Gábor u. 9.</small></td>
+                        <td><span class="mode-badge mode-gas"><i class="fas fa-fire"></i> Gázkazán</span></td>
+                        <td><span class="temp-val">21.5°C</span></td>
+                        <td><span class="curve-val">1.4</span></td>
+                        <td><span class="curve-val">+2</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr class="row-warning">
+                        <td><i class="fas fa-exclamation-triangle warning-icon"></i></td>
+                        <td><strong>Kulturális Központ</strong><br><small>Nagy Imre tér 1.</small></td>
+                        <td><span class="mode-badge mode-gas"><i class="fas fa-fire"></i> Gáz (Hiba!)</span></td>
+                        <td><span class="temp-val">18.0°C</span></td>
+                        <td><span class="curve-val">1.2</span></td>
+                        <td><span class="curve-val">0</span></td>
+                        <td style="color:#ef4444; font-weight:800;">Áramláskapcsoló hiba</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Nagyatádi Járóbeteg Ellátó</strong><br><small>Bajcsy-Zsilinszky u. 1.</small></td>
+                        <td><span class="mode-badge mode-pump"><i class="fas fa-wind"></i> Hőszivattyú</span></td>
+                        <td><span class="temp-val">22.0°C</span></td>
+                        <td><span class="curve-val">0.6</span></td>
+                        <td><span class="curve-val">+4</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Idősek Otthona</strong><br><small>Puskás Tivadar u. 2.</small></td>
+                        <td><span class="mode-badge mode-gas"><i class="fas fa-fire"></i> Gázkazán</span></td>
+                        <td><span class="temp-val">23.5°C</span></td>
+                        <td><span class="curve-val">1.6</span></td>
+                        <td><span class="curve-val">+3</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Városi Sportcsarnok</strong><br><small>Izsó Lajos u. 2.</small></td>
+                        <td><span class="mode-badge mode-pump"><i class="fas fa-wind"></i> Hőszivattyú</span></td>
+                        <td><span class="temp-val">19.0°C</span></td>
+                        <td><span class="curve-val">0.8</span></td>
+                        <td><span class="curve-val">0</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Napsugár Óvoda</strong><br><small>Dózsa György u. 12.</small></td>
+                        <td><span class="mode-badge mode-gas"><i class="fas fa-fire"></i> Gázkazán</span></td>
+                        <td><span class="temp-val">22.5°C</span></td>
+                        <td><span class="curve-val">1.5</span></td>
+                        <td><span class="curve-val">+2</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Városi Strandfürdő</strong><br><small>Zrínyi u. 1.</small></td>
+                        <td><span class="mode-badge mode-pump"><i class="fas fa-wind"></i> Hőszivattyú</span></td>
+                        <td><span class="temp-val">24.0°C</span></td>
+                        <td><span class="curve-val">0.5</span></td>
+                        <td><span class="curve-val">+5</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Ady Endre Gimnázium</strong><br><small>Táncsics u. 1.</small></td>
+                        <td><span class="mode-badge mode-gas"><i class="fas fa-fire"></i> Gázkazán</span></td>
+                        <td><span class="temp-val">20.0°C</span></td>
+                        <td><span class="curve-val">1.4</span></td>
+                        <td><span class="curve-val">+1</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Szent István Tagiskola</strong><br><small>Szent István park 1.</small></td>
+                        <td><span class="mode-badge mode-gas"><i class="fas fa-fire"></i> Gázkazán</span></td>
+                        <td><span class="temp-val">21.0°C</span></td>
+                        <td><span class="curve-val">1.4</span></td>
+                        <td><span class="curve-val">+2</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>Városi Múzeum</strong><br><small>Széchenyi tér 2.</small></td>
+                        <td><span class="mode-badge mode-pump"><i class="fas fa-wind"></i> Hőszivattyú</span></td>
+                        <td><span class="temp-val">20.5°C</span></td>
+                        <td><span class="curve-val">0.7</span></td>
+                        <td><span class="curve-val">+1</span></td>
+                        <td style="color:#10b981; font-weight:700;"><i class="fas fa-check-circle me-1"></i> Rendben
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="hint" style="margin-top: 2rem;">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Megjegyzés:</strong> A hőszivattyús rendszerek meredeksége (Slope) jellemzően 0.4 és 0.8 között
+            ideális, míg a gázkazánoknál 1.2 - 1.6 tartomány javasolt az időjáráskövető szabályozásnál.
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Üzenőfal - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .feed-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .filter-bar {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 0.5rem;
+            scrollbar-width: thin;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-chip:hover,
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .message-card {
+            background: var(--bg-card);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .msg-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .msg-meta {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .msg-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.4rem;
+            background: rgba(123, 97, 255, 0.1);
+            color: var(--accent-purple);
+        }
+
+        .msg-target {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .msg-time {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .msg-content {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+
+        /* Category specific colors */
+        .cat-finance {
+            color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+
+        .cat-tech {
+            color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .cat-tender {
+            color: #9b59b6;
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .cat-admin {
+            color: #e67e22;
+            background: rgba(230, 126, 34, 0.1);
+        }
+
+        .cat-utility {
+            color: #f1c40f;
+            background: rgba(241, 196, 15, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="section-title mb-0"><i class="fas fa-bullhorn me-2" style="color:#ff4081;"></i>Üzenőfal</h2>
+            <button class="btn" style="border-radius:2rem; padding:0.5rem 1.2rem; font-size:0.9rem;"
+                onclick="App.notify('Új üzenet írása fejlesztés alatt!', 'info')">
+                <i class="fas fa-plus me-2"></i>Új Üzenet
+            </button>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-chip active" onclick="filterMsgs('all')">Összes</div>
+            <div class="filter-chip" onclick="filterMsgs('Pénzügy')"><i class="fas fa-coins"></i>Pénzügy</div>
+            <div class="filter-chip" onclick="filterMsgs('Műszak')"><i class="fas fa-tools"></i>Műszak</div>
+            <div class="filter-chip" onclick="filterMsgs('Pályázat')"><i class="fas fa-file-contract"></i>Pályázat</div>
+            <div class="filter-chip" onclick="filterMsgs('Műszaki Vezetők')"><i class="fas fa-user-hard-hat"></i>Műszaki
+                Vezetők</div>
+            <div class="filter-chip" onclick="filterMsgs('Intézményvezetők')"><i
+                    class="fas fa-users-cog"></i>Intézményvezetők</div>
+            <div class="filter-chip" onclick="filterMsgs('Energiakereskedők')"><i
+                    class="fas fa-bolt"></i>Energiakereskedők</div>
+            <div class="filter-chip" onclick="filterMsgs('Közműszolgáltatók')"><i
+                    class="fas fa-water"></i>Közműszolgáltatók</div>
+        </div>
+
+        <div class="feed-container" id="feed">
+            <!-- Initial Hardcoded Entry -->
+            <div class="message-card" data-category="Műszak">
+                <div class="msg-header">
+                    <div class="msg-meta">
+                        <span class="msg-category cat-tech"><i class="fas fa-tools me-1"></i>Műszak</span>
+                        <div class="msg-target" title="Címzettek"><i class="fas fa-users"></i> Hivatal, Intézmények
+                        </div>
+                    </div>
+                    <div class="msg-time">
+                        <i class="far fa-clock"></i> 2026.01.07. 12:45
+                    </div>
+                </div>
+                <div class="msg-content">
+                    <strong>Energetikai Felülvizsgálat Értesítő</strong><br><br>
+                    2026. január hónap második felében a <strong>Hivatal, Irodaház, Gyógyfürdő, Idősek otthona,
+                        Szociális központ, Árpád utcai bölcsőde, Alkotmány utcai óvoda</strong> épületeiben 70 kW
+                    feletti rendszerek kötelező energetikai felülvizsgálata kerül elvégzésre a gázkazánok
+                    füstelvezetőjén lévő nyíláson keresztül végzett füstösszetétel méréssel.
+                    <br><br>
+                    <i class="fas fa-info-circle text-primary me-1"></i> <em>A mérés elvégzése előtt minden helyszínen
+                        próbaindítást végzek.</em>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        function filterMsgs(category) {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const cards = document.querySelectorAll('.message-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.display = 'none';
+                    card.style.opacity = '0';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

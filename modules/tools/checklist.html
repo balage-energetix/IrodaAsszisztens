@@ -145,7 +145,7 @@
     <script>
         const tasks = {
             daily: [
-                "fűtés ellenőrzése .. 5 épületben",
+                "Fűtés ellenőrzése 5 épületben (szezonális)",
                 "Közműcsatlakozási kérelmek eljárása",
                 "Távleolvasási mérési adatok felügyelete",
                 "Közvilágítási hibák jelzése"
@@ -205,10 +205,24 @@
             // Temporary style for 2-column portrait print
             const originalStyle = element.getAttribute('style') || '';
             element.style.gridTemplateColumns = '1fr 1fr';
+            // Print Shield Style
+            element.style.backgroundColor = '#ffffff';
+            element.style.color = '#000000';
+
             element.querySelectorAll('.list-card').forEach(card => {
                 card.style.pageBreakInside = 'avoid';
                 card.style.marginBottom = '1rem';
+                // Force card styles
+                card.style.backgroundColor = '#ffffff';
+                card.style.color = '#000000';
+                card.style.border = '1px solid #000000';
+                card.style.boxShadow = 'none';
             });
+
+            // Force text
+            const textNodes = element.querySelectorAll('h4, span, div');
+            textNodes.forEach(t => t.style.color = '#000000');
+
 
             const opt = {
                 margin: 10,
@@ -220,7 +234,15 @@
 
             html2pdf().from(element).set(opt).save().then(() => {
                 element.setAttribute('style', originalStyle);
-                element.querySelectorAll('.list-card').forEach(card => card.style.pageBreakInside = '');
+                element.querySelectorAll('.list-card').forEach(card => {
+                    card.style.pageBreakInside = '';
+                    card.style.marginBottom = '';
+                    card.style.backgroundColor = '';
+                    card.style.color = '';
+                    card.style.border = '';
+                    card.style.boxShadow = '';
+                });
+                textNodes.forEach(t => t.style.color = '');
             });
         }
 

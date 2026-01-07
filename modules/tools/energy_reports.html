@@ -229,8 +229,31 @@
                     <p class="text-muted small mb-0">Napelemes rendszerek teljesítmény analitikája és környezeti hatása
                     </p>
                 </div>
-                <div class="filters">
-                    <select id="yearFilter" class="styled-select" onchange="updateView()">
+                <div class="filters"
+                    style="display: flex; flex-direction: row; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div id="location-selector" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <label class="eco-pill" style="cursor:pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="location" value="gyogyfurdo"
+                                onchange="loadLocationData(this.value)" checked> Gyógyfürdő
+                        </label>
+                        <label class="eco-pill" style="cursor:pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="location" value="irodahaz"
+                                onchange="loadLocationData(this.value)"> Irodaház
+                        </label>
+                        <label class="eco-pill" style="cursor:pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="location" value="muvhaz" onchange="loadLocationData(this.value)">
+                            Művház
+                        </label>
+                        <label class="eco-pill" style="cursor:pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="location" value="onkori" onchange="loadLocationData(this.value)">
+                            Önkormányzat
+                        </label>
+                        <label class="eco-pill" style="cursor:pointer; display: flex; align-items: center; gap: 5px;">
+                            <input type="radio" name="location" value="turisztika"
+                                onchange="loadLocationData(this.value)"> Turisztika
+                        </label>
+                    </div>
+                    <select id="yearFilter" class="styled-select" onchange="updateView()" style="min-width: 150px;">
                         <option value="all">Összesített adatok</option>
                     </select>
                 </div>
@@ -265,7 +288,7 @@
                     <div class="metric-icon" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;"><i
                             class="fas fa-coins"></i></div>
                     <div class="metric-info">
-                        <h4>Megtakarítás</h4>
+                        <h4>A termelt villamosenergia tőzsdei összértéke</h4>
                         <div id="savingsHuf" class="value">0 Ft</div>
                     </div>
                 </div>
@@ -294,12 +317,13 @@
         </div>
 
         <div style="text-align: center; margin-top: 3rem;">
-            <p class="text-muted small"><i class="fas fa-info-circle me-1"></i> Az adatok a
-                `comparative-month-chart-data.csv` alapján kerültek generálásra.</p>
+            <p class="text-muted small"><i class="fas fa-info-circle me-1"></i> Az adatok a központi adatbázisból (CSV)
+                kerültek betöltésre.</p>
         </div>
     </main>
 
     <script src="../../js/main.js"></script>
+    <script src="../../js/energy_data.js"></script>
     <script>
         let rawData = [];
         let chart = null;
@@ -309,51 +333,93 @@
         const TREE_ABSORPTION = 22;
         const HOME_DAILY_USE = 10;
 
-        const SOLAR_DATA = [
-            { "date": "01.2021", "value": 0 }, { "date": "02.2021", "value": 0 }, { "date": "03.2021", "value": 0 },
-            { "date": "04.2021", "value": 0 }, { "date": "05.2021", "value": 0 }, { "date": "06.2021", "value": 0 },
-            { "date": "07.2021", "value": 0 }, { "date": "08.2021", "value": 0 }, { "date": "09.2021", "value": 15495 },
-            { "date": "10.2021", "value": 2791739 }, { "date": "11.2021", "value": 1643157 }, { "date": "12.2021", "value": 1024405 },
-            { "date": "01.2022", "value": 1810811 }, { "date": "02.2022", "value": 2825295 }, { "date": "03.2022", "value": 4219599 },
-            { "date": "04.2022", "value": 4256964 }, { "date": "05.2022", "value": 5141717 }, { "date": "06.2022", "value": 6012757 },
-            { "date": "07.2022", "value": 5893771 }, { "date": "08.2022", "value": 4724873 }, { "date": "09.2022", "value": 3283249 },
-            { "date": "10.2022", "value": 2767277 }, { "date": "11.2022", "value": 1033729 }, { "date": "12.2022", "value": 711871 },
-            { "date": "01.2023", "value": 940470 }, { "date": "02.2023", "value": 2103830 }, { "date": "03.2023", "value": 3545418 },
-            { "date": "04.2023", "value": 3947011 }, { "date": "05.2023", "value": 5187980 }, { "date": "06.2023", "value": 6624997 },
-            { "date": "07.2023", "value": 7124654 }, { "date": "08.2023", "value": 5917789 }, { "date": "09.2023", "value": 5072216 },
-            { "date": "10.2023", "value": 3442411 }, { "date": "11.2023", "value": 1832867 }, { "date": "12.2023", "value": 997179 },
-            { "date": "01.2024", "value": 1538358 }, { "date": "02.2024", "value": 2716877 }, { "date": "03.2024", "value": 4330163 },
-            { "date": "04.2024", "value": 5660901 }, { "date": "05.2024", "value": 6361055 }, { "date": "06.2024", "value": 5870281 },
-            { "date": "07.2024", "value": 6837237 }, { "date": "08.2024", "value": 6335484 }, { "date": "09.2024", "value": 3720597 },
-            { "date": "10.2024", "value": 3216972 }, { "date": "11.2024", "value": 1560732 }, { "date": "12.2024", "value": 937170 },
-            { "date": "01.2025", "value": 1340041 }, { "date": "02.2025", "value": 2512973 }, { "date": "03.2025", "value": 4082737 },
-            { "date": "04.2025", "value": 5154405 }, { "date": "05.2025", "value": 5814795 }, { "date": "06.2025", "value": 7164447 },
-            { "date": "07.2025", "value": 5351130 }, { "date": "08.2025", "value": 5989129 }, { "date": "09.2025", "value": 4237108 },
-            { "date": "10.2025", "value": 3009985 }, { "date": "11.2025", "value": 1519357 }, { "date": "12.2025", "value": 764624 },
-            { "date": "01.2026", "value": 47045 }, { "date": "02.2026", "value": 0 }, { "date": "03.2026", "value": 0 },
-            { "date": "04.2026", "value": 0 }, { "date": "05.2026", "value": 0 }, { "date": "06.2026", "value": 0 },
-            { "date": "07.2026", "value": 0 }, { "date": "08.2026", "value": 0 }, { "date": "09.2026", "value": 0 },
-            { "date": "10.2026", "value": 0 }, { "date": "11.2026", "value": 0 }, { "date": "12.2026", "value": 0 }
-        ];
+
 
         async function init() {
+            // Load Gyógyfürdő by default using the ID
+            loadLocationData('gyogyfurdo');
+        }
+
+        async function loadLocationData(inputId) {
             try {
-                rawData = SOLAR_DATA;
+                // Map UI IDs to Data Keys
+                const keyMap = {
+                    'gyogyfurdo': 'gyógyfürdő.csv',
+                    'irodahaz': 'irodahaz.csv',
+                    'muvhaz': 'muvhaz.csv',
+                    'onkori': 'onkori.csv',
+                    'turisztika': 'turisztikai_kozpont.csv'
+                };
+
+                // Determine the correct key
+                let dataKey = keyMap[inputId] || inputId;
+
+                // Fallback: If passed key already has extension or isn't in map
+                if (!window.ENERGY_DATA[dataKey] && window.ENERGY_DATA[inputId]) {
+                    dataKey = inputId;
+                }
+
+                // Direct data access from window.ENERGY_DATA
+                if (!window.ENERGY_DATA || !window.ENERGY_DATA[dataKey]) {
+                    console.warn(`Data key handling mismatch: ${inputId} -> ${dataKey}`);
+                    // Specific fallback for default load if needed
+                    if (inputId.includes('.csv') && window.ENERGY_DATA[inputId]) {
+                        dataKey = inputId;
+                    } else {
+                        throw new Error(`Nincs adat a következőhöz: ${dataKey} (${inputId})`);
+                    }
+                }
+
+                rawData = window.ENERGY_DATA[dataKey];
+
+                if (!rawData || rawData.length === 0) {
+                    App.notify(`${dataKey} adatbázisa üres.`, 'warning');
+                    return;
+                }
+
+                // Update active state of pills
+                updatePillStyles();
+
                 populateYearFilter();
                 updateView();
-                console.log("Energetikai adatok betöltve.");
-            } catch (e) { console.error(e); }
+                App.notify(`${dataKey.split('.')[0].toUpperCase()} adatai betöltve.`, 'success');
+            } catch (e) {
+                console.error("Data Load Error:", e);
+                App.notify('Hiba az adatok betöltésekor: ' + e.message, 'error');
+            }
         }
+
+        function updatePillStyles() {
+            document.querySelectorAll('#location-selector .eco-pill').forEach(pill => {
+                const input = pill.querySelector('input');
+                if (input.checked) {
+                    pill.style.background = 'rgba(67, 97, 238, 0.2)';
+                    pill.style.borderColor = 'var(--primary)';
+                    pill.style.color = 'var(--primary)';
+                } else {
+                    pill.style.background = 'transparent';
+                    pill.style.borderColor = 'var(--border-color)';
+                    pill.style.color = 'var(--text-main)';
+                }
+            });
+        }
+
 
         function populateYearFilter() {
             const years = [...new Set(rawData.map(d => d.date.split('.')[1]))].sort();
             const filter = document.getElementById('yearFilter');
+            const currentYear = filter.value;
+            filter.innerHTML = '<option value="all">Összesített adatok</option>';
             years.forEach(year => {
                 const opt = document.createElement('option');
                 opt.value = year;
                 opt.textContent = `${year} év termelése`;
                 filter.appendChild(opt);
             });
+            // Try to keep selection if possible
+            if ([...filter.options].some(o => o.value === currentYear)) {
+                filter.value = currentYear;
+            }
         }
 
         function updateView() {
@@ -470,3 +536,4 @@
 </body>
 
 </html>
+<!-- Module refreshed -->

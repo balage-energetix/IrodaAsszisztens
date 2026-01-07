@@ -91,6 +91,11 @@
             font-weight: 800;
             color: var(--text-muted);
         }
+
+        /* User Request: Dark mode button text should be white */
+        [data-theme="dark"] .action-btn {
+            color: #ffffff !important;
+        }
     </style>
 </head>
 
@@ -108,7 +113,6 @@
 
     <main class="container py-5 fade-in">
         <div class="module-header" style="max-width: 800px; margin-inline: auto;">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-home"></i></a>
             <h2 style="font-weight: 800;"><i class="fas fa-pencil-alt text-primary me-2"></i>Új Gyors Feljegyzés</h2>
         </div>
 
@@ -188,6 +192,12 @@
                 document.getElementById('pdf-date').innerText = date;
                 document.getElementById('pdf-cat').innerText = cat;
                 document.getElementById('pdf-content').innerText = text;
+
+                // Print Shield
+                tpl.style.backgroundColor = '#ffffff';
+                tpl.style.color = '#000000';
+                const allTpl = tpl.querySelectorAll('*');
+                allTpl.forEach(el => el.style.color = '#000000');
 
                 tpl.style.display = 'block';
                 html2pdf().from(tpl).set({

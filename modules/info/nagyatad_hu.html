@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nagyatád.hu Részletes Összefoglaló - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
+    <style>
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-section {
+            background: var(--bg-card);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .info-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-section h3 {
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-list li {
+            padding: 0.75rem;
+            background: var(--bg-light);
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .info-list li strong {
+            display: block;
+            color: var(--primary);
+            margin-bottom: 2px;
+        }
+
+        .pill-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .info-pill {
+            background: var(--primary-light, #e0e7ff);
+            color: var(--primary, #1a237e);
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .quick-contact {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            border-left: 4px solid var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"
+                style="color:var(--accent-purple) !important;"></i><span
+                style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+            <button onclick="App.toggleTheme()"
+                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
+                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                        class="fas fa-landmark text-primary me-2"></i>Nagyatád Digitális Portfolió</h2>
+                <p style="color: var(--text-muted); margin-top: 0.3rem;">Átfogó intézményi és szolgáltatási adatbázis.
+                </p>
+            </div>
+            <a href="https://nagyatad.hu" target="_blank" class="btn btn-primary"><i
+                    class="fas fa-external-link-alt me-2"></i> HIVATALOS OLDAL</a>
+        </div>
+
+        <div class="info-grid">
+            <!-- Polgármesteri Hivatal -->
+            <div class="info-section">
+                <h3><i class="fas fa-building-columns"></i> Hivatali Igazgatás</h3>
+                <ul class="info-list" style="margin-top: 1rem;">
+                    <li><strong>Cím:</strong> Baross Gábor u. 9.</li>
+                    <li><strong>Polgármester:</strong> Dr. Ludas László</li>
+                    <li><strong>Alpolgármester:</strong> Kárpáti László</li>
+                    <li><strong>Jegyző:</strong> Dr. Kovács Ildikó</li>
+                    <li><strong>Aljegyző:</strong> Dr. Nagy Vera</li>
+                </ul>
+                <div class="pill-group">
+                    <span class="info-pill">E-PAPÍR ÜGYINTÉZÉS</span>
+                </div>
+            </div>
+
+            <!-- Képviselő-testület -->
+            <div class="info-section">
+                <h3><i class="fas fa-users"></i> Képviselő-testület</h3>
+                <ul class="info-list">
+                    <li><strong>Tagok:</strong> Boros Bálint, Csonka László, Duka Enikő, Jámbor Szabolcs, Melles Zoltán,
+                        Németh Csaba, Pánczél Roland.</li>
+                </ul>
+            </div>
+
+            <!-- Adóügyek & Pénzügy -->
+            <div class="info-section">
+                <h3><i class="fas fa-calculator"></i> Adóügyi Ügyintézés</h3>
+                <ul class="info-list">
+                    <li><strong>Helyi iparűzési adó:</strong> Bevallási határidő: május 31.</li>
+                    <li><strong>Építményadó:</strong> Évi kétszeri befizetés (márc. 15, szept. 15).</li>
+                    <li><strong>Kommunális adó:</strong> Magánszemélyek éves kötelezettsége.</li>
+                </ul>
+                <div class="pill-group">
+                    <span class="info-pill">ADÓBEVALLÁS</span>
+                </div>
+            </div>
+
+            <!-- Kultúra & Turizmus -->
+            <div class="info-section">
+                <h3><i class="fas fa-masks-theater"></i> Kultúra & Élmény</h3>
+                <ul class="info-list">
+                    <li><strong>Kulturális Központ:</strong> Széchenyi tér 7. (06 82 504 071)</li>
+                    <li><strong>Városi Múzeum:</strong> Széchenyi tér 25.</li>
+                    <li><strong>Városi Könyvtár:</strong> Széchenyi tér 13-14.</li>
+                    <li><strong>Turisztikai Központ:</strong> Széchenyi tér 7.</li>
+                    <li><strong>Gyógyfürdő és Uszoda:</strong> Széchenyi tér 11.</li>
+                </ul>
+            </div>
+
+            <!-- Egészségügy -->
+            <div class="info-section">
+                <h3><i class="fas fa-heart-pulse"></i> Egészségügyi Hálózat</h3>
+                <ul class="info-list">
+                    <li><strong>Járóbeteg Ellátó:</strong> Bajcsy-Zsilinszky u. 1. (06 82 504 400)</li>
+                    <li><strong>Ügyeleti szolgálat:</strong> Hétköznap 16:00 után, hétvégén 24h.</li>
+                    <li><strong>Védőnői szolgálat:</strong> Anya- és gyermekvédelem (Dózsa Gy. u.)</li>
+                </ul>
+                <div class="pill-group">
+                    <span class="info-pill">GYÓGYSZERTÁRAK</span>
+                    <span class="info-pill">SZAKRENDELÉSEK</span>
+                </div>
+            </div>
+
+            <!-- Sport & Szabadidő -->
+            <div class="info-section">
+                <h3><i class="fas fa-swimmer"></i> Sport & Szabadidő</h3>
+                <ul class="info-list">
+                    <li><strong>Városi Strandfürdő:</strong> Termál- és úszómedencék (Zrínyi u. 1.)</li>
+                    <li><strong>Sportcsarnok:</strong> Edzések és városi sportesemények (Izsó L. u.)</li>
+                    <li><strong>Mudra József Sportpálya:</strong> Labdarúgás és atlétika.</li>
+                </ul>
+            </div>
+
+            <!-- Szociális Háló -->
+            <div class="info-section">
+                <h3><i class="fas fa-hand-holding-heart"></i> Szociális Szolgáltatások</h3>
+                <ul class="info-list">
+                    <li><strong>Idősek Otthona:</strong> Puskás Tivadar u. 2. (06 82 504 000)</li>
+                    <li><strong>Családsegítő Központ:</strong> Lelki és anyagi segítségnyújtás.</li>
+                    <li><strong>Közétkeztetés:</strong> Ebédbefizetés és menza koordináció.</li>
+                </ul>
+            </div>
+
+            <!-- Oktatás & Nevelés -->
+            <div class="info-section">
+                <h3><i class="fas fa-graduation-cap"></i> Oktatás & Nevelés</h3>
+                <ul class="info-list">
+                    <li><strong>Általános Iskolák:</strong> Bárdos Lajos és Ady Endre Iskolák.</li>
+                    <li><strong>Középiskola:</strong> Nagyatádi Ady Endre Gimnázium.</li>
+                    <li><strong>Óvodák:</strong> Városi Napközi Otthonos Óvoda (több telephely).</li>
+                </ul>
+                <div class="pill-group">
+                    <span class="info-pill">BEIRATKOZÁS</span>
+                    <span class="info-pill">MENZA</span>
+                </div>
+            </div>
+
+            <!-- Környezetvédelem -->
+            <div class="info-section">
+                <h3><i class="fas fa-leaf"></i> Környezetvédelem</h3>
+                <ul class="info-list">
+                    <li><strong>Hulladékszállítás:</strong> Viridis-Pannonia Nonprofit Kft.</li>
+                    <li><strong>Szelektív gyűjtés:</strong> Szigetszerű és házhoz menő gyűjtés.</li>
+                    <li><strong>Zöldterület kezelés:</strong> Városgondnokság koordinálásában.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Hivatalos Nyitvatartás -->
+        <div class="info-section" style="margin-top: 2rem;">
+            <h3><i class="fas fa-clock"></i> Ügyfélfogadási Rend (Városháza)</h3>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: center;">
+                <div style="padding: 1rem; background: var(--bg-light); border-radius: 1rem;">
+                    <div style="font-weight: 800; color: var(--primary);">HÉTFŐ</div>
+                    <div style="font-size: 0.9rem;">8:00 – 12:00<br>12:30 – 16:00</div>
+                </div>
+                <div style="padding: 1rem; background: var(--bg-light); border-radius: 1rem;">
+                    <div style="font-weight: 800; color: var(--primary);">SZERDA</div>
+                    <div style="font-size: 0.9rem;">8:00 – 12:00<br>12:30 – 16:00</div>
+                </div>
+                <div style="padding: 1rem; background: var(--bg-light); border-radius: 1rem;">
+                    <div style="font-weight: 800; color: var(--primary);">PÉNTEK</div>
+                    <div style="font-size: 0.9rem;">8:00 – 12:00</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>
