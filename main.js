@@ -88,7 +88,7 @@ const App = {
                         <a href="${p}modules/tech/meter_readings.html" class="nav-dropdown-item"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i> Mérőállás Rögzítő</a>
                         <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
                         <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
-                        <a href="${p}modules/map/basemap.html" class="nav-dropdown-item"><i class="fas fa-map" style="color:#00bcd4;"></i> Alaptérkép</a>
+                        <a href="${p}modules/map/basemap.html" class="nav-dropdown-item disabled"><i class="fas fa-map" style="color:#00bcd4;"></i> Alaptérkép</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
@@ -96,7 +96,7 @@ const App = {
                         <a href="${p}modules/info/message_board.html" class="nav-dropdown-item"><i class="fas fa-bullhorn" style="color:#ff4081;"></i> Üzenőfal</a>
                         <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
                         <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
-                        <a href="${p}modules/info/public_light_maps.html" class="nav-dropdown-item"><i class="fas fa-map-marked" style="color:#00bcd4;"></i> Közvilágítási térképek</a>
+                        <a href="${p}modules/info/public_light_maps.html" class="nav-dropdown-item disabled"><i class="fas fa-map-marked" style="color:#00bcd4;"></i> Közvilágítási térképek</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -111,6 +111,8 @@ const App = {
                         <a href="${p}modules/utils/index.html" class="nav-dropdown-item"><i class="fas fa-bolt" style="color:#fbc02d;"></i> Gyorsító Eszközök</a>
                         <a href="${p}modules/tools/notes.html" class="nav-dropdown-item"><i class="fas fa-sticky-note" style="color:#ffee58;"></i> Gyors Feljegyzés</a>
                         <a href="${p}modules/tools/translator.html" class="nav-dropdown-item"><i class="fas fa-language" style="color:#4caf50;"></i> Fordító Segéd</a>
+                        <a href="${p}modules/tools/ai_vision.html" class="nav-dropdown-item"><i class="fas fa-brain" style="color:#5c6bc0;"></i> AI Képfelismerő</a>
+                        <a href="${p}modules/tools/videolibrary.html" class="nav-dropdown-item"><i class="fas fa-video" style="color:#f44336;"></i> Videó Könyvtár</a>
                     </div>
                 </div>
                 <div class="nav-cat">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
