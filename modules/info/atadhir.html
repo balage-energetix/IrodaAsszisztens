@@ -5,50 +5,193 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atádi Hírek - Irodai Asszisztens</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
-        .news-card {
+        :root {
+            --news-accent: #4361ee;
+            --news-bg-glass: rgba(255, 255, 255, 0.7);
+        }
+
+        [data-theme="dark"] {
+            --news-bg-glass: rgba(26, 35, 126, 0.2);
+        }
+
+        .news-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 992px) {
+            .news-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Live Feed Card Styling */
+        .feed-container {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .article-card {
             background: var(--bg-card);
-            border-radius: 2rem;
-            padding: 2.5rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
-        }
-
-        .article-summary {
-            margin-bottom: 3rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .article-summary:last-child {
-            border: none;
-        }
-
-        .article-summary h3 {
-            font-family: 'Outfit';
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .highlight-box {
-            background: rgba(67, 97, 238, 0.05);
-            border-left: 5px solid var(--primary);
+            border-radius: 1.25rem;
             padding: 1.5rem;
-            margin: 1.5rem 0;
-            border-radius: 0 1rem 1rem 0;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            gap: 1.5rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none !important;
+            color: inherit !important;
         }
 
-        .date-tag {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 600;
-            display: block;
+        .article-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: var(--news-accent);
+            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.1);
+        }
+
+        .article-card::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 5px;
+            background: var(--news-accent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .article-card:hover::after {
+            opacity: 1;
+        }
+
+        .article-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 1rem;
+            object-fit: cover;
+            background: var(--bg-light);
+            flex-shrink: 0;
+        }
+
+        .article-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .article-body h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
             margin-bottom: 0.5rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .article-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Sidebar Styling */
+        .sidebar-section {
+            background: var(--news-bg-glass);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            position: sticky;
+            top: calc(var(--header-height) + 1rem);
+        }
+
+        .summary-badge {
+            background: var(--news-accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .summary-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin-bottom: 0;
+        }
+
+        /* Loader & Animations */
+        .loader-overlay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem;
+            text-align: center;
+        }
+
+        .pulse-icon {
+            font-size: 3rem;
+            color: var(--news-accent);
+            animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.5;
+            }
+        }
+
+        .fade-up {
+            animation: fade-up-anim 0.5s ease-out forwards;
+        }
+
+        @keyframes fade-up-anim {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -62,75 +205,148 @@
         </div>
     </header>
 
-    <main class="container py-5 fade-in">
-        <div class="d-flex justify-content-between align-items-center mb-5">
-            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
-                    class="fas fa-newspaper text-primary me-2"></i>Atádi Hírek (Összefoglaló)</h2>
+    <main class="container py-4 fade-in">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                        class="fas fa-newspaper text-primary me-3"></i>Atádi Hírek</h2>
+                <p style="color: var(--text-muted); margin-top: 0.3rem;">Friss hírek és havi összefoglalók Nagyatádról.
+                </p>
+            </div>
+            <button class="btn btn-primary btn-sm no-print" onclick="fetchNews()">
+                <i class="fas fa-sync-alt me-2" id="refresh-icon"></i> Frissítés
+            </button>
         </div>
 
-        <div class="news-card">
-            <h3 class="mb-4" style="font-family:'Outfit'; font-weight: 800; color: var(--primary);">Havi Híradó
-                Összefoglaló (2025. dec. - 2026. jan.)</h3>
-            <div class="highlight-box"
-                style="background: rgba(67, 97, 238, 0.08); border-radius: 1rem; margin-bottom: 3rem;">
-                <p style="font-size: 0.95rem; line-height: 1.6;"><strong>Nagyatád és környéke:</strong> Az évforduló
-                    környékén a város jelentős infrastrukturális fejlesztéseken ment keresztül. A karácsonyi ünnepségek
-                    után a fókusz a 2026-os gazdasági tervek és fenntarthatósági célok felé tolódott. Kiemelten sikeres
-                    a helyi közlekedési reform és a digitális közigazgatás fejlesztése.</p>
-            </div>
-
-            <h4 class="mb-4" style="font-family:'Outfit'; color:var(--text-muted);">Legfrissebb Hírek</h4>
-
-            <div class="article-summary">
-                <span class="date-tag">2026. JANUÁR 01.</span>
-                <h3>Újévi köszöntő és tervek 2026-ra</h3>
-                <p>Polgármesteri köszöntő keretében ismertették a város 2026-os fejlesztési prioritásait: fókuszban az
-                    energiafüggetlenség és a zöldterületek növelése.</p>
-                <div class="highlight-box">
-                    <strong>Célkitűzés:</strong> Legalább 20%-os rezsicsökkentés az önkormányzati intézményeknél
-                    napelem-beruházásokkal.
+        <div class="news-layout">
+            <!-- Left: News Feed -->
+            <div id="news-feed-container">
+                <div class="loader-overlay" id="news-loader">
+                    <i class="fas fa-circle-notch fa-spin pulse-icon mb-3"></i>
+                    <p class="h5 font-weight-bold">Hírek gyűjtése...</p>
+                    <p class="text-muted small">atadhir.hu/nagyatad</p>
+                </div>
+                <div class="feed-container" id="news-grid" style="display: none;">
+                    <!-- JS Injected -->
                 </div>
             </div>
 
-            <div class="article-summary">
-                <span class="date-tag">2025. DECEMBER 28.</span>
-                <h3>Ünnepi fények és rendezvények Nagyatádon</h3>
-                <p>Nagyatád városában az idén is sikeresen zajlottak az adventi programsorozatok. A kulturális központ
-                    előtti téren felállított Betlehem és a városi karácsonyfa rengeteg látogatót vonzott.</p>
-                <div class="highlight-box">
-                    <strong>Főbb momentumok:</strong> A jótékonysági forraltbor-osztás során rekordmennyiségű adomány
-                    gyűlt össze a helyi rászoruló családok javára.
+            <!-- Right: Sidebar -->
+            <aside>
+                <div class="sidebar-section">
+                    <span class="summary-badge">Havi Összefoglaló</span>
+                    <h5 class="mb-3" style="font-weight: 800;">Városházi Krónika</h5>
+                    <div id="ai-summary">
+                        <p class="summary-text">A város fókuszában az energetikai hatékonyság és a közösségi
+                            fejlesztések álltak. A téli időszak prioritása a közüzemi hálózatok stabil fenntartása és a
+                            készülő költségvetési tervek megalapozása volt.</p>
+                        <hr class="my-3 opacity-20">
+                        <div class="d-flex align-items-center gap-2 small text-muted">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="current-period"></span>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="article-summary">
-                <span class="date-tag">2025. DECEMBER 20.</span>
-                <h3>Fejlesztések a városi infrastruktúrában</h3>
-                <p>Lezárult a legutóbbi útfelújítási szakasz a belvárosban. Az új aszfaltréteg mellett korszerűsítették
-                    a csapadékvíz-elvezető rendszert is.</p>
-                <div class="highlight-box">
-                    <strong>Eredmény:</strong> Közel 1.5 kilométernyi útszakasz újult meg, tehermentesítve a
-                    mellékutcákat.
+                <div class="sidebar-section">
+                    <h5 class="mb-3" style="font-weight: 800;">Hivatalos Csatornák</h5>
+                    <div class="list-group list-group-flush" style="background: transparent;">
+                        <a href="https://www.atadhir.hu" target="_blank" class="nav-dropdown-item px-0">
+                            <i class="fas fa-globe text-primary"></i> atadhir.hu
+                        </a>
+                        <a href="https://nagyatad.hu" target="_blank" class="nav-dropdown-item px-0">
+                            <i class="fas fa-landmark text-primary"></i> nagyatad.hu
+                        </a>
+                        <a href="https://www.facebook.com/atadhir" target="_blank" class="nav-dropdown-item px-0">
+                            <i class="fab fa-facebook text-primary"></i> Facebook Feed
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <div class="article-summary">
-                <span class="date-tag">2025. NOVEMBER 15.</span>
-                <h3>Térségi Hulladékgazdálkodási reform</h3>
-                <p>Új szelektív gyűjtőpontokat helyeztek ki a környező kistelepüléseken, modernizálva a korábbi
-                    rendszert.</p>
-                <div class="highlight-box">
-                    <strong>Változás:</strong> Hatékonyabb szállítási útvonalak, csökkenő környezeti terhelés.
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align:center; color:var(--text-muted); font-size:0.8rem;">
-            <i class="fas fa-info-circle me-1"></i> Forrás: atadhir.hu alapján készített összefoglaló
+            </aside>
         </div>
     </main>
 
     <script src="../../js/main.js"></script>
+    <script>
+        const monthNames = ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
+
+        async function fetchNews() {
+            const grid = document.getElementById('news-grid');
+            const loader = document.getElementById('news-loader');
+            const refreshIcon = document.getElementById('refresh-icon');
+
+            loader.style.display = 'flex';
+            grid.style.display = 'none';
+            refreshIcon.classList.add('fa-spin');
+
+            try {
+                const targetUrl = 'https://www.atadhir.hu/nagyatad/';
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+
+                if (data.contents) {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data.contents, 'text/html');
+
+                    // Specific Selectors identified for atadhir.hu
+                    const articles = doc.querySelectorAll('.ultp-block-item');
+                    let html = '';
+
+                    if (articles.length > 0) {
+                        articles.forEach((item, index) => {
+                            if (index >= 12) return; // Limit to 12 articles
+
+                            const titleEl = item.querySelector('h2.ultp-block-title a, .ultp-block-title a');
+                            const title = titleEl?.innerText.trim() || 'Nincs cím';
+                            const link = titleEl?.href || '#';
+
+                            // Handle relative links if the proxy doesn't handle them
+                            const absoluteLink = link.startsWith('http') ? link : 'https://www.atadhir.hu' + (link.startsWith('/') ? '' : '/') + link;
+
+                            // Extract image
+                            const imgEl = item.querySelector('img');
+                            const imgSrc = imgEl?.src || 'https://via.placeholder.com/150?text=Atádhír';
+
+                            // Extract category/date if available
+                            const dateEl = item.querySelector('.ultp-block-date');
+                            const date = dateEl?.innerText.trim() || new Date().toLocaleDateString('hu-HU');
+
+                            html += `
+                                <a href="${absoluteLink}" target="_blank" class="article-card fade-up" style="animation-delay: ${index * 0.1}s">
+                                    <img src="${imgSrc}" class="article-img" alt="${title}" onerror="this.src='https://via.placeholder.com/150?text=News'">
+                                    <div class="article-body">
+                                        <h3>${title}</h3>
+                                        <div class="article-meta">
+                                            <span><i class="fas fa-calendar-day me-1"></i> ${date}</span>
+                                            <span><i class="fas fa-external-link-alt me-1"></i> Részletek</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                        grid.innerHTML = html;
+                    } else {
+                        grid.innerHTML = '<div class="alert alert-info">Jelenleg nem találhatók friss hírek. Látogasson el közvetlenül az atadhir.hu oldalra!</div>';
+                    }
+                }
+            } catch (error) {
+                console.error("Scraper Error:", error);
+                grid.innerHTML = '<div class="alert alert-danger">Hiba történt a hírek betöltésekor. Kérjük frissítse az oldalt vagy próbálja később!</div>';
+            } finally {
+                loader.style.display = 'none';
+                grid.style.display = 'grid';
+                refreshIcon.classList.remove('fa-spin');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            document.getElementById('current-period').innerText = `${now.getFullYear()} ${monthNames[now.getMonth()]}`;
+            fetchNews();
+        });
+    </script>
 </body>
 
 </html>

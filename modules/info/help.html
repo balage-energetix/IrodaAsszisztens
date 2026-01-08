@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Súgó - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .help-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .sitemap-container {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .tree-node {
+            margin-left: 1.5rem;
+            border-left: 2px dashed var(--border-color);
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .tree-node::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.7rem;
+            width: 0.8rem;
+            height: 2px;
+            background: var(--border-color);
+        }
+
+        .node-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .node-label:hover {
+            background: rgba(var(--primary-rgb), 0.05);
+            color: var(--primary);
+        }
+
+        .node-label.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .content-area {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            min-height: 600px;
+        }
+
+        .guide-card h3 {
+            font-family: 'Outfit';
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--bg-light);
+            border-radius: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: scale(1.02);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .feature-text h5 {
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-text p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header mb-5 text-center">
+            <h2 class="section-title"><i class="fas fa-question-circle text-primary me-2"></i>Rendszer Súgó &
+                Oldaltérkép</h2>
+            <p class="text-muted">Ismerje meg az Irodai Asszisztens funkcióit és felépítését</p>
+        </div>
+
+        <div class="help-layout">
+            <div class="sitemap-container">
+                <h4 class="mb-4" style="font-weight: 800;"><i class="fas fa-sitemap me-2 text-primary"></i>Navigációs fa
+                </h4>
+
+                <!-- Dashboard Section -->
+                <div class="tree-root">
+                    <div class="node-label active" onclick="toggleNode(this, 'dashboard')">
+                        <i class="fas fa-chevron-right chevron"></i> <i class="fas fa-home"></i> Vezérlőpult
+                    </div>
+                </div>
+
+                <!-- Műszaki Section -->
+                <div class="tree-root">
+                    <div class="node-label" onclick="toggleNode(this, 'tech-all')">
+                        <i class="fas fa-chevron-right chevron"></i> <i class="fas fa-microchip"></i> Műszaki Eszközök
+                    </div>
+                    <div class="tree-node" style="display:none;">
+                        <div class="node-label" onclick="loadGuide('tech-meter')">Mérőállás Rögzítő</div>
+                        <div class="node-label" onclick="loadGuide('tech-map')">Problématérkép</div>
+                        <div class="node-label" onclick="loadGuide('tech-publiclight')">Közvilágítási térkép</div>
+                        <div class="node-label" onclick="loadGuide('tech-basemap')">Alaptérkép</div>
+                        <div class="node-label" onclick="loadGuide('tech-checklist')">Check-lista</div>
+                        <div class="node-label" onclick="loadGuide('tech-energy')">Energetikai Riportok</div>
+                        <div class="node-label" onclick="loadGuide('tech-optimizer')">Teljesítmény Optimalizáló</div>
+                        <div class="node-label" onclick="loadGuide('tech-geothermal')">Geotermális fűtés</div>
+                        <div class="node-label" onclick="loadGuide('tech-outages')">Közmű szünetek</div>
+                    </div>
+                </div>
+
+                <!-- Eszközök Section -->
+                <div class="tree-root">
+                    <div class="node-label" onclick="toggleNode(this, 'tools-all')">
+                        <i class="fas fa-chevron-right chevron"></i> <i class="fas fa-tools"></i> Eszközök
+                    </div>
+                    <div class="tree-node" style="display:none;">
+                        <div class="node-label" onclick="loadGuide('tools-pdf')">PDF Szerkesztő & Kinyerő</div>
+                        <div class="node-label" onclick="loadGuide('tools-gen')">Nyomtatvány generátor</div>
+                        <div class="node-label" onclick="loadGuide('tools-drone')">Drón fotótár</div>
+                        <div class="node-label" onclick="loadGuide('tools-speech')">AI Speech (STT/TTS)</div>
+                        <div class="node-label" onclick="loadGuide('tools-deadlines')">Határidő napló</div>
+                        <div class="node-label" onclick="loadGuide('tools-weather')">Időjárás Napló</div>
+                    </div>
+                </div>
+
+                <!-- Elszámolás Section -->
+                <div class="tree-root">
+                    <div class="node-label" onclick="toggleNode(this, 'bill-all')">
+                        <i class="fas fa-chevron-right chevron"></i> <i class="fas fa-file-invoice-dollar"></i>
+                        Elszámolás
+                    </div>
+                    <div class="tree-node" style="display:none;">
+                        <div class="node-label" onclick="loadGuide('bill-contract')">Szerződés Nyilvántartó</div>
+                        <div class="node-label" onclick="loadGuide('bill-calc')">Energetikai kalkulátor</div>
+                        <div class="node-label" onclick="loadGuide('bill-budget')">Költségvetési tervező</div>
+                        <div class="node-label" onclick="loadGuide('bill-tenants')">Bérlői elszámolások</div>
+                        <div class="node-label" onclick="loadGuide('bill-heating')">Fűtésvezérlés (POLC)</div>
+                    </div>
+                </div>
+
+                <!-- Információ Section -->
+                <div class="tree-root">
+                    <div class="node-label" onclick="toggleNode(this, 'info-all')">
+                        <i class="fas fa-chevron-right chevron"></i> <i class="fas fa-info-circle"></i> Információ
+                    </div>
+                    <div class="tree-node" style="display:none;">
+                        <div class="node-label" onclick="loadGuide('info-news')">Atádi Hírek</div>
+                        <div class="node-label" onclick="loadGuide('info-proc')">Műszaki Ügymenetek</div>
+                        <div class="node-label" onclick="loadGuide('info-phone')">Telefonkönyv</div>
+                        <div class="node-label" onclick="loadGuide('info-links')">Linkgyűjtemény</div>
+                        <div class="node-label" onclick="loadGuide('info-messages')">Üzenőfal</div>
+                    </div>
+                </div>
+
+                <!-- Ismeretek Section -->
+                <div class="tree-root">
+                    <div class="node-label" onclick="toggleNode(this, 'edu-all')">
+                        <i class="fas fa-chevron-right chevron"></i> <i class="fas fa-graduation-cap"></i> Ismeretek
+                    </div>
+                    <div class="tree-node" style="display:none;">
+                        <div class="node-label" onclick="loadGuide('edu-admin')">Közigazgatás</div>
+                        <div class="node-label" onclick="loadGuide('edu-iso')">EIR ISO 50001</div>
+                        <div class="node-label" onclick="loadGuide('edu-lean')">Irodai Lean & Billentyűk</div>
+                        <div class="node-label" onclick="loadGuide('edu-relax')">Relax Center</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="guide-content" class="content-area">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const guides = {
+            dashboard: {
+                title: "Vezérlőpult - A rendszer szíve",
+                desc: "A központi operációs felület, ahonnan az összes almodul elérhető.",
+                features: [
+                    { icon: "th-large", title: "Intelligens Csempék", text: "Kategóriákba rendezett, 3D hatással ellátott modulok az azonnali azonosításhoz." },
+                    { icon: "search", title: "Dinamikus Keresés", text: "Valós idejű szűrés a modulok között (Alt + F)." },
+                    { icon: "moon", title: "Éjszakai Mód", text: "Professzionális sötét téma a szemkímélő munkavégzéshez." }
+                ]
+            },
+            'tech-meter': {
+                title: "Mérőállás Rögzítő",
+                desc: "Fogyasztási adatok pontos, helyszíni rögzítése és dokumentálása.",
+                features: [
+                    { icon: "gauge-high", title: "Gyorskeresés", text: "Fogyasztási helyek azonosítása cím vagy azonosító alapján." },
+                    { icon: "file-pdf", title: "PDF Generálás", text: "A rögzített óraállásokról hitelesített PDF jegyzőkönyv készül." },
+                    { icon: "history", title: "Előzmények", text: "A rögzített adatok helyileg tárolódnak, így később is visszakereshetők." }
+                ]
+            },
+            'tech-map': {
+                title: "Problématérkép",
+                desc: "Közterületi hibák és feladatok vizualizációja OpenStreetMap alapokon.",
+                features: [
+                    { icon: "map-marker-alt", title: "Interaktív Markerek", text: "Különböző típusú hibák (kátyú, világítás, szemét) rögzítése egyedi ikonokkal." },
+                    { icon: "table", title: "Krónikus Hibahelyek", text: "A visszatérő hibák táblázatos elemzése és rangsorolása." }
+                ]
+            },
+            'tech-publiclight': {
+                title: "Közvilágítási térkép",
+                desc: "A város közvilágítási hálózatának és lámpatesteinek nyilvántartása.",
+                features: [
+                    { icon: "lightbulb", title: "Lámpatest adatok", text: "Típus, teljesítmény és állapot információk minden fénypontra." },
+                    { icon: "search-location", title: "Helyszín azonosítás", text: "Gyors navigálás a hibahelyszínekre a térképen." }
+                ]
+            },
+            'tech-basemap': {
+                title: "Alaptérkép",
+                desc: "Nagy felbontású, mérnöki pontosságú raszter-alaptérkép integráció.",
+                features: [
+                    { icon: "expand", title: "Smart Zoom", text: "Fókuszált betöltés a városközpontra 150%-os nagyítással." },
+                    { icon: "pencil-alt", title: "Annotation Layer", text: "Szabadkézi rajz és jelölés közvetlenül a térképre, ami szinkronban marad a nagyítással." }
+                ]
+            },
+            'tech-checklist': {
+                title: "Check-lista",
+                desc: "Rendszeres karbantartási és ellenőrzési feladatok digitális munkalapja.",
+                features: [
+                    { icon: "clipboard-check", title: "Havi rutinfeladatok", text: "Épületek fűtésellenőrzése és tűzvédelmi bejárások követése." },
+                    { icon: "history", title: "Naplózás", text: "Az elvégzett feladatok és észlelt hibák visszakereshető rögzítése." }
+                ]
+            },
+            'tech-energy': {
+                title: "Energetikai Riportok",
+                desc: "Napelemes és intézményi fogyasztási adatok vizuális elemzése.",
+                features: [
+                    { icon: "chart-bar", title: "Trendelemzés", text: "Havi és éves fogyasztási görbék összehasonlítása." },
+                    { icon: "solar-panel", title: "PV Termelés", text: "Napelemes rendszerek hatékonyságának monitorozása." }
+                ]
+            },
+            'tech-optimizer': {
+                title: "Teljesítmény Optimalizáló",
+                desc: "Elektromos hálózat terhelésének és hatékonyságának javítását segítő eszköz.",
+                features: [
+                    { icon: "bolt", title: "Peak-Shaving", text: "Csúcsterhelések azonosítása és javaslatok a levezetésre." },
+                    { icon: "balance-scale", title: "Fázisegyensúly", text: "A hálózati stabilitás ellenőrzése mért adatok alapján." }
+                ]
+            },
+            'tech-geothermal': {
+                title: "Geotermális fűtés",
+                desc: "A városi hőszivattyús rendszer és távhőműszaki paraméterei.",
+                features: [
+                    { icon: "hot-tub", title: "Kutak állapota", text: "Hőmérséklet és hozam adatok valós idejű követése." },
+                    { icon: "project-diagram", title: "Hálózati séma", text: "A fűtési körök és puffertartályok műszaki rajzai." }
+                ]
+            },
+            'tech-outages': {
+                title: "Közmű szünetek",
+                desc: "Tervezett és váratlan szolgáltatás-kiesések nyilvántartása.",
+                features: [
+                    { icon: "plug-circle-exclamation", title: "E.ON Értesítések", text: "Áram- és gázszünetek előrejelzése és térképi megjelenítése." },
+                    { icon: "bell", title: "Figyelmeztetések", text: "Értesítés az érintett intézményeknek a kiesés előtt." }
+                ]
+            },
+            'tools-pdf': {
+                title: "PDF Szerkesztő & Kinyerő",
+                desc: "Digitális dokumentumok gyors kezelése és adatkinyerése.",
+                features: [
+                    { icon: "file-edit", title: "Annotációk", text: "Szövegek kiemelése és megjegyzések fűzése PDF-hez." },
+                    { icon: "eye", title: "OCR Funkció", text: "Karakterfelismerés a szkennelt dokumentumokból." }
+                ]
+            },
+            'tools-gen': {
+                title: "Nyomtatvány generátor",
+                desc: "Sablon alapú hivatalos dokumentumok gyors összeállítása.",
+                features: [
+                    { icon: "file-signature", title: "Sablonkezelő", text: "Munkalapok és jegyzőkönyvek automatikus kitöltése." },
+                    { icon: "print", title: "Batch Printing", text: "Több dokumentum egyidejű generálása és letöltése." }
+                ]
+            },
+            'tools-speech': {
+                title: "AI Speech (STT/TTS)",
+                desc: "Mesterséges intelligencia alapú hang-szöveg átalakítás.",
+                features: [
+                    { icon: "microphone", title: "Diktálás", text: "Élő beszéd azonnali írásba foglalása (Speech-to-Text)." },
+                    { icon: "volume-up", title: "Felolvasás", text: "Dokumentumok élethű gépi hangon történő felolvasása." }
+                ]
+            },
+            'tools-deadlines': {
+                title: "Határidő napló",
+                desc: "Ütemezett feladatok és jogszabályi határidők követése.",
+                features: [
+                    { icon: "calendar-check", title: "Emlékeztetők", text: "Automatikus figyelmeztetés a közeledő határidőkre." },
+                    { icon: "tasks", title: "Státusz követés", text: "Folyamatban lévő és elvégzett feladatok elkülönítése." }
+                ]
+            },
+            'tools-weather': {
+                title: "Időjárás Napló",
+                desc: "Historikus meteorológiai adatok rögzítése és elemzése.",
+                features: [
+                    { icon: "cloud-sun", title: "Napi adatok", text: "Hőmérséklet, csapadék és szél adatok szisztematikus rögzítése." },
+                    { icon: "chart-line", title: "Klíma trendek", text: "Az adatok vizuális megjelenítése hosszú távú elemzéshez." }
+                ]
+            },
+            'bill-contract': {
+                title: "Szerződés Nyilvántartó",
+                desc: "Energia- és közműszerződések digitális adatbázisa.",
+                features: [
+                    { icon: "file-contract", title: "Határidő figyelés", text: "Automatikus értesítés a lejáró szerződésekről." },
+                    { icon: "search", title: "Szűrés", text: "Keresés szolgáltató, típus vagy összeg alapján." }
+                ]
+            },
+            'bill-calc': {
+                title: "Energetikai kalkulátor",
+                desc: "Költségbecslés és fogyasztási előrejelzés támogatása.",
+                features: [
+                    { icon: "calculator", title: "Tarifa elemzés", text: "Különböző árazási modellek összehasonlítása." },
+                    { icon: "file-invoice-dollar", title: "Számla ellenőrzés", text: "A kapott számlák matematikai validálása." }
+                ]
+            },
+            'bill-tenants': {
+                title: "Bérlői elszámolások",
+                desc: "Intézményi bérlők rezsiköltségének pontos kiszámítása.",
+                features: [
+                    { icon: "user-tag", title: "Almérők kezelése", text: "Bérlőhöz rendelt mérőórák adatainak nyilvántartása." },
+                    { icon: "file-export", title: "Számlarészletező", text: "Közműnyilatkozatok és elszámoló lapok generálása." }
+                ]
+            },
+            'bill-heating': {
+                title: "Fűtésvezérlés (POLC)",
+                desc: "Távoli fűtésfelügyelet és szabályozás (Public Online Lighting & Control).",
+                features: [
+                    { icon: "thermometer-half", title: "Zónavezérlés", text: "Hőmérsékleti profilok beállítása épületenként." },
+                    { icon: "exclamation-triangle", title: "Riasztás", text: "Értesítés extrém alacsony vagy magas érték esetén." }
+                ]
+            },
+            'info-news': {
+                title: "Atádi Hírek",
+                desc: "A város hivatalos és közösségi eseményeinek dinamikus hírcsatornája.",
+                features: [
+                    { icon: "sync-alt", title: "Élő frissítés", text: "Automatikus hírletöltés a helyi hírportálokról." },
+                    { icon: "external-link-alt", title: "Részletek", text: "Közvetlen link a teljes cikkhez az eredeti forráson." }
+                ]
+            },
+            'info-proc': {
+                title: "Műszaki Ügymenetek",
+                desc: "Építési és üzemeltetési eljárások digitális útmutatója.",
+                features: [
+                    { icon: "project-diagram", title: "Folyamatábrák", text: "A hivatali ügymenetek lépésről-lépésre történő bemutatása." },
+                    { icon: "file-download", title: "Letölthető űrlapok", text: "Kérelmek és formanyomtatványok azonnali elérése." }
+                ]
+            },
+            'info-phone': {
+                title: "Telefonkönyv",
+                desc: "Belső és partner kapcsolati adatbázis.",
+                features: [
+                    { icon: "search", title: "Intelligens keresés", text: "Keresés névre, mellékre vagy szervezeti egységre." },
+                    { icon: "phone", title: "Hívás (VOIP)", text: "Közvetlen tárcsázás támogatása (kompatibilis klienssel)." }
+                ]
+            },
+            'info-links': {
+                title: "Linkgyűjtemény",
+                desc: "Fontos külső és belső webes hivatkozások kezelése.",
+                features: [
+                    { icon: "link", title: "Kategorizált linkek", text: "Gyors elérés hivatalos portálokhoz és segédletekhez." },
+                    { icon: "star", title: "Kedvencek", text: "A leggyakrabban használt felületek kiemelése." }
+                ]
+            },
+            'info-messages': {
+                title: "Üzenőfal",
+                desc: "Belső vállalati kommunikációs felület híreknek és hirdetményeknek.",
+                features: [
+                    { icon: "bullhorn", title: "Hirdetmények", text: "Mindenki számára fontos információk elhelyezése." },
+                    { icon: "comment-dots", title: "Interakció", text: "Visszajelzés és véleményezés lehetősége." }
+                ]
+            },
+            'edu-admin': {
+                title: "Közigazgatás",
+                desc: "Szakmai tudástár a helyi önkormányzati feladatok ellátásához.",
+                features: [
+                    { icon: "university", title: "Jogszabályi háttér", text: "Az önkormányzati működés alapvető törvényeinek gyűjteménye." },
+                    { icon: "book", title: "Szakmai segédletek", text: "Módszertani útmutatók a mindennapi munkavégzéshez." }
+                ]
+            },
+            'edu-iso': {
+                title: "EIR ISO 50001",
+                desc: "Energiairányítási Rendszer dokumentációs és képzési modulja.",
+                features: [
+                    { icon: "sync", title: "PDCA Ciklus", text: "Plan-Do-Check-Act folyamat vizuális és technikai bemutatása." },
+                    { icon: "chart-line", title: "Grafikonok", text: "Energetikai célok és eredmények vizuális követése." }
+                ]
+            },
+            'edu-lean': {
+                title: "Irodai Lean & Billentyűk",
+                desc: "Folyamatoptimalizálási technikák és hatékonyságnövelő eszközök.",
+                features: [
+                    { icon: "keyboard", title: "Gyorsbillentyűk", text: "A rendszer és a Windows legfontosabb billentyűkombinációi." },
+                    { icon: "seedling", title: "Lean Alapok", text: "Veszteségek csökkentése és az értékteremtő munka maximalizálása." }
+                ]
+            },
+            'edu-relax': {
+                title: "Relax Center",
+                desc: "Mentális frissességet és stresszkezelést támogató modul.",
+                features: [
+                    { icon: "mug-hot", title: "Mikroszünetek", text: "Tanácsok és gyakorlatok a hatékony pihenéshez munka közben." },
+                    { icon: "bolt", title: "Energia-menedzsment", text: "Hogyan tartsuk fenn fókuszunkat a munkanap során." }
+                ]
+            }
+        };
+
+        function toggleNode(element, guideId) {
+            const nextNode = element.nextElementSibling;
+            const chevron = element.querySelector('.chevron');
+
+            if (nextNode && nextNode.classList.contains('tree-node')) {
+                const isHidden = nextNode.style.display === 'none';
+                nextNode.style.display = isHidden ? 'block' : 'none';
+                chevron.style.transform = isHidden ? 'rotate(90deg)' : 'rotate(0deg)';
+                chevron.style.color = isHidden ? 'var(--primary)' : 'inherit';
+            }
+
+            loadGuide(guideId);
+
+            // Highlight current
+            document.querySelectorAll('.node-label').forEach(l => l.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function loadGuide(id) {
+            const data = guides[id] || {
+                title: "Modul Leírás",
+                desc: "Ebben a szakaszban a választott modul részletes működését és funkcióit ismerheti meg.",
+                features: [{ icon: "info-circle", title: "Működés alatt", text: "A leírás feltöltése folyamatban." }]
+            };
+
+            const html = `
+                <div class="guide-card fade-in">
+                    <div class="guide-header mb-4">
+                        <h2 style="font-family:'Outfit'; font-weight:800; color:var(--primary);">${data.title}</h2>
+                        <p class="text-muted" style="font-size: 1.1rem; line-height:1.6;">${data.desc}</p>
+                    </div>
+                    
+                    <div class="feature-list" style="display: grid; gap: 1.5rem;">
+                        ${data.features.map(f => `
+                            <div class="feature-item" style="display:flex; gap:1.5rem; background:var(--bg-light); padding:1.5rem; border-radius:1.5rem; border:1px solid var(--border-color);">
+                                <div class="feature-icon" style="font-size:2rem; color:var(--primary); min-width:50px; text-align:center;">
+                                    <i class="fas fa-${f.icon}"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h5 style="font-weight:800; margin-bottom:0.5rem;">${f.title}</h5>
+                                    <p style="font-size:0.9rem; color:var(--text-muted); margin:0;">${f.text}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="alert-box mt-5" style="background:rgba(var(--primary-rgb), 0.05); padding:1.5rem; border-radius:1rem; border-left:4px solid var(--primary);">
+                        <h6 style="font-weight:800; color:var(--primary);"><i class="fas fa-lightbulb me-2"></i>Súgó Tipp</h6>
+                        <p class="small text-muted mb-0">Bármilyen technikai probléma esetén keresse a rendszerfejlesztőt a Telefonkönyvben található belső melléken!</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('guide-content').innerHTML = html;
+        }
+
+        // Auto-expand and load first node
+        window.onload = () => {
+            loadGuide('dashboard');
+        };
+    </script>
+</body>
+
+</html>

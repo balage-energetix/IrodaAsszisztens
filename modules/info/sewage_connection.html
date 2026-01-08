@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szennyvízcsatlakozás - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .sewage-card {
+            background: var(--bg-card);
+            border-radius: 2rem;
+            padding: 3rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+
+        .flow-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s;
+        }
+
+        .flow-step:hover {
+            transform: translateX(10px);
+        }
+
+        .flow-num {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .flow-content h5 {
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+        }
+
+        .flow-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .summary-text {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            column-count: 2;
+            column-gap: 3rem;
+            text-align: justify;
+        }
+
+        @media (max-width: 992px) {
+            .summary-text {
+                column-count: 1;
+            }
+        }
+
+        .highlight-box {
+            background: rgba(var(--primary-rgb), 0.05);
+            border-left: 5px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .btn-3d {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(145deg, var(--primary), #1a237e);
+            color: white !important;
+            text-decoration: none;
+            font-weight: 800;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 6px 0 #0d124a, 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.1s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #0d124a, 0 12px 25px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0d124a, 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header mb-5 text-center">
+            <h2 class="section-title"><i class="fas fa-faucet-dotted text-primary me-2"></i>Szennyvízcsatlakozási
+                eljárás</h2>
+            <p class="text-muted">Víziközmű-hálózatra történő utólagos csatlakozás feltételei</p>
+        </div>
+
+        <div class="sewage-card">
+            <h3 class="mb-4" style="font-family:'Outfit'; font-weight:800; color:var(--primary);">Az eljárás részletes
+                leírása</h3>
+            <div class="summary-text">
+                Nagyatád Város Önkormányzata Képviselő-testületének 12/2020. (VI. 12.) önkormányzati rendelete
+                szabályozza a víziközműre történő utólagos csatlakozás műszaki és pénzügyi feltételeit. Az eljárás
+                kiterjed a Nagyatád – Kivadár városrészben 2015-ben megvalósított hálózatra, a déli iparterület
+                fejlesztése során kiépült ivóvíz- és szennyvízhálózatra, valamint a város egyéb bel- és külterületi
+                szakaszaira.
+                <br><br>
+                Az utólagos csatlakozásért hozzájárulást kell fizetni, melynek mértéke területenként eltérő: Kivadár
+                esetén 214.000 Ft, az iparterületnél 315.000 Ft, míg egyéb területeken 118.110 Ft. Természetes személyek
+                részére a rendelet lehetőséget biztosít részletfizetésre is. Nem kell hozzájárulást fizetni a meglévő
+                vezeték felújítása, cseréje vagy korábban már megfizetett és igazolt hozzájárulás esetén.
+                <br><br>
+                Az ügyintézés a Polgármesteri Hivatal Műszaki és Vagyongazdálkodási Irodáján történik. Az ügyintézési
+                határidő alapértelmezésben 8 nap, azonban hiánypótlás vagy a kérelem tisztázása esetén ez 60 napra is
+                meghosszabbodhat. Az elsőfokú eljárás a hatályos jogszabályok értelmében illetékmentes. Jogorvoslatra a
+                határozat kézhezvételétől számított 15 napon belül van lehetőség, melyet a Képviselő-testület bírál el.
+            </div>
+
+            <div class="highlight-box">
+                <h5 class="fw-bold"><i class="fas fa-info-circle me-2"></i> Fontos információ</h5>
+                <p class="mb-0">Amennyiben a kérelmező nem az ingatlan egyedüli tulajdonosa, a tulajdonosok közötti
+                    megállapodást vagy a bérleti szerződést is csatolni kell a kérelemhez!</p>
+            </div>
+
+            <div class="flow-container">
+                <h4 class="fw-bold mb-3">Ügyintézési folyamat</h4>
+                <div class="flow-step">
+                    <div class="flow-num">1</div>
+                    <div class="flow-content">
+                        <h5>Kérelem benyújtása</h5>
+                        <p>Megfelelő nyomtatvány (természetes személy vagy gazdálkodó) kitöltése és leadása.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">2</div>
+                    <div class="flow-content">
+                        <h5>Műszaki ellenőrzés</h5>
+                        <p>A hivatal megvizsgálja a csatlakozás műszaki feltételeit és a tulajdonviszonyokat.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">3</div>
+                    <div class="flow-content">
+                        <h5>Határozat hozatal</h5>
+                        <p>A Polgármester határozatban állapítja meg a csatlakozási hozzájárulás összegét és
+                            feltételeit.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">4</div>
+                    <div class="flow-content">
+                        <h5>Befizetés / Részletfizetés</h5>
+                        <p>A megállapított összeg rendezése a munkálatok megkezdése előtt.</p>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-num">5</div>
+                    <div class="flow-content">
+                        <h5>Kivitelezés</h5>
+                        <p>A fizikai rácsatlakozás elvégzése a szolgáltató közreműködésével.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 text-center d-flex flex-wrap justify-content-center gap-4">
+                <a href="https://nagyatad.hu/wp-content/uploads/2022/06/12_2020_1a_melleklet.doc" class="btn-3d">
+                    <i class="fas fa-download"></i> Kérelem letöltése (Természetes személy)
+                </a>
+                <a href="https://nagyatad.hu/onkormanyzat/e-ugyintezes/muszaki-es-vagyongazdalkodasi-iroda/vizikozmu-halozatra-torteno-utolagos-csatlakozasi-eljaras/"
+                    target="_blank" class="btn-3d"
+                    style="background: linear-gradient(145deg, #455a64, #263238); box-shadow: 0 6px 0 #1a2327, 0 10px 20px rgba(0,0,0,0.3);">
+                    <i class="fas fa-external-link-alt"></i> Eredeti oldal megnyitása
+                </a>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="procedures.html" class="btn btn-outline-primary rounded-pill">
+                <i class="fas fa-arrow-left"></i> Vissza az ügymenetekhez
+            </a>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

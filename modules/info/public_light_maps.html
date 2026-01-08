@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Közvilágítási térképek - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.cdnfonts.com/css/biko" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .pdf-viewer-container {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .pdf-viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .viewer-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-light);
+            padding: 0.4rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-color);
+        }
+
+        .pdf-viewer-container h3 {
+            margin-bottom: 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .pdf-canvas-wrapper {
+            width: 100%;
+            height: 700px;
+            border-radius: 1rem;
+            border: 2px solid var(--border-color);
+            overflow: auto;
+            background: #525659;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        canvas {
+            max-width: none;
+        }
+
+        .tool-btn-sm {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-card);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .tool-btn-sm:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .crop-btn-3d {
+            background: var(--accent-purple);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(123, 97, 255, 0.3);
+        }
+
+        .crop-btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(123, 97, 255, 0.4);
+        }
+
+        .zoom-info {
+            font-size: 0.7rem;
+            font-weight: 800;
+            min-width: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo">
+            <i class="fab fa-android"></i>
+            <span>IRODAI<br>ASSZISZTENS</span>
+        </a>
+        <div class="header-info">
+            <!-- Injected by main.js -->
+        </div>
+    </header>
+
+    <main class="container py-4">
+        <div class="module-header mb-5 text-center">
+            <h2 class="section-title"><i class="fas fa-map-marked-alt text-primary me-2"></i>Közvilágítási Térképtár
+            </h2>
+            <p class="text-muted">Városrészek közvilágítási rendszerének mérnöki dokumentációja</p>
+        </div>
+
+        <!-- Belváros -->
+        <div class="pdf-viewer-container fade-in">
+            <div class="pdf-viewer-header">
+                <h3><i class="fas fa-map-marker-alt" style="color: #2196f3;"></i> Belváros</h3>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="viewer-controls">
+                        <button class="tool-btn-sm active" id="pan-belvaros" onclick="setModuleMode('belvaros', 'pan')"
+                            title="Mozgatás"><i class="fas fa-hand-rock"></i></button>
+                        <button class="tool-btn-sm" id="draw-belvaros" onclick="setModuleMode('belvaros', 'draw')"
+                            title="Rajzolás"><i class="fas fa-pencil-alt"></i></button>
+                        <input type="color" onchange="PDFViewer.setDrawBrush(this.value)"
+                            style="width:24px; height:24px; border:none; padding:0; background:none; cursor:pointer; display:none;"
+                            id="color-belvaros">
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('belvaros', -0.2)"><i
+                                class="fas fa-minus"></i></button>
+                        <span class="zoom-info" id="zoom-belvaros">100%</span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('belvaros', 0.2)"><i
+                                class="fas fa-plus"></i></button>
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" style="color:#f44336;"
+                            onclick="PDFViewer.clearAnnotations('canvas-belvaros')"><i
+                                class="fas fa-eraser"></i></button>
+                    </div>
+                    <button class="crop-btn-3d" onclick="PDFViewer.capture('canvas-belvaros', 'Belvaros')"><i
+                            class="fas fa-camera"></i> Kivágás</button>
+                </div>
+            </div>
+            <div id="canvas-belvaros" class="pdf-canvas-wrapper"></div>
+        </div>
+
+        <!-- Bodvica -->
+        <div class="pdf-viewer-container fade-in">
+            <div class="pdf-viewer-header">
+                <h3><i class="fas fa-map-marker-alt" style="color: #4caf50;"></i> Bodvica</h3>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="viewer-controls">
+                        <button class="tool-btn-sm active" id="pan-bodvica" onclick="setModuleMode('bodvica', 'pan')"
+                            title="Mozgatás"><i class="fas fa-hand-rock"></i></button>
+                        <button class="tool-btn-sm" id="draw-bodvica" onclick="setModuleMode('bodvica', 'draw')"
+                            title="Rajzolás"><i class="fas fa-pencil-alt"></i></button>
+                        <input type="color" onchange="PDFViewer.setDrawBrush(this.value)"
+                            style="width:24px; height:24px; border:none; padding:0; background:none; cursor:pointer; display:none;"
+                            id="color-bodvica">
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('bodvica', -0.2)"><i
+                                class="fas fa-minus"></i></button>
+                        <span class="zoom-info" id="zoom-bodvica">120%</span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('bodvica', 0.2)"><i
+                                class="fas fa-plus"></i></button>
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" style="color:#f44336;"
+                            onclick="PDFViewer.clearAnnotations('canvas-bodvica')"><i
+                                class="fas fa-eraser"></i></button>
+                    </div>
+                    <button class="crop-btn-3d" onclick="PDFViewer.capture('canvas-bodvica', 'Bodvica')"><i
+                            class="fas fa-camera"></i> Kivágás</button>
+                </div>
+            </div>
+            <div id="canvas-bodvica" class="pdf-canvas-wrapper"></div>
+        </div>
+
+        <!-- Dél -->
+        <div class="pdf-viewer-container fade-in">
+            <div class="pdf-viewer-header">
+                <h3><i class="fas fa-map-marker-alt" style="color: #ff9800;"></i> Dél</h3>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="viewer-controls">
+                        <button class="tool-btn-sm active" id="pan-del" onclick="setModuleMode('del', 'pan')"
+                            title="Mozgatás"><i class="fas fa-hand-rock"></i></button>
+                        <button class="tool-btn-sm" id="draw-del" onclick="setModuleMode('del', 'draw')"
+                            title="Rajzolás"><i class="fas fa-pencil-alt"></i></button>
+                        <input type="color" onchange="PDFViewer.setDrawBrush(this.value)"
+                            style="width:24px; height:24px; border:none; padding:0; background:none; cursor:pointer; display:none;"
+                            id="color-del">
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('del', -0.2)"><i
+                                class="fas fa-minus"></i></button>
+                        <span class="zoom-info" id="zoom-del">100%</span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('del', 0.2)"><i
+                                class="fas fa-plus"></i></button>
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" style="color:#f44336;"
+                            onclick="PDFViewer.clearAnnotations('canvas-del')"><i class="fas fa-eraser"></i></button>
+                    </div>
+                    <button class="crop-btn-3d" onclick="PDFViewer.capture('canvas-del', 'Del')"><i
+                            class="fas fa-camera"></i>
+                        Kivágás</button>
+                </div>
+            </div>
+            <div id="canvas-del" class="pdf-canvas-wrapper"></div>
+        </div>
+
+        <!-- Henész -->
+        <div class="pdf-viewer-container fade-in">
+            <div class="pdf-viewer-header">
+                <h3><i class="fas fa-map-marker-alt" style="color: #9c27b0;"></i> Henész</h3>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="viewer-controls">
+                        <button class="tool-btn-sm active" id="pan-henesz" onclick="setModuleMode('henesz', 'pan')"
+                            title="Mozgatás"><i class="fas fa-hand-rock"></i></button>
+                        <button class="tool-btn-sm" id="draw-henesz" onclick="setModuleMode('henesz', 'draw')"
+                            title="Rajzolás"><i class="fas fa-pencil-alt"></i></button>
+                        <input type="color" onchange="PDFViewer.setDrawBrush(this.value)"
+                            style="width:24px; height:24px; border:none; padding:0; background:none; cursor:pointer; display:none;"
+                            id="color-henesz">
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('henesz', -0.2)"><i
+                                class="fas fa-minus"></i></button>
+                        <span class="zoom-info" id="zoom-henesz">120%</span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('henesz', 0.2)"><i
+                                class="fas fa-plus"></i></button>
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" style="color:#f44336;"
+                            onclick="PDFViewer.clearAnnotations('canvas-henesz')"><i class="fas fa-eraser"></i></button>
+                    </div>
+                    <button class="crop-btn-3d" onclick="PDFViewer.capture('canvas-henesz', 'Henesz')"><i
+                            class="fas fa-camera"></i> Kivágás</button>
+                </div>
+            </div>
+            <div id="canvas-henesz" class="pdf-canvas-wrapper"></div>
+        </div>
+
+        <!-- Észak -->
+        <div class="pdf-viewer-container fade-in">
+            <div class="pdf-viewer-header">
+                <h3><i class="fas fa-map-marker-alt" style="color: #f44336;"></i> Észak</h3>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="viewer-controls">
+                        <button class="tool-btn-sm active" id="pan-eszak" onclick="setModuleMode('eszak', 'pan')"
+                            title="Mozgatás"><i class="fas fa-hand-rock"></i></button>
+                        <button class="tool-btn-sm" id="draw-eszak" onclick="setModuleMode('eszak', 'draw')"
+                            title="Rajzolás"><i class="fas fa-pencil-alt"></i></button>
+                        <input type="color" onchange="PDFViewer.setDrawBrush(this.value)"
+                            style="width:24px; height:24px; border:none; padding:0; background:none; cursor:pointer; display:none;"
+                            id="color-eszak">
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('eszak', -0.2)"><i
+                                class="fas fa-minus"></i></button>
+                        <span class="zoom-info" id="zoom-eszak">100%</span>
+                        <button class="tool-btn-sm" onclick="adjustModuleZoom('eszak', 0.2)"><i
+                                class="fas fa-plus"></i></button>
+                        <span style="border-left: 1px solid var(--border-color); height: 20px; margin: 0 5px;"></span>
+                        <button class="tool-btn-sm" style="color:#f44336;"
+                            onclick="PDFViewer.clearAnnotations('canvas-eszak')"><i class="fas fa-eraser"></i></button>
+                    </div>
+                    <button class="crop-btn-3d" onclick="PDFViewer.capture('canvas-eszak', 'Eszak')"><i
+                            class="fas fa-camera"></i> Kivágás</button>
+                </div>
+            </div>
+            <div id="canvas-eszak" class="pdf-canvas-wrapper"></div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="../../index.html" class="btn btn-outline-primary rounded-pill px-5">
+                <i class="fas fa-home me-2"></i> Vissza a vezérlőpulthoz
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="../../js/main.js"></script>
+    <script src="pdf_viewer.js"></script>
+    <script>
+        const viewerScales = {
+            belvaros: 1.0,
+            bodvica: 1.2,
+            del: 1.0,
+            henesz: 1.2,
+            eszak: 1.0
+        };
+
+        function setModuleMode(moduleId, mode) {
+            PDFViewer.setInteractionMode(mode);
+
+            // Update section-specific UI
+            const sections = ['belvaros', 'bodvica', 'del', 'henesz', 'eszak'];
+            sections.forEach(s => {
+                const parent = document.getElementById(`map-${s}`);
+                if (!parent) return;
+
+                const pBtn = document.getElementById(`pan-${s}`);
+                const dBtn = document.getElementById(`draw-${s}`);
+                const colorInput = document.getElementById(`color-${s}`);
+
+                if (s === moduleId) {
+                    if (pBtn) pBtn.classList.toggle('active', mode === 'pan');
+                    if (dBtn) dBtn.classList.toggle('active', mode === 'draw');
+                    if (colorInput) colorInput.style.display = (mode === 'draw' ? 'block' : 'none');
+                }
+            });
+        }
+
+        function adjustModuleZoom(moduleId, delta) {
+            viewerScales[moduleId] = Math.max(0.1, Math.min(5, viewerScales[moduleId] + delta));
+
+            const zoomLabel = document.getElementById(`zoom-${moduleId}`);
+            if (zoomLabel) zoomLabel.innerText = Math.round(viewerScales[moduleId] * 100) + '%';
+
+            PDFViewer.setHTMLZoom(`canvas-${moduleId}`, viewerScales[moduleId]);
+        }
+
+        async function initAllMaps() {
+            const maps = [
+                { id: 'belvaros', file: 'BELVÁROS.html', rotate: 270 },
+                { id: 'bodvica', file: 'BODVICA.html', rotate: 270 },
+                { id: 'del', file: 'DÉL.html', rotate: 270 },
+                { id: 'henesz', file: 'HENÉSZ.html', rotate: 270 },
+                { id: 'eszak', file: 'ÉSZAK.html', rotate: 270 }
+            ];
+
+            for (const map of maps) {
+                await PDFViewer.renderHTML(`canvas-${map.id}`, `../../nyilvantartas/${map.file}`, {
+                    scale: viewerScales[map.id],
+                    rotate: map.rotate
+                });
+            }
+            // Set initial tool state
+            setModuleMode('belvaros', 'pan');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            PDFViewer.init();
+            initAllMaps();
+        });
+
+    </script>
+</body>
+
+</html>

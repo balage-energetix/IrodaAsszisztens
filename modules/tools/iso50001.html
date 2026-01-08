@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EIR ISO (ISO 50001) - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        :root {
+            --iso-green: #2e7d32;
+            --iso-light-green: #66bb6a;
+        }
+
+        [data-theme="dark"] {
+            --iso-green: #4caf50;
+            --iso-light-green: #81c784;
+            --bg-card: #1a1a1a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-muted: #aaa;
+            --primary: #7b61ff;
+        }
+
+        .iso-header {
+            background: linear-gradient(135deg, var(--iso-green) 0%, var(--iso-light-green) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.2);
+        }
+
+        .iso-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .iso-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .iso-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--iso-green);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .iso-card i {
+            font-size: 2.5rem;
+            color: var(--iso-green);
+            margin-bottom: 1rem;
+        }
+
+        .iso-card h4 {
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .iso-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .iso-section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .iso-section-header h3 {
+            font-family: 'Outfit';
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pdca-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .pdca-box {
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            border-bottom: 5px solid transparent;
+            background: var(--bg-card);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .pdca-box:hover {
+            transform: translateY(-10px);
+        }
+
+        .pdca-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .pdca-box.plan {
+            border-bottom-color: #3498db;
+        }
+
+        .pdca-box.do {
+            border-bottom-color: #f1c40f;
+        }
+
+        .pdca-box.check {
+            border-bottom-color: #2ecc71;
+        }
+
+        .pdca-box.act {
+            border-bottom-color: #e74c3c;
+        }
+
+        .pdca-box h5 {
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .pdca-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="iso-header fade-in">
+            <h2 class="mb-2" style="color: white !important;">EIR ISO (ISO 50001)</h2>
+            <p>Energiairányítási Rendszer - A hatékonyabb jövőért</p>
+        </div>
+
+        <div class="iso-grid fade-in">
+            <div class="iso-card">
+                <i class="fas fa-bullseye"></i>
+                <h4>Energiapolitika</h4>
+                <p>A menedzsment elkötelezettségének kinyilvánítása, amely keretet ad az energiacélok kitűzéséhez és a
+                    teljesítmény folyamatos javításához.</p>
+            </div>
+            <div class="iso-card">
+                <i class="fas fa-chart-line"></i>
+                <h4>Folyamatos fejlesztés</h4>
+                <p>Az energiahatékonyság, -felhasználás és -fogyasztás szisztematikus javítása a PDCA ciklus
+                    alkalmazásával.</p>
+            </div>
+            <div class="iso-card">
+                <i class="fas fa-microchip"></i>
+                <h4>Energetikai Alapállapot (EnB)</h4>
+                <p>Egy meghatározott időpontban rögzített energetikai állapot, amely viszonyítási alapként szolgál a
+                    későbbi megtakarítások méréséhez.</p>
+            </div>
+            <div class="iso-card">
+                <i class="fas fa-gauge"></i>
+                <h4>Teljesítménymutatók (EnPI)</h4>
+                <p>Kvantitatív értékek, amelyek segítik az energiahatékonysági célok elérésének nyomon követését és
+                    összehasonlítását.</p>
+            </div>
+        </div>
+
+        <div class="iso-section-header mt-5 fade-in">
+            <h3><i class="fas fa-sync-alt"></i> A PDCA Ciklus Alfoldje</h3>
+            <p>Az ISO 50001 alapját képező folyamatos javítási keretrendszer</p>
+        </div>
+
+        <div class="pdca-container fade-in">
+            <div class="pdca-box plan">
+                <div class="pdca-icon">P</div>
+                <h5>PLAN (Tervezés)</h5>
+                <p>Energetikai átvilágítás, alapállapot (EnB) rögzítése, célok és akciótervek meghatározása.</p>
+            </div>
+            <div class="pdca-box do">
+                <div class="pdca-icon">D</div>
+                <h5>DO (Végrehajtás)</h5>
+                <p>Az energiagazdálkodási akciótervek megvalósítása, felelősségi körök kiosztása.</p>
+            </div>
+            <div class="pdca-box check">
+                <div class="pdca-icon">C</div>
+                <h5>CHECK (Ellenőrzés)</h5>
+                <p>A folyamatok és a kulcsfontosságú teljesítménymutatók (EnPI) mérése és elemzése.</p>
+            </div>
+            <div class="pdca-box act">
+                <div class="pdca-icon">A</div>
+                <h5>ACT (Beavatkozás)</h5>
+                <p>Intézkedések a teljesítmény folyamatos javítása érdekében a mért eredmények alapján.</p>
+            </div>
+        </div>
+
+        <div class="iso-card mt-4 fade-in">
+            <h4><i class="fas fa-shield-halved"></i> Miért elengedhetetlen az EnMS?</h4>
+            <div
+                style="column-count: 2; column-gap: 3rem; font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;">
+                Az Energiairányítási Rendszer (EnMS) nem csupán egy dokumentáció, hanem egy élő keretrendszer, amely
+                segít a szervezetnek azonosítani a jelentős energiafelhasználási területeket (SEU).
+                <br><br>
+                A rendszer bevezetésével a nagyvállalatok mentesülhetnek bizonyos energiahatékonysági kötelezettségek
+                alól (pl. kötelező energetikai audit), miközben a fenntarthatósági (ESG) jelentésekben is komoly
+                versenyelőnyt biztosít. A Nagyatádi Irodai Asszisztens integrált moduljai (Energetikai Riportok,
+                Teljesítmény Optimalizáló) közvetlenül támogatják az ISO 50001 követelményeinek teljesítését.
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

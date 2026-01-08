@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szerződés Nyilvántartó - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .contracts-container {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .view-sel {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .sub-sel {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .contract-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .contract-table th,
+        .contract-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .contract-table th {
+            background: var(--bg-light);
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .tag-elec {
+            background: #fbc02d;
+        }
+
+        .tag-gas {
+            background: #ff7043;
+        }
+
+        .tag-water {
+            background: #29b6f6;
+        }
+
+        [data-theme="dark"] .contract-table th {
+            color: #ffffff !important;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-4">
+        <div class="module-header mb-4">
+            <h2 class="section-title"><i class="fas fa-file-contract me-2"></i>Szerződés Nyilvántartó</h2>
+        </div>
+
+        <div class="view-sel">
+            <button class="btn active" id="btn-energy" onclick="switchMainView('energy')">Energiakereskedelmi
+                Szerződések</button>
+            <button class="btn" id="btn-other" onclick="switchMainView('other')">Hálózattulajdonos és Egyéb</button>
+        </div>
+
+        <div id="energy-sub-sel" class="sub-sel">
+            <button class="btn btn-sm tag-elec" onclick="filterEnergy('villamosenergia')">Villamosenergia</button>
+            <button class="btn btn-sm tag-gas" onclick="filterEnergy('foldgaz')">Földgáz</button>
+            <button class="btn btn-sm tag-water" onclick="filterEnergy('ivoviz')">Ivóvíz</button>
+        </div>
+
+        <div class="contracts-container fade-in">
+            <table class="contract-table">
+                <thead>
+                    <tr>
+                        <th>Intézménynév</th>
+                        <th>Cím</th>
+                        <th>POD Azonosító</th>
+                        <th>Várható Fogyasztás</th>
+                        <th>Szerződés ID</th>
+                        <th>Egységár</th>
+                        <th>Időtartam</th>
+                        <th>Felmondási idő</th>
+                    </tr>
+                </thead>
+                <tbody id="contracts-body">
+                    <!-- Data injected here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const energyData = [
+            { type: 'villamosenergia', name: 'Városháza', addr: 'Baross G. u. 9.', pod: 'HU0001...', cons: '125 000 kWh', id: 'SZ-2024-V01', price: '68.5 Ft/kWh', term: '2024.12.31', notice: '3 hónap' },
+            { type: 'foldgaz', name: 'Kulturális Központ', addr: 'Széchenyi tér 1.', pod: 'GAN002...', cons: '45 000 m3', id: 'SZ-2024-G05', price: '185 Ft/m3', term: '2025.10.01', notice: '6 hónap' },
+            { type: 'ivoviz', name: 'Sportcsarnok', addr: 'Sport u. 2.', pod: 'WTR998...', cons: '12 000 m3', id: 'SZ-2024-W12', price: '420 Ft/m3', term: 'Határozatlan', notice: '30 nap' }
+        ];
+
+        const otherData = [
+            { name: 'E.ON Észak-dunántúli Áramhálózati Zrt.', addr: 'Hálózati hozzáférés', pod: 'KIF III', cons: 'N/A', id: 'H-2024-01-EL', price: 'Díj szerint', term: 'Határozatlan', notice: 'N/A' },
+            { name: 'DRV Zrt.', addr: 'Vízmű hálózat', pod: 'N/A', cons: 'N/A', id: 'H-2024-02-WI', price: 'Díj szerint', term: 'Határozatlan', notice: 'N/A' }
+        ];
+
+        let currentMainView = 'energy';
+
+        function render(data) {
+            const body = document.getElementById('contracts-body');
+            body.innerHTML = data.map(d => `
+                <tr>
+                    <td class="fw-bold">${d.name}</td>
+                    <td>${d.addr}</td>
+                    <td><code>${d.pod}</code></td>
+                    <td>${d.cons}</td>
+                    <td>${d.id}</td>
+                    <td class="text-primary fw-bold">${d.price}</td>
+                    <td>${d.term}</td>
+                    <td>${d.notice}</td>
+                </tr>
+            `).join('');
+        }
+
+        function switchMainView(view) {
+            currentMainView = view;
+            document.getElementById('btn-energy').classList.toggle('active', view === 'energy');
+            document.getElementById('btn-other').classList.toggle('active', view === 'other');
+            document.getElementById('energy-sub-sel').style.display = view === 'energy' ? 'flex' : 'none';
+            render(view === 'energy' ? energyData : otherData);
+        }
+
+        function filterEnergy(type) {
+            const filtered = energyData.filter(d => d.type === type);
+            render(filtered);
+        }
+
+        switchMainView('energy');
+    </script>
+</body>
+
+</html>

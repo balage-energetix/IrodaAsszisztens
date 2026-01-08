@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vonatkozó rendeletek - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .reg-container {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .reg-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .reg-card h3 {
+            color: var(--primary);
+            font-family: 'Outfit';
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .reg-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .reg-section h4 {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reg-section p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .highlight-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .highlight-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .btn-3d {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(145deg, var(--primary), #1a237e);
+            color: white !important;
+            text-decoration: none;
+            font-weight: 800;
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 6px 0 #0d124a, 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.1s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            margin-top: 1rem;
+        }
+
+        .btn-3d:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #0d124a, 0 12px 25px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .btn-3d:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #0d124a, 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-5 fade-in">
+        <div class="module-header mb-5 text-center">
+            <h2 class="section-title"><i class="fas fa-gavel text-primary me-2"></i>Vonatkozó rendeletek, jogszabályok
+            </h2>
+            <p class="text-muted">Nagyatád Város Önkormányzatának aktuális és mérvadó rendeletei</p>
+        </div>
+
+        <div class="reg-container">
+            <!-- Közvilágítás Rendelet -->
+            <div class="reg-card">
+                <h3>Közvilágítás korlátozása (24/2022. XII. 19.)</h3>
+                <div class="reg-section">
+                    <h4><i class="fas fa-bolt"></i> Célkitűzés</h4>
+                    <p>A veszélyhelyzeti intézkedések keretében a város energiatakarékossági célokat valósít meg a
+                        közvilágítás átmeneti üzemeltetésével.</p>
+                </div>
+                <div class="reg-section">
+                    <h4><i class="fas fa-list-check"></i> Főbb intézkedések</h4>
+                    <ul class="highlight-list">
+                        <li>Lámpatestek szakaszos vagy részleges üzemeltetése (maximum 50%-os korlátozás bizonyos
+                            területeken).</li>
+                        <li>Templomok, szobrok és emlékművek díszkivilágításának szüneteltetése.</li>
+                        <li>Gyalogátkelőhelyek és kritikus csomópontok megvilágításának kötelező fenntartása.</li>
+                    </ul>
+                </div>
+                <a href="https://or.njt.hu/eli/731663/r/2022/24" target="_blank" class="btn-3d">
+                    <i class="fas fa-external-link-alt"></i> NJT: Közvilágítás Rendelet
+                </a>
+            </div>
+
+            <!-- Szennyvíz Rendelet -->
+            <div class="reg-card">
+                <h3>Szennyvízkezelés (28/2013. XII. 20.)</h3>
+                <div class="reg-section">
+                    <h4><i class="fas fa-faucet-dotted"></i> Hatály és hatáskör</h4>
+                    <p>Kiterjed Nagyatád közigazgatási területén minden ingatlantulajdonosra, aki nem csatlakozik a
+                        közcsatornára, vagy azt nem használja.</p>
+                </div>
+                <div class="reg-section">
+                    <h4><i class="fas fa-truck-droplet"></i> Közszolgáltatás tartama</h4>
+                    <ul class="highlight-list">
+                        <li>A nem közművel összegyűjtött háztartási szennyvíz kötelező begyűjtése és elszállítása.</li>
+                        <li>2026-os díjtételek meghatározása a 26/2025. (XII. 12.) módosítás alapján.</li>
+                        <li>Zárt, vízzáróan szigetelt tárolók alkalmazásának kötelezettsége.</li>
+                    </ul>
+                </div>
+                <div class="reg-section">
+                    <h4><i class="fas fa-microchip"></i> Struktúra (Kivonat)</h4>
+                    <p
+                        style="font-family: monospace; font-size: 0.8rem; background: var(--bg-light); padding: 1rem; border-radius: 0.5rem; color: var(--text-main);">
+                        1. § Általános rendelkezések<br>
+                        2. § Értelmező rendelkezések<br>
+                        3. § Ingatlantulajdonos kötelezettségei<br>
+                        4. § A közszolgáltató jogai és kötelezettségei<br>
+                        5. § A közszolgáltatás díja, elszámolás<br>
+                        6. § Adatkezelés és ellenőrzés
+                    </p>
+                </div>
+                <a href="https://or.njt.hu/eli/731663/r/2013/28" target="_blank" class="btn-3d">
+                    <i class="fas fa-external-link-alt"></i> NJT: Szennyvíz Rendelet
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

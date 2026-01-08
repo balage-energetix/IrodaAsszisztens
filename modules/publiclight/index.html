@@ -245,37 +245,33 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="../../js/main.js"></script>
+    <script src="../map/map_logic.js"></script>
     <script>
-        const map = L.map('light-map').setView([46.229, 17.365], 15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-        L.Control.geocoder({ defaultMarkGeocode: true, placeholder: "Utca keresése..." }).addTo(map);
+        document.addEventListener('DOMContentLoaded', () => {
+            const map = MapLogic.init('light-map');
 
-        const coords = [];
-        const coordBox = document.getElementById('coords');
+            const coords = [];
+            const coordBox = document.getElementById('coords');
 
-        map.on('click', (e) => {
-            const { lat, lng } = e.latlng;
-            coords.push({ lat, lng, t: new Date().toLocaleTimeString() });
+            map.off('click');
+            map.on('click', (e) => {
+                const { lat, lng } = e.latlng;
+                coords.push({ lat, lng, t: new Date().toLocaleTimeString() });
+                L.marker([lat, lng]).addTo(map).bindPopup(`Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`).openPopup();
 
-            L.marker([lat, lng]).addTo(map).bindPopup(`Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`).openPopup();
+                coordBox.innerHTML = coords.map((c, i) => `[${i + 1}] ${c.lat.toFixed(6)}, ${c.lng.toFixed(6)} (${c.t})`).join('<br>');
+            });
 
-            updateCoordBox();
+            window.saveCoords = function () {
+                if (coords.length === 0) return alert("Nincs rögzített adat.");
+                const text = coords.map((c, i) => `${i + 1};${c.lat};${c.lng};${c.t}`).join('\n');
+                const blob = new Blob([`KÖZVILÁGÍTÁS KOORDINÁTÁK\n${text}`], { type: "text/plain" });
+                const a = document.createElement("a");
+                a.download = App.getExportFileName('Kozvilagitas_Koord', 'txt');
+                a.href = URL.createObjectURL(blob);
+                a.click();
+            };
         });
-
-        function updateCoordBox() {
-            if (coords.length === 0) return;
-            coordBox.innerHTML = coords.map((c, i) => `[${i + 1}] ${c.lat.toFixed(6)}, ${c.lng.toFixed(6)} (${c.t})`).join('<br>');
-        }
-
-        function saveCoords() {
-            if (coords.length === 0) return alert("Nincs rögzített adat.");
-            const text = coords.map((c, i) => `${i + 1};${c.lat};${c.lng};${c.t}`).join('\n');
-            const blob = new Blob([`KÖZVILÁGÍTÁS KOORDINÁTÁK\\n${text}`], { type: "text/plain" });
-            const a = document.createElement("a");
-            a.download = App.getExportFileName('Kozvilagitas_Koord', 'txt');
-            a.href = URL.createObjectURL(blob);
-            a.click();
-        }
     </script>
 </body>
 

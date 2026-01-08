@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Költségvetési Tervező - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        :root {
+            --bg-card: #ffffff;
+            --bg-light: #f8f9fa;
+            --border-color: #e0e0e0;
+            --text-main: #1a1a1a;
+            --text-muted: #666666;
+            --primary: #1a237e;
+            --accent-purple: #7b61ff;
+        }
+
+        [data-theme="dark"] {
+            --bg-card: #141414;
+            --bg-light: #1d1d1d;
+            --border-color: #2a2a2a;
+            --text-main: #f0f0f0;
+            --text-muted: #aaaaaa;
+            --primary: #9fa8da;
+        }
+
+        body {
+            background: var(--bg-light);
+            color: var(--text-main);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .planner-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .budget-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .budget-table th,
+        .budget-table td {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: left;
+            color: var(--text-main);
+        }
+
+        .budget-table th {
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            background: var(--bg-light);
+        }
+
+        .total-row {
+            background: var(--bg-light);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+
+<body data-theme="light">
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        <div class="module-header mb-4">
+            <h2 class="section-title"><i class="fas fa-file-invoice-dollar me-2"></i>Költségvetési tervező / előrejelző
+            </h2>
+        </div>
+
+        <div class="planner-card fade-in">
+            <table class="budget-table">
+                <thead>
+                    <tr>
+                        <th>Tételsor megnevezése</th>
+                        <th>Szerződésszám</th>
+                        <th>Szerződéses Időszak</th>
+                        <th>Éves nettó díj</th>
+                        <th>Éves bruttó díj</th>
+                    </tr>
+                </thead>
+                <tbody id="planner-body">
+                    <!-- Data here -->
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3">Összesen:</td>
+                        <td id="total-net">0 Ft</td>
+                        <td id="total-gross">0 Ft</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        const items = [
+            { item: 'Közvilágítás aktív elemek üzemeltetése', id: 'SZ-KV-2024-01', period: '2024 egész év', net: 12500000 },
+            { item: 'Közvilágítás karbantartási díj', id: 'SZ-KV-2024-02', period: '2024 egész év', net: 8400000 },
+            { item: 'Közvilágítás éves energiadíj', id: 'SZ-EN-2024-V1', period: '2024 egész év', net: 42000000 },
+            { item: 'Távmérők kommunikációs díja', id: 'SZ-COM-2024-11', period: '2024.01-12', net: 650000 },
+            { item: 'Kazánok karbantartása', id: 'SZ-MAINT-2023-09', period: 'Évi 2 alkalom', net: 2100000 },
+            { item: 'Tűzoltókészülékek felülvizsgálata', id: 'SZ-SAFE-2024-P', period: '2024 tavasz', net: 450000 },
+            { item: 'Érintésvédelmi vizsgálatok', id: 'SZ-SAFE-2024-E', period: '2024.08', net: 890000 }
+        ];
+
+        function render() {
+            const body = document.getElementById('planner-body');
+            let totalNet = 0;
+
+            body.innerHTML = items.map(d => {
+                totalNet += d.net;
+                const gross = d.net * 1.27;
+                return `
+                    <tr>
+                        <td class="fw-bold">${d.item}</td>
+                        <td><code>${d.id}</code></td>
+                        <td>${d.period}</td>
+                        <td class="text-primary fw-bold">${new Intl.NumberFormat('hu-HU').format(d.net)} Ft</td>
+                        <td class="text-accent fw-bold">${new Intl.NumberFormat('hu-HU').format(gross)} Ft</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('total-net').innerText = new Intl.NumberFormat('hu-HU').format(totalNet) + " Ft";
+            document.getElementById('total-gross').innerText = new Intl.NumberFormat('hu-HU').format(totalNet * 1.27) + " Ft";
+        }
+        render();
+    </script>
+</body>
+
+</html>

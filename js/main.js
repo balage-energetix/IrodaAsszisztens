@@ -8,6 +8,7 @@ const App = {
         theme: localStorage.getItem('theme') || 'light',
         bgColor: localStorage.getItem('bg-color') || '#f5f5f5',
         location: { lat: 46.229, lon: 17.365, name: 'Nagyatád' },
+        version: "V3.42",
         droneIndex: 1
     },
 
@@ -21,7 +22,8 @@ const App = {
         this.initSearch();
         this.initHeaderBgRotation();
         this.initInteractivity();
-        console.log("Irodai Asszisztens V3.37 initialized");
+        this.initStars();
+        console.log("Irodai Asszisztens V3.42 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
     },
 
@@ -83,9 +85,10 @@ const App = {
             <nav class="app-nav">
                 <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
+                        <a href="${p}modules/tech/meter_readings.html" class="nav-dropdown-item"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i> Mérőállás Rögzítő</a>
                         <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
                         <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
-                        <span class="nav-dropdown-item" style="opacity: 0.5; cursor: not-allowed; pointer-events: none; color: #999;"><i class="fas fa-map" style="color:#999;"></i> Alaptérkép gyorsbetöltő</span>
+                        <a href="${p}modules/map/basemap.html" class="nav-dropdown-item"><i class="fas fa-map" style="color:#00bcd4;"></i> Alaptérkép</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
@@ -93,6 +96,7 @@ const App = {
                         <a href="${p}modules/info/message_board.html" class="nav-dropdown-item"><i class="fas fa-bullhorn" style="color:#ff4081;"></i> Üzenőfal</a>
                         <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
                         <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
+                        <a href="${p}modules/info/public_light_maps.html" class="nav-dropdown-item"><i class="fas fa-map-marked" style="color:#00bcd4;"></i> Közvilágítási térképek</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -109,24 +113,24 @@ const App = {
                         <a href="${p}modules/tools/translator.html" class="nav-dropdown-item"><i class="fas fa-language" style="color:#4caf50;"></i> Fordító Segéd</a>
                     </div>
                 </div>
-                <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/calc/index.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#2ecc71;"></i> Számlázási Segéd</a>
-                        <a href="${p}modules/consumption/index.html" class="nav-dropdown-item"><i class="fas fa-building-circle-check" style="color:#16a085;"></i> Fogyasztási Helyek</a>
-                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#ef5350;"></i> Tőzsde & Árak</a>
-                        <a href="${p}modules/polc/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i> POLC (Számlatár)</a>
+                        <a href="${p}modules/calc/contracts.html" class="nav-dropdown-item"><i class="fas fa-file-contract" style="color:#e67e22;"></i> Szerződés Nyilvántartó</a>
+                        <a href="${p}modules/calc/energy_calc.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#2ecc71;"></i> Energiaszámla kalkulátor</a>
+                        <a href="${p}modules/calc/budget_planner.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i> Költségvetési tervező</a>
                         <a href="${p}modules/tenants/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice" style="color:#e91e63;"></i> Bérlői elszámolások</a>
                         <a href="${p}modules/tools/heating.html" class="nav-dropdown-item"><i class="fas fa-temperature-arrow-up" style="color:#d32f2f;"></i> Fűtésvezérlés</a>
                     </div>
                 </div>
-                <div class="nav-cat ${!isAdmin ? 'disabled-access' : ''}">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás</a>
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
                         <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper" style="color:#607d8b;"></i> Atádi Hírek</a>
+                        <a href="${p}modules/info/procedures.html" class="nav-dropdown-item"><i class="fas fa-project-diagram" style="color:#673ab7;"></i> Ügymenetek</a>
+                        <a href="${p}modules/info/help.html" class="nav-dropdown-item"><i class="fas fa-question-circle" style="color:#009688;"></i> Súgó</a>
                         <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book" style="color:#795548;"></i> Telefonkönyv</a>
                         <a href="${p}modules/links/index.html" class="nav-dropdown-item"><i class="fas fa-link" style="color:#009688;"></i> Linkgyűjtemény</a>
-                        <a href="${p}modules/viz/index.html" class="nav-dropdown-item"><i class="fas fa-chart-pie" style="color:#673ab7;"></i> Adat Vizualizáció</a>
                     </div>
                 </div>
                 <div class="nav-cat">ISMERETEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -138,6 +142,8 @@ const App = {
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling" style="color:#4caf50;"></i> Irodai Lean</a>
                         <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket" style="color:#ff5722;"></i> Hatékonyság</a>
                         <a href="${p}modules/videos/index.html" class="nav-dropdown-item"><i class="fas fa-play-circle" style="color:#f44336;"></i> Videótár</a>
+                        <a href="${p}modules/info/regulations.html" class="nav-dropdown-item"><i class="fas fa-gavel" style="color:#546e7a;"></i> Vonatkozó rendeletek</a>
+                        <a href="${p}modules/tools/iso50001.html" class="nav-dropdown-item"><i class="fas fa-leaf" style="color:#4caf50;"></i> EIR ISO (ISO 50001)</a>
                         <a href="${p}modules/tools/relax_center.html" class="nav-dropdown-item"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i> Relax Center</a>
                     </div>
                 </div>
@@ -161,13 +167,19 @@ const App = {
                         <div id="header-weather" style="text-align: right; line-height: 1.2; font-size: 0.85rem; font-weight: 600;"></div>
                         <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--accent-purple); font-weight: 700; text-shadow: 0 0 10px rgba(123, 97, 255, 0.3);"></div>
                     </div>
-                    <div class="header-actions" style="display: flex; flex-direction: column; align-items: center; gap: 0.4rem;">
-                        <button onclick="App.logout()" class="logout-btn" title="Kijelentkezés">
-                            <i class="fas fa-sign-out-alt" style="color:#7b61ff;"></i>
-                        </button>
-                        <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.1rem; color:var(--text-main); cursor:pointer;">
-                            <i id="theme-toggle-icon" class="fas fa-moon" style="color:var(--accent-purple);"></i>
-                        </button>
+                    <div class="header-actions" style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.2rem;">
+                            <span style="font-size: 0.55rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">KILÉP</span>
+                            <button onclick="App.logout()" class="logout-btn" title="Kijelentkezés" style="padding:0; background:none; border:none; cursor:pointer;">
+                                <i class="fas fa-sign-out-alt" style="color:#7b61ff; font-size:1.1rem;"></i>
+                            </button>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 0.2rem;">
+                            <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.1rem; color:var(--text-main); cursor:pointer; padding:0;">
+                                <i id="theme-toggle-icon" class="fas fa-moon" style="color:var(--accent-purple);"></i>
+                            </button>
+                            <span style="font-size: 0.55rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">ÉJJELI</span>
+                        </div>
                     </div>
                 </div>
             `;
@@ -286,6 +298,107 @@ const App = {
     },
 
     // --- Cursor Follower removed ---
+
+    initStars() {
+        const canvas = document.getElementById('stars-canvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let animationId;
+
+        const initCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+
+            // Create 150 stars
+            for (let i = 0; i < 150; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speed: Math.random() * 0.3 + 0.1,
+                    opacity: Math.random()
+                });
+            }
+        };
+
+        const drawStar = (star) => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme !== 'dark') return; // Only draw in dark mode
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+            ctx.beginPath();
+
+            // Draw a star shape instead of a circle
+            const spikes = 5;
+            const outerRadius = star.size;
+            const innerRadius = star.size / 2;
+
+            let rot = Math.PI / 2 * 3;
+            let x = star.x;
+            let y = star.y;
+            const step = Math.PI / spikes;
+
+            ctx.moveTo(star.x, star.y - outerRadius);
+
+            for (let i = 0; i < spikes; i++) {
+                x = star.x + Math.cos(rot) * outerRadius;
+                y = star.y + Math.sin(rot) * outerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+
+                x = star.x + Math.cos(rot) * innerRadius;
+                y = star.y + Math.sin(rot) * innerRadius;
+                ctx.lineTo(x, y);
+                rot += step;
+            }
+
+            ctx.lineTo(star.x, star.y - outerRadius);
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        const animate = () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+
+            if (theme === 'dark') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                stars.forEach(star => {
+                    // Twinkling effect
+                    star.opacity += (Math.random() - 0.5) * 0.05;
+                    star.opacity = Math.max(0.2, Math.min(1, star.opacity));
+
+                    drawStar(star);
+                });
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            animationId = requestAnimationFrame(animate);
+        };
+
+        initCanvas();
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', initCanvas);
+
+        // Stop animation when user logs in
+        const observer = new MutationObserver(() => {
+            const overlay = document.getElementById('auth-overlay');
+            if (overlay && overlay.style.display === 'none') {
+                cancelAnimationFrame(animationId);
+            }
+        });
+
+        const overlay = document.getElementById('auth-overlay');
+        if (overlay) {
+            observer.observe(overlay, { attributes: true, attributeFilter: ['style'] });
+        }
+    },
 
     initInteractivity() {
         // Interactivity (flashlight/cursor effects) removed as per request

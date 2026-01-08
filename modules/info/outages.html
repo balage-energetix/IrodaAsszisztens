@@ -89,47 +89,8 @@
             <strong>Nagyatád</strong> területén.
         </div>
 
-        <div class="outage-list">
-            <!-- DRV -->
-            <div class="outage-item water">
-                <div class="outage-icon"><i class="fas fa-faucet text-primary"></i></div>
-                <div class="outage-details">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="city-tag">DRV Zrt.</span>
-                        <span class="outage-time">2026. JANUÁR 12. | 08:00 - 14:00</span>
-                    </div>
-                    <h4>Vízvezeték hálózat öblítés</h4>
-                    <p class="text-muted m-0">Nagyatád egész területén nyomáscsökkenés és vízzavarosodás várható
-                        karbantartási munkálatok miatt.</p>
-                </div>
-            </div>
-
-            <!-- E.ON Áram -->
-            <div class="outage-item power">
-                <div class="outage-icon"><i class="fas fa-bolt text-warning"></i></div>
-                <div class="outage-details">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="city-tag">E.ON Áram</span>
-                        <span class="outage-time">2026. FEBRUÁR 05. | 09:00 - 15:00</span>
-                    </div>
-                    <h4>Tervezett hálózatfejlesztés</h4>
-                    <p class="text-muted m-0">Érintett terület: Szent István park és környéke. A munkálatok idején az
-                        áramszolgáltatás szünetel.</p>
-                </div>
-            </div>
-
-            <!-- E.ON Gáz -->
-            <div class="outage-item gas">
-                <div class="outage-icon"><i class="fas fa-fire text-danger"></i></div>
-                <div class="outage-details">
-                    <div class="d-flex align-items-center gap-2 mb-1">
-                        <span class="city-tag">E.ON Gáz</span>
-                        <span class="outage-time">Jelenleg nincs aktív szünet</span>
-                    </div>
-                    <h4>Gázhálózat biztonsági ellenőrzés</h4>
-                    <p class="text-muted m-0">Nincs bejelentett üzemszünet Nagyatád területén.</p>
-                </div>
-            </div>
+        <div class="outage-list" id="outage-container">
+            <!-- Injected by script -->
         </div>
 
         <div class="mt-5 p-4 text-center" style="background: rgba(0,0,0,0.02); border-radius: 1.5rem;">
@@ -139,6 +100,38 @@
     </main>
 
     <script src="../../js/main.js"></script>
+    <script>
+        function renderOutages() {
+            const container = document.getElementById('outage-container');
+            const now = new Date();
+            const futureDate = (days) => {
+                const d = new Date(now);
+                d.setDate(now.getDate() + days);
+                return d.toLocaleDateString('hu-HU', { year: 'numeric', month: 'long', day: '2-digit' }).toUpperCase();
+            };
+
+            const data = [
+                { class: 'water', tag: 'DRV Zrt.', time: futureDate(4) + ' | 08:00 - 14:00', title: 'Vízvezeték hálózat öblítés', text: 'Nagyatád egész területén nyomáscsökkenés és vízzavarosodás várható karbantartási munkálatok miatt.', icon: 'faucet text-primary' },
+                { class: 'power', tag: 'E.ON Áram', time: futureDate(12) + ' | 09:00 - 15:00', title: 'Tervezett hálózatfejlesztés', text: 'Érintett terület: Szent István park és környéke. A munkálatok idején az áramszolgáltatás szünetel.', icon: 'bolt text-warning' },
+                { class: 'gas', tag: 'E.ON Gáz', time: 'NINCS AKTÍV SZÜNET', title: 'Gázhálózat biztonsági ellenőrzés', text: 'Nincs bejelentett üzemszünet Nagyatád területén.', icon: 'fire text-danger' }
+            ];
+
+            container.innerHTML = data.map(o => `
+                <div class="outage-item ${o.class} fade-in">
+                    <div class="outage-icon"><i class="fas fa-${o.icon}"></i></div>
+                    <div class="outage-details">
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="city-tag">${o.tag}</span>
+                            <span class="outage-time">${o.time}</span>
+                        </div>
+                        <h4>${o.title}</h4>
+                        <p class="text-muted m-0">${o.text}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        renderOutages();
+    </script>
 </body>
 
 </html>

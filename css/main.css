@@ -2,12 +2,10 @@
 
 :root {
     /* Dark Blue & Purple Palette */
-    --primary: #1a237e;
-    /* Indigo / Dark Blue */
-    --primary-light: #3949ab;
-    /* Medium Blue */
-    --primary-dark: #000051;
-    /* Deep Navy */
+    --primary: #283593;
+    /* Richer Indigo */
+    --primary-light: #5c6bc0;
+    --primary-dark: #1a237e;
     --secondary: #7b1fa2;
     /* Purple */
     --accent: #9c27b0;
@@ -553,29 +551,31 @@ h6 {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Feature Cards - Dashboard Grid Specifics (Compact 3D) */
+/* Feature Cards - Dashboard Grid Specifics (Relaxed 3D) */
 .dashboard-grid .feature-card {
-    width: 130px;
-    height: 120px;
+    width: 145px;
+    height: 130px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    background: linear-gradient(135deg, var(--bg-card), var(--bg-creamy)) !important;
 }
 
 .feature-card i {
-    font-size: 1.6rem !important;
-    transition: transform 0.3s ease;
-    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.1));
+    font-size: 1.75rem !important;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .feature-card h5 {
-    font-size: 0.75rem !important;
-    line-height: 1.2;
+    font-size: 0.8rem !important;
+    line-height: 1.3;
     margin: 0;
-    font-weight: 800;
+    font-weight: 700;
     text-align: center;
+    color: var(--primary-dark);
 }
 
 /* Fix for vertical line flickering - using a dedicated hardware-accelerated layer */
@@ -590,15 +590,14 @@ h6 {
 }
 
 .feature-card:hover {
-    transform: translateY(-8px) scale(1.04);
+    transform: translateY(-10px) scale(1.03) rotateX(4deg);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 25px 50px rgba(0, 0, 0, 0.12),
         0 0 0 2px var(--primary-light);
-    background: var(--bg-card) !important;
 }
 
 .feature-card:hover i {
-    transform: scale(1.1);
+    transform: scale(1.15) translateZ(20px);
 }
 
 [data-theme="dark"] .feature-card {
@@ -682,12 +681,11 @@ h6 {
 
 /* Smoother Grid and Card interactions */
 .dashboard-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.25rem;
-    padding: 1rem;
-    perspective: 1000px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0.5rem;
+    perspective: 1200px;
 }
 
 .feature-card {
