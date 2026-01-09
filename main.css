@@ -681,9 +681,6 @@ h6 {
 
 /* Smoother Grid and Card interactions */
 .dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-    gap: 1rem;
     padding: 1rem 0.5rem;
     perspective: 1200px;
 }
@@ -1505,29 +1502,4 @@ h6 {
 
 [data-theme="dark"] .dashboard-grid .feature-card h5 {
     animation: textGlowDark 3s ease-in-out infinite;
-}
-
-/* Disabled/Deactivated Modules */
-.feature-card.disabled,
-.nav-dropdown-item.disabled {
-    opacity: 0.4 !important;
-    pointer-events: none !important;
-    cursor: not-allowed !important;
-    filter: grayscale(1) brightness(0.8) !important;
-}
-
-.feature-card.disabled::before {
-    content: "INAKTÍV";
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: #ff5252;
-    color: white;
-    font-size: 0.6rem;
-    font-weight: 800;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    z-index: 20;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transform: rotate(5deg);
 }
