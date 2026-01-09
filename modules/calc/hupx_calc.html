@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sima Kalkulátor (HUPX) - Irodai Asszisztens</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .calc-card {
+            background: var(--bg-card);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 600px;
+            margin: 2rem auto;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 1rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-light);
+            color: var(--text-main);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent-purple) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 10px 20px rgba(123, 97, 255, 0.3);
+        }
+
+        .result-box h4 {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .result-box .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+        }
+
+        .hint {
+            background: rgba(123, 97, 255, 0.05);
+            padding: 1rem;
+            border-radius: 1rem;
+            border-left: 4px solid var(--accent-purple);
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo">
+            <i class="fab fa-android"></i>
+            <span>IRODAI<br>ASSZISZTENS</span>
+        </a>
+        <div class="header-info">
+            <!-- Data injected by main.js -->
+        </div>
+    </header>
+    <main class="container py-4">
+        <div class="module-header text-center mb-4">
+            <h2 class="section-title"><i class="fas fa-calculator text-primary me-2"></i>Sima kalkulátor</h2>
+            <p class="text-muted">Tőzsdei (HUPX) alapú becsült energiadíj számoló</p>
+        </div>
+        <div class="calc-card fade-in">
+            <div class="form-group">
+                <label>Tőzsdei ár (HUPX EUR/MWh)</label>
+                <input type="number" id="hupx" value="105" oninput="calculate()">
+            </div>
+            <div class="form-group">
+                <label>Kereskedelmi felár (Ft/kWh)</label>
+                <input type="number" id="e2-fee" value="5.5" oninput="calculate()">
+            </div>
+            <div class="form-group">
+                <label>Rendszerhasználati díj (Ft/kWh)</label>
+                <input type="number" id="rh-fee" value="32.4" oninput="calculate()">
+            </div>
+            <div class="form-group">
+                <label>Éves várható fogyasztás (kWh)</label>
+                <input type="number" id="consumption" value="100000" oninput="calculate()">
+            </div>
+            <div class="result-box">
+                <h4>Becsült éves nettó energiadíj</h4>
+                <div class="value" id="total-result">0 Ft</div>
+            </div>
+            <div class="hint">
+                <i class="fas fa-info-circle me-1"></i> A számítás 410 Ft/EUR árfolyammal történik. A tőzsdei ár
+                Ft/kWh-ra konvertálva hozzáadódik a díjtételekhez.
+            </div>
+        </div>
+    </main>
+    <script src="../../js/main.js"></script>
+    <script>
+        function calculate() {
+            const hupx = parseFloat(document.getElementById('hupx').value) || 0;
+            const e2 = parseFloat(document.getElementById('e2-fee').value) || 0;
+            const rh = parseFloat(document.getElementById('rh-fee').value) || 0;
+            const cons = parseFloat(document.getElementById('consumption').value) || 0;
+            const eurHuf = 410;
+            const hupxHufKwh = (hupx * eurHuf) / 1000;
+            const totalUnitPice = hupxHufKwh + e2 + rh;
+            const total = totalUnitPice * cons;
+            document.getElementById('total-result').innerText = new Intl.NumberFormat('hu-HU', { style: 'currency', currency: 'HUF', maximumFractionDigits: 0 }).format(total);
+        }
+        calculate();
+    </script>
+</body>
+
+</html>

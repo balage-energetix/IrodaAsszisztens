@@ -83,20 +83,29 @@ const App = {
         const navHtml = `
             <button class="menu-toggle" onclick="App.toggleMobileMenu()"><i class="fas fa-bars"></i></button>
             <nav class="app-nav">
-                <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                <div class="nav-cat">ENERGETIKA <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/tech/meter_readings.html" class="nav-dropdown-item"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i> Mérőállás Rögzítő</a>
-                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
-                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
-                        <a href="${p}modules/map/basemap.html" class="nav-dropdown-item"><i class="fas fa-map" style="color:#00bcd4;"></i> Alaptérkép</a>
-                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
                         <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
-                        <a href="${p}modules/info/message_board.html" class="nav-dropdown-item"><i class="fas fa-bullhorn" style="color:#ff4081;"></i> Üzenőfal</a>
                         <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
+                        <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station" style="color:#ff9800;"></i> Energia Ismeretek</a>
+                    </div>
+                </div>
+                <div class="nav-cat">TÉRKÉPEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
+                        <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
+                        <a href="#" class="nav-dropdown-item disabled-access"><i class="fas fa-map" style="color:#00bcd4;"></i> Alaptérkép</a>
+                        <a href="#" class="nav-dropdown-item disabled-access"><i class="fas fa-map-marked" style="color:#00bcd4;"></i> Közvilágítási térképek</a>
+                    </div>
+                </div>
+                <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
+                    <div class="nav-cat-dropdown">
+                        <a href="${p}modules/tech/meter_readings.html" class="nav-dropdown-item"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i> Mérőállás Rögzítő</a>
+                        <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
+                        <a href="${p}modules/info/message_board.html" class="nav-dropdown-item"><i class="fas fa-bullhorn" style="color:#ff4081;"></i> Üzenőfal</a>
                         <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
-                        <a href="${p}modules/info/public_light_maps.html" class="nav-dropdown-item"><i class="fas fa-map-marked" style="color:#00bcd4;"></i> Közvilágítási térképek</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -117,9 +126,14 @@ const App = {
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/calc/contracts.html" class="nav-dropdown-item"><i class="fas fa-file-contract" style="color:#e67e22;"></i> Szerződés Nyilvántartó</a>
                         <a href="${p}modules/calc/energy_calc.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#2ecc71;"></i> Energiaszámla kalkulátor</a>
+                        <a href="${p}modules/calc/hupx_calc.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#4caf50;"></i> Sima kalkulátor</a>
+                        <a href="${p}modules/calc/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#d32f2f;"></i> Számlázási Segéd</a>
                         <a href="${p}modules/calc/budget_planner.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i> Költségvetési tervező</a>
                         <a href="${p}modules/tenants/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice" style="color:#e91e63;"></i> Bérlői elszámolások</a>
                         <a href="${p}modules/tools/heating.html" class="nav-dropdown-item"><i class="fas fa-temperature-arrow-up" style="color:#d32f2f;"></i> Fűtésvezérlés</a>
+                        <a href="${p}modules/polc/index.html" class="nav-dropdown-item"><i class="fas fa-microchip" style="color:#2196f3;"></i> POLC Online</a>
+                        <a href="${p}modules/consumption/index.html" class="nav-dropdown-item"><i class="fas fa-building-circle-check" style="color:#4caf50;"></i> Fogyasztási Helyek</a>
+                        <a href="${p}modules/stocks/index.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#fbc02d;"></i> Tőzsdei Árak</a>
                     </div>
                 </div>
                 <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -164,8 +178,8 @@ const App = {
             infoArea.innerHTML = `
                 <div class="info-wrapper" style="display: flex; align-items: center; gap: 1.5rem;">
                     <div class="weather-clock-group" style="display: flex; align-items: center; gap: 1rem; border-right: 1px solid var(--border-color); padding-right: 1.5rem; margin-right: 0.5rem;">
-                        <div id="header-weather" style="text-align: right; line-height: 1.2; font-size: 0.85rem; font-weight: 600;"></div>
-                        <div id="global-clock" style="text-align: right; line-height: 1.2; font-size: 0.85rem; color: var(--accent-purple); font-weight: 700; text-shadow: 0 0 10px rgba(123, 97, 255, 0.3);"></div>
+                        <div id="header-weather" style="text-align: right; line-height: 1.1; font-size: 0.85rem; font-weight: 600; display: flex; flex-direction: column; justify-content: center;"></div>
+                        <div id="global-clock" style="text-align: right; line-height: 1.1; font-size: 0.85rem; color: var(--accent-purple); font-weight: 700; text-shadow: 0 0 10px rgba(123, 97, 255, 0.3); display: flex; flex-direction: column; justify-content: center;"></div>
                     </div>
                     <div class="header-actions" style="display: flex; flex-direction: column; align-items: center; gap: 0.8rem;">
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 0.2rem;">
@@ -178,7 +192,7 @@ const App = {
                             <button onclick="App.toggleTheme()" style="background:none; border:none; font-size:1.1rem; color:var(--text-main); cursor:pointer; padding:0;">
                                 <i id="theme-toggle-icon" class="fas fa-moon" style="color:var(--accent-purple);"></i>
                             </button>
-                            <span style="font-size: 0.55rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">ÉJJELI</span>
+                            <span id="theme-toggle-label" style="font-size: 0.55rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; line-height: 1;">ÉJJELI</span>
                         </div>
                     </div>
                 </div>
@@ -264,6 +278,8 @@ const App = {
         document.documentElement.setAttribute('data-theme', this.state.theme);
         const icon = document.getElementById('theme-toggle-icon');
         if (icon) icon.className = this.state.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        const label = document.getElementById('theme-toggle-label');
+        if (label) label.innerText = this.state.theme === 'light' ? 'ÉJJELI' : 'NAPPAL';
     },
 
     applyBgColor() {
@@ -435,8 +451,14 @@ const App = {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 weatherEl.innerHTML = `
-                    <div style="font-weight:800; font-size:0.9rem; color:var(--accent-purple); text-shadow: 0 0 10px rgba(123, 97, 255, 0.3);"><i class="fas fa-temperature-high"></i> ${Math.round(data.current.temperature_2m)}°C</div>
-                    <div style="font-size:0.7rem; color:var(--text-muted);"><i class="fas fa-sun" style="color:var(--accent-purple);"></i> ${sunrise} | <i class="fas fa-moon" style="color:var(--accent-purple);"></i> ${sunset}</div>
+                    <div style="font-weight:900; font-size:1.1rem; color:var(--accent-purple); text-shadow: 0 0 15px rgba(123, 97, 255, 0.4); margin-bottom: 2px;">
+                        <i class="fas fa-temperature-low" style="margin-right: 2px;"></i>${Math.round(data.current.temperature_2m)}°C
+                    </div>
+                    <div style="font-size:0.65rem; color:var(--text-muted); font-weight:800; display: flex; align-items: center; justify-content: flex-end; gap: 6px; letter-spacing: 0.02em;">
+                        <span><i class="fas fa-sun" style="color:var(--accent-purple); opacity: 0.8; font-size: 0.6rem;"></i> ${sunrise}</span>
+                        <span style="opacity: 0.3;">|</span>
+                        <span><i class="fas fa-moon" style="color:var(--accent-purple); opacity: 0.8; font-size: 0.6rem;"></i> ${sunset}</span>
+                    </div>
                 `;
             }
 
