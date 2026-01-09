@@ -187,9 +187,9 @@ body {
     height: 100%;
     z-index: -1;
     overflow: hidden;
-    background: linear-gradient(135deg, #1a237e 0%, #7b61ff 50%, #4a148c 100%) !important;
+    background: linear-gradient(135deg, #0a1142 0%, #1a237e 50%, #050a10 100%) !important;
     opacity: 1 !important;
-    box-shadow: inset 0 0 50px rgba(123, 97, 255, 0.2);
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
 }
 
 .header-bg-layer img {
@@ -335,6 +335,8 @@ h6 {
     gap: 2rem;
     height: 100%;
     align-items: center;
+    transform: translateX(-60px);
+    /* Shift approx 1.5cm left */
 }
 
 .nav-cat {
@@ -501,8 +503,8 @@ h6 {
 
 /* Category Groups */
 .category-group {
-    margin-bottom: 0.5rem;
-    padding: 0.3rem 0.8rem;
+    margin-bottom: 0.3rem;
+    padding: 0.25rem 0.75rem;
     border-radius: 1.25rem;
     background: rgba(255, 255, 255, 0.25);
     border: 1px solid transparent;
@@ -553,25 +555,25 @@ h6 {
 
 /* Feature Cards - Dashboard Grid Specifics (Relaxed 3D) */
 .dashboard-grid .feature-card {
-    width: 145px;
-    height: 130px;
+    width: 128px;
+    height: 95px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
     background: linear-gradient(135deg, var(--bg-card), var(--bg-creamy)) !important;
 }
 
 .feature-card i {
-    font-size: 1.75rem !important;
+    font-size: 1.35rem !important;
     transition: all 0.4s ease;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .feature-card h5 {
-    font-size: 0.8rem !important;
-    line-height: 1.3;
+    font-size: 0.75rem !important;
+    line-height: 1.2;
     margin: 0;
     font-weight: 700;
     text-align: center;
@@ -681,7 +683,7 @@ h6 {
 
 /* Smoother Grid and Card interactions */
 .dashboard-grid {
-    padding: 1rem 0.5rem;
+    padding: 0.5rem 0.5rem;
     perspective: 1200px;
 }
 
