@@ -723,12 +723,11 @@ const App = {
                 // 2. 3-Day Average Calculation (Slot 3)
                 if (avgEl) {
                     const last3 = allValues.slice(-3); // Last 3 items including today
-                    let avg = last3.reduce((a, b) => a + b, 0) / last3.length;
+                    const avg = last3.reduce((a, b) => a + b, 0) / last3.length;
 
-                    // FORCE NEGATIVE SIGN as per user request (data correction)
-                    if (avg > 0) avg = avg * -1;
-
-                    avgEl.innerText = avg.toFixed(1) + "°C";
+                    // Show explicit sign (user requested "előjel pótlás", and confirmed it is positive)
+                    const sign = avg > 0 ? '+' : '';
+                    avgEl.innerText = `${sign}${avg.toFixed(1)}°C`;
                 }
 
                 console.log("Monitoring data updated successfully.");
