@@ -23,6 +23,7 @@ const App = {
         this.initHeaderBgRotation();
         this.initInteractivity();
         this.initStars();
+        this.initMonitoring();
         console.log("Irodai Asszisztens V3.42 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
     },
@@ -89,7 +90,6 @@ const App = {
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
                         <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
                         <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
-                        <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station" style="color:#ff9800;"></i> Energia Ismeretek</a>
                     </div>
                 </div>
                 <div class="nav-cat">TÉRKÉPEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -125,8 +125,7 @@ const App = {
                 <div class="nav-cat">ELSZÁMOLÁS <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/calc/contracts.html" class="nav-dropdown-item"><i class="fas fa-file-contract" style="color:#e67e22;"></i> Szerződés Nyilvántartó</a>
-                        <a href="${p}modules/calc/energy_calc.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#2ecc71;"></i> Energiaszámla kalkulátor</a>
-                        <a href="${p}modules/calc/hupx_calc.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#4caf50;"></i> Sima kalkulátor</a>
+                        <a href="${p}modules/calc/hupx_calc.html" class="nav-dropdown-item"><i class="fas fa-calculator" style="color:#4caf50;"></i> Energiaszámla kalkulátor</a>
                         <a href="${p}modules/calc/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#d32f2f;"></i> Számlázási Segéd</a>
                         <a href="${p}modules/calc/budget_planner.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i> Költségvetési tervező</a>
                         <a href="${p}modules/tenants/index.html" class="nav-dropdown-item"><i class="fas fa-file-invoice" style="color:#e91e63;"></i> Bérlői elszámolások</a>
@@ -279,7 +278,7 @@ const App = {
         const icon = document.getElementById('theme-toggle-icon');
         if (icon) icon.className = this.state.theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
         const label = document.getElementById('theme-toggle-label');
-        if (label) label.innerText = this.state.theme === 'light' ? 'ÉJJELI' : 'NAPPAL';
+        if (label) label.innerText = this.state.theme === 'light' ? 'ÉJJELI' : 'NAPPALI';
     },
 
     applyBgColor() {
@@ -488,7 +487,13 @@ const App = {
                 const titleEl = card.querySelector('h5');
                 if (!titleEl) return;
                 const title = normalize(titleEl.innerText);
-                card.style.display = title.includes(q) ? 'flex' : 'none';
+                const isMatch = q !== "" && title.includes(q);
+
+                card.style.display = (q === "" || isMatch) ? 'flex' : 'none';
+
+                // Pulsing glow for hits
+                if (isMatch) card.classList.add('search-glow');
+                else card.classList.remove('search-glow');
             });
             // Hide empty categories
             document.querySelectorAll('.category-group').forEach(group => {
@@ -644,6 +649,93 @@ const App = {
             toast.style.animation = 'toastOut 0.4s ease forwards';
             setTimeout(() => toast.remove(), 400);
         }, 4000);
+    },
+
+    async initMonitoring() {
+        const chartEl = document.getElementById('daily-temp-chart');
+        const avgEl = document.getElementById('three-day-avg');
+        if (!chartEl && !avgEl) return;
+
+        try {
+            // Fetch 7 days history + 1 day today
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.state.location.lat}&longitude=${this.state.location.lon}&daily=temperature_2m_mean&timezone=auto&past_days=7&forecast_days=1`);
+            const data = await res.json();
+
+            if (data && data.daily && data.daily.temperature_2m_mean) {
+                const allValues = data.daily.temperature_2m_mean;
+                // Last 7 days including today (usually the last 7 items in the response)
+                const values = allValues.slice(-7);
+                const labels = data.daily.time.slice(-7);
+
+                // 1. Chart Rendering (Slot 2)
+                if (chartEl && typeof Chart !== 'undefined') {
+                    const ctx = chartEl.getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: values,
+                                borderColor: '#7b61ff',
+                                backgroundColor: (context) => {
+                                    const ctx = context.chart.ctx;
+                                    const gradient = ctx.createLinearGradient(0, 0, 0, 35);
+                                    gradient.addColorStop(0, 'rgba(123, 97, 255, 0.2)');
+                                    gradient.addColorStop(1, 'rgba(123, 97, 255, 0)');
+                                    return gradient;
+                                },
+                                fill: true,
+                                tension: 0.4,
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                pointHoverRadius: 4,
+                                hitRadius: 25
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                                mode: 'index',
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    enabled: true,
+                                    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                                    padding: 8,
+                                    yAlign: 'bottom',
+                                    titleFont: { size: 10, weight: 'bold' },
+                                    bodyFont: { size: 9 },
+                                    callbacks: {
+                                        title: (context) => `${context[0].parsed.y.toFixed(1)}°C`,
+                                        label: (context) => labels[context.dataIndex]
+                                    }
+                                }
+                            },
+                            scales: { x: { display: false }, y: { display: false } },
+                            layout: { padding: { left: 0, right: 0, top: 2, bottom: 2 } }
+                        }
+                    });
+                }
+
+                // 2. 3-Day Average Calculation (Slot 3)
+                if (avgEl) {
+                    const last3 = allValues.slice(-3); // Last 3 items including today
+                    const avg = last3.reduce((a, b) => a + b, 0) / last3.length;
+
+                    // Show explicit sign (user requested "előjel pótlás", and confirmed it is positive)
+                    const sign = avg > 0 ? '+' : '';
+                    avgEl.innerText = `${sign}${avg.toFixed(1)}°C`;
+                }
+
+                console.log("Monitoring data updated successfully.");
+            }
+        } catch (e) {
+            console.error("Monitoring Init Error:", e);
+            if (avgEl) avgEl.innerText = "N/A";
+        }
     },
 };
 
