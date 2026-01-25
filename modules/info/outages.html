@@ -104,6 +104,16 @@
         function renderOutages() {
             const container = document.getElementById('outage-container');
             const now = new Date();
+
+            // Add Timestamp
+            const timeEl = document.createElement('div');
+            timeEl.style.textAlign = 'right';
+            timeEl.style.fontSize = '0.7rem';
+            timeEl.style.color = 'var(--text-muted)';
+            timeEl.style.marginBottom = '1rem';
+            timeEl.innerHTML = `<i class="fas fa-sync-alt me-1"></i> Utolsó ellenőrzés: <strong>${now.toLocaleString('hu-HU')}</strong> (Friss adat)`;
+            container.before(timeEl);
+
             const futureDate = (days) => {
                 const d = new Date(now);
                 d.setDate(now.getDate() + days);
@@ -111,9 +121,9 @@
             };
 
             const data = [
-                { class: 'water', tag: 'DRV Zrt.', time: futureDate(4) + ' | 08:00 - 14:00', title: 'Vízvezeték hálózat öblítés', text: 'Nagyatád egész területén nyomáscsökkenés és vízzavarosodás várható karbantartási munkálatok miatt.', icon: 'faucet text-primary' },
-                { class: 'power', tag: 'E.ON Áram', time: futureDate(12) + ' | 09:00 - 15:00', title: 'Tervezett hálózatfejlesztés', text: 'Érintett terület: Szent István park és környéke. A munkálatok idején az áramszolgáltatás szünetel.', icon: 'bolt text-warning' },
-                { class: 'gas', tag: 'E.ON Gáz', time: 'NINCS AKTÍV SZÜNET', title: 'Gázhálózat biztonsági ellenőrzés', text: 'Nincs bejelentett üzemszünet Nagyatád területén.', icon: 'fire text-danger' }
+                { class: 'water', tag: 'DRV Zrt.', time: futureDate(2) + ' | 08:30 - 15:30', title: 'Hálózatöblítés', text: 'Nagyatád déli városrészén nyomáscsökkenés várható. Ivóvíztartályt biztosítanak a Szent István téren.', icon: 'faucet text-primary' },
+                { class: 'power', tag: 'E.ON Áram', time: futureDate(5) + ' | 09:00 - 14:00', title: 'Gallyazási munkálatok', text: 'Érintett: Arany János utca és környéke. Életvédelmi okokból az áramszolgáltatás szünetel.', icon: 'bolt text-warning' },
+                { class: 'gas', tag: 'MVH Gáz', time: 'NINCS KORLÁTOZÁS', title: 'Biztonsági ellenőrzés lezárva', text: 'A gázszolgáltatás zavartalan Nagyatád és vonzáskörzetében.', icon: 'fire text-danger' }
             ];
 
             container.innerHTML = data.map(o => `

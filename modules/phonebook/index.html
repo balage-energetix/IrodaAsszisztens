@@ -95,39 +95,33 @@
 
 <body>
     <header class="app-header">
-        <a href="../../index.html" class="logo"><i class="fas fa-briefcase"></i><span>Irodai Asszisztens</span></a>
-        <div class="header-info">
-            <div id="header-weather" class="weather-info"></div>
-            <div id="global-clock" class="item-group"></div>
-            <button onclick="App.toggleTheme()"
-                style="background:none; border:none; font-size:1.5rem; color:var(--text-main); cursor:pointer;"><i
-                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </div>
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
     </header>
 
     <main class="container-fluid py-5 fade-in">
-        <div class="module-header" style="max-width: 1000px; margin-inline: auto;">
-            <a href="../../index.html" class="back-btn"><i class="fas fa-home"></i></a>
+        <div class="module-header" style="max-width: 1100px; margin-inline: auto;">
             <h2 style="font-weight: 800;"><i class="fas fa-address-book text-primary me-2"></i>Telefonkönyv</h2>
         </div>
 
         <div class="search-bar">
             <i class="fas fa-search"></i>
-            <input type="text" id="search" placeholder="Keresés név, pozíció vagy szám alapján..." oninput="filter()">
+            <input type="text" id="search" placeholder="Keresés név, pozíció, e-mail vagy szám alapján..."
+                oninput="filter()">
         </div>
 
-        <div class="directory-card" style="max-width: 1000px; margin-inline: auto;">
+        <div class="directory-card" style="max-width: 1100px; margin-inline: auto;">
             <table>
                 <thead>
                     <tr>
-                        <th>Pozíció</th>
+                        <th>Pozíció / Osztály</th>
                         <th>Név</th>
                         <th>Telefonszám</th>
-                        <th>Megjegyzés</th>
+                        <th>E-mail cím</th>
                     </tr>
                 </thead>
                 <tbody id="directory-body">
-                    <!-- Sample Data -->
+                    <!-- Data populated by script -->
                 </tbody>
             </table>
         </div>
@@ -136,41 +130,101 @@
     <script src="../../js/main.js"></script>
     <script>
         const members = [
-            { p: "Somogy Vármegyei Önkormányzat", n: "Központi Hivatal", t: "+36 82 898 246", m: "Kaposvár, Fő u. 10.", tag: "Megyei Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Kaposvár", t: "+36 82 501 501", m: "Somogy vármegyeszékhely", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Siófok", t: "+36 84 504 200", m: "Siófok, Fő tér 1.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Nagyatád", t: "+36 82 504 501", m: "Nagyatád, Baross G. u. 9.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Barcs", t: "+36 82 461 200", m: "Barcs, Bajcsy-Zs. u. 46.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Marcali", t: "+36 85 501 001", m: "Marcali, Rákóczi u. 11.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Balatonboglár", t: "+36 85 550 333", m: "Boglár, Erzsébet u. 7.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Balatonlelle", t: "+36 85 554 930", m: "Lelle, Petőfi u. 2.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Tab", t: "+36 84 320 000", m: "Tab, Kossuth u. 49.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Fonyód", t: "+36 85 560 000", m: "Fonyód, Ady E. u. 1.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Csurgó", t: "+36 82 471 130", m: "Csurgó, Széchenyi tér 2.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Lengyeltóti", t: "+36 85 530 004", m: "Lengyeltóti, Zrínyi u. 2.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Balatonföldvár", t: "+36 84 540 330", m: "Földvár, Petőfi u. 1.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Kadarkút", t: "+36 82 581 003", m: "Kadarkút, Petőfi u. 2.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Zamárdi", t: "+36 84 348 400", m: "Zamárdi, Szabadság tér 4.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Igal", t: "+36 82 573 029", m: "Igal, Szent István u. 2.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Nagybajom", t: "+36 82 556 950", m: "Nagybajom, Jővő u. 2.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Balatonszárszó", t: "+36 84 362 501", m: "Szárszó, Hősök tere 1.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Balatonszemes", t: "+36 84 560 900", m: "Szemes, Bajcsy-Zs. u. 23.", tag: "Helyi Önkormányzat" },
-            { p: "Polgármesteri Hivatal", n: "Balatonkeresztúr", t: "+36 85 575 810", m: "Keresztúr, Ady E. u. 52.", tag: "Helyi Önkormányzat" }
+            // Vezetés & Titkárság
+            { p: "Polgármester (111. iroda)", n: "Dr. Ludas László", t: "06 82 504 501", e: "varoshaza@nagyatad.hu", tag: "Vezetés" },
+            { p: "Jegyző (112. iroda)", n: "Dr. Kovács Ildikó", t: "06 82 504 502", e: "jegyzo@nagyatad.hu", tag: "Vezetés" },
+            { p: "Aljegyző, Irodavezető (4. iroda)", n: "Dr. Nagy Vera", t: "06 82 504 510", e: "drnagyvera@nagyatad.hu", tag: "Vezetés" },
+            { p: "Jogtanácsos (101. iroda)", n: "Dr. Pacári Judit", t: "06 82 504 504", e: "jogtanacsos@nagyatad.hu", tag: "Vezetés" },
+            { p: "Polgármesteri titkárság", n: "Lovrencsics Bernadett", t: "06 82 504 533", e: "varoshaza@nagyatad.hu", tag: "Titkárság" },
+            { p: "Jegyzői titkárság", n: "Hivatal", t: "06 82 504 534", e: "jegyzo@nagyatad.hu", tag: "Titkárság" },
+
+            // Jegyzői Iroda (I. emelet)
+            { p: "Személyzeti ügyek (115. iroda)", n: "Horváth Zoltánné", t: "06 82 504 580", e: "horvath.zoltanne@nagyatad.hu", tag: "Jegyzői Iroda" },
+            { p: "Képviselő-testületi ügyintéző (102. iroda)", n: "Szőke Kornél", t: "06 82 504 526", e: "szoke.kornel@nagyatad.hu", tag: "Jegyzői Iroda" },
+            { p: "Informatikus (113. iroda)", n: "Vajda Zsolt", t: "06 82 504 535", e: "informatikus@nagyatad.hu", tag: "Jegyzői Iroda" },
+
+            // Hatósági Iroda (Földszint)
+            { p: "Anyakönyv, Lakásügyek (8. iroda)", n: "Aranyné Répássy Beáta", t: "06 82 504 530", e: "aranynebea@nagyatad.hu", tag: "Hatósági Iroda" },
+            { p: "Anyakönyv, Mezőgazdaság (1. iroda)", n: "Csiszár Henriett", t: "06 82 504 565", e: "csiszar.henriett@nagyatad.hu", tag: "Hatósági Iroda" },
+            { p: "Gyermekvédelem, Ipar (6. iroda)", n: "Hoffmann Andrea", t: "06 82 504 511", e: "hoffmannandrea@nagyatad.hu", tag: "Hatósági Iroda" },
+            { p: "Iktató, Irattáros (3. iroda)", n: "Kulcsár Alexandra", t: "06 82 504 519", e: "-", tag: "Hatósági Iroda" },
+            { p: "Hagyatéki ügyek (5. iroda)", n: "Szmolenszkyné Mozsonyi Anett", t: "06 82 504 517", e: "szmolenszkyanett@nagyatad.hu", tag: "Hatósági Iroda" },
+
+            // Pénzügyi Iroda (I. emelet)
+            { p: "Pénzügyi Irodavezető (109. iroda)", n: "Vargáné Szüts Katalin", t: "06 82 504 506", e: "vargaszka@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Pénzügyi ügyintéző (118. iroda)", n: "Beregszászi Szilvia", t: "06 82 504 587", e: "szilviberegszaszi@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Projektmenedzser (205. iroda)", n: "Bódis Bernadett", t: "06 82 504 512", e: "bodis.bernadett@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Pénzügyi ügyintéző (118. iroda)", n: "Boti Andrea", t: "06 82 504 587", e: "botiandrea@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Pénztáros (104. iroda)", n: "Fintáné Stadler Mariann", t: "06 82 504 524", e: "fintane.stadler.mariann@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Projektmenedzser (206. iroda)", n: "Győri-Lébár Tünde", t: "06 82 504 548", e: "lebartunde@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Projektmenedzser (212. iroda)", n: "Hantosi Réka", t: "06 82 504 554", e: "hantosireka@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Pénzügyi ügyintéző (103. iroda)", n: "Kisdeákné Horváth Judit", t: "06 82 504 537", e: "judit@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Pénzügy, Számlanyilvántartás (118. iroda)", n: "Némethné Milánkovics Szilvia", t: "06 82 504 552", e: "-", tag: "Pénzügy" },
+            { p: "Pénzügyi ügyintéző (108. iroda)", n: "Rózsa Andrea", t: "06 82 504 574", e: "rozsa.andrea@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Intézményi könyvelő (108. iroda)", n: "Tompáné Baja Barbara", t: "06 82 504 587", e: "bbarbara@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Könyvelő (118. iroda)", n: "Vassné Teszlák Szilvia", t: "06 82 504 552", e: "vassneszilvi@nagyatad.hu", tag: "Pénzügy" },
+            { p: "Pénzügyi ügyintéző (105. iroda)", n: "Zsiga Karolina", t: "06 82 504 525", e: "zsiga.karolina@nagyatad.hu", tag: "Pénzügy" },
+
+            // Adócsoport (Földszint)
+            { p: "Adócsoport vezető (14. iroda)", n: "Horváth Ildikó", t: "06 82 504 520", e: "adoiroda@nagyatad.hu", tag: "Adó" },
+            { p: "Talajterhelési díj (16. iroda)", n: "Harisné Kiss Szilvia", t: "06 82 504 521", e: "-", tag: "Adó" },
+            { p: "Kommunális adó (16. iroda)", n: "Pókos Szilvia", t: "06 82 504 522", e: "-", tag: "Adó" },
+
+            // Műszaki Iroda (II. emelet)
+            { p: "Irodavezető, Főépítész (216. iroda)", n: "Svégel Gábor", t: "06 82 504 507", e: "svegel@nagyatad.hu", tag: "Műszaki" },
+            { p: "Építési ügyek (203. iroda)", n: "Borongics Beáta", t: "06 82 504 544", e: "borongics.beata@nagyatad.hu", tag: "Műszaki" },
+            { p: "Közlekedés, Környezetvédelem", n: "Bölcsföldi Zoltán", t: "06 82 504 542", e: "bolcsfoldi.zoltan@nagyatad.hu", tag: "Műszaki" },
+            { p: "Közterület felügyelő (201. iroda)", n: "Friedrich Norbert", t: "06 82 504 582", e: "kozteruletfelugyelo@nagyatad.hu", tag: "Rendészet" },
+            { p: "Közterület felügyelő (201. iroda)", n: "Gresa János", t: "06 82 504 582", e: "kozteruletfelugyelo@nagyatad.hu", tag: "Rendészet" },
+            { p: "Energetikai ügyek (215. iroda)", n: "Horváth Balázs", t: "06 82 504 546", e: "horvath.balazs@nagyatad.hu", tag: "Műszaki" },
+            { p: "Vagyongazdálkodás (216. iroda)", n: "Simon Katalin", t: "06 82 504 541", e: "simonkati@nagyatad.hu", tag: "Műszaki" },
+
+            // Regional Data
+            { p: "Somogy Vármegyei Központ", n: "Hivatal", t: "+36 82 898 246", e: "onkormanyzat@somogy.hu", tag: "Regionális" },
+            { p: "Polgármesteri Hivatal", n: "Kaposvár", t: "+36 82 501 501", e: "titkarsag@kaposvar.hu", tag: "Helyi" },
+            { p: "Polgármesteri Hivatal", n: "Siófok", t: "+36 84 504 200", e: "onkormanyzat@siofok.hu", tag: "Helyi" },
+            { p: "Polgármesteri Hivatal", n: "Barcs", t: "+36 82 461 200", e: "barcs@barcs.hu", tag: "Helyi" },
+            { p: "Polgármesteri Hivatal", n: "Marcali", t: "+36 85 501 001", e: "marcali@marcali.hu", tag: "Helyi" },
+            { p: "Polgármesteri Hivatal", n: "Balatonboglár", t: "+36 85 550 333", e: "hivatal@balatonboglar.hu", tag: "Helyi" }
         ];
 
         function render(data) {
+            const query = document.getElementById('search').value.toLowerCase();
             const body = document.getElementById('directory-body');
-            body.innerHTML = data.map(m => `
-                <tr style="${m.tag.includes('Megyei') ? 'background: rgba(123, 97, 255, 0.05);' : ''}">
-                    <td style="font-weight:700;">${m.p}</td>
-                    <td>${m.n}</td>
-                    <td><a href="tel:${m.t.replace(/\s/g, '').replace(/\-/g, '')}" class="phone-link"><i class="fas fa-phone-alt"></i> ${m.t}</a></td>
-                    <td>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">${m.m}</div>
-                        <span style="font-size:0.65rem; padding: 2px 8px; border-radius:10px; background: ${m.tag.includes('Megyei') ? '#7b61ff' : '#4caf50'}; color: white; display: inline-block; margin-top: 4px; font-weight: 800;">${m.tag}</span>
-                    </td>
-                </tr>
-            `).join('');
+
+            const highlightText = (text) => {
+                if (!query) return text;
+                const regex = new RegExp(`(${query})`, 'gi');
+                return String(text).replace(regex, '<span class="neon-text-highlight">$1</span>');
+            };
+
+            const highlightPhone = (phone, isVisible) => {
+                let html = phone;
+                // If the query matches anything in the entry, we highlight the last 3 digits
+                if (query && isVisible) {
+                    const last3 = phone.slice(-3);
+                    html = phone.slice(0, -3) + `<span class="neon-text-highlight">${last3}</span>`;
+                }
+                return html;
+            };
+
+            body.innerHTML = data.map(m => {
+                const isMatch = query && (
+                    m.p.toLowerCase().includes(query) ||
+                    m.n.toLowerCase().includes(query) ||
+                    m.t.includes(query) ||
+                    m.e.toLowerCase().includes(query)
+                );
+
+                return `
+                    <tr>
+                        <td style="font-weight:700;">${highlightText(m.p)}</td>
+                        <td>${highlightText(m.n)}</td>
+                        <td><a href="tel:${m.t.replace(/\s/g, '')}" class="phone-link"><i class="fas fa-phone-alt"></i> ${highlightPhone(m.t, isMatch)}</a></td>
+                        <td><a href="mailto:${m.e}" class="phone-link" style="color: var(--secondary); font-size: 0.85rem;"><i class="fas fa-envelope"></i> ${highlightText(m.e)}</a></td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function filter() {
@@ -179,7 +233,7 @@
                 m.p.toLowerCase().includes(query) ||
                 m.n.toLowerCase().includes(query) ||
                 m.t.includes(query) ||
-                m.tag.toLowerCase().includes(query)
+                m.e.toLowerCase().includes(query)
             );
             render(filtered);
         }

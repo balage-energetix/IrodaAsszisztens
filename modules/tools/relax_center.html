@@ -83,6 +83,8 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            overflow-y: auto;
+            max-height: 480px;
         }
 
         .radio-item {
@@ -373,6 +375,20 @@
                             </div>
                             <i class="fas fa-play-circle fa-2x radio-play-btn"></i>
                         </div>
+                        <div class="radio-item" data-url="https://media-ice.musicradio.com/CapitalMP3">
+                            <div class="radio-info">
+                                <span class="radio-name">Capital FM</span>
+                                <span class="radio-tag">The UK's No.1 Hit Music Station</span>
+                            </div>
+                            <i class="fas fa-play-circle fa-2x radio-play-btn"></i>
+                        </div>
+                        <div class="radio-item" data-url="http://radio.virginradio.co.uk/stream">
+                            <div class="radio-info">
+                                <span class="radio-name">Virgin Radio UK</span>
+                                <span class="radio-tag">The Best 80s, 90s & Now</span>
+                            </div>
+                            <i class="fas fa-play-circle fa-2x radio-play-btn"></i>
+                        </div>
                     </div>
                 </div>
                 <audio id="radio-player"></audio>
@@ -399,6 +415,7 @@
                     <small class="text-muted">Élő természetközeli pillanatok Afrikából.</small>
                 </div>
             </div>
+
 
             <!-- 6. Paint Mini-Module -->
             <div class="relax-card">
@@ -738,6 +755,17 @@
             }
         }
         function setVolume(v) { player.volume = v; }
+
+        // Auto-play Radio 1 on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const radio1 = document.querySelector('.radio-item');
+                if (radio1 && !playing) {
+                    radio1.click();
+                    toggleRadio();
+                }
+            }, 1000);
+        });
     </script>
 </body>
 

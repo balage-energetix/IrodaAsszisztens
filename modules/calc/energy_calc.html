@@ -9,31 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
-        :root {
-            --bg-card: #ffffff;
-            --bg-light: #f8f9fa;
-            --border-color: #e0e0e0;
-            --text-main: #1a1a1a;
-            --text-muted: #666666;
-            --primary: #1a237e;
-            --accent-purple: #7b61ff;
-        }
-
-        [data-theme="dark"] {
-            --bg-card: #141414;
-            --bg-light: #1d1d1d;
-            --border-color: #2a2a2a;
-            --text-main: #f0f0f0;
-            --text-muted: #aaaaaa;
-            --primary: #9fa8da;
-        }
-
-        body {
-            background: var(--bg-light);
-            color: var(--text-main);
-            transition: background 0.3s, color 0.3s;
-        }
-
         .calc-card {
             background: var(--bg-card);
             border-radius: 1.5rem;
@@ -42,6 +17,30 @@
             margin: 2rem auto;
             border: 1px solid var(--border-color);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .provider-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         .form-group {
@@ -57,7 +56,8 @@
             color: var(--text-muted);
         }
 
-        .form-group input {
+        .styled-input,
+        .styled-select {
             width: 100%;
             padding: 1rem;
             border-radius: 1rem;
@@ -88,10 +88,20 @@
             font-size: 2.5rem;
             font-weight: 800;
         }
+
+        #e2-sub-tabs {
+            display: none;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.02);
+            padding: 0.75rem;
+            border-radius: 1rem;
+        }
     </style>
 </head>
 
-<body data-theme="light">
+<body>
     <header class="app-header">
         <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
         <div class="header-info">
@@ -102,51 +112,103 @@
 
     <main class="container py-4">
         <div class="module-header text-center mb-4">
-            <h2 class="section-title">Energiaszámlaérték költségszámoló</h2>
-            <p class="text-muted">Várható éves energiadíj kalkuláció</p>
+            <h2 class="section-title"><i class="fas fa-file-invoice-dollar text-primary me-2"></i>Energiaszámla
+                Kalkulátor</h2>
+            <p class="text-muted">Összetett kalkulátor szolgáltatói (MVM, E.ON, E2) tarifákkal</p>
         </div>
 
         <div class="calc-card fade-in">
-            <div class="form-group">
-                <label>Tőzsdei ár (HUPX EUR/MWh)</label>
-                <input type="number" id="hupx" value="105" oninput="calculate()">
+            <div class="provider-tabs">
+                <button class="tab-btn active" onclick="setProvider('MVM', this)">MVM</button>
+                <button class="tab-btn" onclick="setProvider('EON', this)">E.ON</button>
+                <button class="tab-btn" onclick="setProvider('E2', this)">E2</button>
             </div>
-            <div class="form-group">
-                <label>E2 Felár / Kereskedelmi díj (Ft/kWh)</label>
-                <input type="number" id="e2-fee" value="5.5" oninput="calculate()">
+
+            <div id="e2-sub-tabs">
+                <button class="tab-btn" onclick="setE2Sub('gaz', this)">Gáz (Tőzsde)</button>
+                <button class="tab-btn" onclick="setE2Sub('aram', this)">Áram (Tőzsde)</button>
             </div>
+
             <div class="form-group">
-                <label>KIF III Rendszerhasználati díjak (Ft/kWh)</label>
-                <input type="number" id="rh-fee" value="32.4" oninput="calculate()">
+                <label>Fogyasztás mértéke</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="number" id="bill-amount" class="styled-input" style="flex: 2;" oninput="calcBill()"
+                        value="1000">
+                    <select id="bill-unit" class="styled-select" style="flex: 1;" onchange="calcBill()">
+                        <option value="kwh">kWh</option>
+                        <option value="m3">m³</option>
+                    </select>
+                </div>
             </div>
+
             <div class="form-group">
-                <label>Éves várható fogyasztás (kWh)</label>
-                <input type="number" id="consumption" value="100000" oninput="calculate()">
+                <label>Egységár (Nettó Ft)</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="number" id="unit-price" class="styled-input" style="flex: 2;" oninput="calcBill()">
+                    <select id="price-unit" class="styled-select" style="flex: 1;" onchange="calcBill()">
+                        <option value="kwh">Ft / kWh</option>
+                        <option value="m3">Ft / m³</option>
+                    </select>
+                </div>
             </div>
 
             <div class="result-box">
-                <h4>Becsült éves nemtó energiadíj (HUF)</h4>
-                <div class="value" id="total-result">0 Ft</div>
+                <h4>Várható Bruttó Összeg (27% ÁFA)</h4>
+                <div class="value" id="bill-res">0 Ft</div>
             </div>
         </div>
     </main>
 
     <script src="../../js/main.js"></script>
     <script>
-        function calculate() {
-            const hupx = parseFloat(document.getElementById('hupx').value) || 0;
-            const e2 = parseFloat(document.getElementById('e2-fee').value) || 0;
-            const rh = parseFloat(document.getElementById('rh-fee').value) || 0;
-            const cons = parseFloat(document.getElementById('consumption').value) || 0;
-            const eurHuf = 410; // Fixed exchange rate for estimation
+        const providerData = {
+            MVM: { price: 10.20, unit: 'kwh' },
+            EON: { price: 10.30, unit: 'kwh' },
+            E2: { price: 10.15, unit: 'kwh' }
+        };
+        let currentP = 'MVM';
 
-            const hupxHufKwh = (hupx * eurHuf) / 1000;
-            const totalUnitPice = hupxHufKwh + e2 + rh;
-            const total = totalUnitPice * cons;
+        function setProvider(p, btn) {
+            currentP = p;
+            document.querySelectorAll('.provider-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-            document.getElementById('total-result').innerText = new Intl.NumberFormat('hu-HU', { style: 'currency', currency: 'HUF', maximumFractionDigits: 0 }).format(total);
+            const e2Sub = document.getElementById('e2-sub-tabs');
+            if (p === 'E2') {
+                e2Sub.style.display = 'flex';
+                e2Sub.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            } else {
+                e2Sub.style.display = 'none';
+                document.getElementById('unit-price').value = providerData[p].price;
+                document.getElementById('price-unit').value = providerData[p].unit;
+                calcBill();
+            }
         }
-        calculate();
+
+        function setE2Sub(type, btn) {
+            document.querySelectorAll('#e2-sub-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            if (type === 'gaz') {
+                document.getElementById('unit-price').value = 4.82;
+                document.getElementById('price-unit').value = 'kwh';
+            } else {
+                document.getElementById('unit-price').value = 52.4;
+                document.getElementById('price-unit').value = 'kwh';
+            }
+            calcBill();
+        }
+
+        function calcBill() {
+            const amount = parseFloat(document.getElementById('bill-amount').value) || 0;
+            const price = parseFloat(document.getElementById('unit-price').value) || 0;
+            const total = amount * price * 1.27;
+            document.getElementById('bill-res').innerText = Math.round(total).toLocaleString('hu-HU') + ' Ft';
+        }
+
+        // Init
+        document.getElementById('unit-price').value = providerData.MVM.price;
+        calcBill();
     </script>
 </body>
 

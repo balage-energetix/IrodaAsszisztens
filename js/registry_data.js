@@ -75,7 +75,7 @@ window.REGISTRY_DATA = [
             "L\u00e9tes\u00edtm\u00e9ny vezet\u0151, igazgat\u00f3",
             "Dr. Ludas L\u00e1szl\u00f3",
             "Dr. Horv\u00e1th Szil\u00e1rd",
-            "Druzsin Imre",
+            "Dr. Horváth Szilárd",
             "Iv\u00f3kn\u00e9 Pint\u00e9r Melinda",
             "Iv\u00f3kn\u00e9 Pint\u00e9r Melinda",
             "Iv\u00f3kn\u00e9 Pint\u00e9r Melinda",

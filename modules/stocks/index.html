@@ -166,7 +166,7 @@
         const eurRate = 410;
         const hPricesFt = hPricesEUR.map(p => (p * eurRate / 1000).toFixed(2));
         const hPricesMJ = hPricesFt.map(p => (p / 3.6).toFixed(4));
-        const hPricesE2MJ = hPricesEUR.map(p => ((p + 20) * eurRate / 3600).toFixed(4));
+        const hPricesE2MJ = hPricesEUR.map(p => ((p + 23.5) * eurRate / 3600).toFixed(4));
 
         const ctxH = document.getElementById('h-chart').getContext('2d');
         new Chart(ctxH, {
@@ -182,7 +182,7 @@
                         tension: 0.3
                     },
                     {
-                        label: 'E2 tarifa (+20 EUR/MWh)',
+                        label: 'E2 tarifa (+23.5 EUR/MWh)',
                         data: hPricesE2MJ,
                         borderColor: '#ff9800',
                         borderDash: [5, 5],
@@ -214,7 +214,7 @@
         const labelsE = Array.from({ length: 30 }, (_, i) => `${i + 1}. nap`);
         const dataE_EUR = Array.from({ length: 30 }, () => (70 + Math.random() * 50).toFixed(2));
         const dataE_Ft = dataE_EUR.map(p => (p * eurRate / 1000).toFixed(2));
-        const dataE_E2Ft = dataE_EUR.map(p => ((parseFloat(p) + 20) * eurRate / 1000).toFixed(2));
+        const dataE_E2Ft = dataE_EUR.map(p => ((parseFloat(p) + 22) * eurRate / 1000).toFixed(2));
 
         new Chart(ctxE, {
             type: 'line',
@@ -229,7 +229,7 @@
                         tension: 0.3
                     },
                     {
-                        label: 'E2 tarifa (+20 EUR/MWh)',
+                        label: 'E2 tarifa (+22 EUR/MWh)',
                         data: dataE_E2Ft,
                         borderColor: '#ff9800',
                         borderDash: [5, 5],

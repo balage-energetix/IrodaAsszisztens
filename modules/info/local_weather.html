@@ -107,14 +107,37 @@
                 Időkép.hu</div>
         </div>
 
-        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1rem; text-align: right;">Forrás:
-            Időkép.hu</div>
+        <div class="radar-card" style="max-width: 900px; margin-inline: auto; margin-top: 3rem;">
+            <h4 style="font-family:'Outfit'; font-weight:800; margin-bottom:1.5rem;"><i
+                    class="fas fa-droplet text-info me-2"></i>Csapadékmennyiség grafikon (Nagyatád)</h4>
+            <img id="precip-graph" src="https://www.idokep.hu/automata/omme_nagyatad_csap.png"
+                alt="Nagyatád csapadék grafikon" style="width: 100%; border-radius: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1rem; text-align: right;">Forrás:
+                Időkép.hu</div>
+        </div>
+
+        <div class="radar-card" style="max-width: 900px; margin-inline: auto; margin-top: 3rem;">
+            <h4 style="font-family:'Outfit'; font-weight:800; margin-bottom:1.5rem;"><i
+                    class="fas fa-water text-primary me-2"></i>Rinya-patak vízállás (Babócsa / Nagyatád)</h4>
+            <img id="vizugy-graph" src="https://www.vizugy.hu/uploads/grafikon/grafikon_0pdd5ho2jlus4h3bn04c2p7981.png"
+                alt="Rinya-patak grafikon" style="width: 100%; border-radius: 1rem;">
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1rem; text-align: right;">Forrás:
+                Vizügy.hu</div>
         </div>
     </main>
 
     <script src="../../js/main.js"></script>
     <script>
-        // Weather module specific logic if any
+        document.addEventListener('DOMContentLoaded', () => {
+            const csapImg = document.getElementById('precip-graph');
+            if (csapImg) {
+                csapImg.src = `https://www.idokep.hu/automata/omme_nagyatad_csap1.png?t=${Date.now()}`;
+            }
+            const vizugyImg = document.getElementById('vizugy-graph');
+            if (vizugyImg) {
+                vizugyImg.src = `https://www.vizugy.hu/uploads/grafikon/grafikon_0pdd5ho2jlus4h3bn04c2p7981.png?t=${Date.now()}`;
+            }
+        });
     </script>
 </body>
 

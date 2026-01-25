@@ -609,7 +609,7 @@
         </div>
 
         <div id="error-banner"><i class="fas fa-warning me-2"></i> Saját téves érték! Kérjük ellenőrizze az adatokat
-            (Max 100 kW, csak számok).</div>
+            (Max 200 kW, csak számok).</div>
         <div id="no-data-banner" style="background: #fff3cd; color: #856404; border-color: #ffeeba;"><i
                 class="fas fa-info-circle me-2"></i> Adjon meg legalább 5 hónap csúcsteljesítmény adatot a pontos
             optimalizáláshoz!</div>
@@ -836,8 +836,8 @@
 
         function liveValidate(input) {
             const valStr = input.value.trim();
-            const val = parseFloat(valStr);
-            const isOk = valStr === "" || (!isNaN(val) && val <= 100 && /^\d*\.?\d*$/.test(valStr));
+            const val = parseFloat(valStr.replace(',', '.'));
+            const isOk = valStr === "" || (!isNaN(val) && val <= 200 && /^[\d\s,.]*$/.test(valStr));
 
             if (!isOk) {
                 input.classList.add('invalid');
@@ -901,13 +901,13 @@
 
             inputs.forEach(inp => {
                 const s = inp.value.trim();
-                const v = parseFloat(s);
-                if (s !== "" && (isNaN(v) || v > 100 || !/^\d*\.?\d*$/.test(s))) err = true;
+                const v = parseFloat(s.replace(',', '.'));
+                if (s !== "" && (isNaN(v) || v > 200 || !/^[\d\s,.]*$/.test(s))) err = true;
                 peaks.push(isNaN(v) ? 0 : v);
             });
 
             if (err) {
-                alert("Saját téves érték! Kérjük javítsa a hibás (piros) mezőket (Max 100 kW).");
+                alert("Saját téves érték! Kérjük javítsa a hibás (piros) mezőket (Max 200 kW).");
                 return;
             }
 
@@ -939,9 +939,9 @@
             document.getElementById('max-peak-val').innerText = maxPeak.toFixed(1) + " kW";
             document.getElementById('limit-val').innerText = annLimit + " hó / " + years + " év";
 
-            // TESTING RANGE: 1 to 100 kW as requested for smooth curve
+            // TESTING RANGE: 1 to 200 kW as requested
             let candidates = [];
-            for (let i = 1; i <= 100; i++) candidates.push(i);
+            for (let i = 1; i <= 200; i++) candidates.push(i);
 
             let minSum = Infinity, bestCap = 0, bestBase = 0, bestAnnP = 0, bestUnannP = 0, bestWorstTotal = 0;
             const chartData = [];
@@ -1088,7 +1088,7 @@
                             title: { display: true, text: 'Lekötött Teljesítmény (kW)', font: { weight: 'bold' } },
                             grid: { display: false },
                             min: 1,
-                            max: 100
+                            max: 200
                         }
                     }
                 }

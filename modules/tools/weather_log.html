@@ -68,6 +68,11 @@
                     <div style="font-size: 1.5rem; font-weight: 800; color: #5c6bc0;">-0.5°C (JAN)</div>
                 </div>
                 <div class="meta-box">
+                    <div style="font-size: 0.8rem; color: var(--text-muted);">30 napos átlag</div>
+                    <div id="trend-avg-display" style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">--°C
+                    </div>
+                </div>
+                <div class="meta-box">
                     <div style="font-size: 0.8rem; color: var(--text-muted);">Legmagasabb átlag</div>
                     <div style="font-size: 1.5rem; font-weight: 800; color: #ef5350;">21.8°C (AUG)</div>
                 </div>
@@ -172,6 +177,12 @@
                     trendChart.data.labels = labels;
                     trendChart.data.datasets[0].data = values;
                     trendChart.update();
+
+                    // Calculate and display 30-day average
+                    const trendAvg = values.reduce((a, b) => a + b, 0) / values.length;
+                    const avgEl = document.getElementById('trend-avg-display');
+                    if (avgEl) avgEl.innerText = trendAvg.toFixed(1) + "°C";
+
                     console.log("Trend chart updated with real MET data.");
                 }
             } catch (error) {

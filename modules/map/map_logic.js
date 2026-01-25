@@ -72,10 +72,6 @@ const MapLogic = {
 
         const marker = L.marker(this.lastLatlng, { icon: customIcon, draggable: true }).addTo(this.drawnItems);
 
-        if (text) {
-            marker.bindPopup(`<strong>Bejelentés:</strong><br>${text}`).openPopup();
-        }
-
         marker.on('contextmenu', (e) => {
             L.DomEvent.stopPropagation(e);
             this.drawnItems.removeLayer(marker);

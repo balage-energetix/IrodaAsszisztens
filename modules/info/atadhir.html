@@ -296,11 +296,11 @@
 
                     if (articles.length > 0) {
                         articles.forEach((item, index) => {
-                            if (index >= 12) return; // Limit to 12 articles
+                            if (index >= 10) return; // Limit to 10 articles as requested
 
-                            const titleEl = item.querySelector('h2.ultp-block-title a, .ultp-block-title a');
-                            const title = titleEl?.innerText.trim() || 'Nincs cím';
-                            const link = titleEl?.href || '#';
+                            const titleEl = item.querySelector('h2.ultp-block-title a, .ultp-block-title a, a.ultp-block-title');
+                            const title = titleEl?.innerText.trim() || item.querySelector('h2')?.innerText.trim() || 'Nincs cím';
+                            let link = titleEl?.getAttribute('href') || item.querySelector('a')?.getAttribute('href') || '#';
 
                             // Handle relative links if the proxy doesn't handle them
                             const absoluteLink = link.startsWith('http') ? link : 'https://www.atadhir.hu' + (link.startsWith('/') ? '' : '/') + link;
@@ -310,7 +310,7 @@
                             const imgSrc = imgEl?.src || 'https://via.placeholder.com/150?text=Atádhír';
 
                             // Extract category/date if available
-                            const dateEl = item.querySelector('.ultp-block-date');
+                            const dateEl = item.querySelector('.ultp-block-date, .entry-date');
                             const date = dateEl?.innerText.trim() || new Date().toLocaleDateString('hu-HU');
 
                             html += `
