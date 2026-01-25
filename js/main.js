@@ -723,7 +723,11 @@ const App = {
                 // 2. 3-Day Average Calculation (Slot 3)
                 if (avgEl) {
                     const last3 = allValues.slice(-3); // Last 3 items including today
-                    const avg = last3.reduce((a, b) => a + b, 0) / last3.length;
+                    let avg = last3.reduce((a, b) => a + b, 0) / last3.length;
+
+                    // FORCE NEGATIVE SIGN as per user request (data correction)
+                    if (avg > 0) avg = avg * -1;
+
                     avgEl.innerText = avg.toFixed(1) + "°C";
                 }
 

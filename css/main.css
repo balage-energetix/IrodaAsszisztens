@@ -580,6 +580,15 @@ h6 {
     background: linear-gradient(90deg, var(--bg-card) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.6) 60%, var(--bg-card) 100%);
 }
 
+/* Force Black Header */
+.app-header {
+    background: #000000 !important;
+}
+
+.header-bg-layer {
+    display: none !important;
+}
+
 .app-nav {
     display: flex;
     gap: 2rem;
