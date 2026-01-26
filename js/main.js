@@ -25,7 +25,7 @@ const App = {
         this.initStars();
         this.initMonitoring();
         this.fetchRinyaData();
-        console.log("Irodai Asszisztens V3.42 initialized");
+        console.log("Irodai Asszisztens V3.43 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
     },
 
@@ -660,8 +660,9 @@ const App = {
                                 fill: true,
                                 tension: 0.4,
                                 borderWidth: 2,
-                                pointRadius: 0,
-                                pointHoverRadius: 4,
+                                pointRadius: 4,
+                                pointBackgroundColor: '#ff4d4d',
+                                pointHoverRadius: 6,
                                 hitRadius: 25
                             }]
                         },
@@ -695,12 +696,11 @@ const App = {
 
                 // 2. 3-Day Average Calculation (Slot 3)
                 if (avgEl) {
-                    const last3 = allValues.slice(-3); // Last 3 items including today
+                    const last3 = allValues.slice(-3);
                     const avg = last3.reduce((a, b) => a + b, 0) / last3.length;
 
-                    // Show explicit sign (user requested "előjel pótlás", and confirmed it is positive)
-                    const sign = avg > 0 ? '+' : '';
-                    avgEl.innerText = `${sign}${avg.toFixed(1)}°C`;
+                    // Show value (removed sign as per request)
+                    avgEl.innerText = `${avg.toFixed(1)}°C`;
                 }
 
                 console.log("Monitoring data updated successfully.");

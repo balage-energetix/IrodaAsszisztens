@@ -76,8 +76,36 @@
             <span class="ms-3"><i class="fas fa-draw-polygon me-1"></i> Távolságmérő (megszakítása: Esc gom)</span>
         </div>
 
+        <!-- Dynamic Daily Status Image Section -->
+        <div class="daily-status-container"
+            style="margin-top: 2rem; background: var(--bg-card); border-radius: 1.5rem; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                        class="fas fa-calendar-day text-primary me-2"></i>Aktuális napi állapot (Napló)</h3>
+                <div class="actions">
+                    <button class="btn btn-outline-primary"
+                        onclick="App.notify('Napi állás exportálása folyamatban...', 'info')">
+                        <i class="fas fa-download me-2"></i> NAPLÓ EXPORT
+                    </button>
+                </div>
+            </div>
+            <div class="status-image-wrapper"
+                style="border-radius: 1rem; overflow: hidden; border: 2px dashed var(--border-color); min-height: 200px; display: flex; align-items: center; justify-content: center; background: var(--bg-light);">
+                <img id="daily-status-img" src="../../Irodai_Problem_Map_20260126_1702.png"
+                    onerror="this.style.display='none'; document.getElementById('status-placeholder').style.display='flex';"
+                    style="max-width: 100%; height: auto; display: block;">
+                <div id="status-placeholder"
+                    style="display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-align: center; padding: 2rem;">
+                    <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                    <p style="font-weight: 600;">Nincs még feltöltve a mai napi állás
+                        (Irodai_Problem_Map_20260126_1702.png)</p>
+                    <small>Másolja a napi képet a gyökérkönyvtárba!</small>
+                </div>
+            </div>
+        </div>
+
         <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 0 1rem;">
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 0 1rem; margin-top: 3rem;">
             <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
                     class="fas fa-map-marked-alt text-primary me-2"></i>Hiba jelölő térkép</h2>
             <button class="back-btn"
@@ -109,6 +137,7 @@
             <div onclick="addPointer('warning', 'fa-person-digging', '#ff9800')"><i class="fas fa-person-digging"></i>
                 Közterületbontás</div>
         </div>
+
 
         <!-- Aktuális Hibahelyek Táblázat -->
         <div class="issues-table-container"
@@ -188,33 +217,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <!-- Dynamic Daily Status Image Section -->
-        <div class="daily-status-container"
-            style="margin-top: 2rem; background: var(--bg-card); border-radius: 1.5rem; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
-                        class="fas fa-calendar-day text-primary me-2"></i>Aktuális napi állapot (Napló)</h3>
-                <div class="actions">
-                    <button class="btn btn-outline-primary"
-                        onclick="App.notify('Napi állás exportálása folyamatban...', 'info')">
-                        <i class="fas fa-download me-2"></i> NAPLÓ EXPORT
-                    </button>
-                </div>
-            </div>
-            <div class="status-image-wrapper"
-                style="border-radius: 1rem; overflow: hidden; border: 2px dashed var(--border-color); min-height: 200px; display: flex; align-items: center; justify-content: center; background: var(--bg-light);">
-                <img id="daily-status-img" src="png/current_status.png"
-                    onerror="this.style.display='none'; document.getElementById('status-placeholder').style.display='flex';"
-                    style="max-width: 100%; height: auto; display: block;">
-                <div id="status-placeholder"
-                    style="display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-align: center; padding: 2rem;">
-                    <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <p style="font-weight: 600;">Nincs még feltöltve a mai napi állás (current_status.png)</p>
-                    <small>Másolja a napi képet a modules/map/png/ mappába!</small>
-                </div>
             </div>
         </div>
     </main>
