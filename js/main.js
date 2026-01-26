@@ -24,6 +24,7 @@ const App = {
         this.initInteractivity();
         this.initStars();
         this.initMonitoring();
+        this.fetchRinyaData();
         console.log("Irodai Asszisztens V3.42 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
     },
@@ -327,12 +328,12 @@ const App = {
             canvas.height = window.innerHeight;
             stars = [];
 
-            // Create 150 stars
-            for (let i = 0; i < 150; i++) {
+            // Reduce to 100 stars for better performance
+            for (let i = 0; i < 100; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
-                    size: Math.random() * 2 + 1,
+                    size: Math.random() * 1.5 + 0.5,
                     speed: Math.random() * 0.3 + 0.1,
                     opacity: Math.random()
                 });
@@ -341,37 +342,11 @@ const App = {
 
         const drawStar = (star) => {
             const theme = document.documentElement.getAttribute('data-theme');
-            if (theme !== 'dark') return; // Only draw in dark mode
+            if (theme !== 'dark') return;
 
             ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
             ctx.beginPath();
-
-            // Draw a star shape instead of a circle
-            const spikes = 5;
-            const outerRadius = star.size;
-            const innerRadius = star.size / 2;
-
-            let rot = Math.PI / 2 * 3;
-            let x = star.x;
-            let y = star.y;
-            const step = Math.PI / spikes;
-
-            ctx.moveTo(star.x, star.y - outerRadius);
-
-            for (let i = 0; i < spikes; i++) {
-                x = star.x + Math.cos(rot) * outerRadius;
-                y = star.y + Math.sin(rot) * outerRadius;
-                ctx.lineTo(x, y);
-                rot += step;
-
-                x = star.x + Math.cos(rot) * innerRadius;
-                y = star.y + Math.sin(rot) * innerRadius;
-                ctx.lineTo(x, y);
-                rot += step;
-            }
-
-            ctx.lineTo(star.x, star.y - outerRadius);
-            ctx.closePath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
             ctx.fill();
         };
 
@@ -398,10 +373,8 @@ const App = {
         initCanvas();
         animate();
 
-        // Handle window resize
         window.addEventListener('resize', initCanvas);
 
-        // Stop animation when user logs in
         const observer = new MutationObserver(() => {
             const overlay = document.getElementById('auth-overlay');
             if (overlay && overlay.style.display === 'none') {
@@ -737,6 +710,50 @@ const App = {
             if (avgEl) avgEl.innerText = "N/A";
         }
     },
+
+    async fetchRinyaData() {
+        // Elements in local_weather.html
+        const valEl = document.getElementById('rinya-value');
+        const timeEl = document.getElementById('rinya-time');
+
+        // Only run if elements exist (e.g. on the weather page)
+        if (!valEl) return;
+
+        try {
+            const url = "https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor";
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
+            const html = data.contents;
+
+            // Extract the last values from Vizallas and Idopont arrays in the script
+            // Vizallas = new Array( 35, ..., 41, 41);
+            // Idopont = new Array( '...', '2026.01.26. 15:00');
+
+            const vizallasMatch = html.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\);/);
+            const idopontMatch = html.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\);/);
+
+            if (vizallasMatch && idopontMatch) {
+                const values = vizallasMatch[1].split(',').map(v => v.trim());
+                const times = idopontMatch[1].split(',').map(t => t.trim().replace(/'/g, ""));
+
+                const lastVal = values[values.length - 1];
+                const lastTime = times[times.length - 1];
+
+                valEl.innerText = `${lastVal} cm`;
+                timeEl.innerText = lastTime;
+
+                console.log(`Rinya Data: ${lastVal} cm at ${lastTime}`);
+            } else {
+                valEl.innerText = "Hiba";
+                console.error("Could not parse Vizallas or Idopont data");
+            }
+        } catch (e) {
+            valEl.innerText = "Hiba";
+            console.error("Rinya Fetch Error:", e);
+        }
+    }
 };
 
 // Global Enter listener for login

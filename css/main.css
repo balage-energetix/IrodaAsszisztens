@@ -119,8 +119,8 @@ h2,
 [data-theme="dark"] .opt-container,
 [data-theme="dark"] .info-bar {
     background: rgba(0, 0, 0, 0.5) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
     border: 1px solid rgba(0, 242, 255, 0.25) !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8),
         inset 0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -169,8 +169,8 @@ h2,
     margin-bottom: 1.2rem;
     /* REDUCED SPACING */
     background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(25px) saturate(200%);
-    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    backdrop-filter: blur(12px) saturate(200%);
+    -webkit-backdrop-filter: blur(12px) saturate(200%);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 14px;
     gap: 2rem;
@@ -779,8 +779,8 @@ h6 {
     border-radius: 2rem;
     background: rgba(255, 255, 255, 0.05);
     /* Very light glass */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
 }

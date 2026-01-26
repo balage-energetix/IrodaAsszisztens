@@ -118,14 +118,33 @@
 
         <div class="radar-card" style="max-width: 900px; margin-inline: auto; margin-top: 3rem;">
             <h4 style="font-family:'Outfit'; font-weight:800; margin-bottom:1.5rem;"><i
-                    class="fas fa-water text-primary me-2"></i>Rinya-patak vízállás (Babócsa / Nagyatád)</h4>
-            <img id="vizugy-graph" src="https://www.vizugy.hu/uploads/grafikon/grafikon_0pdd5ho2jlus4h3bn04c2p7981.png"
-                alt="Rinya-patak grafikon" style="width: 100%; border-radius: 1rem;">
+                    class="fas fa-water text-primary me-2"></i>Rinya-patak kézi mérés (Nagyatád)</h4>
+            <div style="height: 300px;">
+                <canvas id="rinya-manual-chart"></canvas>
+            </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1rem; text-align: right;">Forrás:
+                Saját mérés</div>
+        </div>
+
+        <div class="radar-card" style="max-width: 900px; margin-inline: auto; margin-top: 3rem;">
+            <h4 style="font-family:'Outfit'; font-weight:800; margin-bottom:1.5rem;"><i
+                    class="fas fa-water text-primary me-2"></i>Rinya-patak vízállás (Babócsa / Nagyatád)</h4>
+            <div id="rinya-data-container" class="stat-card"
+                style="margin-top: 1rem; background: var(--bg-creamy); border: 2px solid var(--primary); padding: 2rem;">
+                <div class="stat-label" style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--primary);">
+                    Legfrissebb vízállás</div>
+                <div id="rinya-value" class="stat-value" style="font-size: 3.5rem; color: var(--primary);">Betöltés...
+                </div>
+                <div id="rinya-time"
+                    style="font-size: 1rem; color: var(--text-muted); margin-top: 0.5rem; font-weight: 600;">--</div>
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1.5rem; text-align: right;">Forrás:
                 Vizügy.hu</div>
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../js/water_data.js"></script>
     <script src="../../js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -133,9 +152,51 @@
             if (csapImg) {
                 csapImg.src = `https://www.idokep.hu/automata/omme_nagyatad_csap1.png?t=${Date.now()}`;
             }
+
+            // Manual Water Level Chart (Rinya-patak)
+            const waterCtx = document.getElementById('rinya-manual-chart').getContext('2d');
+            const waterData = window.WATER_DATA || [];
+
+            new Chart(waterCtx, {
+                type: 'line',
+                data: {
+                    labels: waterData.map(d => d.datetime),
+                    datasets: [{
+                        label: 'Vízállás (cm)',
+                        data: waterData.map(d => d.value),
+                        borderColor: '#2196f3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#2196f3'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
             const vizugyImg = document.getElementById('vizugy-graph');
             if (vizugyImg) {
-                vizugyImg.src = `https://www.vizugy.hu/uploads/grafikon/grafikon_0pdd5ho2jlus4h3bn04c2p7981.png?t=${Date.now()}`;
+                // Vizügy graph refresh with Unix timestamp (seconds)
+                vizugyImg.src = `https://www.vizugy.hu/uploads/grafikon/grafikon_0pdd5ho2jlus4h3bn04c2p7981.png?${Math.floor(Date.now() / 1000)}`;
             }
         });
     </script>
