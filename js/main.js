@@ -159,6 +159,7 @@ const App = {
                         <a href="${p}modules/info/regulations.html" class="nav-dropdown-item"><i class="fas fa-gavel" style="color:#546e7a;"></i> Vonatkozó rendeletek</a>
                         <a href="${p}modules/tools/iso50001.html" class="nav-dropdown-item"><i class="fas fa-leaf" style="color:#4caf50;"></i> EIR ISO (ISO 50001)</a>
                         <a href="${p}modules/tools/relax_center.html" class="nav-dropdown-item"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i> Relax Center</a>
+                        <a href="${p}bolygokapitanyaquiz.html" class="nav-dropdown-item"><i class="fas fa-leaf" style="color:#4caf50;"></i> Bolygó Kapitánya Kvíz</a>
                     </div>
                 </div>
             </nav>
@@ -640,7 +641,7 @@ const App = {
                 // Last 7 days including today (usually from index 0 to 7 in this request)
                 // Open-Meteo returns past_days + forecast_days. 
                 // Index 7 is today.
-                const pastValues = allValues.slice(0, 8); 
+                const pastValues = allValues.slice(0, 8);
                 const pastLabels = data.daily.time.slice(0, 8);
 
                 // 1. Chart Rendering (7-Day Trend)
@@ -705,7 +706,7 @@ const App = {
                 if (forecastItemsEl) {
                     forecastItemsEl.innerHTML = '';
                     const days = ['Vas', 'Hét', 'Ked', 'Sze', 'Csü', 'Pén', 'Szo'];
-                    
+
                     for (let i = 0; i < 3; i++) {
                         const idx = 7 + i; // Start from today
                         const date = new Date(data.daily.time[idx]);
