@@ -627,28 +627,31 @@ const App = {
     async initMonitoring() {
         const chartEl = document.getElementById('daily-temp-chart');
         const avgEl = document.getElementById('three-day-avg');
-        if (!chartEl && !avgEl) return;
+        const forecastItemsEl = document.getElementById('forecast-items');
+        if (!chartEl && !avgEl && !forecastItemsEl) return;
 
         try {
-            // Fetch 7 days history + 1 day today
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.state.location.lat}&longitude=${this.state.location.lon}&daily=temperature_2m_mean&timezone=auto&past_days=7&forecast_days=1`);
+            // Fetch 7 days history + 3 days forecast
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${this.state.location.lat}&longitude=${this.state.location.lon}&daily=temperature_2m_mean,temperature_2m_max,temperature_2m_min,weathercode&timezone=auto&past_days=7&forecast_days=3`);
             const data = await res.json();
 
-            if (data && data.daily && data.daily.temperature_2m_mean) {
+            if (data && data.daily) {
                 const allValues = data.daily.temperature_2m_mean;
-                // Last 7 days including today (usually the last 7 items in the response)
-                const values = allValues.slice(-7);
-                const labels = data.daily.time.slice(-7);
+                // Last 7 days including today (usually from index 0 to 7 in this request)
+                // Open-Meteo returns past_days + forecast_days. 
+                // Index 7 is today.
+                const pastValues = allValues.slice(0, 8); 
+                const pastLabels = data.daily.time.slice(0, 8);
 
-                // 1. Chart Rendering (Slot 2)
+                // 1. Chart Rendering (7-Day Trend)
                 if (chartEl && typeof Chart !== 'undefined') {
                     const ctx = chartEl.getContext('2d');
                     new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: labels,
+                            labels: pastLabels,
                             datasets: [{
-                                data: values,
+                                data: pastValues,
                                 borderColor: '#7b61ff',
                                 backgroundColor: (context) => {
                                     const ctx = context.chart.ctx;
@@ -669,10 +672,7 @@ const App = {
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            interaction: {
-                                intersect: false,
-                                mode: 'index',
-                            },
+                            interaction: { intersect: false, mode: 'index' },
                             plugins: {
                                 legend: { display: false },
                                 tooltip: {
@@ -684,7 +684,7 @@ const App = {
                                     bodyFont: { size: 9 },
                                     callbacks: {
                                         title: (context) => `${context[0].parsed.y.toFixed(1)}°C`,
-                                        label: (context) => labels[context.dataIndex]
+                                        label: (context) => pastLabels[context.dataIndex]
                                     }
                                 }
                             },
@@ -694,43 +694,73 @@ const App = {
                     });
                 }
 
-                // 2. 3-Day Average Calculation (Slot 3)
+                // 2. 3-Day Average Calculation (Past 3 days)
                 if (avgEl) {
-                    const last3 = allValues.slice(-3);
+                    const last3 = allValues.slice(5, 8); // index 5, 6, 7 (past 2 + today)
                     const avg = last3.reduce((a, b) => a + b, 0) / last3.length;
-
-                    // Show value (removed sign as per request)
                     avgEl.innerText = `${avg.toFixed(1)}°C`;
                 }
 
-                console.log("Monitoring data updated successfully.");
+                // 3. 3-Day Forecast Rendering (Today + Next 2 days)
+                if (forecastItemsEl) {
+                    forecastItemsEl.innerHTML = '';
+                    const days = ['Vas', 'Hét', 'Ked', 'Sze', 'Csü', 'Pén', 'Szo'];
+                    
+                    for (let i = 0; i < 3; i++) {
+                        const idx = 7 + i; // Start from today
+                        const date = new Date(data.daily.time[idx]);
+                        const dayName = i === 0 ? 'Ma' : days[date.getDay()];
+                        const min = Math.round(data.daily.temperature_2m_min[idx]);
+                        const max = Math.round(data.daily.temperature_2m_max[idx]);
+                        const code = data.daily.weathercode[idx];
+                        const icon = this.getWeatherIcon(code);
+
+                        const item = document.createElement('div');
+                        item.style.cssText = "display:flex; flex-direction:column; align-items:center; line-height:1; gap:2px;";
+                        item.innerHTML = `
+                            <span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">${dayName}</span>
+                            <i class="${icon}" style="font-size:0.9rem; color:var(--accent-purple);"></i>
+                            <span style="font-size:0.75rem; font-weight:700; color:var(--text-main);">${min}/${max}°C</span>
+                        `;
+                        forecastItemsEl.appendChild(item);
+                    }
+                }
+
+                console.log("Monitoring and Forecast data updated.");
             }
         } catch (e) {
             console.error("Monitoring Init Error:", e);
             if (avgEl) avgEl.innerText = "N/A";
+            if (forecastItemsEl) forecastItemsEl.innerText = "N/A";
         }
     },
 
+    getWeatherIcon(code) {
+        // WMO Weather interpretation codes (https://open-meteo.com/en/docs)
+        if (code === 0) return 'fas fa-sun'; // Clear sky
+        if (code >= 1 && code <= 3) return 'fas fa-cloud-sun'; // Main sky
+        if (code >= 45 && code <= 48) return 'fas fa-smog'; // Fog
+        if (code >= 51 && code <= 55) return 'fas fa-cloud-rain'; // Drizzle
+        if (code >= 61 && code <= 65) return 'fas fa-cloud-showers-heavy'; // Rain
+        if (code >= 71 && code <= 77) return 'fas fa-snowflake'; // Snow
+        if (code >= 80 && code <= 82) return 'fas fa-cloud-showers-water'; // Rain showers
+        if (code >= 95 && code <= 99) return 'fas fa-bolt-lightning'; // Thunderstorm
+        return 'fas fa-cloud'; // Default
+    },
+
     async fetchRinyaData() {
-        // Elements in local_weather.html
         const valEl = document.getElementById('rinya-value');
         const timeEl = document.getElementById('rinya-time');
 
-        // Only run if elements exist (e.g. on the weather page)
         if (!valEl) return;
 
         try {
-            const url = "https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor";
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+            // Fetch directly from vizugy.hu using a CORS proxy
+            const targetUrl = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
+            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`);
+            const html = await response.text();
 
-            const response = await fetch(proxyUrl);
-            const data = await response.json();
-            const html = data.contents;
-
-            // Extract the last values from Vizallas and Idopont arrays in the script
-            // Vizallas = new Array( 35, ..., 41, 41);
-            // Idopont = new Array( '...', '2026.01.26. 15:00');
-
+            // Extract Vizallas and Idopont arrays from the page source
             const vizallasMatch = html.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\);/);
             const idopontMatch = html.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\);/);
 
@@ -738,16 +768,16 @@ const App = {
                 const values = vizallasMatch[1].split(',').map(v => v.trim());
                 const times = idopontMatch[1].split(',').map(t => t.trim().replace(/'/g, ""));
 
-                const lastVal = values[values.length - 1];
+                const lastVal = values[values.length - 1]; // Currently 40 as per user example
                 const lastTime = times[times.length - 1];
 
                 valEl.innerText = `${lastVal} cm`;
-                timeEl.innerText = lastTime;
+                if (timeEl) timeEl.innerText = lastTime;
 
-                console.log(`Rinya Data: ${lastVal} cm at ${lastTime}`);
+                console.log(`Rinya Data (Live): ${lastVal} cm at ${lastTime}`);
             } else {
                 valEl.innerText = "Hiba";
-                console.error("Could not parse Vizallas or Idopont data");
+                console.error("Could not parse Rinya data from source.");
             }
         } catch (e) {
             valEl.innerText = "Hiba";
