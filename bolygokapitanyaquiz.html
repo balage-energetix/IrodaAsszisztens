@@ -427,8 +427,17 @@
         document.getElementById('start-btn').addEventListener('click', () => {
             startScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
+            shuffle(quizData); // Randomize question order on start
             loadQuestion();
         });
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         function loadQuestion() {
             const data = quizData[currentQuestion];
@@ -438,34 +447,47 @@
 
             optionsContainer.innerHTML = '';
 
-            // Create options with random order (optional, but keep simple for now)
-            data.options.forEach((opt, index) => {
+            // Map options to objects that track their original position (to identify correctness after shuffle)
+            const mappedOptions = data.options.map((opt, index) => ({
+                text: opt,
+                isCorrect: index === data.correct
+            }));
+
+            // Shuffle the local copy of options
+            shuffle(mappedOptions);
+
+            mappedOptions.forEach((opt) => {
                 const div = document.createElement('div');
                 div.className = 'option';
-                div.innerText = opt;
-                div.addEventListener('click', () => selectOption(index));
+                div.innerText = opt.text;
+                div.dataset.isCorrect = opt.isCorrect; // Store correctness as a data attribute
+                div.addEventListener('click', () => selectOption(div, opt.isCorrect));
                 optionsContainer.appendChild(div);
             });
         }
 
-        function selectOption(index) {
+        function selectOption(target, isCorrect) {
             const options = document.querySelectorAll('.option');
             options.forEach(opt => opt.style.pointerEvents = 'none');
 
-            const isCorrect = index === quizData[currentQuestion].correct;
-
             if (isCorrect) {
-                options[index].classList.add('correct');
+                target.classList.add('correct');
                 score++;
                 correctCount++;
                 correctCountEl.innerText = correctCount;
             } else {
-                options[index].classList.add('wrong');
+                target.classList.add('wrong');
                 wrongCount++;
                 wrongCountEl.innerText = wrongCount;
-                // Show correct one too
-                options[quizData[currentQuestion].correct].classList.add('correct');
+
+                // Also highlight the correct one
+                // Find the option that has data-is-correct="true"
+                const correctOptionElement = Array.from(options).find(opt => opt.dataset.isCorrect === 'true');
+                if (correctOptionElement) {
+                    correctOptionElement.classList.add('correct');
+                }
             }
+
 
             setTimeout(() => {
                 currentQuestion++;
