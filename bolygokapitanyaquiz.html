@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +42,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
             z-index: -1;
         }
 
@@ -77,6 +78,7 @@
             margin-bottom: 20px;
             background: linear-gradient(to right, #2ecc71, #3498db, #e67e22, #e74c3c);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -86,7 +88,8 @@
             font-size: 1.1rem;
             margin-bottom: 30px;
             line-height: 1.6;
-            color: rgba(255, 255, 255, 0.8);
+            color: #ffffff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .btn {
@@ -138,9 +141,29 @@
 
         .question-text {
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 30px;
             line-height: 1.4;
+            color: #ffffff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-counter {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        .score-item.correct {
+            color: #2ecc71;
+        }
+
+        .score-item.wrong {
+            color: #e74c3c;
         }
 
         .options-container {
@@ -194,6 +217,7 @@
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 10px;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
         .fail-text {
@@ -201,13 +225,22 @@
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 10px;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
         }
 
         /* Animations */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .pulse {
@@ -226,6 +259,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div id="particles-js"></div>
@@ -234,17 +268,22 @@
         <!-- Start Screen -->
         <div id="start-screen" class="card">
             <h1>Bolygó Kapitánya</h1>
-            <p class="description">"A hatalom a tiétek!"<br>Készen állsz egy tudományosan korrekt kihívásra az elemekről?</p>
+            <p class="description">"A hatalom a tiétek!"<br>Készen állsz egy tudományosan korrekt kihívásra az
+                elemekről?</p>
             <button id="start-btn" class="btn pulse">A játék indítása</button>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="card hidden">
             <div class="question-header">
-                <span id="question-number">1 / 6</span>
+                <span id="question-number">1 / 10</span>
                 <div class="progress-bar">
                     <div id="progress-fill" class="progress-fill"></div>
                 </div>
+            </div>
+            <div class="score-counter">
+                <div class="score-item correct">Helyes: <span id="correct-count">0</span></div>
+                <div class="score-item wrong">Rossz: <span id="wrong-count">0</span></div>
             </div>
             <div id="question-text" class="question-text">Miért kék az ég?</div>
             <div id="options" class="options-container">
@@ -256,7 +295,8 @@
         <div id="success-screen" class="card hidden">
             <div class="result-icon">🌍</div>
             <div class="success-text">Tökéletes Válaszok!</div>
-            <p class="description">Gratulálok! Te vagy a bolygó igazi őrzője. Minden kérdésre tudományosan pontos választ adtál.</p>
+            <p class="description">Gratulálok! Te vagy a bolygó igazi őrzője. Minden kérdésre tudományosan pontos
+                választ adtál.</p>
             <button onclick="location.reload()" class="btn">Újra játszom</button>
         </div>
 
@@ -264,7 +304,8 @@
         <div id="fail-screen" class="card hidden">
             <div class="result-icon">🌋</div>
             <div class="fail-text">Sikertelen Kísérlet</div>
-            <p class="description">Sajnos nem minden válasz volt helyes. A Bolygó Kapitánya csak a tökéletes tudást fogadja el!</p>
+            <p class="description">Sajnos nem minden válasz volt helyes. A Bolygó Kapitánya csak a tökéletes tudást
+                fogadja el!</p>
             <button onclick="location.reload()" class="btn">Próbáld újra</button>
         </div>
     </div>
@@ -326,6 +367,42 @@
                     "100 °C-on"
                 ],
                 correct: 1
+            },
+            {
+                question: "Miért fehérek a felhők?",
+                options: [
+                    "A Mie-szórás miatt (minden hullámhosszt egyformán szórnak a vízcseppek)",
+                    "Mert a jégkristályok visszatükrözik a Nap fehér fényét",
+                    "Mert a felhőkben lévő vízgőz eleve fehér színű"
+                ],
+                correct: 0
+            },
+            {
+                question: "Mi tartja a bolygókat a Nap körüli pályájukon?",
+                options: [
+                    "A centrifugális erő és a mágneses vonzás egyensúlya",
+                    "A Nap tömege által okozott téridő-görbület (gravitáció)",
+                    "A világűrben lévő sötét anyag áramlása"
+                ],
+                correct: 1
+            },
+            {
+                question: "Melyik gáz felelős a sztratoszférikus ózonréteg UV-szűrő képességéért?",
+                options: [
+                    "CO2 (Szén-dioxid)",
+                    "O3 (Trioxigén)",
+                    "CH4 (Metán)"
+                ],
+                correct: 1
+            },
+            {
+                question: "Miből áll főként a Föld belső magja?",
+                options: [
+                    "Folyékony kőzetből és szilikátokból",
+                    "Szilárd vasból és nikkelből",
+                    "Sűrű hidrogénből és héliumból"
+                ],
+                correct: 1
             }
         ];
 
@@ -341,6 +418,11 @@
         const questionText = document.getElementById('question-text');
         const questionNumber = document.getElementById('question-number');
         const progressFill = document.getElementById('progress-fill');
+        const correctCountEl = document.getElementById('correct-count');
+        const wrongCountEl = document.getElementById('wrong-count');
+
+        let correctCount = 0;
+        let wrongCount = 0;
 
         document.getElementById('start-btn').addEventListener('click', () => {
             startScreen.classList.add('hidden');
@@ -353,9 +435,9 @@
             questionText.innerText = data.question;
             questionNumber.innerText = `${currentQuestion + 1} / ${quizData.length}`;
             progressFill.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
-            
+
             optionsContainer.innerHTML = '';
-            
+
             // Create options with random order (optional, but keep simple for now)
             data.options.forEach((opt, index) => {
                 const div = document.createElement('div');
@@ -369,14 +451,18 @@
         function selectOption(index) {
             const options = document.querySelectorAll('.option');
             options.forEach(opt => opt.style.pointerEvents = 'none');
-            
+
             const isCorrect = index === quizData[currentQuestion].correct;
-            
+
             if (isCorrect) {
                 options[index].classList.add('correct');
                 score++;
+                correctCount++;
+                correctCountEl.innerText = correctCount;
             } else {
                 options[index].classList.add('wrong');
+                wrongCount++;
+                wrongCountEl.innerText = wrongCount;
                 // Show correct one too
                 options[quizData[currentQuestion].correct].classList.add('correct');
             }
@@ -394,7 +480,7 @@
         function showResult() {
             quizScreen.classList.add('hidden');
             progressFill.style.width = '100%';
-            
+
             if (score === quizData.length) {
                 successScreen.classList.remove('hidden');
                 initParticles();
@@ -420,4 +506,5 @@
         }
     </script>
 </body>
+
 </html>
