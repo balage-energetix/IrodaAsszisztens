@@ -281,82 +281,81 @@
                 const { html, timestamp } = JSON.parse(cache);
                 const age = Date.now() - timestamp;
 
-                // Show cached content immediately
                 grid.innerHTML = html;
                 loader.style.display = 'none';
                 grid.style.display = 'grid';
 
-                if (age < 14400000) { // If less than 4 hours old, don't refetch automatically
-                    return;
-                }
+                if (age < 14400000) return; // 4h freshness
             }
 
-            if (!force) {
-                // Background refresh indicator (subtle)
-                refreshIcon.classList.add('fa-spin');
-            } else {
+            refreshIcon.classList.add('fa-spin');
+            if (force) {
                 loader.style.display = 'flex';
                 grid.style.display = 'none';
-                refreshIcon.classList.add('fa-spin');
             }
+
+            // Timeout Controller (10s)
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
 
             try {
                 const targetUrl = 'https://www.atadhir.hu/nagyatad/';
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
-                const response = await fetch(proxyUrl);
+                const response = await fetch(proxyUrl, { signal: controller.signal });
                 const data = await response.json();
+                clearTimeout(timeoutId);
 
                 if (data.contents) {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(data.contents, 'text/html');
-
-                    const articles = doc.querySelectorAll('.ultp-block-item');
+                    const articles = doc.querySelectorAll('.ultp-block-item, article');
                     let html = '';
 
                     if (articles.length > 0) {
                         articles.forEach((item, index) => {
-                            if (index >= 10) return;
+                            if (index >= 12) return;
 
-                            const titleEl = item.querySelector('h2.ultp-block-title a, .ultp-block-title a, a.ultp-block-title');
-                            const title = titleEl?.innerText.trim() || item.querySelector('h2')?.innerText.trim() || 'Nincs cím';
-                            let link = titleEl?.getAttribute('href') || item.querySelector('a')?.getAttribute('href') || '#';
-
+                            const titleEl = item.querySelector('.ultp-block-title a, h2 a, h3 a, a');
+                            const title = titleEl?.innerText.trim() || 'Nincs cím';
+                            let link = titleEl?.getAttribute('href') || '#';
                             const absoluteLink = link.startsWith('http') ? link : 'https://www.atadhir.hu' + (link.startsWith('/') ? '' : '/') + link;
 
                             const imgEl = item.querySelector('img');
-                            const imgSrc = imgEl?.src || 'https://via.placeholder.com/150?text=Atádhír';
+                            const imgSrc = imgEl?.dataset?.src || imgEl?.src || 'https://via.placeholder.com/150?text=Atádhír';
 
-                            const dateEl = item.querySelector('.ultp-block-date, .entry-date');
+                            const dateEl = item.querySelector('.ultp-block-date, .entry-date, time');
                             const date = dateEl?.innerText.trim() || new Date().toLocaleDateString('hu-HU');
 
                             html += `
-                                <a href="${absoluteLink}" target="_blank" class="article-card fade-up" style="animation-delay: ${index * 0.1}s">
+                                <a href="${absoluteLink}" target="_blank" class="article-card fade-up" style="animation-delay: ${index * 0.05}s">
                                     <img src="${imgSrc}" class="article-img" alt="${title}" onerror="this.src='https://via.placeholder.com/150?text=News'">
                                     <div class="article-body">
                                         <h3>${title}</h3>
                                         <div class="article-meta">
                                             <span><i class="fas fa-calendar-day me-1"></i> ${date}</span>
-                                            <span><i class="fas fa-external-link-alt me-1"></i> Részletek</span>
+                                            <span><i class="fas fa-external-link-alt me-1"></i> Nagyatád</span>
                                         </div>
                                     </div>
                                 </a>
                             `;
                         });
                         grid.innerHTML = html;
-
-                        // Save to cache
-                        localStorage.setItem('cache_atadhir', JSON.stringify({
-                            html: html,
-                            timestamp: Date.now()
-                        }));
-                    } else if (!cache) {
-                        grid.innerHTML = '<div class="alert alert-info">Jelenleg nem találhatók friss hírek. Látogasson el közvetlenül az atadhir.hu oldalra!</div>';
-                    }
+                        localStorage.setItem('cache_atadhir', JSON.stringify({ html, timestamp: Date.now() }));
+                    } else throw new Error("No articles found");
                 }
             } catch (error) {
                 console.error("Scraper Error:", error);
-                if (!cache) grid.innerHTML = '<div class="alert alert-danger">Hiba történt a hírek betöltésekor. Kérjük frissítse az oldalt vagy próbálja később!</div>';
+                if (!cache) {
+                    grid.innerHTML = `
+                        <div class="alert alert-warning text-center">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                            <p>A hírek lassabban töltenek be a szokásosnál.</p>
+                            <a href="https://www.atadhir.hu/nagyatad/" target="_blank" class="btn btn-outline-primary btn-sm mt-2">
+                                Megnyitás az atadhir.hu-n
+                            </a>
+                        </div>`;
+                }
             } finally {
                 loader.style.display = 'none';
                 grid.style.display = 'grid';
