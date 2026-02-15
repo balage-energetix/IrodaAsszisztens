@@ -69,15 +69,9 @@ const App = {
         }
 
         const setFixedBg = () => {
-            const p = this.getPath();
-            const imgPath = `${p}pictures/(17).jpg`;
-
-            const img = new Image();
-            img.src = imgPath;
-            img.onload = () => {
-                bgLayer.innerHTML = `<img src="${img.src}" alt="Header background" style="width:100%; height:100%; object-fit:cover; filter:blur(2px) brightness(0.7);">`;
-                bgLayer.style.opacity = '0.4';
-            };
+            // Background image injection disabled for a cleaner look
+            bgLayer.style.background = 'linear-gradient(135deg, #0a1142 0%, #1a237e 50%, #050a10 100%)';
+            bgLayer.style.opacity = '1';
         };
 
         // Rotation disabled as per request
@@ -163,6 +157,7 @@ const App = {
                         <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás</a>
                         <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
                         <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper" style="color:#607d8b;"></i> Atádi Hírek</a>
+                        <a href="${p}modules/info/nagyatad_presentation.html" class="nav-dropdown-item"><i class="fas fa-city" style="color:#2e7d32;"></i> Nagyatád bemutató</a>
                         <a href="${p}modules/info/procedures.html" class="nav-dropdown-item"><i class="fas fa-project-diagram" style="color:#673ab7;"></i> Ügymenetek</a>
                         <a href="${p}modules/info/help.html" class="nav-dropdown-item"><i class="fas fa-question-circle" style="color:#009688;"></i> Súgó</a>
                         <a href="${p}modules/phonebook/index.html" class="nav-dropdown-item"><i class="fas fa-address-book" style="color:#795548;"></i> Telefonkönyv</a>

@@ -281,7 +281,7 @@ h2,
     margin-bottom: 1.2rem;
     /* REDUCED SPACING */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    z-index: 10000 !important;
+    z-index: 100 !important;
     position: relative;
     overflow: visible !important;
 }
@@ -736,8 +736,7 @@ h6 {
 }
 
 .header-bg-layer img {
-    display: none;
-    /* Images no longer used for PCB background */
+    display: none !important;
 }
 
 /* Force black text for PDF exports */
