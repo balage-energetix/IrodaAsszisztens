@@ -8,11 +8,14 @@ const App = {
         theme: localStorage.getItem('theme') || 'light',
         bgColor: localStorage.getItem('bg-color') || '#f5f5f5',
         location: { lat: 46.229, lon: 17.365, name: 'Nagyatád' },
-        version: "V3.42",
-        droneIndex: 1
+        version: "V3.43",
+        droneIndex: 1,
+        isIdle: false,
+        powerAlert: false
     },
 
     init() {
+        window.scrollTo(0, 0);
         this.checkLogin();
         this.applyTheme();
         this.applyBgColor();
@@ -25,8 +28,23 @@ const App = {
         this.initStars();
         this.initMonitoring();
         this.fetchRinyaData();
-        console.log("Irodai Asszisztens V3.43 initialized");
+        this.initIdleDetection();
+        this.initEntryAnimations();
+        this.checkPowerDeadlines();
+        console.log("Irodai Asszisztens V3.44 initialized");
         setTimeout(() => document.body.classList.add('ready'), 300);
+    },
+
+    initIdleDetection() {
+        let timer;
+        const resetTimer = () => {
+            this.state.isIdle = false;
+            clearTimeout(timer);
+            timer = setTimeout(() => this.state.isIdle = true, 30000); // 30s idle
+        };
+        window.addEventListener('mousemove', resetTimer);
+        window.addEventListener('keypress', resetTimer);
+        resetTimer();
     },
 
     // --- Wave Direction Switcher removed ---
@@ -76,7 +94,11 @@ const App = {
         // Force Android Icon and grass green branding
         const logo = header.querySelector('.logo');
         if (logo) {
-            logo.innerHTML = `<i class="fab fa-android" style="color:var(--accent-purple) !important;"></i><span style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span>`;
+            const alertHtml = this.state.powerAlert ? '<div class="header-alert-badge" title="Bejelentési határidő közeleg!">!</div>' : '';
+            logo.innerHTML = `<div style="position:relative; display:inline-block;">
+                <i class="fab fa-android" style="color:var(--accent-purple) !important;"></i>
+                ${alertHtml}
+            </div><span style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span>`;
         }
 
         const authTier = sessionStorage.getItem('auth_tier') || 'guest';
@@ -87,26 +109,26 @@ const App = {
             <nav class="app-nav">
                 <div class="nav-cat">ENERGETIKA <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
+                        <a href="${p}modules/tools/gas_evaluator.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i> Gázárajánlat kiértékelő</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
                         <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
                         <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
+                        <a href="${p}modules/tools/power_overrun_scheduler.html" class="nav-dropdown-item"><i class="fas fa-calendar-alt" style="color:#ff5722;"></i> Teljesítménytúllépés ütemező</a>
                     </div>
                 </div>
                 <div class="nav-cat">TÉRKÉPEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/map/index.html" class="nav-dropdown-item"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i> Probléma térkép</a>
                         <a href="${p}modules/publiclight/index.html" class="nav-dropdown-item"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i> Közvilágítási térkép</a>
-                        <a href="#" class="nav-dropdown-item disabled-access"><i class="fas fa-map" style="color:#00bcd4;"></i> Alaptérkép</a>
-                        <a href="#" class="nav-dropdown-item disabled-access"><i class="fas fa-map-marked" style="color:#00bcd4;"></i> Közvilágítási térképek</a>
                     </div>
                 </div>
                 <div class="nav-cat">MŰSZAKI ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/tech/meter_readings.html" class="nav-dropdown-item"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i> Mérőállás Rögzítő</a>
+                        <a href="${p}modules/tech/meter_readings.html" class="nav-dropdown-item disabled-access"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i> Mérőállás Rögzítő</a>
                         <a href="${p}modules/tools/checklist.html" class="nav-dropdown-item"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i> Check-lista</a>
                         <a href="${p}modules/info/message_board.html" class="nav-dropdown-item"><i class="fas fa-bullhorn" style="color:#ff4081;"></i> Üzenőfal</a>
-                        <a href="${p}modules/info/outages.html" class="nav-dropdown-item"><i class="fas fa-plug-circle-exclamation" style="color:#fbc02d;"></i> Közmű szünetek</a>
+                        <a href="${p}modules/tech/notebooklm_intro.html" class="nav-dropdown-item"><i class="fas fa-robot" style="color:#4285f4;"></i> NotebookLM</a>
                     </div>
                 </div>
                 <div class="nav-cat">ESZKÖZÖK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -155,11 +177,10 @@ const App = {
                         <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard" style="color:#9e9e9e;"></i> Gyorsbillentyűk</a>
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling" style="color:#4caf50;"></i> Irodai Lean</a>
                         <a href="${p}modules/tools/efficiency.html" class="nav-dropdown-item"><i class="fas fa-rocket" style="color:#ff5722;"></i> Hatékonyság</a>
-                        <a href="${p}modules/videos/index.html" class="nav-dropdown-item"><i class="fas fa-play-circle" style="color:#f44336;"></i> Videótár</a>
+                        <a href="${p}modules/videos/index.html" class="nav-dropdown-item disabled-access"><i class="fas fa-play-circle" style="color:#f44336;"></i> Videótár</a>
                         <a href="${p}modules/info/regulations.html" class="nav-dropdown-item"><i class="fas fa-gavel" style="color:#546e7a;"></i> Vonatkozó rendeletek</a>
                         <a href="${p}modules/tools/iso50001.html" class="nav-dropdown-item"><i class="fas fa-leaf" style="color:#4caf50;"></i> EIR ISO (ISO 50001)</a>
                         <a href="${p}modules/tools/relax_center.html" class="nav-dropdown-item"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i> Relax Center</a>
-                        <a href="${p}bolygokapitanyaquiz.html" class="nav-dropdown-item"><i class="fas fa-leaf" style="color:#4caf50;"></i> Bolygó Kapitánya Kvíz</a>
                     </div>
                 </div>
             </nav>
@@ -306,7 +327,9 @@ const App = {
     initHeaderDrone() {
         const p = this.getPath();
         const update = () => {
-            const rand = Math.floor(Math.random() * 86) + 1;
+            const min = 1;
+            const max = 86;
+            const rand = Math.floor(Math.random() * (max - min + 1)) + min;
             const imgUrl = `url('${p}pictures/(${rand}).jpg')`;
             document.documentElement.style.setProperty('--bg-drone', imgUrl);
         };
@@ -371,8 +394,21 @@ const App = {
             animationId = requestAnimationFrame(animate);
         };
 
+        const fastAnimate = () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark' && !this.state.isIdle) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.opacity += (Math.random() - 0.5) * 0.05;
+                    star.opacity = Math.max(0.2, Math.min(1, star.opacity));
+                    drawStar(star);
+                });
+            }
+            setTimeout(() => requestAnimationFrame(fastAnimate), 100); // Throttled animation
+        };
+
         initCanvas();
-        animate();
+        fastAnimate();
 
         window.addEventListener('resize', initCanvas);
 
@@ -424,9 +460,9 @@ const App = {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 weatherEl.innerHTML = `
-                    <div style="font-weight:900; font-size:1.1rem; color:var(--accent-purple); text-shadow: 0 0 15px rgba(123, 97, 255, 0.4); margin-bottom: 2px;">
-                        <i class="fas fa-temperature-low" style="margin-right: 2px;"></i>${Math.round(data.current.temperature_2m)}°C
-                    </div>
+        <div style="font-weight:900; font-size:1.1rem; color:var(--accent-purple); text-shadow: 0 0 8px rgba(123, 97, 255, 0.2); margin-bottom: 2px;">
+            <i class="fas fa-temperature-low" style="margin-right: 2px;"></i>${Math.round(data.current.temperature_2m)}°C
+        </div>
                     <div style="font-size:0.65rem; color:var(--text-muted); font-weight:800; display: flex; align-items: center; justify-content: flex-end; gap: 6px; letter-spacing: 0.02em;">
                         <span><i class="fas fa-sun" style="color:var(--accent-purple); opacity: 0.8; font-size: 0.6rem;"></i> ${sunrise}</span>
                         <span style="opacity: 0.3;">|</span>
@@ -665,7 +701,15 @@ const App = {
                                 tension: 0.4,
                                 borderWidth: 2,
                                 pointRadius: 4,
-                                pointBackgroundColor: '#ff4d4d',
+                                pointBackgroundColor: (context) => {
+                                    const val = context.raw;
+                                    if (val <= 0) return '#2196f3'; // Deep Blue
+                                    if (val < 10) return '#bbdefb'; // Light Blue
+                                    if (val < 20) return '#fbc02d'; // Yellow/Orange
+                                    return '#ff4d4d'; // Red
+                                },
+                                pointBorderColor: 'rgba(255,255,255,0.5)',
+                                pointBorderWidth: 1,
                                 pointHoverRadius: 6,
                                 hitRadius: 25
                             }]
@@ -750,10 +794,22 @@ const App = {
     },
 
     async fetchRinyaData() {
-        const valEl = document.getElementById('rinya-value');
+        const valEl = document.getElementById('rinya-val');
         const timeEl = document.getElementById('rinya-time');
 
         if (!valEl) return;
+
+        // Try load from cache first for instant UI
+        const cache = localStorage.getItem('cache_rinya');
+        if (cache) {
+            const { val, time, timestamp } = JSON.parse(cache);
+            const age = Date.now() - timestamp;
+            if (age < 3600000) { // If less than 1 hour old, show cache
+                valEl.innerText = `${val} cm`;
+                if (timeEl) timeEl.innerText = time;
+                if (age < 600000) return; // If less than 10 mins old, don't even refetch background
+            }
+        }
 
         try {
             // Fetch directly from vizugy.hu using a CORS proxy
@@ -769,21 +825,83 @@ const App = {
                 const values = vizallasMatch[1].split(',').map(v => v.trim());
                 const times = idopontMatch[1].split(',').map(t => t.trim().replace(/'/g, ""));
 
-                const lastVal = values[values.length - 1]; // Currently 40 as per user example
+                const lastVal = values[values.length - 1];
                 const lastTime = times[times.length - 1];
 
                 valEl.innerText = `${lastVal} cm`;
                 if (timeEl) timeEl.innerText = lastTime;
 
+                // Save to cache
+                localStorage.setItem('cache_rinya', JSON.stringify({
+                    val: lastVal,
+                    time: lastTime,
+                    timestamp: Date.now()
+                }));
+
                 console.log(`Rinya Data (Live): ${lastVal} cm at ${lastTime}`);
             } else {
-                valEl.innerText = "Hiba";
+                if (!cache) valEl.innerText = "Hiba";
                 console.error("Could not parse Rinya data from source.");
             }
         } catch (e) {
-            valEl.innerText = "Hiba";
+            if (!cache) valEl.innerText = "Hiba";
             console.error("Rinya Fetch Error:", e);
         }
+    },
+
+    checkPowerDeadlines() {
+        const now = new Date();
+        const year = now.getFullYear();
+
+        // Deadlines: May 31 (Strand) and Sept 30 (Others)
+        const deadlines = [
+            { name: 'Strandfürdő', date: new Date(year, 4, 31) }, // May 31
+            { name: 'KIF3 Intézmények', date: new Date(year, 8, 30) } // Sept 30
+        ];
+
+        let hasPending = false;
+        deadlines.forEach(d => {
+            const diffDays = Math.ceil((d.date - now) / (1000 * 60 * 60 * 24));
+            if (diffDays >= 0 && diffDays <= 14) {
+                hasPending = true;
+            }
+        });
+
+        if (hasPending) {
+            this.state.powerAlert = true;
+            // Re-inject nav to show icon if it was already injected
+            this.injectGlobalNav();
+        }
+    },
+
+    initEntryAnimations() {
+        // 1. Header Animations (Slide from sides)
+        const logo = document.querySelector('.logo');
+        const headerInfo = document.querySelector('.header-info');
+
+        if (logo) logo.classList.add('slide-in-left');
+        if (headerInfo) headerInfo.classList.add('slide-in-right');
+
+        // 2. Dashboard & Module Tiles Staggered Entry
+        const cards = document.querySelectorAll('.feature-card, .relax-card, .pro-card, .summary-box');
+        cards.forEach((card, index) => {
+            // Apply delay based on index for "waterfall" effect
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+                card.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            }, 100 + (index * 40));
+        });
+
+        // 3. Section Titles Slide
+        const titles = document.querySelectorAll('.section-title, .group-title');
+        titles.forEach((title, index) => {
+            setTimeout(() => {
+                title.style.opacity = '1';
+                title.style.transform = 'translateY(0)';
+                title.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            }, 50 + (index * 100));
+        });
     }
 };
 
