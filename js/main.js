@@ -799,36 +799,37 @@ const App = {
 
         if (!valEl) return;
 
-        // 1. Try LIVE_DATA booster (Instant local display)
+        // 1. Instant Booster / Cache
+        let currentVal = "--";
+        let currentTime = "--:--";
+
         if (window.LIVE_DATA && window.LIVE_DATA.rinya) {
-            const { val, time } = window.LIVE_DATA.rinya;
-            valEl.innerText = `${val} cm`;
-            if (timeEl) timeEl.innerText = time;
-            // Proceed to check cache/network silently unless it's extremely fresh
+            currentVal = window.LIVE_DATA.rinya.val;
+            currentTime = window.LIVE_DATA.rinya.time;
         }
 
-        // 2. Try load from cache for persistent state
         const cache = localStorage.getItem('cache_rinya');
         if (cache) {
             const { val, time, timestamp } = JSON.parse(cache);
-            const age = Date.now() - timestamp;
-            if (age < 3600000) { // 1h freshness
-                valEl.innerText = `${val} cm`;
-                if (timeEl) timeEl.innerText = time;
-                if (age < 600000) return; // 10 mins skip network check
+            if (Date.now() - timestamp < 3600000) {
+                currentVal = val;
+                currentTime = time;
             }
         }
 
+        valEl.innerText = `${currentVal} cm`;
+        if (timeEl) timeEl.innerText = currentTime;
+
+        // 2. Network Sync (Silent)
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 12000);
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
 
             const targetUrl = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
             const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, { signal: controller.signal });
             const html = await response.text();
             clearTimeout(timeoutId);
 
-            // Extract data directly from JS arrays in the HTML source
             const vizallasMatch = html.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\);/);
             const idopontMatch = html.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\);/);
 
@@ -839,14 +840,14 @@ const App = {
                 const lastVal = values[values.length - 1];
                 const lastTime = times[times.length - 1];
 
-                if (lastVal && lastTime) {
+                if (lastVal && lastVal !== "null") {
                     valEl.innerText = `${lastVal} cm`;
                     if (timeEl) timeEl.innerText = lastTime;
                     localStorage.setItem('cache_rinya', JSON.stringify({ val: lastVal, time: lastTime, timestamp: Date.now() }));
                 }
             }
         } catch (e) {
-            console.error("Rinya fetch failed:", e);
+            console.warn("Rinya sync skipped:", e.message);
         }
     },
 
