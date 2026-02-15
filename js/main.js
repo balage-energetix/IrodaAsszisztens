@@ -799,31 +799,43 @@ const App = {
 
         if (!valEl) return;
 
-        // Try load from cache first for instant UI
+        // 1. Try LIVE_DATA (Agentic lightning fast source)
+        if (window.LIVE_DATA && window.LIVE_DATA.rinya) {
+            const { val, time } = window.LIVE_DATA.rinya;
+            valEl.innerText = `${val} cm`;
+            if (timeEl) timeEl.innerText = time;
+            return; // Instant local match, no need for proxy wait
+        }
+
+        // 2. Try load from cache for persistence
         const cache = localStorage.getItem('cache_rinya');
         if (cache) {
             const { val, time, timestamp } = JSON.parse(cache);
             const age = Date.now() - timestamp;
-            if (age < 3600000) { // If less than 1 hour old, show cache
-                valEl.innerText = `${val} cm`;
-                if (timeEl) timeEl.innerText = time;
-                if (age < 600000) return; // If less than 10 mins old, don't even refetch background
+            if (age < 3600000) { // If less than 1 hour old
+                if (valEl.innerText === "Betöltés...") {
+                    valEl.innerText = `${val} cm`;
+                    if (timeEl) timeEl.innerText = time;
+                }
+                if (age < 600000) return; // 10 mins freshness
             }
         }
 
         try {
-            // Fetch directly from vizugy.hu using a CORS proxy
-            const targetUrl = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
-            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`);
-            const html = await response.text();
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
 
-            // Extract Vizallas and Idopont arrays from the page source
+            const targetUrl = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
+            const response = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, { signal: controller.signal });
+            const html = await response.text();
+            clearTimeout(timeoutId);
+
             const vizallasMatch = html.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\);/);
             const idopontMatch = html.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\);/);
 
             if (vizallasMatch && idopontMatch) {
                 const values = vizallasMatch[1].split(',').map(v => v.trim());
-                const times = idopontMatch[1].split(',').map(t => t.trim().replace(/'/g, ""));
+                const times = idopontMatch[1].split(',').map(t => t.trim().replace(/\'/g, ""));
 
                 const lastVal = values[values.length - 1];
                 const lastTime = times[times.length - 1];
@@ -831,21 +843,10 @@ const App = {
                 valEl.innerText = `${lastVal} cm`;
                 if (timeEl) timeEl.innerText = lastTime;
 
-                // Save to cache
-                localStorage.setItem('cache_rinya', JSON.stringify({
-                    val: lastVal,
-                    time: lastTime,
-                    timestamp: Date.now()
-                }));
-
-                console.log(`Rinya Data (Live): ${lastVal} cm at ${lastTime}`);
-            } else {
-                if (!cache) valEl.innerText = "Hiba";
-                console.error("Could not parse Rinya data from source.");
+                localStorage.setItem('cache_rinya', JSON.stringify({ val: lastVal, time: lastTime, timestamp: Date.now() }));
             }
         } catch (e) {
-            if (!cache) valEl.innerText = "Hiba";
-            console.error("Rinya Fetch Error:", e);
+            console.warn("Rinya fetch failed/timed out, using offline data.");
         }
     },
 
