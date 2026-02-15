@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM Bevezető - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .intro-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 3rem;
+            background: var(--bg-card);
+            border-radius: 2rem;
+            border: 1px solid var(--accent-purple);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            border-bottom: 2px solid var(--accent-purple);
+            padding-bottom: 2rem;
+        }
+
+        .intro-header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--accent-purple);
+            color: black;
+            padding: 1.25rem 2.5rem;
+            border-radius: 3rem;
+            text-decoration: none;
+            font-weight: 800;
+            font-family: 'Outfit';
+            font-size: 1.2rem;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(251, 192, 45, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(251, 192, 45, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .tutorial-content {
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: var(--text-main);
+        }
+
+        .tutorial-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .tutorial-section h3 {
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .feature-tag {
+            background: rgba(251, 192, 45, 0.1);
+            color: var(--accent-purple);
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fas fa-robot"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <main class="container py-5">
+        <div class="intro-container fade-in">
+            <div class="intro-header">
+                <span class="feature-tag">Mesterséges Intelligencia</span>
+                <h1>NotebookLM Tutorial</h1>
+                <p class="text-muted">Ismerje meg a Google legfejlettebb kutatási és jegyzetelési asszisztensét.</p>
+                <div class="mt-4">
+                    <a href="https://notebooklm.google.com/" target="_blank" class="cta-button">
+                        <i class="fas fa-external-link-alt"></i> TOVÁBB A PROGRAMHOZ
+                    </a>
+                </div>
+            </div>
+
+            <div class="tutorial-content">
+                <div class="tutorial-section">
+                    <h3><i class="fas fa-brain"></i> Mi az a NotebookLM?</h3>
+                    <p>A NotebookLM egy kísérleti MI-alapú alkalmazás, amely a Google legmodernebb nyelvi modelljeit
+                        (Gemini 1.5 Pro) használja. Ellentétben a hagyományos chatbotokkal, a NotebookLM "forrás-alapú",
+                        ami azt jelenti, hogy az Ön által feltöltött dokumentumokra (PDF-ek, weboldalak, Google
+                        Dokumentumok) támaszkodik a válaszadáshoz.</p>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3><i class="fas fa-file-upload"></i> Források használata</h3>
+                    <p>A munkafolyamat első lépése a források hozzáadása. Feltöltheti saját jegyzeteit, szakmai
+                        dokumentumait vagy akár vágólapra másolt szövegeket is. Az MI ezeket az adatokat "tanulja meg",
+                        és minden válaszát ezekkel fogja alátámasztani, pontos forrásmegjelölésekkel.</p>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3><i class="fas fa-headphones"></i> Audio Overview (Audio-összefoglaló)</h3>
+                    <p>Az egyik legizgalmasabb funkció az "Audio Overview", amely képes a forrásanyagokból egy élethű,
+                        kétfős rádióbeszélgetést vagy podcast-et generálni. Az MI-műsorvezetők megvitatják az anyag
+                        legfontosabb pontjait, példákat hoznak fel és összefoglalják a tanulságokat.</p>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3><i class="fas fa-lightbulb"></i> Ötletelés és rendszerezés</h3>
+                    <p>Használhatja a programot tanulmányi tervek készítéséhez, komplex jogi szövegek egyszerűsítéséhez,
+                        vagy akár kreatív íráshoz is. Az asszisztens képes automatikusan összefoglalót írni a
+                        dokumentumokról, kulcsszavakat gyűjteni, vagy kérdéssorokat összeállítani az anyag alapján.</p>
+                </div>
+
+                <div class="tutorial-section">
+                    <h3><i class="fas fa-shield-alt"></i> Adatvédelem</h3>
+                    <p>Fontos tudni, hogy a NotebookLM-be feltöltött személyes dokumentumokat a Google nem használja fel
+                        az általános nyelvi modellei tanításához. Az Ön adatai az Ön privát jegyzetfüzetében maradnak,
+                        így biztonságosan dolgozhat bizalmas irodai anyagokkal is.</p>
+                </div>
+
+                <hr style="border-color: rgba(251, 192, 45, 0.2); margin: 3rem 0;">
+
+                <div class="tutorial-section">
+                    <p>A NotebookLM folyamatosan fejlődik. Javasoljuk, hogy kezdje egy kisebb PDF fájl feltöltésével, és
+                        próbálja megkérdezni tőle a dokumentum tartalmát. Látni fogja, hogy a válaszok meglepően
+                        pontosak és mindig tartalmazzák a hivatkozást az eredeti szöveg helyére.</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <p class="small text-muted mb-3">Készen áll a felfedezésre?</p>
+                <a href="https://notebooklm.google.com/" target="_blank" class="cta-button">
+                    <i class="fas fa-rocket"></i> INDÍTÁS MOST
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+</body>
+
+</html>

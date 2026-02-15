@@ -270,14 +270,35 @@
     <script>
         const monthNames = ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
 
-        async function fetchNews() {
+        async function fetchNews(force = false) {
             const grid = document.getElementById('news-grid');
             const loader = document.getElementById('news-loader');
             const refreshIcon = document.getElementById('refresh-icon');
 
-            loader.style.display = 'flex';
-            grid.style.display = 'none';
-            refreshIcon.classList.add('fa-spin');
+            // Try load from cache first
+            const cache = localStorage.getItem('cache_atadhir');
+            if (cache && !force) {
+                const { html, timestamp } = JSON.parse(cache);
+                const age = Date.now() - timestamp;
+
+                // Show cached content immediately
+                grid.innerHTML = html;
+                loader.style.display = 'none';
+                grid.style.display = 'grid';
+
+                if (age < 14400000) { // If less than 4 hours old, don't refetch automatically
+                    return;
+                }
+            }
+
+            if (!force) {
+                // Background refresh indicator (subtle)
+                refreshIcon.classList.add('fa-spin');
+            } else {
+                loader.style.display = 'flex';
+                grid.style.display = 'none';
+                refreshIcon.classList.add('fa-spin');
+            }
 
             try {
                 const targetUrl = 'https://www.atadhir.hu/nagyatad/';
@@ -290,26 +311,22 @@
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(data.contents, 'text/html');
 
-                    // Specific Selectors identified for atadhir.hu
                     const articles = doc.querySelectorAll('.ultp-block-item');
                     let html = '';
 
                     if (articles.length > 0) {
                         articles.forEach((item, index) => {
-                            if (index >= 10) return; // Limit to 10 articles as requested
+                            if (index >= 10) return;
 
                             const titleEl = item.querySelector('h2.ultp-block-title a, .ultp-block-title a, a.ultp-block-title');
                             const title = titleEl?.innerText.trim() || item.querySelector('h2')?.innerText.trim() || 'Nincs cím';
                             let link = titleEl?.getAttribute('href') || item.querySelector('a')?.getAttribute('href') || '#';
 
-                            // Handle relative links if the proxy doesn't handle them
                             const absoluteLink = link.startsWith('http') ? link : 'https://www.atadhir.hu' + (link.startsWith('/') ? '' : '/') + link;
 
-                            // Extract image
                             const imgEl = item.querySelector('img');
                             const imgSrc = imgEl?.src || 'https://via.placeholder.com/150?text=Atádhír';
 
-                            // Extract category/date if available
                             const dateEl = item.querySelector('.ultp-block-date, .entry-date');
                             const date = dateEl?.innerText.trim() || new Date().toLocaleDateString('hu-HU');
 
@@ -327,13 +344,19 @@
                             `;
                         });
                         grid.innerHTML = html;
-                    } else {
+
+                        // Save to cache
+                        localStorage.setItem('cache_atadhir', JSON.stringify({
+                            html: html,
+                            timestamp: Date.now()
+                        }));
+                    } else if (!cache) {
                         grid.innerHTML = '<div class="alert alert-info">Jelenleg nem találhatók friss hírek. Látogasson el közvetlenül az atadhir.hu oldalra!</div>';
                     }
                 }
             } catch (error) {
                 console.error("Scraper Error:", error);
-                grid.innerHTML = '<div class="alert alert-danger">Hiba történt a hírek betöltésekor. Kérjük frissítse az oldalt vagy próbálja később!</div>';
+                if (!cache) grid.innerHTML = '<div class="alert alert-danger">Hiba történt a hírek betöltésekor. Kérjük frissítse az oldalt vagy próbálja később!</div>';
             } finally {
                 loader.style.display = 'none';
                 grid.style.display = 'grid';
@@ -346,6 +369,9 @@
             document.getElementById('current-period').innerText = `${now.getFullYear()} ${monthNames[now.getMonth()]}`;
             fetchNews();
         });
+
+        // Expose to window for manual button
+        window.fetchNews = () => fetchNews(true);
     </script>
 </body>
 

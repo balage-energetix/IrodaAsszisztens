@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teljesítménytúllépés Ütemező - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .scheduler-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .facility-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .facility-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .facility-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .facility-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-alt);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .facility-name {
+            font-family: 'Outfit';
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .exceedance-tracker {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .exceedance-dot {
+            flex: 1;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .exceedance-dot.active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success-glow);
+        }
+
+        .exceedance-dot.warning {
+            background: var(--danger);
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .deadline-info {
+            background: var(--bg-alt);
+            padding: 1rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .deadline-header {
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .deadline-date {
+            color: var(--danger);
+            font-weight: 800;
+        }
+
+        .action-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            border: none;
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .theory-box {
+            background: rgba(var(--primary-rgb), 0.05);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 0 1rem 1rem 0;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .tag-kif3 {
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-left: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i class="fab fa-android"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info">
+            <div id="header-weather"></div>
+            <div id="global-clock"></div>
+        </div>
+    </header>
+
+    <main class="container py-4 fade-in">
+        <div class="module-header mb-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                        class="fas fa-calendar-alt text-primary me-3"></i>Teljesítménytúllépés Ütemező</h2>
+                <p class="text-muted" style="margin-top:0.3rem;">KIF3-as tarifás intézmények 3 alkalmas túllépési
+                    bejelentéseinek kezelése.</p>
+            </div>
+            <a href="https://www.eon.hu/hu/egyeb/forms/leopold.html" target="_blank" class="btn btn-primary"
+                style="padding: 0.8rem 1.5rem; border-radius: 1rem; font-weight: 800; box-shadow: 0 10px 20px rgba(var(--primary-rgb), 0.2);">
+                <i class="fas fa-external-link-alt me-2"></i> E.ON Leopold Bejelentés
+            </a>
+        </div>
+
+        <div class="theory-box">
+            <h5 style="font-weight:800; margin-bottom:0.5rem;"><i class="fas fa-lightbulb me-2"></i>Szakmai Elv</h5>
+            Minden KIF3 tarifásnál élni kell a **3 túllépés bejelentés** lehetőségével. Kétféle modell létezik:
+            1. Az alap lekötött szintet úgy határozzuk meg, hogy **nem számolunk** a 3 legmagasabb előzetes túllépéssel.
+            2. Amikor **számolunk** velük, hiszen célszerű élni a lehetőséggel a költségoptimalizálás érdekében.
+            A teljesítményoptimalizáló modul alapértelmezetten kalkulál ezekkel a keretekkel.
+        </div>
+
+        <div class="scheduler-container">
+            <!-- Strandfürdő -->
+            <div class="facility-card">
+                <div class="facility-header">
+                    <div class="facility-icon"><i class="fas fa-umbrella-beach"></i></div>
+                    <h5 class="facility-name">Strandfürdő</h5>
+                    <span class="tag-kif3">KIF3</span>
+                </div>
+                <div class="exceedance-tracker">
+                    <div class="exceedance-dot active" title="1. alkalom: Felhasználva"></div>
+                    <div class="exceedance-dot" title="2. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="3. alkalom: Szabad"></div>
+                </div>
+                <div class="deadline-info">
+                    <div class="deadline-header"><i class="fas fa-clock"></i> Következő Jelentés</div>
+                    Nyári szezon előtti jelentés szükséges: <span class="deadline-date">Május 31.</span>
+                </div>
+            </div>
+
+            <!-- PMH -->
+            <div class="facility-card">
+                <div class="facility-header">
+                    <div class="facility-icon"><i class="fas fa-landmark"></i></div>
+                    <h5 class="facility-name">PMH</h5>
+                    <span class="tag-kif3">KIF3</span>
+                </div>
+                <div class="exceedance-tracker">
+                    <div class="exceedance-dot" title="1. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="2. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="3. alkalom: Szabad"></div>
+                </div>
+                <div class="deadline-info">
+                    <div class="deadline-header"><i class="fas fa-clock"></i> Következő Jelentés</div>
+                    Téli szezon előtti jelentés (ősz eleje): <span class="deadline-date">Szeptember 30.</span>
+                </div>
+            </div>
+
+            <!-- Művelődési Ház -->
+            <div class="facility-card">
+                <div class="facility-header">
+                    <div class="facility-icon"><i class="fas fa-theater-masks"></i></div>
+                    <h5 class="facility-name">Művelődési Ház</h5>
+                    <span class="tag-kif3">KIF3</span>
+                </div>
+                <div class="exceedance-tracker">
+                    <div class="exceedance-dot" title="1. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="2. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="3. alkalom: Szabad"></div>
+                </div>
+                <div class="deadline-info">
+                    <div class="deadline-header"><i class="fas fa-clock"></i> Következő Jelentés</div>
+                    Téli szezon előtti jelentés (ősz eleje): <span class="deadline-date">Szeptember 30.</span>
+                </div>
+            </div>
+
+            <!-- Gyógyfürdő -->
+            <div class="facility-card">
+                <div class="facility-header">
+                    <div class="facility-icon"><i class="fas fa-spa"></i></div>
+                    <h5 class="facility-name">Gyógyfürdő</h5>
+                    <span class="tag-kif3">KIF3</span>
+                </div>
+                <div class="exceedance-tracker">
+                    <div class="exceedance-dot" title="1. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="2. alkalom: Szabad"></div>
+                    <div class="exceedance-dot" title="3. alkalom: Szabad"></div>
+                </div>
+                <div class="deadline-info">
+                    <div class="deadline-header"><i class="fas fa-clock"></i> Következő Jelentés</div>
+                    Téli szezon előtti jelentés (ősz eleje): <span class="deadline-date">Szeptember 30.</span>
+                </div>
+            </div>
+
+            <!-- Park Hotel -->
+            <div class="facility-card">
+                <div class="facility-header">
+                    <div class="facility-icon"><i class="fas fa-hotel"></i></div>
+                    <h5 class="facility-name">Park Hotel</h5>
+                    <span class="tag-kif3">Javasolt</span>
+                </div>
+                <div class="exceedance-tracker">
+                    <div class="exceedance-dot" title="Vizsgálat szükséges"></div>
+                    <div class="exceedance-dot" title="Vizsgálat szükséges"></div>
+                    <div class="exceedance-dot" title="Vizsgálat szükséges"></div>
+                </div>
+                <div class="deadline-info">
+                    <div class="deadline-header"><i class="fas fa-info-circle"></i> Javaslat</div>
+                    Érdemes megfontolni a 3 alkalmas túllépés bejelentését az üzemeltetési modellnél.
+                </div>
+            </div>
+
+            <!-- Kollégium -->
+            <div class="facility-card">
+                <div class="facility-header">
+                    <div class="facility-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h5 class="facility-name">Kollégium</h5>
+                    <span class="tag-kif3">Javasolt</span>
+                </div>
+                <div class="exceedance-tracker">
+                    <div class="exceedance-dot" title="Vizsgálat szükséges"></div>
+                    <div class="exceedance-dot" title="Vizsgálat szükséges"></div>
+                    <div class="exceedance-dot" title="Vizsgálat szükséges"></div>
+                </div>
+                <div class="deadline-info">
+                    <div class="deadline-header"><i class="fas fa-info-circle"></i> Javaslat</div>
+                    Várható téli terhelési csúcsok miatt javasolt a keret megnyitása.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        // Module specific logic could go here
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Scheduler module loaded");
+        });
+    </script>
+</body>
+
+</html>

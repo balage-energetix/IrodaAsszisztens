@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hu" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gázárajánlat Kiértékelő - Irodai Asszisztens</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <style>
+        .audio-bar {
+            position: sticky;
+            top: var(--header-height);
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            gap: 1.5rem;
+            z-index: 999;
+            border-bottom: 1px solid var(--accent-purple);
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .audio-bar .play-btn {
+            background: none;
+            border: none;
+            color: var(--accent-purple);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+        }
+
+        .audio-bar .progress-container {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .audio-bar .progress-bar {
+            height: 100%;
+            background: var(--accent-purple);
+            border-radius: 2px;
+            width: 0%;
+        }
+
+        .audio-bar .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100px;
+        }
+
+        .audio-bar input[type="range"] {
+            width: 100%;
+            height: 4px;
+            accent-color: var(--accent-purple);
+        }
+
+        .module-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 1rem;
+            background: white;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="app-header">
+        <a href="../../index.html" class="logo"><i
+                class="fas fa-file-invoice-dollar"></i><span>IRODAI<br>ASSZISZTENS</span></a>
+        <div class="header-info"></div>
+    </header>
+
+    <div class="audio-bar">
+        <button id="podcast-play-btn" class="play-btn"><i class="fas fa-play"></i></button>
+        <div id="podcast-progress-container" class="progress-container">
+            <div id="podcast-progress-bar" class="progress-bar"></div>
+        </div>
+        <div id="podcast-time">0:00 / 0:00</div>
+        <div class="volume-container">
+            <i class="fas fa-volume-up"></i>
+            <input type="range" id="podcast-volume" min="0" max="1" step="0.1" value="0.5">
+        </div>
+    </div>
+
+    <main class="module-container">
+        <div class="card">
+            <h3 class="card-title"><i class="fas fa-chart-pie"></i> Gázárajánlat Kiértékelő</h3>
+            <p class="text-muted mb-4">Interaktív ajánlat-elemző és összehasonlító felület.</p>
+            <iframe id="evaluator-frame"
+                src="../../Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata.html"></iframe>
+        </div>
+    </main>
+
+    <audio id="podcast-audio"></audio>
+    <script src="../../podcast_part1.js"></script>
+    <script>
+        // Check if part 1 loaded, if not fall back to one file if they named it like that
+        if (!window.podcast_part1) console.warn("Part 1 not found");
+    </script>
+    <script src="../../podcast_part2.js"></script>
+
+    <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('podcast-audio');
+            const playBtn = document.getElementById('podcast-play-btn');
+            const playIcon = playBtn.querySelector('i');
+            const progressBar = document.getElementById('podcast-progress-bar');
+            const progressContainer = document.getElementById('podcast-progress-container');
+            const timeDisplay = document.getElementById('podcast-time');
+            const volumeSlider = document.getElementById('podcast-volume');
+
+            // Base64 to Blob Reassembly (Bypassing 25MB limit + Local File Protocol CORS)
+            const loadAudioChunks = () => {
+                timeDisplay.innerText = "Szinkronizálás...";
+                try {
+                    if (!window.podcast_part1 || !window.podcast_part2) {
+                        throw new Error("Missing audio chunks");
+                    }
+
+                    const b64toBlob = (b64Data, contentType = 'audio/mp4') => {
+                        const byteCharacters = atob(b64Data.trim());
+                        const byteArrays = [];
+                        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+                            const slice = byteCharacters.slice(offset, offset + 512);
+                            const byteNumbers = new Array(slice.length);
+                            for (let i = 0; i < slice.length; i++) {
+                                byteNumbers[i] = slice.charCodeAt(i);
+                            }
+                            const byteArray = new Uint8Array(byteNumbers);
+                            byteArrays.push(byteArray);
+                        }
+                        return new Blob(byteArrays, { type: contentType });
+                    };
+
+                    const blobHeader = b64toBlob(window.podcast_part1);
+                    const blobData = b64toBlob(window.podcast_part2);
+
+                    const fullBlob = new Blob([blobHeader, blobData], { type: 'audio/mp4' });
+                    audio.src = URL.createObjectURL(fullBlob);
+
+                    audio.oncanplay = () => {
+                        if (timeDisplay.innerText === "Szinkronizálás...") {
+                            timeDisplay.innerText = "0:00 / 0:00";
+                            startPlay();
+                        }
+                    };
+                } catch (err) {
+                    console.error("Audio reconstruction failed:", err);
+                    timeDisplay.innerText = "Hiba (Fájl hiányzik)";
+                }
+            };
+
+            // Auto-play logic
+            const startPlay = () => {
+                if (!audio.src || !audio.paused) return;
+                audio.playbackRate = 1.3;
+                audio.play().then(() => {
+                    playIcon.className = 'fas fa-pause';
+                }).catch(err => {
+                    console.log("Auto-play blocked, waiting for user...");
+                    if (timeDisplay.innerText === "0:00 / 0:00") {
+                        timeDisplay.innerText = "Kattints a lejátszáshoz";
+                    }
+                });
+            };
+
+            // Initialize loading
+            loadAudioChunks();
+
+            // Broad interaction listeners to unlock audio
+            const unlock = () => {
+                if (audio.paused && audio.src) {
+                    startPlay();
+                    ['click', 'mousedown', 'touchstart', 'keydown'].forEach(evt =>
+                        window.removeEventListener(evt, unlock)
+                    );
+                }
+            };
+            ['click', 'mousedown', 'touchstart', 'keydown'].forEach(evt =>
+                window.addEventListener(evt, unlock)
+            );
+
+            playBtn.onclick = () => {
+                if (audio.paused) {
+                    audio.play();
+                    playIcon.className = 'fas fa-pause';
+                } else {
+                    audio.pause();
+                    playIcon.className = 'fas fa-play';
+                }
+            };
+
+            audio.ontimeupdate = () => {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = percent + '%';
+
+                // Display wall-clock time (content time / 1.3)
+                const realCurrent = audio.currentTime / 1.3;
+                const realTotal = audio.duration / 1.3;
+
+                const curM = Math.floor(realCurrent / 60);
+                const curS = Math.floor(realCurrent % 60).toString().padStart(2, '0');
+                const durM = Math.floor(realTotal / 60) || 0;
+                const durS = Math.floor(realTotal % 60 || 0).toString().padStart(2, '0');
+
+                timeDisplay.innerText = `${curM}:${curS} / ${durM}:${durS}`;
+            };
+
+            progressContainer.onclick = (e) => {
+                const rect = progressContainer.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                audio.currentTime = pos * audio.duration;
+            };
+
+            volumeSlider.oninput = () => {
+                audio.volume = volumeSlider.value;
+            };
+        });
+    </script>
+</body>
+
+</html>

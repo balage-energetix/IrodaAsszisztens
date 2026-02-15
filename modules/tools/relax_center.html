@@ -328,25 +328,25 @@
         </div>
 
         <div class="relax-grid">
-            <!-- 1. Breakout Full -->
+            <!-- 1. Captain Planet Quiz -->
             <div class="relax-card">
-                <h4><i class="fas fa-gamepad"></i> Téglatörő (Arcade)</h4>
-                <div class="relax-content" style="position: relative;">
-                    <canvas id="breakout-canvas" width="320" height="420"></canvas>
-                    <div id="breakout-overlay" class="relax-overlay">
-                        <div class="overlay-title">TÉGLATÖRŐ</div>
-                        <div class="overlay-text">Pattogtasd a golyót és törd szét a téglákat!<br>Használd az egeret a
-                            mozgatáshoz.</div>
-                        <button class="btn btn-primary" onclick="startBreakout()">START JÁTÉK</button>
+                <h4><i class="fas fa-leaf"></i> Bolygó Kapitánya Kvíz</h4>
+                <div class="relax-content"
+                    style="background: linear-gradient(135deg, #1b5e20 0%, #4caf50 100%); flex-direction: column; gap: 1.5rem; padding: 2rem;">
+                    <i class="fas fa-globe-europe fa-5x"
+                        style="color: white; filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));"></i>
+                    <div style="color: white; text-align: center;">
+                        <h5 style="font-weight: 800; font-family: 'Outfit'; margin-bottom: 0.5rem;">MENTSÜK MEG A
+                            FÖLDET!</h5>
+                        <p style="font-size: 0.85rem; opacity: 0.9;">Tudományos kérdések a természet erejéről.</p>
                     </div>
-                    <div id="breakout-result" class="relax-overlay hidden">
-                        <div class="overlay-title" id="bo-res-title">VÉGE A JÁTÉKNAK</div>
-                        <div class="overlay-text" id="bo-res-text">Pontszám: 0<br>Idő: 0:00</div>
-                        <button class="btn btn-primary" onclick="resetBreakout()">Újra</button>
-                    </div>
+                    <a href="../../bolygokapitanyaquiz.html" class="btn btn-light"
+                        style="font-weight: 800; border-radius: 2rem; padding: 0.75rem 2rem; color: #1b5e20;">JÁTÉK
+                        INDÍTÁSA</a>
                 </div>
-                <div class="mt-2 text-center small text-muted">Ablak méret: 320x420 | Pont: <span
-                        id="bo-score-live">0</span> | Idő: <span id="bo-timer-live">0:00</span></div>
+                <div class="p-3 text-center border-top" style="background: var(--bg-card);">
+                    <small class="text-muted">Szórakoztató és tanulságos ismeretterjesztő.</small>
+                </div>
             </div>
 
             <!-- 4. Radio Center -->
@@ -440,6 +440,27 @@
                 <div class="p-3 text-center border-top" style="background: var(--bg-card);">
                     <small class="text-muted">Skiccelj fel egy gyors ötletet!</small>
                 </div>
+            </div>
+
+            <!-- 7. Breakout Full -->
+            <div class="relax-card">
+                <h4><i class="fas fa-gamepad"></i> Téglatörő (Arcade)</h4>
+                <div class="relax-content" style="position: relative;">
+                    <canvas id="breakout-canvas" width="320" height="420"></canvas>
+                    <div id="breakout-overlay" class="relax-overlay">
+                        <div class="overlay-title">TÉGLATÖRŐ</div>
+                        <div class="overlay-text">Pattogtasd a golyót és törd szét a téglákat!<br>Használd az egeret a
+                            mozgatáshoz.</div>
+                        <button class="btn btn-primary" onclick="startBreakout()">START JÁTÉK</button>
+                    </div>
+                    <div id="breakout-result" class="relax-overlay hidden">
+                        <div class="overlay-title" id="bo-res-title">VÉGE A JÁTÉKNAK</div>
+                        <div class="overlay-text" id="bo-res-text">Pontszám: 0<br>Idő: 0:00</div>
+                        <button class="btn btn-primary" onclick="resetBreakout()">Újra</button>
+                    </div>
+                </div>
+                <div class="mt-2 text-center small text-muted">Ablak méret: 320x420 | Pont: <span
+                        id="bo-score-live">0</span> | Idő: <span id="bo-timer-live">0:00</span></div>
             </div>
         </div>
     </main>
