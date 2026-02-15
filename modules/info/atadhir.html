@@ -11,187 +11,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
-        :root {
-            --news-accent: #4361ee;
-            --news-bg-glass: rgba(255, 255, 255, 0.7);
+        .news-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        [data-theme="dark"] {
-            --news-bg-glass: rgba(26, 35, 126, 0.2);
-        }
-
-        .news-layout {
-            display: grid;
-            grid-template-columns: 1fr 320px;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        @media (max-width: 992px) {
-            .news-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Live Feed Card Styling */
-        .feed-container {
-            display: grid;
-            gap: 1.25rem;
-        }
-
-        .article-card {
-            background: var(--bg-card);
-            border-radius: 1.25rem;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .news-item {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            gap: 1.5rem;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
             text-decoration: none !important;
             color: inherit !important;
+            transition: opacity 0.2s;
         }
 
-        .article-card:hover {
-            transform: translateY(-5px) scale(1.01);
-            border-color: var(--news-accent);
-            box-shadow: 0 15px 30px rgba(67, 97, 238, 0.1);
+        .news-item:hover {
+            opacity: 0.7;
         }
 
-        .article-card::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 5px;
-            background: var(--news-accent);
-            opacity: 0;
-            transition: 0.3s;
-        }
-
-        .article-card:hover::after {
-            opacity: 1;
-        }
-
-        .article-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 1rem;
-            object-fit: cover;
-            background: var(--bg-light);
-            flex-shrink: 0;
-        }
-
-        .article-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .article-body h3 {
+        .news-title {
+            font-weight: 700;
             font-size: 1.1rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
             line-height: 1.4;
-            color: var(--text-main);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            flex: 1;
         }
 
-        .article-meta {
-            font-size: 0.75rem;
+        .news-date {
+            font-size: 0.85rem;
             color: var(--text-muted);
+            white-space: nowrap;
+            font-family: 'Outfit';
+        }
+
+        .flash-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 1rem;
-            margin-top: 0.5rem;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
         }
 
-        /* Sidebar Styling */
-        .sidebar-section {
-            background: var(--news-bg-glass);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
-            position: sticky;
-            top: calc(var(--header-height) + 1rem);
-        }
-
-        .summary-badge {
-            background: var(--news-accent);
+        .btn-sync {
+            background: var(--primary);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            display: inline-block;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .summary-text {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--text-main);
-            margin-bottom: 0;
-        }
-
-        /* Loader & Animations */
-        .loader-overlay {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 4rem;
-            text-align: center;
-        }
-
-        .pulse-icon {
-            font-size: 3rem;
-            color: var(--news-accent);
-            animation: pulse-ring 1.25s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(0.95);
-                opacity: 0.5;
-            }
-
-            50% {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-
-            100% {
-                transform: scale(0.95);
-                opacity: 0.5;
-            }
-        }
-
-        .fade-up {
-            animation: fade-up-anim 0.5s ease-out forwards;
-        }
-
-        @keyframes fade-up-anim {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        #status-msg {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -205,133 +83,57 @@
         </div>
     </header>
 
-    <main class="container py-4 fade-in">
-        <div class="d-flex justify-content-between align-items-end mb-4">
-            <div>
-                <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
-                        class="fas fa-newspaper text-primary me-3"></i>Atádi Hírek</h2>
-                <p style="color: var(--text-muted); margin-top: 0.3rem;">Friss hírek és havi összefoglalók Nagyatádról.
-                </p>
-            </div>
-            <button class="btn btn-primary btn-sm no-print" onclick="fetchNews()">
-                <i class="fas fa-sync-alt me-2" id="refresh-icon"></i> Frissítés
-            </button>
+    <main class="news-container fade-in">
+        <div class="flash-header">
+            <h2 style="margin:0; font-weight:800; letter-spacing:-1px;">ATÁDI HÍREK</h2>
+            <button class="btn-sync" onclick="syncNews()"><i class="fas fa-sync-alt" id="sync-icon"></i>
+                FRISSÍTÉS</button>
         </div>
 
-        <div class="news-layout">
-            <!-- Left: News Feed -->
-            <div id="news-feed-container">
-                <div class="loader-overlay" id="news-loader">
-                    <i class="fas fa-circle-notch fa-spin pulse-icon mb-3"></i>
-                    <p class="h5 font-weight-bold">Hírek gyűjtése...</p>
-                    <p class="text-muted small">atadhir.hu/nagyatad</p>
-                </div>
-                <div class="feed-container" id="news-grid" style="display: none;">
-                    <!-- JS Injected -->
-                </div>
-            </div>
-
-            <!-- Right: Sidebar -->
-            <aside>
-                <div class="sidebar-section">
-                    <span class="summary-badge">Havi Összefoglaló</span>
-                    <h5 class="mb-3" style="font-weight: 800;">Városházi Krónika</h5>
-                    <div id="ai-summary">
-                        <p class="summary-text">A város fókuszában az energetikai hatékonyság és a közösségi
-                            fejlesztések álltak. A téli időszak prioritása a közüzemi hálózatok stabil fenntartása és a
-                            készülő költségvetési tervek megalapozása volt.</p>
-                        <hr class="my-3 opacity-20">
-                        <div class="d-flex align-items-center gap-2 small text-muted">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span id="current-period"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h5 class="mb-3" style="font-weight: 800;">Hivatalos Csatornák</h5>
-                    <div class="list-group list-group-flush" style="background: transparent;">
-                        <a href="https://www.atadhir.hu" target="_blank" class="nav-dropdown-item px-0">
-                            <i class="fas fa-globe text-primary"></i> atadhir.hu
-                        </a>
-                        <a href="https://nagyatad.hu" target="_blank" class="nav-dropdown-item px-0">
-                            <i class="fas fa-landmark text-primary"></i> nagyatad.hu
-                        </a>
-                        <a href="https://www.facebook.com/atadhir" target="_blank" class="nav-dropdown-item px-0">
-                            <i class="fab fa-facebook text-primary"></i> Facebook Feed
-                        </a>
-                    </div>
-                </div>
-            </aside>
+        <div id="news-list">
+            <div class="loading-text">Betöltés...</div>
         </div>
+        <div id="status-msg"></div>
     </main>
 
     <script>
-        // Data Booster for immediate local display
+        // Emergency Data Booster (Instant Load)
         window.LIVE_DATA = {
-            rinya: { val: 38, time: "2026.02.15. 13:00", timestamp: Date.now() },
             news: [
-                { title: "Farsangi kavalkád a nagyatádi általános iskolákban", date: "2026.02.10.", link: "https://www.atadhir.hu/hirek/nagyatad/farsangi-kavalkad-a-nagyatadi-altalanos-iskolakban/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/bardos-alsos-farsang-atadhir20260210-09-870x570.jpg" },
-                { title: "Megkezdték a fák metszését és a zöldterületek takarítását a városban", date: "2026.02.12.", link: "https://www.atadhir.hu/hirek/nagyatad/megkezdtek-a-fak-metszeset-es-a-zoldteruletek-takaritasat-a-varosban/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/fametszes-favagas-atadhir20260212-5-870x570.jpg" },
-                { title: "Tavaszi lomtalanítás lesz Nagyatádon", date: "2026.02.08.", link: "https://www.atadhir.hu/hirek/tavaszi-lomtalanitas-nagyatadon/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/Depositphotos_17140817_L-870x570.jpg" },
-                { title: "Éremesővel és jótékonysággal indította a 2026-os szezont a NUTE", date: "2026.02.05.", link: "https://www.atadhir.hu/hirek/eremesovel-es-jotekonysaggal-inditotta-a-2026-os-szezont-a-nute/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/Depositphotos_662765832_S-2-870x570.jpg" },
-                { title: "Kevesebb jelzés, súlyosabb esetek: Megtartotta éves tanácskozását a gyermekjóléti szolgálat és központ", date: "2026.02.09.", link: "https://www.atadhir.hu/hirek/kevesebb-jelzes-sulyosabb-esetek-megtartotta-eves-tanacskozasat-a-gyermekjoleti-szolgalat-es-kozpont/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/rszszk-gyermekvedelem-atadhir-20260209-2-870x570.jpg" },
-                { title: "Pályaorientációs napot tartottak a NASZI-ban", date: "2026.02.09.", link: "https://www.atadhir.hu/hirek/nagyatad/palyaorientacios-napot-tartottak-a-naszi-ban/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/naszi-palyaorientacio-atadhir20260209-4-870x570.jpg" },
-                { title: "Tűz ütött ki az egyik benzinkút épületében Nagyatádon", date: "2026.02.09.", link: "https://www.atadhir.hu/hirek/nagyatad/tuz-utott-ki-az-egyik-benzinkut-epuleteben-nagyatadon/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/benzinkut-tuz-nagyatad-atadhir20260209-4-870x570.jpg" },
-                { title: "Ezüstérem és ígéretes helyezések: Remekeltek judósaink a Zrinski Openen", date: "2026.02.09.", link: "https://www.atadhir.hu/hirek/sport-hirek/ezusterem-es-igeretes-helyezesek-remekeltek-judosaink-a-zrinski-openen/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/Depositphotos_64267967_L-1-870x570.jpg" },
-                { title: "Látogatási tilalom és kötelező maszkviselés lépett érvénybe a Nagyatádi Kórházban", date: "2026.02.02.", link: "https://www.atadhir.hu/hirek/latogatasi-tilalom-es-kotelezo-maszkviseles-lepett-ervenybe-a-nagyatadi-korhazban/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/IMG_2303_Original-1-870x570.jpeg" },
-                { title: "Elűzték a telet Nagyatádról", date: "2026.02.06.", link: "https://www.atadhir.hu/hirek/nagyatad/eluztek-a-telet-nagyatadrol/", imgSrc: "https://www.atadhir.hu/wp-content/uploads/farsang-boritokep-atadhir20260206-870x570.png" }
+                { title: "Farsangi kavalkád a nagyatádi általános iskolákban", date: "2026.02.10.", link: "https://www.atadhir.hu/hirek/nagyatad/farsangi-kavalkad-a-nagyatadi-altalanos-iskolakban/" },
+                { title: "Megkezdték a fák metszését és a zöldterületek takarítását a városban", date: "2026.02.12.", link: "https://www.atadhir.hu/hirek/nagyatad/megkezdtek-a-fak-metszeset-es-a-zoldteruletek-takaritasat-a-varosban/" },
+                { title: "Tavaszi lomtalanítás lesz Nagyatádon", date: "2026.02.08.", link: "https://www.atadhir.hu/hirek/tavaszi-lomtalanitas-nagyatadon/" },
+                { title: "Pályaorientációs napot tartottak a NASZI-ban", date: "2026.02.09.", link: "https://www.atadhir.hu/hirek/nagyatad/palyaorientacios-napot-tartottak-a-naszi-ban/" },
+                { title: "Látogatási tilalom lépett érvénybe a Nagyatádi Kórházban", date: "2026.02.02.", link: "https://www.atadhir.hu/hirek/latogatasi-tilalom-es-kotelezo-maszkviseles-lepett-ervenybe-a-nagyatadi-korhazban/" }
             ]
         };
     </script>
     <script src="../../js/main.js"></script>
     <script>
-        const monthNames = ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"];
+        const newsListEl = document.getElementById('news-list');
+        const syncIcon = document.getElementById('sync-icon');
+        const statusMsg = document.getElementById('status-msg');
 
-        async function fetchNews(force = false) {
-            console.log("News fetch started, force=" + force);
-            const grid = document.getElementById('news-grid');
-            const loader = document.getElementById('news-loader');
-            const refreshIcon = document.getElementById('refresh-icon');
+        function renderNews(data) {
+            if (!data || data.length === 0) return;
+            newsListEl.innerHTML = data.map(item => `
+                <a href="${item.link}" target="_blank" class="news-item">
+                    <span class="news-title">${item.title}</span>
+                    <span class="news-date">${item.date}</span>
+                </a>
+            `).join('');
+        }
 
-            // 1. Try LIVE_DATA (Instant local source)
-            if (window.LIVE_DATA && window.LIVE_DATA.news && !force) {
-                console.log("LIVE_DATA booster detected, rendering instantly.");
-                renderNewsTiles(window.LIVE_DATA.news);
-                loader.style.display = 'none';
-                grid.style.display = 'grid';
-                return;
-            }
-            const cache = localStorage.getItem('cache_atadhir');
-            if (cache && !force) {
-                const { data, timestamp } = JSON.parse(cache);
-                const age = Date.now() - timestamp;
-                if (age < 3600000) { // 1h freshness for local cache
-                    console.log("Using fresh cache (age: " + Math.round(age / 60000) + " min)");
-                    renderNewsTiles(data);
-                    loader.style.display = 'none';
-                    grid.style.display = 'grid';
-                    return;
-                }
-            }
-
-            console.log("Fetching live news from atadhir.hu...");
-            refreshIcon.classList.add('fa-spin');
-            if (force || grid.innerHTML === "") {
-                loader.style.display = 'flex';
-                grid.style.display = 'none';
-            }
-
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 12000);
+        async function syncNews() {
+            syncIcon.classList.add('fa-spin');
+            statusMsg.innerText = "Adatok lekérése az atadhir.hu-ról...";
 
             try {
                 const targetUrl = 'https://www.atadhir.hu/nagyatad/';
                 const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
-                const response = await fetch(proxyUrl, { signal: controller.signal });
+                const response = await fetch(proxyUrl);
                 const json = await response.json();
-                clearTimeout(timeoutId);
 
                 if (json.contents) {
                     const parser = new DOMParser();
@@ -339,67 +141,54 @@
                     const items = doc.querySelectorAll('.ultp-block-item');
 
                     if (items.length > 0) {
-                        const newsData = [];
-                        items.forEach((item, index) => {
-                            if (index >= 10) return; // Top 10 only
+                        const freshNews = [];
+                        items.forEach((item, i) => {
+                            if (i >= 12) return;
+                            const linkEl = item.querySelector('a');
+                            const imgEl = item.querySelector('img');
+                            if (linkEl) {
+                                let date = 'Friss';
+                                const dateMatch = imgEl?.src?.match(/atadhir(\d{4})(\d{2})(\d{2})/);
+                                if (dateMatch) date = `${dateMatch[1]}.${dateMatch[2]}.${dateMatch[3]}.`;
 
-                            const titleEl = item.querySelector('.ultp-block-title a');
-                            const title = titleEl?.innerText.trim() || 'Cím nélkül';
-                            const link = titleEl?.getAttribute('href') || '#';
-
-                            const imgEl = item.querySelector('img.ultp-block-image-content');
-                            const imgSrc = imgEl?.src || '';
-
-                            // Date extraction from image URL (pattern: atadhirYYYYMMDD)
-                            let date = 'Friss';
-                            const dateMatch = imgSrc.match(/atadhir(\d{4})(\d{2})(\d{2})/);
-                            if (dateMatch) {
-                                date = `${dateMatch[1]}.${dateMatch[2]}.${dateMatch[3]}.`;
+                                freshNews.push({
+                                    title: linkEl.innerText.trim(),
+                                    link: linkEl.href,
+                                    date: date
+                                });
                             }
-
-                            newsData.push({ title, link, imgSrc, date });
                         });
 
-                        renderNewsTiles(newsData);
-                        localStorage.setItem('cache_atadhir', JSON.stringify({ data: newsData, timestamp: Date.now() }));
-                    } else throw new Error("No items found");
+                        renderNews(freshNews);
+                        localStorage.setItem('cache_atadhir_min', JSON.stringify({ data: freshNews, timestamp: Date.now() }));
+                        statusMsg.innerText = "Frissítve: " + new Date().toLocaleTimeString();
+                    } else throw new Error("Üres válasz");
                 }
-            } catch (error) {
-                console.error("News fetch failed:", error);
-                if (grid.innerHTML === "") {
-                    grid.innerHTML = `<div class="alert alert-warning w-100 text-center">Nem sikerült frissíteni a híreket. <br><small>${error.message}</small></div>`;
-                }
+            } catch (e) {
+                console.error("Fetch error", e);
+                statusMsg.innerText = "Hiba történt a frissítéskor.";
             } finally {
-                loader.style.display = 'none';
-                grid.style.display = 'grid';
-                refreshIcon.classList.remove('fa-spin');
+                syncIcon.classList.remove('fa-spin');
             }
         }
 
-        function renderNewsTiles(newsList) {
-            const grid = document.getElementById('news-grid');
-            grid.innerHTML = newsList.map((item, index) => `
-                <a href="${item.link}" target="_blank" class="article-card fade-up" style="animation-delay: ${index * 0.05}s">
-                    <img src="${item.imgSrc}" class="article-img" alt="${item.title}" onerror="this.src='https://via.placeholder.com/150?text=News'">
-                    <div class="article-body">
-                        <h3>${item.title}</h3>
-                        <div class="article-meta">
-                            <span><i class="fas fa-calendar-day me-1"></i> ${item.date}</span>
-                            <span><i class="fas fa-external-link-alt me-1"></i> Nagyatád</span>
-                        </div>
-                    </div>
-                </a>
-            `).join('');
-        }
-
+        // Init
         document.addEventListener('DOMContentLoaded', () => {
-            const now = new Date();
-            const periodEl = document.getElementById('current-period');
-            if (periodEl) periodEl.innerText = `${now.getFullYear()} ${monthNames[now.getMonth()]}`;
-            fetchNews();
-        });
+            // 1. Show Booster immediately
+            renderNews(window.LIVE_DATA.news);
 
-        window.fetchNews = () => fetchNews(true);
+            // 2. Try Cache
+            const cache = localStorage.getItem('cache_atadhir_min');
+            if (cache) {
+                const { data, timestamp } = JSON.parse(cache);
+                if (Date.now() - timestamp < 1800000) { // 30 min cache
+                    renderNews(data);
+                }
+            }
+
+            // 3. Silent update
+            syncNews();
+        });
     </script>
 </body>
 
