@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu" data-theme="dark">
+<html lang="hu" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .audio-bar {
             position: sticky;
@@ -74,172 +76,625 @@
             padding: 2rem;
             max-width: 1400px;
             margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
-        iframe {
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 400px 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
             width: 100%;
-            height: 800px;
-            border: none;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.8rem;
+            border-bottom: 2px solid var(--text-main);
+            color: var(--text-muted);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid var(--border-color);
             border-radius: 1rem;
-            background: white;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-purple);
+        }
+
+        .summary-banner {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .winner-indexed {
+            background: rgba(46, 204, 113, 0.1);
+            border: 1px solid #2ecc71;
+            color: #27ae60;
+        }
+
+        .alert-danger {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+        }
+
+        .chart-container {
+            height: 350px;
+            position: relative;
+            margin-top: 1.5rem;
+        }
+
+        .timeline-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            padding: 2.5rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--bg-light);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: 0.5s;
+        }
+
+        .timeline-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            background: var(--bg-card);
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: var(--primary);
+        }
+
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            width: 90%;
+            text-align: center;
+        }
+
+        .unit-btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .unit-btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-main);
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+
+        .unit-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .risk-list {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .risk-list p {
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+        }
+
+        .risk-list strong {
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Auth Overlay consistency */
+        body:not(.authenticated) #app-main {
+            display: none !important;
+        }
+
+        body.authenticated #auth-overlay {
+            display: none !important;
         }
     </style>
 </head>
 
 <body>
-    <header class="app-header">
-        <a href="../../index.html" class="logo"><i
-                class="fas fa-file-invoice-dollar"></i><span>IRODAI<br>ASSZISZTENS</span></a>
-        <div class="header-info"></div>
-    </header>
-
-    <div class="audio-bar">
-        <button id="podcast-play-btn" class="play-btn"><i class="fas fa-play"></i></button>
-        <div id="podcast-progress-container" class="progress-container">
-            <div id="podcast-progress-bar" class="progress-bar"></div>
-        </div>
-        <div id="podcast-time">0:00 / 0:00</div>
-        <div class="volume-container">
-            <i class="fas fa-volume-up"></i>
-            <input type="range" id="podcast-volume" min="0" max="1" step="0.1" value="0.5">
+    <div id="auth-overlay"
+        style="position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px);">
+        <div class="auth-box-modern">
+            <div class="auth-icon-wrapper"><i class="fas fa-shield-halved"></i></div>
+            <h2 class="auth-title">Gázajánlat Elemző</h2>
+            <p class="auth-subtitle">Biztonságos belépés</p>
+            <div class="auth-input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="auth-password-input" placeholder="Belépési kód...">
+            </div>
+            <button onclick="App.login()" class="auth-submit-btn"><span>Belépés</span><i
+                    class="fas fa-arrow-right"></i></button>
         </div>
     </div>
 
-    <main class="module-container">
-        <div class="card">
-            <h3 class="card-title"><i class="fas fa-chart-pie"></i> Gázárajánlat Kiértékelő</h3>
-            <p class="text-muted mb-4">Interaktív ajánlat-elemző és összehasonlító felület.</p>
-            <iframe id="evaluator-frame"
-                src="../../Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata.html"></iframe>
+    <div id="app-main">
+        <header class="app-header">
+            <a href="../../index.html" class="logo">
+                <i class="fab fa-android"></i>
+                <span>IRODAI<br>ASSZISZTENS</span>
+            </a>
+            <div class="header-info"></div>
+        </header>
+
+        <div class="audio-bar">
+            <button id="podcast-play-btn" class="play-btn"><i class="fas fa-play"></i></button>
+            <div id="podcast-progress-container" class="progress-container">
+                <div id="podcast-progress-bar" class="progress-bar"></div>
+            </div>
+            <div id="podcast-time">0:00 / 0:00</div>
+            <div class="volume-container">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" id="podcast-volume" min="0" max="1" step="0.1" value="0.5">
+            </div>
         </div>
-    </main>
+
+        <main class="module-container fade-in">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div>
+                    <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
+                            class="fas fa-file-invoice-dollar text-primary me-3"></i>Gázárajánlat Kiértékelő</h2>
+                    <p class="text-muted small">Nagyatád Város Önkormányzata • Professzionális döntéstámogató rendszer
+                    </p>
+                </div>
+                <div class="unit-btn-group">
+                    <button id="btnKWh" class="unit-btn active" onclick="setUnit('kWh')">Ft/kWh</button>
+                    <button id="btnMJ" class="unit-btn" onclick="setUnit('MJ')">Ft/MJ</button>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Részletes Szerződési Kockázatelemzés -->
+                <div class="card" style="grid-row: span 3; border-top: 4px solid var(--danger);">
+                    <h3 class="card-title"
+                        style="color: var(--danger) !important; font-size: 1.1rem; margin-bottom: 1.5rem;">
+                        <i class="fas fa-exclamation-triangle"></i> Jogi és Szerződési Kockázatelemzés
+                    </h3>
+                    <div class="risk-list">
+                        <p><strong>1. Ráutaló magatartás:</strong> A dokumentum egyik legveszélyesebb pontja: az
+                            elutasítás hiánya automatikusan a szerződés létrejöttét eredményezi. Mindössze 15 nap van az
+                            írásbeli elutasításra.</p>
+                        <p><strong>2. 3 éves kötöttség:</strong> Az ajánlat 2026. október 1-től 2029. október 1-ig tartó
+                            hűségidőszakot ír elő, ami korlátozza a mozgásteret.</p>
+                        <p><strong>3. Indexált árazás volatilitása:</strong> A tőzsdei árazás közvetlenül kitettséget
+                            jelent a piaci kilengéseknek.</p>
+                        <p><strong>4. EUR/HUF devizakockázat:</strong> Az önkormányzat teljes mértékben viseli a forint
+                            gyengülésének kockázatát.</p>
+                        <p><strong>5. Kereskedői árrögzítési jog:</strong> A kereskedő egyoldalúan rögzítheti az árat,
+                            ha az neki kedvező.</p>
+                        <p><strong>6. Felmondási jog kizárása:</strong> Ha a kereskedő rögzíti az árat, a fogyasztó nem
+                            jogosult a felmondásra.</p>
+                        <p><strong>7. Utolsó ajánlattételi jog:</strong> Versenytorzító hatás, a többi kereskedő
+                            elriasztása a valódi versenytől.</p>
+                        <p><strong>8. Súlyos pótdíjak:</strong> 500.000 Ft-os büntetés az ajánlattételi jog
+                            megsértésekor.</p>
+                        <p><strong>9. Szűk felmondási ablak:</strong> Csak a gázév fordulója előtt, a 210. és 180. nap
+                            között lehetséges.</p>
+                        <p><strong>10. Automatikus meghosszabbodás:</strong> Figyelem hiányában a szerződés határozatlan
+                            idejűvé válik kontroll nélkül.</p>
+                        <p><strong>11. ÁSZF egyoldalú módosítása:</strong> A kereskedő bármikor módosíthatja a
+                            feltételeket.</p>
+                        <p><strong>12. Rejtett költségek:</strong> Biankó felhatalmazás jövőbeni adók áthárítására.</p>
+                        <p><strong>13. Kapacitástúllépési díj:</strong> Rugalmatlan rendszer, büntetés a
+                            többletfogyasztásért.</p>
+                        <p><strong>14. Ügyfélminősítés:</strong> Egyoldalú negatív minősítési jog és előrefizetési
+                            kényszer lehetősége.</p>
+                        <p><strong>15. Értékaránytalanság kizárása:</strong> Lemondás a megtámadási jogról túlzott
+                            drágaság esetén.</p>
+                        <p><strong>16. Bonyolult árképzés:</strong> VTP Day-Ahead Index napi súlyozott átlaga
+                            (ellenőrizhetetlen).</p>
+                        <p><strong>17. Extrém piaci szabályok:</strong> Válsághelyzetben a kereskedőt védő elszámolási
+                            szabályok.</p>
+                        <p><strong>18. Nominálási felelősség:</strong> Adatszolgáltatási hibákból eredő pótdíjak
+                            áthárítása.</p>
+                        <p><strong>19. Adatkezelési felelősség:</strong> GDPR bírságok továbbhárítása a fogyasztóra.</p>
+                        <p><strong>20. Összegzés:</strong> Rendkívül aszimmetrikus szerződéstervezet, javasolt az
+                            elutasítás.</p>
+                    </div>
+                </div>
+
+                <!-- Analysis Summary -->
+                <div class="card" style="border-top: 4px solid var(--warning);">
+                    <h3 class="card-title" style="color: var(--warning) !important;"><i class="fas fa-shield-alt"></i>
+                        Szakmai Javaslat</h3>
+                    <div id="riskAnalysis" style="font-size: 0.95rem; line-height: 1.5;"></div>
+                </div>
+
+                <!-- Paraméterek -->
+                <div class="card">
+                    <h3 class="card-title">Kalkuláció</h3>
+                    <div class="input-group">
+                        <label>Éves fogyasztás (kWh)</label>
+                        <input type="number" id="annualIn" value="424383" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label>FIX ajánlati ár (<span class="unit-txt">Ft/kWh</span>)</label>
+                        <input type="number" id="fixPriceIn" value="23.5" step="0.1" oninput="calculate()">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="input-group">
+                            <label>EUR/HUF Árfolyam</label>
+                            <input type="range" id="eurRateRange" min="350" max="450" value="415" oninput="calculate()">
+                            <div style="text-align:right; font-weight:800; color:var(--primary)" id="eurRateVal">415
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Piaci elmozdulás (%)</label>
+                            <input type="range" id="marketShift" min="-30" max="30" value="0" oninput="calculate()">
+                            <div style="text-align:right; font-weight:800; color:var(--primary)" id="shiftVal">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trend Table -->
+                <div class="card" style="grid-column: span 2;">
+                    <h3 class="card-title">Piaci Trendelemzés (14 Hónap)</h3>
+                    <div class="table-container">
+                        <table id="detailsTable">
+                            <thead>
+                                <tr>
+                                    <th>Hónap</th>
+                                    <th>HUDEX EUR/MWh</th>
+                                    <th>Fix Ajánlat</th>
+                                    <th style="color:var(--accent-purple);">Indexált Becslés</th>
+                                    <th>Különbség</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Chart & Final Result -->
+                <div class="card" style="grid-column: span 2;">
+                    <h3 class="card-title">Vizuális Összehasonlítás</h3>
+                    <div id="savingsResult" class="summary-banner">
+                        <div id="savingsValue" style="font-size: 1.5rem;">Kalkuláció...</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="card" style="margin-top: 2rem;">
+                <h3 class="card-title" style="text-align: center; margin-bottom: 1rem;">Váltási és Felmondási Ütemterv
+                </h3>
+                <div class="timeline-container" id="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-progress" id="progressBar"></div>
+                    <div class="timeline-item active">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-blue">MA</span>
+                            <p>Piaci monitoring</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-rose">2026.03.05</span>
+                            <p>Lemondási ablak nyit</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-amber">2026.04.04</span>
+                            <p>Lemondási határnap</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-emerald">2026.10.01</span>
+                            <p>Szerződés fordulónap</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <audio id="podcast-audio"></audio>
     <script src="../../podcast_part1.js"></script>
-    <script>
-        // Check if part 1 loaded, if not fall back to one file if they named it like that
-        if (!window.podcast_part1) console.warn("Part 1 not found");
-    </script>
     <script src="../../podcast_part2.js"></script>
-
     <script src="../../js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('podcast-audio');
-            const playBtn = document.getElementById('podcast-play-btn');
-            const playIcon = playBtn.querySelector('i');
-            const progressBar = document.getElementById('podcast-progress-bar');
-            const progressContainer = document.getElementById('podcast-progress-container');
-            const timeDisplay = document.getElementById('podcast-time');
-            const volumeSlider = document.getElementById('podcast-volume');
+        const hudexSequence = [32.0, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1, 41.8, 36.2];
+        const months = ['25.Jan', '25.Feb', '25.Már', '25.Ápr', '25.Máj', '25.Jún', '25.Júl', '25.Aug', '25.Szept', '25.Okt', '25.Nov', '25.Dec', '26.Jan', '26.Feb'];
 
-            // Base64 to Blob Reassembly (Bypassing 25MB limit + Local File Protocol CORS)
-            const loadAudioChunks = () => {
-                timeDisplay.innerText = "Szinkronizálás...";
-                try {
-                    if (!window.podcast_part1 || !window.podcast_part2) {
-                        throw new Error("Missing audio chunks");
-                    }
+        let currentUnit = 'kWh';
+        let chartObj = null;
 
-                    const b64toBlob = (b64Data, contentType = 'audio/mp4') => {
-                        const byteCharacters = atob(b64Data.trim());
-                        const byteArrays = [];
-                        for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-                            const slice = byteCharacters.slice(offset, offset + 512);
-                            const byteNumbers = new Array(slice.length);
-                            for (let i = 0; i < slice.length; i++) {
-                                byteNumbers[i] = slice.charCodeAt(i);
+        function setUnit(unit) {
+            currentUnit = unit;
+            document.getElementById('btnKWh').classList.toggle('active', unit === 'kWh');
+            document.getElementById('btnMJ').classList.toggle('active', unit === 'MJ');
+            document.querySelectorAll('.unit-txt').forEach(el => el.innerText = unit === 'MJ' ? 'Ft/MJ' : 'Ft/kWh');
+            calculate();
+        }
+
+        function calculate() {
+            const annualIn = parseFloat(document.getElementById('annualIn').value) || 0;
+            const fixPriceIn = parseFloat(document.getElementById('fixPriceIn').value) || 0;
+            const eurRate = parseFloat(document.getElementById('eurRateRange').value);
+            document.getElementById('eurRateVal').innerText = eurRate;
+            const shift = 1 + (parseFloat(document.getElementById('marketShift').value) / 100);
+            document.getElementById('shiftVal').innerText = document.getElementById('marketShift').value;
+
+            const monthlyKWh = annualIn / 12;
+            let totalFix = monthlyKWh * 14 * (currentUnit === 'MJ' ? fixPriceIn * 3.6 : fixPriceIn);
+            let totalIndexed = 0;
+            const indexedRates = [];
+
+            const tbody = document.querySelector('#detailsTable tbody');
+            tbody.innerHTML = '';
+
+            hudexSequence.forEach((base, i) => {
+                const rate = ((base * shift + 20) * eurRate) / 1000; // 20 EUR margin
+                const displayRate = currentUnit === 'MJ' ? (rate / 3.6).toFixed(2) : rate.toFixed(2);
+                indexedRates.push(parseFloat(displayRate));
+                totalIndexed += monthlyKWh * rate;
+
+                const diff = (fixPriceIn - displayRate).toFixed(2);
+                const diffColor = diff > 0 ? 'color:green' : 'color:red';
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td style="font-weight:700">${months[i]}</td>
+                    <td>${base.toFixed(1)}</td>
+                    <td style="font-weight:700">${fixPriceIn.toFixed(2)}</td>
+                    <td style="color:var(--accent-purple); font-weight:800">${displayRate}</td>
+                    <td style="font-weight:800; ${diffColor}">${diff > 0 ? '+' : ''}${diff}</td>
+                `;
+            });
+
+            const savings = totalFix - totalIndexed;
+            const resEl = document.getElementById('savingsResult');
+            const valEl = document.getElementById('savingsValue');
+            const analysisEl = document.getElementById('riskAnalysis');
+
+            if (savings > 0) {
+                resEl.className = 'summary-banner winner-indexed';
+                valEl.innerHTML = `<i class="fas fa-piggy-bank"></i> ${Math.round(savings).toLocaleString()} Ft Megtakarítás`;
+                analysisEl.innerHTML = `<p style="color:#27ae60; font-weight:800; text-transform:uppercase">JAVASLAT: INDEXÁLT ÁRAZÁS</p><p>A jelenlegi piaci trendek és devizaárfolyam mellett az indexált megoldás kifizetődőbb. A gazdasági előny meghaladja a tőzsdei kockázatokat.</p>`;
+            } else {
+                resEl.className = 'summary-banner alert-danger';
+                valEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${Math.round(Math.abs(savings)).toLocaleString()} Ft Veszteség`;
+                analysisEl.innerHTML = `<p style="color:#c0392b; font-weight:800; text-transform:uppercase">JAVASLAT: FIX ÁRAZÁS</p><p>Az indexált ár várhatóan a fix ajánlati szint fölé emelkedik. Javasolt a fix díjas megállapodás rögzítése a következő időszakra.</p>`;
+            }
+
+            updateChart(indexedRates, fixPriceIn);
+            updateTimeline();
+        }
+
+        function updateChart(indexedData, fixValue) {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            const fixData = Array(14).fill(fixValue);
+
+            if (chartObj) {
+                chartObj.data.datasets[0].data = indexedData;
+                chartObj.data.datasets[1].data = fixData;
+                chartObj.update();
+            } else {
+                chartObj = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: 'Indexált Ár',
+                                data: indexedData,
+                                borderColor: '#7b61ff',
+                                backgroundColor: 'rgba(123, 97, 255, 0.1)',
+                                tension: 0.4,
+                                fill: true,
+                                borderWidth: 3
+                            },
+                            {
+                                label: 'Fix Ajánlat',
+                                data: fixData,
+                                borderColor: '#000000',
+                                borderDash: [5, 5],
+                                borderWidth: 4,
+                                tension: 0,
+                                fill: false,
+                                pointRadius: 0
                             }
-                            const byteArray = new Uint8Array(byteNumbers);
-                            byteArrays.push(byteArray);
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom', labels: { font: { weight: '800' } } } },
+                        scales: {
+                            y: { beginAtZero: false, grid: { color: 'rgba(0,0,0,0.05)' } },
+                            x: { grid: { display: false } }
                         }
-                        return new Blob(byteArrays, { type: contentType });
-                    };
-
-                    const blobHeader = b64toBlob(window.podcast_part1);
-                    const blobData = b64toBlob(window.podcast_part2);
-
-                    const fullBlob = new Blob([blobHeader, blobData], { type: 'audio/mp4' });
-                    audio.src = URL.createObjectURL(fullBlob);
-
-                    audio.oncanplay = () => {
-                        if (timeDisplay.innerText === "Szinkronizálás...") {
-                            timeDisplay.innerText = "0:00 / 0:00";
-                            startPlay();
-                        }
-                    };
-                } catch (err) {
-                    console.error("Audio reconstruction failed:", err);
-                    timeDisplay.innerText = "Hiba (Fájl hiányzik)";
-                }
-            };
-
-            // Auto-play logic
-            const startPlay = () => {
-                if (!audio.src || !audio.paused) return;
-                audio.playbackRate = 1.3;
-                audio.play().then(() => {
-                    playIcon.className = 'fas fa-pause';
-                }).catch(err => {
-                    console.log("Auto-play blocked, waiting for user...");
-                    if (timeDisplay.innerText === "0:00 / 0:00") {
-                        timeDisplay.innerText = "Kattints a lejátszáshoz";
                     }
                 });
-            };
+            }
+        }
 
-            // Initialize loading
-            loadAudioChunks();
+        function updateTimeline() {
+            const today = new Date();
+            const milestones = [
+                today,
+                new Date('2026-03-05'),
+                new Date('2026-04-04'),
+                new Date('2026-10-01')
+            ];
 
-            // Broad interaction listeners to unlock audio
-            const unlock = () => {
-                if (audio.paused && audio.src) {
-                    startPlay();
-                    ['click', 'mousedown', 'touchstart', 'keydown'].forEach(evt =>
-                        window.removeEventListener(evt, unlock)
-                    );
+            const items = document.querySelectorAll('.timeline-item');
+            let activeIdx = 0;
+            milestones.forEach((d, i) => {
+                if (today >= d) {
+                    items[i].classList.add('active');
+                    activeIdx = i;
                 }
-            };
-            ['click', 'mousedown', 'touchstart', 'keydown'].forEach(evt =>
-                window.addEventListener(evt, unlock)
-            );
+            });
 
-            playBtn.onclick = () => {
-                if (audio.paused) {
-                    audio.play();
-                    playIcon.className = 'fas fa-pause';
-                } else {
-                    audio.pause();
-                    playIcon.className = 'fas fa-play';
-                }
-            };
+            const progress = document.getElementById('progressBar');
+            progress.style.width = (activeIdx / (items.length - 1) * 100) + '%';
+        }
 
-            audio.ontimeupdate = () => {
-                const percent = (audio.currentTime / audio.duration) * 100;
-                progressBar.style.width = percent + '%';
+        // --- Optimized Audio Handling ---
+        const audio = document.getElementById('podcast-audio');
+        const playBtn = document.getElementById('podcast-play-btn');
+        const playIcon = playBtn.querySelector('i');
+        const progressBar = document.getElementById('podcast-progress-bar');
+        const progressContainer = document.getElementById('podcast-progress-container');
+        const timeDisplay = document.getElementById('podcast-time');
+        const volumeSlider = document.getElementById('podcast-volume');
 
-                // Display wall-clock time (content time / 1.3)
-                const realCurrent = audio.currentTime / 1.3;
-                const realTotal = audio.duration / 1.3;
+        const b64toBlob = async (b64) => {
+            const res = await fetch(`data:audio/mp4;base64,${b64}`);
+            return await res.blob();
+        };
 
-                const curM = Math.floor(realCurrent / 60);
-                const curS = Math.floor(realCurrent % 60).toString().padStart(2, '0');
-                const durM = Math.floor(realTotal / 60) || 0;
-                const durS = Math.floor(realTotal % 60 || 0).toString().padStart(2, '0');
+        const initAudio = async () => {
+            if (!window.podcast_part1 || !window.podcast_part2) return;
+            try {
+                timeDisplay.innerText = "Dekódolás...";
+                const [b1, b2] = await Promise.all([b64toBlob(window.podcast_part1), b64toBlob(window.podcast_part2)]);
+                const full = new Blob([b1, b2], { type: 'audio/mp4' });
+                audio.src = URL.createObjectURL(full);
+                audio.playbackRate = 1.3;
+                timeDisplay.innerText = "0:00 / 0:00";
 
-                timeDisplay.innerText = `${curM}:${curS} / ${durM}:${durS}`;
-            };
+                audio.play().then(() => playIcon.className = 'fas fa-pause').catch(() => {
+                    timeDisplay.innerText = "Indításra kész";
+                });
+            } catch (e) {
+                timeDisplay.innerText = "Audio Error";
+            }
+        };
 
-            progressContainer.onclick = (e) => {
-                const rect = progressContainer.getBoundingClientRect();
-                const pos = (e.clientX - rect.left) / rect.width;
-                audio.currentTime = pos * audio.duration;
-            };
+        playBtn.onclick = () => {
+            if (audio.paused) { audio.play(); playIcon.className = 'fas fa-pause'; }
+            else { audio.pause(); playIcon.className = 'fas fa-play'; }
+        };
 
-            volumeSlider.oninput = () => {
-                audio.volume = volumeSlider.value;
-            };
-        });
+        audio.ontimeupdate = () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = percent + '%';
+            const cur = Math.floor(audio.currentTime / 1.3 / 60) + ":" + Math.floor(audio.currentTime / 1.3 % 60).toString().padStart(2, '0');
+            const dur = Math.floor(audio.duration / 1.3 / 60) + ":" + Math.floor(audio.duration / 1.3 % 60).toString().padStart(2, '0');
+            timeDisplay.innerText = `${cur} / ${dur}`;
+        };
+
+        volumeSlider.oninput = () => audio.volume = volumeSlider.value;
+        progressContainer.onclick = (e) => audio.currentTime = ((e.clientX - progressContainer.getBoundingClientRect().left) / progressContainer.offsetWidth) * audio.duration;
+
+        calculate();
+        setTimeout(initAudio, 100);
     </script>
 </body>
 
