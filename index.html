@@ -60,7 +60,7 @@
                 <!-- Data injected by main.js -->
             </div>
         </header>
-        <div id="flashlight-overlay"></div>
+        <div id="flashlight-overlay" style="display: none;"></div>
 
         <div class="container py-3">
             <main class="dashboard-content fade-in">
@@ -118,14 +118,22 @@
 
                 <!-- News & Updates Bar (Ultra-Compact) -->
                 <div class="news-bar">
-                    <div class="news-item">
-                        <span class="news-badge">Hír</span>
-                        <span>V3.44: Bővült drónfotó galéria (86 kép) és 30 kérdéses Bolygó Kapitánya kvíz.</span>
+                    <div class="news-items-wrapper">
+                        <div class="news-item">
+                            <span class="news-badge">Hír</span>
+                            <span>V3.44: Bővült drónfotó galéria (86 kép) és 30 kérdéses Bolygó Kapitánya kvíz.</span>
+                        </div>
+                        <div style="opacity: 0.3; font-size: 0.8rem;">|</div>
+                        <div class="news-item">
+                            <span class="update-badge">Frissítés</span>
+                            <span>V3.44: Podcast támogatás gázelemzéshez, színes grafikon és belépési animációk.</span>
+                        </div>
                     </div>
-                    <div style="opacity: 0.3; font-size: 0.8rem;">|</div>
-                    <div class="news-item">
-                        <span class="update-badge">Frissítés</span>
-                        <span>V3.44: Podcast támogatás gázelemzéshez, színes grafikon és belépési animációk.</span>
+                    <div class="news-disclaimer"
+                        style="width: 100%; text-align: center; font-size: 0.65rem; color: var(--text-muted); opacity: 0.8; margin-top: 0.2rem; padding-top: 0.4rem; border-top: 1px dashed var(--border-color);">
+                        minden oldal tartalma generált és a pontatlan utasítások miatt téves infókat tartalmazhat. a
+                        validált tartalmú oldalak <i class="fas fa-check-circle" style="color: #4caf50;"></i> jelölést
+                        kaptak
                     </div>
                 </div>
 
