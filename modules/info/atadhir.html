@@ -19,13 +19,13 @@
 
         .news-item {
             padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.1));
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 20px;
             text-decoration: none !important;
-            color: inherit !important;
+            color: var(--text-color, #111) !important;
             transition: opacity 0.2s;
         }
 
@@ -38,13 +38,25 @@
             font-size: 1.1rem;
             line-height: 1.4;
             flex: 1;
+            color: var(--text-color, #111);
         }
 
         .news-date {
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-muted, #666);
             white-space: nowrap;
             font-family: 'Outfit';
+        }
+
+        /* Sötét mód explicit fallback */
+        [data-theme="dark"] .news-item,
+        [data-theme="dark"] .news-title,
+        [data-theme="dark"] .news-date {
+            color: #f0f0f0 !important;
+        }
+
+        [data-theme="dark"] .news-item {
+            border-bottom-color: rgba(255,255,255,0.1) !important;
         }
 
         .flash-header {
@@ -151,8 +163,12 @@
                                 const dateMatch = imgEl?.src?.match(/atadhir(\d{4})(\d{2})(\d{2})/);
                                 if (dateMatch) date = `${dateMatch[1]}.${dateMatch[2]}.${dateMatch[3]}.`;
 
+                                // Javított cím kinyerés: először próbálja a címszerű elemeket, különben a link szövegét
+                                const titleEl = item.querySelector('h2, h3, .title') || linkEl;
+                                const title = titleEl.innerText.trim();
+
                                 freshNews.push({
-                                    title: linkEl.innerText.trim(),
+                                    title: title,
                                     link: linkEl.href,
                                     date: date
                                 });
