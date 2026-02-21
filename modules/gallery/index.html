@@ -179,11 +179,11 @@
 
     <script src="../../js/main.js"></script>
     <script>
-        let currentIdx = 1;
-        const total = 86;
+        const uniqueIndices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 37, 39, 40, 41, 42, 43, 44, 47, 48, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 61, 63, 64, 67, 68, 69, 70, 71, 72, 73, 75, 77, 79, 81, 82, 83, 84, 85];
+        let currentArrayIdx = 0;
 
         function openLightbox(idx) {
-            currentIdx = idx;
+            currentArrayIdx = uniqueIndices.indexOf(idx);
             updateLightbox();
             document.getElementById('lightbox').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -195,16 +195,17 @@
         }
 
         function changeImage(dir) {
-            currentIdx += dir;
-            if (currentIdx > total) currentIdx = 1;
-            if (currentIdx < 1) currentIdx = total;
+            currentArrayIdx += dir;
+            if (currentArrayIdx >= uniqueIndices.length) currentArrayIdx = 0;
+            if (currentArrayIdx < 0) currentArrayIdx = uniqueIndices.length - 1;
             updateLightbox();
         }
 
         function updateLightbox() {
             const img = document.getElementById('lightbox-img');
-            img.src = `../../pictures/(${currentIdx}).jpg`;
-            document.getElementById('l-counter').innerText = `${currentIdx} / ${total}`;
+            const realIdx = uniqueIndices[currentArrayIdx];
+            img.src = `../../pictures/(${realIdx}).jpg`;
+            document.getElementById('l-counter').innerText = `${currentArrayIdx + 1} / ${uniqueIndices.length}`;
         }
 
         // Swipe support for mobile
@@ -238,7 +239,7 @@
 
         // Grid Injection
         const grid = document.getElementById('image-grid');
-        for (let i = 1; i <= total; i++) {
+        uniqueIndices.forEach(i => {
             const card = document.createElement('div');
             card.className = 'feature-card';
             card.style.padding = '0';
@@ -251,7 +252,7 @@
                 <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:white; padding:8px; font-size:0.75rem; text-align:center; font-weight:700;">Dron_Felvétel_(${i}).jpg</div>
             `;
             grid.appendChild(card);
-        }
+        });
     </script>
 </body>
 
