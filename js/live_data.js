@@ -1,9 +1,4 @@
 window.LIVE_DATA = {
-    rinya: {
-        val: 31,
-        time: "2026.02.15. 13:00",
-        timestamp: Date.now()
-    },
     news: [
         { title: "Farsangi kavalkád a nagyatádi általános iskolákban", date: "2026.02.10.", link: "https://www.atadhir.hu/hirek/nagyatad/farsangi-kavalkad-a-nagyatadi-altalanos-iskolakban/" },
         { title: "Megkezdték a fák metszését és a zöldterületek takarítását a városban", date: "2026.02.12.", link: "https://www.atadhir.hu/hirek/nagyatad/megkezdtek-a-fak-metszeset-es-a-zoldteruletek-takaritasat-a-varosban/" },
