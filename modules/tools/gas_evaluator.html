@@ -286,32 +286,12 @@
             font-size: 0.9rem;
         }
 
-        /* Auth Overlay consistency */
-        body:not(.authenticated) #app-main {
-            display: none !important;
-        }
-
-        body.authenticated #auth-overlay {
-            display: none !important;
-        }
+        /* Auth Overlay consistency removed */
     </style>
 </head>
 
 <body>
-    <div id="auth-overlay"
-        style="position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px);">
-        <div class="auth-box-modern">
-            <div class="auth-icon-wrapper"><i class="fas fa-shield-halved"></i></div>
-            <h2 class="auth-title">Gázajánlat Elemző</h2>
-            <p class="auth-subtitle">Biztonságos belépés</p>
-            <div class="auth-input-group">
-                <i class="fas fa-lock input-icon"></i>
-                <input type="password" id="auth-password-input" placeholder="Belépési kód...">
-            </div>
-            <button onclick="App.login()" class="auth-submit-btn"><span>Belépés</span><i
-                    class="fas fa-arrow-right"></i></button>
-        </div>
-    </div>
+    <!-- Auth Overlay Removed -->
 
     <div id="app-main">
         <header class="app-header">
