@@ -131,6 +131,7 @@
             color: white;
             font-size: 0.85rem;
             margin-bottom: 0;
+            z-index: 999;
         }
 
         .audio-bar .play-btn {
@@ -451,14 +452,15 @@
         </section>
     </div>
 
-    <audio id="bg-audio" loop>
+    <audio id="bg-audio" preload="auto" loop>
         <source src="atad_assets/bg_audio.m4a" type="audio/mp4">
     </audio>
 
-    <!-- JS Injected Video Parts (3 parts now for <25MB limit) -->
+    <!-- JS Injected Video Parts (4 parts now for even smaller files) -->
     <script src="atad_assets/video_part1.js"></script>
     <script src="atad_assets/video_part2.js"></script>
     <script src="atad_assets/video_part3.js"></script>
+    <script src="atad_assets/video_part4.js"></script>
 
     <script src="../../js/main.js"></script>
     <script>
@@ -503,18 +505,22 @@
                 const chunks = [];
                 if (window.VIDEO_PART_1) {
                     chunks.push(base64ToBlob(window.VIDEO_PART_1));
-                    progress.style.width = '33%';
+                    progress.style.width = '25%';
                 }
                 if (window.VIDEO_PART_2) {
                     chunks.push(base64ToBlob(window.VIDEO_PART_2));
-                    progress.style.width = '66%';
+                    progress.style.width = '50%';
                 }
                 if (window.VIDEO_PART_3) {
                     chunks.push(base64ToBlob(window.VIDEO_PART_3));
+                    progress.style.width = '75%';
+                }
+                if (window.VIDEO_PART_4) {
+                    chunks.push(base64ToBlob(window.VIDEO_PART_4));
                     progress.style.width = '100%';
                 }
 
-                if (chunks.length < 3) throw new Error("A videó darabjai hiányoznak. Kérlek ellenőrizd a fájlokat!");
+                if (chunks.length < 4) throw new Error("A videó darabjai hiányoznak. Kérlek ellenőrizd a fájlokat!");
 
                 const mergedBlob = new Blob(chunks, { type: 'video/mp4' });
                 video.src = URL.createObjectURL(mergedBlob);
@@ -581,12 +587,19 @@
                 overlay.style.opacity = '0';
                 overlay.style.pointerEvents = 'none';
                 setTimeout(() => overlay.style.display = 'none', 600);
-                audio.play().then(() => {
-                    playIcon.className = 'fas fa-pause';
-                }).catch(e => {
-                    console.warn("Audio blocked by browser");
-                    playIcon.className = 'fas fa-play';
-                });
+
+                // Explicitly set volume and try to play
+                audio.volume = volumeSlider.value;
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        playIcon.className = 'fas fa-pause';
+                    }).catch(e => {
+                        console.warn("Audio play blocked even after interaction:", e);
+                        playIcon.className = 'fas fa-play';
+                    });
+                }
             };
 
             // 5. Render Flashcards
