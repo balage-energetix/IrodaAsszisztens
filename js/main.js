@@ -166,6 +166,7 @@ const App = {
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university" style="color:#546e7a;"></i> Közigazgatás</a>
                         <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station" style="color:#ff9800;"></i> Energetika</a>
+                        <a href="${p}modules/ai_atad_villany_black.html" class="nav-dropdown-item"><i class="fas fa-bolt" style="color:#d4a853;"></i> Nagyatád Okoshálózat</a>
                         <a href="${p}modules/info/vibe_code.html" class="nav-dropdown-item"><i class="fas fa-terminal" style="color:#4caf50;"></i> Vájb Kód Bevezető</a>
                         <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard" style="color:#9e9e9e;"></i> Gyorsbillentyűk</a>
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling" style="color:#4caf50;"></i> Irodai Lean</a>
