@@ -780,7 +780,8 @@ h6 {
     cursor: pointer;
     font-weight: 700;
     font-size: 0.8rem;
-    color: var(--text-main);
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     transition: var(--transition);
     user-select: none;
     text-transform: uppercase;
@@ -2143,5 +2144,60 @@ h6 {
 
     100% {
         transform: scale(1);
+    }
+}
+
+/* --- NEO Beta Shiny Button --- */
+.neo-beta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 2.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+    background-size: 200% auto;
+    color: white !important;
+    text-decoration: none !important;
+    border-radius: 3rem;
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+    transition: all 0.4s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.neo-beta-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(99, 102, 241, 0.6);
+    background-position: right center;
+}
+
+.neo-beta-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent,
+            rgba(255, 255, 255, 0.3),
+            transparent);
+    transform: rotate(45deg);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
     }
 }
