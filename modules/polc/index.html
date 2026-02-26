@@ -1,416 +1,525 @@
 <!DOCTYPE html>
-<html lang="hu" data-theme="light">
+<html lang="hu" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POLC - Online OLC System - Irodai Asszisztens</title>
-
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>NEO - Nagyatád Energetikai Oldala</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Raleway:wght@300;400;600;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Core Styles -->
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --tree-width: 400px;
-            --sidebar-bg: rgba(255, 255, 255, 0.5);
-            --node-hover: rgba(52, 152, 219, 0.1);
-            --node-selected: rgba(52, 152, 219, 0.2);
-        }
-
-        /* User Request: Dark mode refinements */
-        [data-theme="dark"] .module-header h2 {
-            color: #ffffff !important;
-        }
-
-        [data-theme="dark"] .tree-column,
-        [data-theme="dark"] .invoice-column {
-            background: #2d2d2d !important;
-            border-color: #444444 !important;
-        }
-
-        [data-theme="dark"] .tree-node,
-        [data-theme="dark"] .node-label,
-        [data-theme="dark"] .premium-table td,
-        [data-theme="dark"] .premium-table th,
-        [data-theme="dark"] h4,
-        [data-theme="dark"] small,
-        [data-theme="dark"] span:not(.badge) {
-            color: #ffffff !important;
-        }
-
-        [data-theme="dark"] .tree-header,
-        [data-theme="dark"] .invoice-header {
-            background: #333333 !important;
-            border-bottom-color: #444444 !important;
-        }
-
-        [data-theme="dark"] .search-box input {
-            background: #444444 !important;
-            color: #ffffff !important;
-            border-color: #555555 !important;
-        }
-
-        [data-theme="dark"] .premium-table tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .polc-layout {
-            display: flex;
-            gap: 2rem;
-            height: calc(100vh - 200px);
-            min-height: 600px;
-        }
-
-        /* User Request: Remove the back button bar injected by main.js */
-        .sub-nav-bar {
-            display: none !important;
-        }
-
-        /* Tree Styles */
-        .tree-column {
-            width: var(--tree-width);
-            min-width: var(--tree-width);
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 1.5rem;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .tree-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        .search-box {
-            position: relative;
-            margin-top: 1rem;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border-radius: 0.75rem;
-            border: 1px solid var(--border-color);
-            background: white;
-            font-family: inherit;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        .search-box input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        #tree-view {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-        }
-
-        .tree-node {
-            margin-bottom: 0.25rem;
-        }
-
-        .node-content {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .node-content:hover {
-            background: var(--node-hover);
-        }
-
-        .node-content.selected {
-            background: var(--node-selected);
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        .node-icon {
-            margin-right: 0.75rem;
-            width: 1rem;
-            text-align: center;
-        }
-
-        .node-label {
-            font-size: 0.9rem;
-        }
-
-        .toggler {
-            width: 1.25rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-            color: var(--text-muted);
-        }
-
-        .node-children {
-            padding-left: 1.5rem;
-            margin-top: 0.25rem;
-            border-left: 1px dashed var(--border-color);
-            margin-left: 0.6rem;
-        }
-
-        .collapsed .node-children {
+        /* --- PDF Preview Modal System --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
             display: none;
-        }
-
-        /* Invoice Container Styles */
-        .invoice-column {
-            flex: 1;
-            background: white;
-            border-radius: 1.5rem;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .invoice-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #invoice-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1.5rem;
-        }
-
-        .premium-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .premium-table th {
-            background: var(--bg-main);
-            padding: 1rem;
-            text-align: left;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05rem;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .premium-table td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.9rem;
-            vertical-align: middle;
-        }
-
-        .premium-table tr:hover td {
-            background: rgba(248, 249, 250, 0.5);
-        }
-
-        .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 2rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
-
-        .badge-rhd {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-
-        .badge-energia {
-            background: #fff3e0;
-            color: #f57c00;
-        }
-
-        .badge-víz {
-            background: #e1f5fe;
-            color: #0288d1;
-        }
-
-        .badge-csatorna {
-            background: #f3e5f5;
-            color: #7b1fa2;
-        }
-
-        .badge-gas {
-            background: #fbe9e7;
-            color: #d84315;
-        }
-
-        .amount {
-            font-weight: 700;
-            color: var(--text-main);
-            text-align: right;
-        }
-
-        .btn-icon {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            transition: var(--transition);
-        }
-
-        .btn-icon:hover {
-            color: var(--primary);
-            background: var(--node-hover);
-        }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100%;
-            color: var(--text-muted);
-            text-align: center;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease;
+            z-index: 10000;
         }
 
-        .empty-state i {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        .module-header {
+        .modal-content {
+            width: 100%;
+            max-width: 1100px;
+            max-height: 92vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            animation: slideUp 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            background: rgba(26, 26, 26, 0.9);
+            border: 1px solid rgba(212, 168, 83, 0.2);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
             justify-content: space-between;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid rgba(212, 168, 83, 0.2);
+            background: rgba(212, 168, 83, 0.05);
         }
 
-        .back-btn {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 600;
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #d4a853;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            transition: var(--transition);
+            gap: 0.75rem;
         }
 
-        .back-btn:hover {
-            color: var(--primary);
+        .modal-body {
+            flex: 1;
+            background: #e0e0e0;
         }
 
-        .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+        [data-theme="light"] .modal-overlay {
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        [data-theme="light"] .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .modal-header h3 {
+            color: #8e6d2e;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
             }
 
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .confirm-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 68, 68, 0.1);
+            border: 2px solid #ff4444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff4444;
+            font-size: 2.2rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
+        }
+
+        .confirm-btn-cancel {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-color: var(--glass-border) !important;
+            color: var(--text-secondary) !important;
+        }
+
+        .confirm-btn-delete {
+            background: #ff4444 !important;
+            border-color: #ff4444 !important;
+            color: white !important;
+        }
+
+        .confirm-btn-delete:hover {
+            background: #cc0000 !important;
+            box-shadow: 0 0 25px rgba(255, 68, 68, 0.4) !important;
         }
     </style>
 </head>
 
-<body>
+<body class="dark-theme">
+    <div id="toast-container"></div>
+    <div class="grain-overlay"></div>
 
-    <header class="app-header">
-        <a href="../../index.html" class="logo">
-            <i class="fab fa-android"></i>
-            <span>IRODAI<br>ASSZISZTENS</span>
-        </a>
-        <div class="header-info">
-            <div id="global-clock" style="font-family: monospace; font-weight: 600; color: var(--text-muted);"></div>
-            <button onclick="App.toggleTheme()"
-                style="background: none; border: none; font-size: 1.25rem; color: var(--text-main); cursor: pointer;">
-                <i id="theme-toggle-icon" class="fas fa-moon"></i>
-            </button>
-        </div>
-    </header>
-
-    <main class="container py-5 fade-in">
-        <div class="module-header">
-            <h2 style="font-weight: 800;"><i class="fas fa-file-invoice-dollar text-primary me-2"></i>POLC - Fogyasztás
-                & Számlák</h2>
-        </div>
-
-        <div class="polc-layout">
-            <div class="tree-column">
-                <div class="tree-header">
-                    <h4 style="margin: 0; font-weight: 700;">Intézmények</h4>
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="tree-search" placeholder="Keresés az intézmények között...">
-                    </div>
+    <div class="app-shell">
+        <header class="main-header">
+            <div class="header-left">
+                <div class="branding" id="branding-logo">
+                    <i class="fas fa-microchip"></i>
+                    <span class="brand-neo">NEO</span>
                 </div>
-                <div id="tree-view">
-                    <!-- Tree content injected by JS -->
+                <div class="datetime-display">
+                    <span id="current-date"></span>
+                    <span class="separator">|</span>
+                    <span id="current-time"></span>
                 </div>
             </div>
 
-            <div class="invoice-column">
-                <div class="invoice-header">
-                    <div>
-                        <h4 style="margin: 0; font-weight: 700;">Számlalista</h4>
-                        <small id="selected-pod-title" style="color: var(--text-muted);">Válasszon egy fogyasztási
-                            helyet</small>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="#" class="nav-link active" data-view="dashboard"><i class="fas fa-chart-line"></i>
+                            Dashboard</a></li>
+                    <li><a href="#" class="nav-link" data-view="utility"><i class="fas fa-edit"></i> Rögzítés</a></li>
+                    <li><a href="#" class="nav-link" data-view="logs"><i class="fas fa-list-check"></i> Napló</a></li>
+                    <li><a href="#" class="nav-link" data-view="neo"><i class="fas fa-folder-tree"></i>
+                            Számlanyilvántartás (NEO)</a></li>
+                    <li><a href="#" class="nav-link" data-view="ocr"><i class="fas fa-microchip"></i> OCR Engine</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="header-right">
+                <div class="theme-switch-container">
+                    <button id="theme-toggle" class="btn-icon" title="Sötét/Világos mód">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="status-indicator">
+                    <div id="status-dot" class="status-dot online"></div>
+                    <span id="db-status">Online</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content-area">
+            <!-- DASHBOARD VIEW -->
+            <div id="dashboard-view" class="view-pane active">
+                <div class="view-header">
+                    <h2>Mission Control</h2>
+                    <p>Fogyasztási trendek és aktuális statisztikák</p>
+                </div>
+                <div class="dashboard-grid">
+                    <!-- GAS CARD -->
+                    <div class="glass-card stat-card" id="gas-trend">
+                        <div class="card-icon"><i class="fas fa-fire"></i></div>
+                        <div class="card-info">
+                            <h3>Gázfogyasztás</h3>
+                            <div class="main-stat">0 <small>m³</small></div>
+                            <div class="trend"><i class="fas fa-minus"></i> Nincs adat</div>
+                        </div>
                     </div>
-                    <div class="actions">
-                        <button class="btn btn-primary btn-sm" onclick="PolcApp.exportPDF()">
-                            <i class="fas fa-file-export"></i> Exportálás
+
+                    <!-- ELECTRICITY CARD -->
+                    <div class="glass-card stat-card" id="elec-trend">
+                        <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="card-info">
+                            <h3>Villamosenergia</h3>
+                            <div class="main-stat">0 <small>kWh</small></div>
+                            <div class="trend"><i class="fas fa-minus"></i> Nincs adat</div>
+                        </div>
+                    </div>
+
+                    <!-- WATER CARD -->
+                    <div class="glass-card stat-card" id="water-trend">
+                        <div class="card-icon" style="color:#2196f3;"><i class="fas fa-droplet"></i></div>
+                        <div class="card-info">
+                            <h3>Vízfogyasztás</h3>
+                            <div class="main-stat">0 <small>m³</small></div>
+                            <div class="trend"><i class="fas fa-minus"></i> Nincs adat</div>
+                        </div>
+                    </div>
+
+                    <!-- HEATING CARD -->
+                    <div class="glass-card stat-card" id="heat-trend">
+                        <div class="card-icon" style="color:#ff9800;"><i class="fas fa-temperature-high"></i></div>
+                        <div class="card-info">
+                            <h3>Távhő</h3>
+                            <div class="main-stat">0 <small>GJ</small></div>
+                            <div class="trend"><i class="fas fa-minus"></i> Nincs adat</div>
+                        </div>
+                    </div>
+
+                    <!-- ARCHIVE CARD -->
+                    <div class="glass-card stat-card" id="archive-stat">
+                        <div class="card-icon"><i class="fas fa-box-archive"></i></div>
+                        <div class="card-info">
+                            <h3>Iratarchívum</h3>
+                            <div class="main-stat" id="total-invoices">0</div>
+                            <div class="trend">Feldolgozott dokumentumok</div>
+                        </div>
+                    </div>
+
+                    <!-- SYSTEM CARD -->
+                    <div class="glass-card stat-card">
+                        <div class="card-icon"><i class="fas fa-shield-halved"></i></div>
+                        <div class="card-info">
+                            <h3>Rendszer Aktív</h3>
+                            <div class="main-stat" style="font-size: 1.5rem; margin-top: 0.5rem;">Online</div>
+                            <div class="trend">Minden modul üzemkész</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UTILITY VIEW -->
+            <div id="utility-view" class="view-pane reveal">
+                <div class="view-header">
+                    <h2>Közmű Nyilvántartó</h2>
+                    <p>Mérőállások rögzítése és fogyasztás követése</p>
+                </div>
+                <div class="utility-grid">
+                    <div class="glass-card form-section">
+                        <h3>Új Adatfelvétel</h3>
+                        <form id="entry-form">
+                            <div class="form-grid">
+                                <div class="input-group full">
+                                    <label>Típus</label>
+                                    <select id="record-type" class="premium-input" required>
+                                        <option value="electricity">Villamosenergia (kWh)</option>
+                                        <option value="gas">Földgáz (m³)</option>
+                                        <option value="water">Víz (m³)</option>
+                                        <option value="heating">Távhő (GJ)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Helyszín</label>
+                                    <input type="text" id="location-name" class="premium-input" placeholder="pl: Otthon"
+                                        list="location-list">
+                                    <datalist id="location-list"></datalist>
+                                </div>
+                                <div class="input-group">
+                                    <label>Dátum</label>
+                                    <input type="date" id="entry-date" class="premium-input">
+                                </div>
+                                <div class="input-group">
+                                    <label>Mérőállás</label>
+                                    <input type="number" step="0.01" id="meter-reading" class="premium-input"
+                                        placeholder="0.00">
+                                </div>
+                                <div class="input-group">
+                                    <label>Elszámolt</label>
+                                    <input type="number" step="0.01" id="last-settled" class="premium-input"
+                                        placeholder="Opcionális">
+                                </div>
+                                <div class="input-group full">
+                                    <label>Fénykép (opcionális)</label>
+                                    <div class="file-upload-wrapper">
+                                        <input type="file" id="meter-photo" accept="image/*">
+                                        <div class="file-upload-display">
+                                            <span id="meter-photo-label">Válassz egy képet...</span>
+                                            <i class="fas fa-camera upload-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-premium wide">
+                                <i class="fas fa-save"></i> Rögzítés
+                            </button>
+                            <div id="status-msg"></div>
+                        </form>
+                    </div>
+                    <div class="glass-card list-section">
+                        <div class="utility-controls">
+                            <h3>Bejegyzések</h3>
+                            <div class="utility-tabs" id="utility-type-tabs">
+                                <button class="tab-btn active" data-type="all">Összes</button>
+                                <button class="tab-btn" data-type="electricity">Villany</button>
+                                <button class="tab-btn" data-type="gas">Gáz</button>
+                                <button class="tab-btn" data-type="water">Víz</button>
+                                <button class="tab-btn" data-type="heating">Távhő</button>
+                            </div>
+                        </div>
+                        <div id="entries-container" class="custom-scrollbar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- READING LOGS VIEW -->
+            <div id="logs-view" class="view-pane reveal">
+                <div class="view-header">
+                    <h2>Fogyasztási Napló</h2>
+                    <p>Idősoros adatok és fogyasztási különbözetek (Delta)</p>
+                </div>
+                <div class="glass-card full-row">
+                    <div id="logs-container" class="custom-scrollbar" style="max-height: 60vh; overflow-y: auto;">
+                        <!-- Dynamic Logs Table -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEO VIEW -->
+            <div id="neo-view" class="view-pane reveal">
+                <div class="neo-container">
+                    <aside class="neo-sidebar glass-card">
+                        <div class="sidebar-header">
+                            <h3>Fogyasztási Helyek</h3>
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="neo-tree-search" placeholder="Keresés...">
+                            </div>
+                        </div>
+                        <div id="tree-view" class="custom-scrollbar"></div>
+                    </aside>
+                    <section class="neo-viewer glass-card">
+                        <div class="viewer-header">
+                            <div>
+                                <h2 id="active-node-title">Iratarchívum</h2>
+                                <p id="active-node-path">Válassz egy elemet</p>
+                            </div>
+                            <div class="header-actions">
+                                <button class="btn-premium secondary" id="add-invoice-btn" style="display:none;">
+                                    <i class="fas fa-plus"></i> Új Irat
+                                </button>
+                                <button class="btn-premium" onclick="App.exportCategorized()">
+                                    <i class="fas fa-file-export"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div id="neo-entry-container" class="glass-card neo-entry-form"
+                            style="display:none; margin-bottom: 2rem; border-color: var(--amber); overflow: visible;">
+                            <h3>Új Irat Rögzítése</h3>
+                            <form id="neo-invoice-form">
+                                <div class="form-grid">
+                                    <div class="input-group"><label>Szolgáltató</label><input type="text"
+                                            id="neo-provider" class="premium-input"></div>
+                                    <div class="input-group">
+                                        <label>Típus</label>
+                                        <select id="neo-type" class="premium-input">
+                                            <option value="SZÁMLA">SZÁMLA</option>
+                                            <option value="Földgáz Számla">Földgáz Számla</option>
+                                            <option value="Villamos Energia Számla">Villamos Energia Számla</option>
+                                            <option value="Víz Számla">Víz Számla</option>
+                                            <option value="Szerződés">Szerződés</option>
+                                            <option value="Jegyzőkönyv">Jegyzőkönyv</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group"><label>Sorszám</label><input type="text" id="neo-serial"
+                                            class="premium-input"></div>
+                                    <div class="input-group"><label>Kelt</label><input type="date" id="neo-date"
+                                            class="premium-input"></div>
+                                    <div class="input-group"><label>Összeg</label><input type="number" id="neo-amount"
+                                            class="premium-input"></div>
+                                    <div class="input-group">
+                                        <label>Pénznem</label>
+                                        <select id="neo-currency" class="premium-input">
+                                            <option value="Ft">Ft</option>
+                                            <option value="EUR">EUR</option>
+                                        </select>
+                                    </div>
+                                    <div class="input-group full">
+                                        <label>PDF Dokumentum</label>
+                                        <div class="file-upload-wrapper">
+                                            <input type="file" id="neo-file" accept=".pdf">
+                                            <div class="file-upload-display">
+                                                <span id="neo-file-label">Válassz egy PDF-et...</span>
+                                                <i class="fas fa-file-upload upload-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="neo-form-actions">
+                                    <button type="submit" class="btn-premium">Mentés</button>
+                                    <button type="button" id="cancel-neo-btn"
+                                        class="btn-premium secondary">Mégse</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="neo-header-actions"
+                            style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--glass-border);">
+                            <div class="search-box" style="flex: 1; position: relative;">
+                                <i class="fas fa-search"
+                                    style="position: absolute; left: 1rem; top: 50%; translate: 0 -50%; color: var(--text-muted); opacity: 0.6;"></i>
+                                <input type="text" id="invoice-search"
+                                    placeholder="Keresés az iratok között (dátum, sorszám, szolgáltató...)"
+                                    style="width: 100%; padding: 0.75rem 1rem 0.75rem 2.8rem; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); font-size: 0.85rem;"
+                                    oninput="filterInvoices()">
+                            </div>
+                        </div>
+                        <div id="neo-top-scroll" class="top-scroll-wrapper" style="margin-top: 2rem; display: none;">
+                            <div id="neo-top-scroll-content" class="top-scroll-content"></div>
+                        </div>
+                        <div id="invoice-list-container" style="margin-top: 1rem;" class="custom-scrollbar"></div>
+                    </section>
+                </div>
+            </div>
+            <!-- /NEO VIEW -->
+
+            <!-- OCR ENGINE VIEW -->
+            <div id="ocr-view" class="view-pane">
+                <div class="view-header">
+                    <h2>Intelligens Beolvasó</h2>
+                    <p>Számlák és dokumentumok automatikus feldolgozása – fő paraméterek kiolvasása</p>
+                </div>
+                <div class="utility-grid">
+                    <div class="glass-card ocr-upload-zone">
+                        <h3>Számla Beolvasása</h3>
+                        <div class="file-upload-wrapper ocr-drop-zone" style="height: 160px;">
+                            <input type="file" id="ocr-file" accept=".pdf,image/*,.txt" multiple>
+                            <div class="file-upload-display"
+                                style="height: 100%; flex-direction: column; justify-content: center; gap: 1rem;">
+                                <i class="fas fa-file-invoice upload-icon" style="font-size: 2.5rem;"></i>
+                                <span id="ocr-label">Húzza ide a PDF/kép fájl(oka)t vagy kattintson a tallózáshoz</span>
+                                <small style="font-size: 0.65rem; opacity: 0.5;">PDF, JPG, PNG, TIFF – több fájl
+                                    egyszerre</small>
+                            </div>
+                        </div>
+                        <button id="process-ocr-btn" class="btn-premium wide" style="margin-top: 1.5rem;">
+                            <i class="fas fa-brain"></i> Motor Indítása – Beolvasás
                         </button>
                     </div>
-                </div>
-                <div id="invoice-list">
-                    <div class="empty-state">
-                        <i class="fas fa-file-invoice"></i>
-                        <p>A számlák megtekintéséhez válasszon ki egy konkrét azonosítót (POD) a bal oldali listából.
-                        </p>
+                    <div class="glass-card recognition-results">
+                        <h3>Felismerési Eredmények (NER)</h3>
+                        <div id="ocr-results" class="empty-state ocr-results-area">
+                            Várjon a beolvasásra...
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <!-- Core Scripts -->
+        <footer class="main-footer">
+            NEO - Nagyatád Energetikai Oldala | &copy; 2026 | Nagyatád Municipality Edition
+        </footer>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="../../js/main.js"></script>
-    <script src="polc.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- PDF.js for text extraction from PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Tesseract.js for image OCR -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script src="neo.js"></script>
+    <script src="app.js"></script>
+    <!-- PDF PREVIEW MODAL -->
+    <div id="pdf-modal" class="modal-overlay" style="display:none; z-index: 9999;">
+        <div class="glass-card modal-content pdf-modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-pdf"></i> Irat Betekintő</h3>
+                <button class="btn-icon" onclick="closePdfModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" style="height: 92vh; padding: 0;">
+                <iframe id="pdf-viewer" src="" width="100%" height="100%"
+                    style="border:none; border-radius: 0 0 6px 6px;"></iframe>
+            </div>
+            <div class="modal-footer"
+                style="padding: 1rem; text-align: right; border-top: 1px solid var(--glass-border);">
+                <a id="pdf-download-link" href="#" download class="btn-premium"
+                    style="text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; font-size: 0.8rem;">
+                    <i class="fas fa-download"></i> Letöltés
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM CONFIRM MODAL -->
+    <div id="confirm-modal" class="modal-overlay" style="display:none; z-index: 10001;">
+        <div class="glass-card modal-content"
+            style="max-width: 450px; border-color: rgba(255, 68, 68, 0.3); box-shadow: 0 40px 100px rgba(0,0,0,0.8);">
+            <div class="modal-body" style="background:none; text-align: center; padding: 3rem 2rem 2.5rem;">
+                <div class="confirm-icon">
+                    <i class="fas fa-exclamation"></i>
+                </div>
+                <h3
+                    style="color: var(--mist-white); font-size: 1.4rem; margin-bottom: 1rem; font-family: var(--font-display);">
+                    Megerősítés</h3>
+                <p style="color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem;">Biztosan törölni szeretné
+                    ezt az iratot?<br><b>A folyamat nem visszavonható.</b></p>
+            </div>
+            <div class="modal-footer"
+                style="padding: 1.5rem; display: flex; gap: 1rem; justify-content: center; border-top: 1px solid var(--glass-border); background: rgba(0, 0, 0, 0.2);">
+                <button class="btn-premium confirm-btn-cancel" style="min-width: 100px;"
+                    id="confirm-cancel-btn">Mégse</button>
+                <button class="btn-premium confirm-btn-delete" style="min-width: 100px;"
+                    id="confirm-delete-btn">Törlés</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
