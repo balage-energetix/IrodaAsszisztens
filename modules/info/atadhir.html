@@ -19,7 +19,7 @@
 
         .news-item {
             padding: 15px 0;
-            border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.1));
+            border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -56,7 +56,7 @@
         }
 
         [data-theme="dark"] .news-item {
-            border-bottom-color: rgba(255,255,255,0.1) !important;
+            border-bottom-color: rgba(255, 255, 255, 0.1) !important;
         }
 
         .flash-header {
@@ -150,34 +150,42 @@
                 if (json.contents) {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(json.contents, 'text/html');
-                    const items = doc.querySelectorAll('.ultp-block-item');
+                    const items = doc.querySelectorAll('.ultp-block-item, .post-item, .entry-title');
 
                     if (items.length > 0) {
                         const freshNews = [];
                         items.forEach((item, i) => {
-                            if (i >= 12) return;
-                            const linkEl = item.querySelector('a');
-                            const imgEl = item.querySelector('img');
-                            if (linkEl) {
-                                let date = 'Friss';
+                            if (freshNews.length >= 10) return;
+
+                            const linkEl = item.querySelector('a') || (item.tagName === 'A' ? item : null);
+                            if (!linkEl) return;
+
+                            const titleEl = item.querySelector('h2, h3, .title, .entry-title') || linkEl;
+                            const title = titleEl.innerText.trim();
+                            const link = linkEl.href;
+
+                            if (!title || !link || link.includes('javascript:') || title.length < 5) return;
+
+                            let date = 'Friss';
+                            const dateEl = item.querySelector('.updated, .published, .date, .post-date');
+                            if (dateEl) {
+                                date = dateEl.innerText.trim();
+                            } else {
+                                const imgEl = item.querySelector('img');
                                 const dateMatch = imgEl?.src?.match(/atadhir(\d{4})(\d{2})(\d{2})/);
                                 if (dateMatch) date = `${dateMatch[1]}.${dateMatch[2]}.${dateMatch[3]}.`;
+                            }
 
-                                // Javított cím kinyerés: először próbálja a címszerű elemeket, különben a link szövegét
-                                const titleEl = item.querySelector('h2, h3, .title') || linkEl;
-                                const title = titleEl.innerText.trim();
-
-                                freshNews.push({
-                                    title: title,
-                                    link: linkEl.href,
-                                    date: date
-                                });
+                            if (!freshNews.some(n => n.link === link)) {
+                                freshNews.push({ title, link, date });
                             }
                         });
 
-                        renderNews(freshNews);
-                        localStorage.setItem('cache_atadhir_min', JSON.stringify({ data: freshNews, timestamp: Date.now() }));
-                        statusMsg.innerText = "Frissítve: " + new Date().toLocaleTimeString();
+                        if (freshNews.length > 0) {
+                            renderNews(freshNews);
+                            localStorage.setItem('cache_atadhir_min', JSON.stringify({ data: freshNews, timestamp: Date.now() }));
+                            statusMsg.innerText = "Frissítve: " + new Date().toLocaleTimeString();
+                        } else throw new Error("Nem található hír");
                     } else throw new Error("Üres válasz");
                 }
             } catch (e) {
