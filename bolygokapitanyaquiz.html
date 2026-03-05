@@ -315,260 +315,100 @@
     <script>
         const quizData = [
             {
-                question: "Melyik kémiai elem alkotja a gyémántot és a grafitot is?",
-                options: ["Szén", "Oxigén", "Nitrogén"],
+                question: "Miért kék az ég?",
+                options: [
+                    "Rayleigh-szórás (a rövidebb hullámhosszú kék fény jobban szóródik)",
+                    "Az óceánok színének tükröződése a légkörben",
+                    "A levegőben lévő vízpára kék színe miatt"
+                ],
                 correct: 0
             },
             {
-                question: "Melyik gáz a leggyakoribb a Föld légkörében (kb. 78%)?",
-                options: ["Oxigén", "Nitrogén", "Argon"],
+                question: "Miért zöld a fű?",
+                options: [
+                    "A fotoszintézis során keletkező metán miatt",
+                    "A klorofill elnyeli a vörös és kék fényt, a zöldet pedig visszaveri",
+                    "A növények nitrogén-tartalma okozza a zöld színt"
+                ],
                 correct: 1
             },
             {
-                question: "Melyik elem vegyjele az 'Au'?",
-                options: ["Ezüst", "Arany", "Alumínium"],
+                question: "Mi a tűz definíciója tudományos szempontból?",
+                options: [
+                    "Egy különleges gáz halmazállapotú elem",
+                    "Gyors oxidációs folyamat, amely hőt és fényt bocsát ki",
+                    "A súrlódás által gerjesztett molekuláris rezgés"
+                ],
                 correct: 1
             },
             {
-                question: "Melyik elem nélkülözhetetlen az emberi légzéshez?",
-                options: ["Oxigén", "Szén-dioxid", "Hidrogén"],
+                question: "Mi a levegő 3 leggyakoribb összetevője?",
+                options: [
+                    "Nitrogén (78%), Oxigén (21%), Argon (0,9%)",
+                    "Oxigén (50%), Nitrogén (40%), CO2 (10%)",
+                    "Hidrogén (60%), Oxigén (20%), Hélium (20%)"
+                ],
                 correct: 0
             },
             {
-                question: "Melyik a legkönnyebb elem a periódusos rendszerben?",
-                options: ["Hélium", "Hidrogén", "Lítium"],
+                question: "Hány százalék a levegőben a CO2 koncentrációja?",
+                options: [
+                    "Körülbelül 5 százalék",
+                    "Körülbelül 1 százalék",
+                    "Körülbelül 0,04 százalék"
+                ],
+                correct: 2
+            },
+            {
+                question: "Hány Celsius-fokon a legsűrűbb a víz?",
+                options: [
+                    "0 °C-on (fagyáspont)",
+                    "4 °C-on",
+                    "100 °C-on"
+                ],
                 correct: 1
             },
             {
-                question: "Melyik fém folyékony szobahőmérsékleten?",
-                options: ["Ólom", "Higany", "Gálium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem adja a vörösvértestek színét a hemoglobinban?",
-                options: ["Réz", "Vas", "Magnézium"],
-                correct: 1
-            },
-            {
-                question: "Melyik nemesgáz tölti ki a legtöbb fényreklám csövét?",
-                options: ["Neon", "Xenon", "Kripton"],
+                question: "Miért fehérek a felhők?",
+                options: [
+                    "A Mie-szórás miatt (minden hullámhosszt egyformán szórnak a vízcseppek)",
+                    "Mert a jégkristályok visszatükrözik a Nap fehér fényét",
+                    "Mert a felhőkben lévő vízgőz eleve fehér színű"
+                ],
                 correct: 0
             },
             {
-                question: "Mi a konyhasó egyik alkotóeleme a nátrium mellett?",
-                options: ["Fluor", "Klór", "Jód"],
+                question: "Mi tartja a bolygókat a Nap körüli pályájukon?",
+                options: [
+                    "A centrifugális erő és a mágneses vonzás egyensúlya",
+                    "A Nap tömege által okozott téridő-görbület (gravitáció)",
+                    "A világűrben lévő sötét anyag áramlása"
+                ],
                 correct: 1
             },
             {
-                question: "Melyik elem felelős a csontok keménységéért?",
-                options: ["Kálium", "Kalcium", "Foszfor"],
+                question: "Melyik gáz felelős a sztratoszférikus ózonréteg UV-szűrő képességéért?",
+                options: [
+                    "CO2 (Szén-dioxid)",
+                    "O3 (Trioxigén)",
+                    "CH4 (Metán)"
+                ],
                 correct: 1
             },
             {
-                question: "Melyik elem vegyjele az 'Ag'?",
-                options: ["Arany", "Ezüst", "Antimon"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem égése során keletkezik kizárólag víz?",
-                options: ["Szén", "Hidrogén", "Oxigén"],
-                correct: 1
-            },
-            {
-                question: "Melyik fém a legjobb elektromos vezető az alábbiak közül?",
-                options: ["Réz", "Ezüst", "Vas"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem adja a smaragd zöld színét?",
-                options: ["Króm", "Vas", "Réz"],
-                correct: 0
-            },
-            {
-                question: "Melyik elem a leggyakoribb a Világegyetemben?",
-                options: ["Hélium", "Hidrogén", "Szén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem a Nap energiatermelésének fő üzemanyaga?",
-                options: ["Hélium", "Hidrogén", "Vas"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem kapta a nevét a görög 'nap' (Héliosz) szóról?",
-                options: ["Hélium", "Szelén", "Tellúr"],
-                correct: 0
-            },
-            {
-                question: "Melyik elem okozza az acél rozsdásodását oxigén jelenlétében?",
-                options: ["Vas", "Nikkel", "Kobalt"],
-                correct: 0
-            },
-            {
-                question: "Melyik elemet használják fertőtlenítésre az uszodák vizében?",
-                options: ["Fluor", "Klór", "Bróm"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem a félvezetők alapanyaga a legtöbb számítógépes chipben?",
-                options: ["Germánium", "Szilícium", "Szén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele az 'Fe'?",
-                options: ["Vas", "Fluor", "Foszfor"],
-                correct: 0
-            },
-            {
-                question: "Melyik elem a legkeményebb természetes anyag alapja?",
-                options: ["Szilícium", "Szén", "Bór"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele az 'O'?",
-                options: ["Ozmium", "Oxigén", "Ólom"],
-                correct: 1
-            },
-            {
-                question: "Melyik gáz keletkezik a fotoszintézis melléktermékeként?",
-                options: ["Szén-dioxid", "Oxigén", "Nitrogén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Pb'?",
-                options: ["Platina", "Ólom", "Paládium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elemet hívják 'kénkőnek' is?",
-                options: ["Foszfor", "Kén", "Szelén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele az 'N'?",
-                options: ["Nátrium", "Nitrogén", "Neon"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem a levegőnél könnyebb, és léggömbök töltésére használják?",
-                options: ["Nitrogén", "Hélium", "Argon"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'K'?",
-                options: ["Kalcium", "Kálium", "Kripton"],
-                correct: 1
-            },
-            {
-                question: "Melyik fémből készül az alumíniumfólia?",
-                options: ["Ón", "Alumínium", "Ezüst"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Cu'?",
-                options: ["Kadmium", "Réz", "Curium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elemet használják a hőmérőkben (régebben)?",
-                options: ["Alkohol", "Higany", "Víz"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Na'?",
-                options: ["Neon", "Nátrium", "Nitrogén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'P'?",
-                options: ["Platina", "Foszfor", "Paládium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele az 'S'?",
-                options: ["Szelén", "Kén", "Szilícium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem adja a tüzijátékok sárga színét?",
-                options: ["Nátrium", "Stroncium", "Bárium"],
-                correct: 0
-            },
-            {
-                question: "Melyik elem adja a tüzijátékok vörös színét?",
-                options: ["Kálium", "Stroncium", "Réz"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem adja a tüzijátékok zöld színét?",
-                options: ["Bárium", "Réz", "Nátrium"],
-                correct: 0
-            },
-            {
-                question: "Melyik elemet hívják 'halogének' csoportjába tartozónak?",
-                options: ["Hélium", "Jód", "Argon"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'He'?",
-                options: ["Hidrogén", "Hélium", "Hafnium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Li'?",
-                options: ["Lantán", "Lítium", "Livermórium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elemet használják leggyakrabban modern mobiltelefon-akkumulátorokban?",
-                options: ["Nikkel", "Lítium", "Kadmium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele az 'Al'?",
-                options: ["Amerícium", "Alumínium", "Arany"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Mg'?",
-                options: ["Mangán", "Magnézium", "Molibdén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Zn'?",
-                options: ["Cirkónium", "Cink", "Ón"],
-                correct: 1
-            },
-            {
-                question: "Melyik elemet használják a ceruzabél készítéséhez az agyag mellett?",
-                options: ["Ólom", "Szén (grafit)", "Iridium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Sn'?",
-                options: ["Antimon", "Ón", "Szelén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Si'?",
-                options: ["Ezüst", "Szilícium", "Kén"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele a 'Pt'?",
-                options: ["Plutónium", "Platina", "Paládium"],
-                correct: 1
-            },
-            {
-                question: "Melyik elem vegyjele az 'I'?",
-                options: ["Irídium", "Jód", "Indium"],
+                question: "Miből áll főként a Föld belső magja?",
+                options: [
+                    "Folyékony kőzetből és szilikátokból",
+                    "Szilárd vasból és nikkelből",
+                    "Sűrű hidrogénből és héliumból"
+                ],
                 correct: 1
             }
         ];
 
-        let activeQuestions = [];
         let currentQuestion = 0;
         let score = 0;
+        let userAnswers = [];
 
         const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
@@ -587,18 +427,7 @@
         document.getElementById('start-btn').addEventListener('click', () => {
             startScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
-
-            const shuffledAll = [...quizData];
-            shuffle(shuffledAll);
-            activeQuestions = shuffledAll.slice(0, 50);
-
-            currentQuestion = 0;
-            score = 0;
-            correctCount = 0;
-            wrongCount = 0;
-            correctCountEl.innerText = '0';
-            wrongCountEl.innerText = '0';
-
+            shuffle(quizData); // Randomize question order on start
             loadQuestion();
         });
 
@@ -611,25 +440,27 @@
         }
 
         function loadQuestion() {
-            const data = activeQuestions[currentQuestion];
+            const data = quizData[currentQuestion];
             questionText.innerText = data.question;
-            questionNumber.innerText = `${currentQuestion + 1} / ${activeQuestions.length}`;
-            progressFill.style.width = `${((currentQuestion) / activeQuestions.length) * 100}%`;
+            questionNumber.innerText = `${currentQuestion + 1} / ${quizData.length}`;
+            progressFill.style.width = `${((currentQuestion) / quizData.length) * 100}%`;
 
             optionsContainer.innerHTML = '';
 
+            // Map options to objects that track their original position (to identify correctness after shuffle)
             const mappedOptions = data.options.map((opt, index) => ({
                 text: opt,
                 isCorrect: index === data.correct
             }));
 
+            // Shuffle the local copy of options
             shuffle(mappedOptions);
 
             mappedOptions.forEach((opt) => {
                 const div = document.createElement('div');
                 div.className = 'option';
                 div.innerText = opt.text;
-                div.dataset.isCorrect = opt.isCorrect;
+                div.dataset.isCorrect = opt.isCorrect; // Store correctness as a data attribute
                 div.addEventListener('click', () => selectOption(div, opt.isCorrect));
                 optionsContainer.appendChild(div);
             });
@@ -649,15 +480,18 @@
                 wrongCount++;
                 wrongCountEl.innerText = wrongCount;
 
+                // Also highlight the correct one
+                // Find the option that has data-is-correct="true"
                 const correctOptionElement = Array.from(options).find(opt => opt.dataset.isCorrect === 'true');
                 if (correctOptionElement) {
                     correctOptionElement.classList.add('correct');
                 }
             }
 
+
             setTimeout(() => {
                 currentQuestion++;
-                if (currentQuestion < activeQuestions.length) {
+                if (currentQuestion < quizData.length) {
                     loadQuestion();
                 } else {
                     showResult();
@@ -669,7 +503,7 @@
             quizScreen.classList.add('hidden');
             progressFill.style.width = '100%';
 
-            if (score === activeQuestions.length) {
+            if (score === quizData.length) {
                 successScreen.classList.remove('hidden');
                 initParticles();
             } else {
