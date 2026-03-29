@@ -196,12 +196,19 @@
                     const res = await fetch(proxyUrl);
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     
-                    const data = await res.json();
-                    // AllOrigins wraps in .contents, corsproxy.io might return direct if configured but here we expect text
-                    const html = data.contents || data; 
-                    if (html && typeof html === 'string' && html.length > 100) return html;
-                    
-                    throw new Error('Üres válasz');
+                    const text = await res.text();
+                    try {
+                        const data = JSON.parse(text);
+                        const html = data.contents || data;
+                        if (html && typeof html === 'string' && html.length > 100) return html;
+                        throw new Error('Érvénytelen válaszformátum');
+                    } catch (e) {
+                        // Not JSON, assume it's raw HTML from a simpler proxy like corsproxy.io
+                        if (text && text.length > 100 && (text.includes('<html') || text.includes('<td'))) {
+                            return text;
+                        }
+                        throw new Error('Üres vagy hibás válasz');
+                    }
                 } catch (e) {
                     console.warn(`Proxy failed: ${proxy}`, e);
                     lastErr = e;
