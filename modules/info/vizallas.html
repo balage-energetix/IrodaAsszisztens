@@ -110,7 +110,12 @@
 
     <script>
         const VIZUGY_URL = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
-        const PROXY = 'https://api.allorigins.win/get?url=';
+        
+        // Multiple proxies to try if one fails
+        const PROXIES = [
+            'https://api.allorigins.win/get?url=',
+            'https://corsproxy.io/?'
+        ];
 
         function setStatus(type, msg) {
             const el = document.getElementById('status');
@@ -128,6 +133,8 @@
 
         function drawChart(history) {
             const data = [...history].reverse();
+            if (data.length === 0) return;
+            
             const vals = data.map(r => r.val);
             const minV = Math.min(...vals) - 3;
             const maxV = Math.max(...vals) + 3;
@@ -169,12 +176,38 @@
                 const x = xOf(i), y = yOf(r.val);
                 svg += `<circle cx="${x}" cy="${y}" r="4" fill="#05070f" stroke="url(#lg)" stroke-width="2"/>`;
                 if (i % 2 === 0 || i === n-1) {
-                    const label = r.date.split(' ').pop();
+                    const parts = r.date.split(' ');
+                    const label = parts[parts.length - 1];
                     svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" fill="#64748b" font-size="9.5">${label}</text>`;
                 }
             });
 
             document.getElementById('chart').innerHTML = svg;
+        }
+
+        async function fetchWithRetry(url) {
+            let lastErr;
+            for (const proxy of PROXIES) {
+                try {
+                    const proxyUrl = proxy.includes('allorigins') 
+                        ? proxy + encodeURIComponent(url) + '&_ts=' + Date.now()
+                        : proxy + encodeURIComponent(url);
+                    
+                    const res = await fetch(proxyUrl);
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    
+                    const data = await res.json();
+                    // AllOrigins wraps in .contents, corsproxy.io might return direct if configured but here we expect text
+                    const html = data.contents || data; 
+                    if (html && typeof html === 'string' && html.length > 100) return html;
+                    
+                    throw new Error('Üres válasz');
+                } catch (e) {
+                    console.warn(`Proxy failed: ${proxy}`, e);
+                    lastErr = e;
+                }
+            }
+            throw lastErr;
         }
 
         async function load() {
@@ -185,10 +218,9 @@
             setStatus('', '<i class="bi bi-wifi spin"></i> Lekérés...');
 
             try {
-                const res = await fetch(PROXY + encodeURIComponent(VIZUGY_URL));
-                const json = await res.json();
-                const html = json.contents;
+                const html = await fetchWithRetry(VIZUGY_URL);
 
+                // Robust regex for parsing
                 const re = /<td[^>]*>\s*<strong>\s*(\d{4}\.\d{2}\.\d{2}\.\s+\d{2}:\d{2})\s*<\/strong>\s*<\/td>\s*<td[^>]*>\s*<strong>\s*(-?\d+)\s*<\/strong>/gi;
                 const rows = [];
                 let m;
@@ -197,7 +229,7 @@
                     if (rows.length >= 10) break;
                 }
 
-                if (!rows.length) throw new Error('Nem találhatók adatsorok.');
+                if (!rows.length) throw new Error('Nem található adatsor a válaszban.');
 
                 const curr = rows[0], prev = rows[1];
                 document.getElementById('val-curr').innerText = curr.val;
@@ -212,6 +244,7 @@
                 setStatus('ok', `<i class="bi bi-check-circle-fill"></i> Frissítve: ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`);
             } catch (err) {
                 setStatus('err', `<i class="bi bi-exclamation-triangle-fill"></i> Hiba: ${err.message}`);
+                console.error(err);
             } finally {
                 btn.disabled = false;
                 icon.className = 'bi bi-arrow-clockwise';
