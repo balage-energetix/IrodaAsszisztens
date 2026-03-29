@@ -1364,6 +1364,19 @@
       // Reset tbody
       b.innerHTML = '';
 
+      // 3. Calculate rowspans for grouped institutions
+      const rowspanMap = [];
+      let lastFennt = null, lastIdx = -1;
+      processedRows.forEach((pr, i) => {
+        if (pr.fennt !== lastFennt) {
+          lastFennt = pr.fennt;
+          lastIdx = i;
+          rowspanMap[i] = 1;
+        } else {
+          rowspanMap[lastIdx]++;
+        }
+      });
+
       processedRows.forEach((pr, i) => {
         const r = pr.data;
         const fennt = pr.fennt;
@@ -1371,23 +1384,18 @@
 
         // 1. Energiadíj (nettó)
         let ftm3;
-        if (type === 'I') {
-          ftm3 = (kwhPrice + 31.8) * 398 / 1000 * 10.5;
-        } else {
-          ftm3 = kwhPrice * 10.5;
-        }
+        if (type === 'I') ftm3 = (kwhPrice + 31.8) * 398 / 1000 * 10.5;
+        else ftm3 = kwhPrice * 10.5;
         const energyCost = m3 * ftm3;
 
         // 2. Teljesítmény díj
         const unitTelj = parseFloat(teljDijRaw) || 1508;
         let multiplier;
         const isRinyamenti = ['39N040000928000Z', '39N040008802000K', '39N0400206690009', '39N040095849000F'].includes(pod);
-
         if (pod === '39N040122571000O') multiplier = 40;
         else if (pod === '39N0400035270007') multiplier = 16;
         else if (isRinyamenti) multiplier = 4;
         else multiplier = unitTelj <= 1508 ? 4 : 8;
-        
         const rowTeljCost = multiplier * unitTelj;
 
         // 3. Forgalmi díj
@@ -1396,7 +1404,6 @@
 
         // 4. Sor összesen
         const rowTotal = energyCost + rowTeljCost + rowForgCost;
-
         totalM3 += m3;
         totalEnergyCost += energyCost;
         totalTeljCost += rowTeljCost;
@@ -1415,15 +1422,20 @@
         }
 
         const tr = document.createElement('tr');
-        // Zebra striping: every 2nd row is light grey
-        if (i % 2 === 1) tr.style.background = '#f2f2f2';
-        else tr.style.background = '#ffffff';
+        // Pepitás színezés: minden 2. sor halványszürke
+        const isGrey = i % 2 === 1;
+        tr.style.background = isGrey ? '#f2f2f2' : '#ffffff';
 
-        // Becsült éves díj
+        // Fenntartó cella kezelése (csak az első sorban a csoportból)
+        let fenntCell = "";
+        if (rowspanMap[i]) {
+          fenntCell = `<td class="wrap" rowspan="${rowspanMap[i]}" style="vertical-align:middle;font-size:8pt;font-weight:800;background:#f5f5f5;border-right:1px solid #ddd">${fennt}</td>`;
+        }
+
         const energyCell = m3 === 0 ? '<span style="font-weight:800;font-size:9pt; color:#c00">★ RHD</span>' : fmt(rowTotal);
 
         tr.innerHTML = `
-          <td class="wrap" style="vertical-align:middle;font-size:8pt;font-weight:700;background:rgba(0,0,0,0.03)">${fennt}</td>
+          ${fenntCell}
           <td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cim}</td>
           <td style="font-size:8pt;white-space:nowrap;text-align:center">${pod}</td>
           <td style="text-align:center;font-weight:700;font-size:9pt">${type === 'F' ? 'Fix' : 'Index'}</td>
