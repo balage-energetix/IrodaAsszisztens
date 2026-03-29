@@ -187,28 +187,37 @@
 
         async function fetchWithRetry(url) {
             let lastErr;
+            const now = Date.now();
             for (const proxy of PROXIES) {
                 try {
                     const proxyUrl = proxy.includes('allorigins') 
-                        ? proxy + encodeURIComponent(url) + '&_ts=' + Date.now()
+                        ? proxy + encodeURIComponent(url) + '&_ts=' + now
                         : proxy + encodeURIComponent(url);
                     
                     const res = await fetch(proxyUrl);
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     
                     const text = await res.text();
-                    try {
-                        const data = JSON.parse(text);
-                        const html = data.contents || data;
-                        if (html && typeof html === 'string' && html.length > 100) return html;
-                        throw new Error('Érvénytelen válaszformátum');
-                    } catch (e) {
-                        // Not JSON, assume it's raw HTML from a simpler proxy like corsproxy.io
-                        if (text && text.length > 100 && (text.includes('<html') || text.includes('<td'))) {
-                            return text;
+                    if (!text || text.length < 50) throw new Error('Túl rövid vagy üres válasz');
+
+                    // Dynamic detection: if it looks like JSON, parse it
+                    if (text.trim().startsWith('{')) {
+                        try {
+                            const data = JSON.parse(text);
+                            const html = data.contents || data;
+                            if (typeof html === 'string' && html.length > 100) return html;
+                        } catch (e) {
+                            console.warn('JSON parse failed, checking if text is HTML...', e);
                         }
-                        throw new Error('Üres vagy hibás válasz');
                     }
+
+                    // If not JSON or parse failed, check if it's usable HTML
+                    if (text.includes('<html') || text.includes('<td') || text.includes('strong')) {
+                        return text;
+                    }
+
+                    console.error('Unusable response (first 100 chars):', text.substring(0, 100));
+                    throw new Error('Ismeretlen válaszformátum');
                 } catch (e) {
                     console.warn(`Proxy failed: ${proxy}`, e);
                     lastErr = e;
