@@ -132,6 +132,14 @@
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 1.5rem; text-align: right;">Forrás:
                 Vizügy.hu</div>
         </div>
+
+        <!-- Embedded Full Rinya Widget -->
+        <div class="radar-card" style="max-width: 900px; margin-inline: auto; margin-top: 3rem; padding: 0; overflow: hidden; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(123, 97, 255, 0.2);">
+            <div style="padding: 1rem 1.5rem; background: var(--bg-card); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                <h4 style="font-family:'Outfit'; font-weight:800; margin:0;"><i class="fas fa-chart-line text-primary me-2"></i>Rinya Vízállás Monitor</h4>
+            </div>
+            <iframe src="../../../Vizallas_Widget/vizallas.html" style="width: 100%; height: 600px; border: none;" title="Rinya Vízállás Widget"></iframe>
+        </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -143,33 +151,14 @@
             if (csapImg) {
                 csapImg.src = `https://www.idokep.hu/automata/omme_nagyatad_csap1.png?t=${Date.now()}`;
             }
-            // Improved Rinya Fetch (AllOrigins Proxy)
-            const target = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
-            fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(target)}`)
-                .then(r => r.json())
-                .then(json => {
-                    const h = json.contents;
-                    const vMatch = h.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\)/);
-                    const tMatch = h.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\)/);
-
-                    if (vMatch) {
-                        const vals = vMatch[1].split(',');
-                        const lastVal = vals.pop().trim();
-                        if (lastVal && lastVal !== 'null') {
-                            document.getElementById('rinya-val').innerText = lastVal + " cm";
-                        }
-                    }
-                    if (tMatch) {
-                        const times = tMatch[1].split(',');
-                        const lastTime = times.pop().trim().replace(/['"]/g, "");
-                        if (lastTime) {
-                            document.getElementById('rinya-time').innerText = lastTime;
-                        }
-                    }
-                }).catch(e => {
-                    console.warn("Rinya error", e);
-                    document.getElementById('rinya-val').innerText = "Hiba";
-                });
+            // Simple Rinya Fetch (Oneshot)
+            fetch('https://corsproxy.org/?' + encodeURIComponent('https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor'))
+                .then(r => r.text()).then(h => {
+                    const v = h.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\)/)[1].split(',').pop().trim();
+                    const t = h.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\)/)[1].split(',').pop().trim().replace(/['"]/g, "");
+                    if (v && v !== 'null') document.getElementById('rinya-val').innerText = v + " cm";
+                    if (t) document.getElementById('rinya-time').innerText = t;
+                }).catch(e => console.warn("Rinya error", e));
         });
     </script>
 </body>
