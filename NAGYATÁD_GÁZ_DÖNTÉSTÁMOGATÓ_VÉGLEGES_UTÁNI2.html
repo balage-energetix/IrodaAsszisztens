@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Nagyatád Gázenergia Döntéstámogató 2026-2027</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+  <style>
+    /* Header specific adjustments */
+    body {
+        padding-top: 60px !important; /* Space for the fixed header */
+        background: #f0f0f0 !important;
+    }
+    .app-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f0f0;
+      color: #000;
+      line-height: 1.35;
+      padding: 10px;
+      font-weight: 600
+    }
+
+    .a3 {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 6mm;
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative
+    }
+
+    /* HEADER */
+    header.main-header {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      border-bottom: 3px solid #000;
+      padding-bottom: 10px
+    }
+
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      text-decoration: underline;
+      flex: 3;
+      line-height: 1.2;
+      align-self: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tri-box-compact {
+      border: 1.5px solid #000;
+      border-radius: 10px;
+      padding: 3px 5px;
+      background: #fdfdfd;
+      display: grid;
+      grid-template-columns: 1fr 30px 1.1fr 30px 1fr;
+      grid-template-rows: auto auto;
+      gap: 1px 0;
+      align-items: center;
+      justify-items: center;
+      flex: 0.7;
+      margin-left: 25px
+    }
+
+    .tri-eq {
+      font-size: 21pt;
+      font-weight: 900;
+      line-height: 1;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%
+    }
+
+    .tri-val-c {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      min-width: 65px;
+      text-align: center
+    }
+
+    .tri-val-c .big {
+      display: block;
+      font-size: 12pt;
+      font-weight: 800;
+      line-height: 1
+    }
+
+    .tri-val-c small {
+      font-size: 8pt;
+      text-transform: uppercase;
+      display: block
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 2px solid #000;
+      margin: 6px 0;
+      width: 100%;
+    }
+
+    /* CARDS & CONTAINERS */
+    .tri-arrow {
+      font-size: 10pt;
+      line-height: 1
+    }
+
+    .hdr-date {
+      text-align: center;
+      font-size: 12pt;
+      font-weight: 800;
+      border: 1.5px solid #000;
+      border-radius: 10px;
+      padding: 6px 12px;
+      background: #fff;
+      white-space: nowrap;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px
+    }
+
+    .export-btn {
+      font-size: 8pt;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      margin-top: 4px
+    }
+
+    .export-btn:hover {
+      background: #333
+    }
+
+    /* GRID */
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    /* CARDS */
+    .card {
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      background: #fff
+    }
+
+    .ct i {
+      font-size: 11pt
+    }
+
+    /* SVG CROP */
+    .svg-crop-container {
+      overflow: hidden;
+      border: 2px solid #000;
+      border-radius: 10px;
+      margin-top: 3px;
+    }
+
+    .svg-crop-container img {
+      margin-top: -132px;
+      margin-bottom: -42px;
+      display: block;
+      width: 100%;
+    }
+
+    /* TREE */
+    .tree {
+      border: 1px solid #000;
+      border-radius: 10px;
+      min-height: 162px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #fcfcfc
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      font-weight: 700;
+      border: 1.5px solid #000;
+      overflow: hidden;
+      table-layout: fixed
+    }
+
+    th {
+      background: #eee;
+      text-align: left;
+      padding: 4px 5px;
+      font-weight: 800;
+      border: 1px solid #000;
+      font-size: 10pt;
+      word-break: break-word;
+      white-space: normal
+    }
+
+    td {
+      padding: 3px 5px;
+      border: 1px solid #000;
+      font-size: 9.5pt;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle
+    }
+
+    td.wrap {
+      white-space: normal;
+      word-break: break-word
+    }
+
+    td.merged {
+      border-top: none !important;
+      background: #fafafa
+    }
+
+    /* RISKS */
+    .rl {
+      font-size: 8pt;
+      font-weight: 700;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px
+    }
+
+    .ri {
+      border: 1.2px solid #000;
+      border-radius: 10px;
+      padding: 8px;
+      background: #fff
+    }
+
+    .ri strong {
+      display: block;
+      text-decoration: underline;
+      margin-bottom: 3px;
+      font-size: 10.5pt
+    }
+
+    .rs {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #666;
+      margin-top: 4px;
+      font-style: italic;
+      display: block;
+      border-top: 1px dashed #bbb;
+      padding-top: 2px
+    }
+
+    .src {
+      font-size: 9pt;
+      font-weight: 700;
+      font-style: italic;
+      color: #666;
+      display: block;
+      margin-top: 2px;
+      border-top: 1px dashed #bbb;
+      padding-top: 2px
+    }
+
+    /* TIMELINE */
+    .timeline-wrap {
+      border: 1.2px solid #000;
+      border-radius: 12px;
+      padding: 12px 10px;
+      background: #fff
+    }
+
+    .timeline-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 11.5pt;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 6px;
+      text-transform: uppercase
+    }
+
+    .tl-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      margin-bottom: 10px
+    }
+
+    .tl-track {
+      position: absolute;
+      top: 18px;
+      left: 15px;
+      right: 15px;
+      height: 3px;
+      background: #000;
+      z-index: 0
+    }
+
+    .tp {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      background: #fff;
+      padding: 4px 2px;
+      border: 2.5px solid #000;
+      border-radius: 8px;
+      width: 125px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-weight: 800
+    }
+
+    .tp strong {
+      display: block;
+      font-size: 9.5pt;
+      margin-bottom: 0px
+    }
+
+    .tp span {
+      font-size: 8.5pt;
+      color: #000;
+      display: block;
+      line-height: 1.1
+    }
+
+    .tp.act {
+      background: #fff;
+      color: #000;
+      border: 2.5px solid #000
+    }
+
+    .tp.red {
+      border: 2px solid #2c3e50;
+      color: #2c3e50
+    }
+
+    .tl-branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .tl-branch {
+      border: 1px solid #000;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      background: #fafafa
+    }
+
+    .tl-branch h5 {
+      font-size: 10pt;
+      font-weight: 800;
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .tl-branch ol {
+      margin-left: 14px
+    }
+
+    .tl-branch li {
+      margin-bottom: 3px
+    }
+
+    /* ELECTRIC */
+    .elr {
+      display: flex;
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      background: #fffbe6;
+      padding: 8px;
+      align-items: center;
+      gap: 12px
+    }
+
+    .elt {
+      font-weight: 800;
+      font-size: 9pt;
+      text-transform: uppercase;
+      border-right: 2px solid #000;
+      padding-right: 10px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .eli {
+      font-size: 8pt;
+      font-weight: 700;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap
+    }
+
+    /* JOGI */
+    .jogi {
+      font-size: 8pt;
+      font-weight: 700;
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 10px;
+      background: #f8fff8
+    }
+
+    .jogi h4 {
+      font-size: 9.5pt;
+      font-weight: 800;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .jogi ol {
+      margin-left: 16px;
+      margin-bottom: 6px
+    }
+
+    .jogi li {
+      margin-bottom: 5px
+    }
+
+    /* .jogi .src shares .rs styling defined above */
+    /* STAT */
+    .stat {
+      font-size: 8pt;
+      font-weight: 700;
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 10px;
+      background: #f8f8ff
+    }
+
+    .stat h4 {
+      font-size: 9.5pt;
+      font-weight: 800;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .stat ol {
+      margin-left: 16px
+    }
+
+    .stat li {
+      margin-bottom: 5px
+    }
+
+    /* SUMMARY */
+    .summary-box {
+      background: #fdfdfd;
+      color: #000;
+      padding: 10px 15px;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 0;
+      align-items: center;
+      width: 100%;
+      margin: 0 auto;
+      border: 1.5px solid #000
+    }
+
+    .sb-item {
+      padding: 5px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-right: 1px solid #ccc
+    }
+
+    .sb-item:last-child {
+      border-right: none
+    }
+
+    .sb-item .val {
+      font-size: 8.8pt;
+      font-weight: 800;
+      color: #000;
+      margin-top: 2px
+    }
+
+    .sb-item .lbl {
+      font-size: 10pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #444;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px
+    }
+
+    /* SVG */
+    .svg-full {
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 6px;
+      text-align: center;
+      background: #fff
+    }
+
+    .svg-full img {
+      width: 100%;
+      height: auto
+    }
+
+    .svg-full p {
+      font-size: 8pt;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px
+    }
+
+    .svg-half {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    /* PROPOSALS */
+    .prop-box {
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fffef0;
+      font-size: 8pt;
+      font-weight: 700
+    }
+
+    .prop-box strong {
+      font-size: 9.5pt;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px
+    }
+
+    .prop-box ul {
+      margin-left: 16px
+    }
+
+    .prop-box li {
+      margin-bottom: 4px
+    }
+
+    /* Note */
+    .note-dashed {
+      font-size: 10.5pt;
+      font-weight: 700;
+      margin-top: 4px;
+      border: 1px dashed #000;
+      border-radius: 6px;
+      padding: 4px;
+      background: #fefefe;
+      color: #000
+    }
+
+    .pod-note {
+      font-size: 9pt;
+      font-style: italic;
+      color: #555;
+      display: block;
+      margin-top: 1px;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 5mm;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #fff;
+        font-size: 6.2pt
+      }
+
+      .a3 {
+        border: 1px solid #000;
+        border-radius: 0;
+        padding: 3mm;
+        max-width: none;
+        width: 100%;
+        height: auto;
+        min-height: 270mm;
+        overflow: visible;
+        background: #fff;
+        gap: 4px;
+        columns: 2;
+        column-gap: 10px;
+      }
+
+      .a3 > * {
+        break-inside: avoid;
+      }
+
+      .card,
+      .timeline-wrap,
+      .jogi,
+      .stat,
+      .prop-box,
+      .elr,
+      .svg-full {
+        page-break-inside: avoid;
+        border-width: 2px !important;
+        margin-bottom: 6px !important;
+      }
+
+      .export-btn,
+      .no-print {
+        display: none !important
+      }
+
+      table {
+        font-size: 6.5pt;
+        table-layout: fixed;
+        width: 100%
+      }
+
+      th,
+      td {
+        padding: 1px 2px;
+        white-space: normal !important;
+      }
+
+      .ct {
+        margin-bottom: 3px;
+        font-size: 8.2pt;
+        padding-bottom: 2px
+      }
+
+      .summary-box {
+        padding: 4px;
+        gap: 4px;
+        grid-template-columns: 1fr 1fr 1fr !important
+      }
+
+      .sb-item {
+        padding: 3px
+      }
+
+      .sb-item .val {
+        font-size: 10.5pt
+      }
+
+      .sb-item .lbl {
+        font-size: 7pt
+      }
+
+      .timeline-wrap {
+        padding: 6px 4px;
+        margin: 0
+      }
+
+      .tl-row {
+        margin-bottom: 3px
+      }
+
+      .tp {
+        min-width: 68px;
+        padding: 2px 4px
+      }
+
+      .tp strong {
+        font-size: 6.2pt
+      }
+
+      .tp span {
+        font-size: 6.5pt
+      }
+
+      .tl-branches {
+        grid-template-columns: 1fr !important;
+        gap: 6px
+      }
+
+      .tl-branch {
+        padding: 4px;
+        font-size: 6.5pt
+      }
+
+      .svg-full {
+        padding: 3px;
+        margin: 0
+      }
+
+      .svg-full p {
+        font-size: 6.5pt;
+        margin-bottom: 1px
+      }
+
+      .svg-full img {
+        max-height: 110px;
+        width: auto;
+        display: inline-block
+      }
+
+      .svg-half {
+        grid-template-columns: 1fr !important;
+        gap: 8px
+      }
+
+      .tree svg {
+        height: 120px !important
+      }
+
+      canvas#hudexChart {
+        max-height: 80px !important
+      }
+
+      .jogi,
+      .stat,
+      .prop-box,
+      .elr {
+        padding: 4px;
+        font-size: 6.8pt;
+        margin: 0
+      }
+
+      .jogi h4,
+      .stat h4,
+      .prop-box strong,
+      .timeline-title {
+        font-size: 8.2pt;
+        margin-bottom: 3px
+      }
+
+      .jogi ol,
+      .stat ol {
+        margin-bottom: 0
+      }
+
+      .src,
+      .rs {
+        font-size: 6.5pt;
+        color: #666;
+      }
+    }
+  </style>
+</head>
+
+<body class="authenticated">
+    <header class="app-header">
+        <a href="index.html" class="logo">
+            <i class="fab fa-android"></i>
+            <span>IRODAI<br>ASSZISZTENS</span>
+        </a>
+        <div class="header-info">
+            <!-- Data injected by main.js -->
+        </div>
+    </header>
+
+    <div id="app-main">
+        <div class="container py-3">
+  <div class="a3" id="mainDoc">
+
+    <header class="main-header" style="position:relative">
+      <div style="position:absolute; top:-15px; left:0; font-size:8.5pt; font-weight:900; color:#000">
+        <i class="bi bi-currency-exchange"></i> EUR/HUF: 398 Ft (2026.03.29.)
+      </div>
+      <h1>Nagyatád Város Önkormányzata – Gázenergia Ellátás Döntéstámogató 2026<small style="font-size:0.7em">.10.</small>–2027<small style="font-size:0.7em">.10.</small></h1>
+      <div class="tri-box-compact" style="grid-template-columns: 1fr auto auto auto 1fr">
+        <div style="grid-column:1/6;display:flex;justify-content:center;margin-bottom:2px">
+          <div class="tri-val-c"><span class="big" style="font-size:11pt">3,6&nbsp;MJ&nbsp;←&nbsp;1&nbsp;kWh</span></div>
+        </div>
+        <div class="tri-val-c" style="background:#fff"><small>Fűtőérték</small><span class="big">37,8</span><small>MJ/m³</small></div>
+        <div class="tri-eq">=</div>
+        <div style="font-size:9pt;font-weight:900;text-align:center;line-height:1.2;background:#eee;border-radius:4px;border:1px solid #ccc;padding:4px 6px;white-space:nowrap">(1&nbsp;m³)&nbsp;gáz</div>
+        <div class="tri-eq">=</div>
+        <div class="tri-val-c" style="background:#fff"><small>Energia</small><span class="big">10,5</span><small>kWh/m³</small></div>
+      </div>
+      <div class="hdr-date">
+        <div><i class="bi bi-calendar-event"></i> 2026. március 30. 14:00 Kiselőadó</div>
+      </div>
+    </header>
+
+    <!-- E2H KERESKEDŐI ÜZENET BLOKK -->
+    <div
+      style="border:1.5px dashed #000;border-radius:12px;padding:12px;background:#fff;display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:start">
+      <div style="border-right:2px solid #000;padding-right:15px;white-space:nowrap">
+        <div
+          style="font-family:'Outfit',sans-serif;font-weight:800;font-size:11pt;text-transform:uppercase;display:flex;align-items:center;gap:8px;color:#000">
+          <i class="bi bi-envelope-exclamation" style="font-size:13pt"></i> E2 Hungary Zrt.
+        </div>
+        <div style="font-size:9pt;font-weight:700;color:#000;margin-top:3px">Utolsó tájékoztató:<br>2026.03.16.</div>
+      </div>
+      <div style="font-size:10.5pt;font-weight:500;color:#000;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span
+            style="color:#c0392b;font-size:11pt;white-space:nowrap;flex-shrink:0;font-weight:900;text-decoration:underline">1. PIACI
+            HELYZET</span>
+          <span><strong>Iráni háború:</strong> <strong>globális energiaellátásra</strong> gyakorolt hatás,
+            <strong>kínálati oldal szűkülése</strong> — <strong>jelentős
+              áremelkedés</strong>, <strong>napon belüli kiugrásokkal</strong> mind gáz, mind áram piacán.</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span
+            style="color:#2980b9;font-size:11pt;white-space:nowrap;flex-shrink:0;font-weight:900;text-decoration:underline">AJÁNLATADÁS</span>
+          <span><strong>Újraárazás esetén</strong> <strong>lényegesen magasabb árszinteket</strong> látnak — ahol a
+            beszerzés
+            halasztható, az <strong>ajánlati folyamatokat felfüggesztették</strong>.</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span
+            style="color:#27ae60;font-size:11pt;white-space:nowrap;flex-shrink:0;font-weight:900;text-decoration:underline">JAVASLAT</span>
+          <span><strong>Háború elhúzódására</strong> számítanak — <strong>beforduló (felmondás hiányában meghosszabbodó)
+              szerződés fenntartása javasolt</strong>, ha a kereskedő tudja tartani az árat. Kollégáik dolgoznak az
+            <strong>ártartás biztosításán</strong> minden Ügyfelük számára.</span>
+        </div>
+      </div>
+    </div>
+
+
+    <div
+      style="border:2.5px solid #000;border-radius:12px;padding:12px;background:#fff;display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:start">
+      <div style="border-right:2px solid #000;padding-right:15px;white-space:nowrap">
+        <div
+          style="font-family:'Outfit',sans-serif;font-weight:800;font-size:11pt;text-transform:uppercase;display:flex;align-items:center;gap:8px">
+          <i class="bi bi-building-check"></i> MVM Next Zrt. Ajánlat
+        </div>
+        <div style="font-size:8.5pt;font-weight:700;color:#555;margin-top:3px">Határidő: 2026.03.30. 10:00-ig</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:10pt;font-weight:700">
+        <div style="border:2.5px solid #000;border-radius:8px;padding:8px;text-align:center;background:#fffff0">
+          <div style="font-size:10pt;font-weight:700;text-transform:uppercase">MVM Fix ár</div>
+          <div style="font-size:18pt;font-weight:800;line-height:1.1">&nbsp;</div>
+          <div style="font-size:9pt;color:#666">Ft/kWh &bull; kitöltendő</div>
+        </div>
+        <div style="border:1.5px solid #ccc;border-radius:8px;padding:8px;background:#fafafa">
+          <div style="font-size:9pt;font-weight:700">Szállítás:</div>
+          <div style="margin-top:4px;color:#333;line-height:1.4">________________</div>
+        </div>
+        <div style="border:1.5px solid #ccc;border-radius:8px;padding:8px;background:#fafafa">
+          <div style="font-size:9pt;font-weight:700">Egyéb feltételek:</div>
+          <div style="margin-top:4px;color:#333;line-height:1.6">
+            ________________<br>________________</div>
+        </div>
+      </div>
+    </div>
+
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <!-- 2. FOGYASZTÁSI STRUKTÚRA -->
+        <div class="card">
+          <h3 class="ct"><i class="bi bi-pie-chart"></i> 2. Fogyasztási Struktúra</h3>
+          <div class="tree">
+            <svg width="100%" height="190" viewBox="0 0 580 190">
+              <rect x="190" y="5" width="200" height="36" stroke="#000" rx="8" fill="#eee" />
+              <text x="290" y="28" text-anchor="middle" font-weight="900" font-size="12">ÖSSZESEN: <tspan fill="#000">107.079 m³ (32 db)</tspan></text>
+              <line x1="290" y1="41" x2="145" y2="82" stroke="#000" />
+              <text x="195" y="58" font-size="10" font-weight="900" fill="#c00">54%</text>
+              <line x1="290" y1="41" x2="435" y2="82" stroke="#000" />
+              <text x="375" y="58" font-size="10" font-weight="900" fill="#c00">46%</text>
+              <rect x="30" y="77" width="225" height="28" stroke="#000" rx="6" fill="#fdfdfd" />
+              <text x="142" y="96" text-anchor="middle" font-size="12" font-weight="900">INDEXÁLT (10 db): <tspan fill="#000">58.261 m³</tspan></text>
+              <text x="32" y="120" font-size="11.5" font-weight="800">• Sportcsarnok <tspan fill="#000">23.500 m³ (24,163 EUR/MWh)</tspan></text>
+              <text x="32" y="132" font-size="11.5" font-weight="800">• Bölcsőde <tspan fill="#000">14.832 m³ (29,6 EUR/MWh)</tspan></text>
+              <text x="32" y="144" font-size="11.5" font-weight="800">• Napsugár Óvoda <tspan fill="#000">6.739 m³ (36,682 EUR/MWh)</tspan></text>
+              <text x="32" y="156" font-size="11.5" font-weight="800">• VG Telephely <tspan fill="#000">6.659 m³</tspan> / Lábod <tspan fill="#000">5.509 m³</tspan></text>
+              <text x="32" y="168" font-size="11.5" font-weight="800">• Fürdők <tspan fill="#000">562 m³</tspan> / Idősek o. <tspan fill="#000">460 m³</tspan></text>
+              <rect x="320" y="77" width="225" height="28" stroke="#000" rx="6" fill="#fcfcfc" />
+              <text x="432" y="96" text-anchor="middle" font-size="12" font-weight="900">FIX ÁRAS (22 db): <tspan fill="#000">48.818 m³</tspan></text>
+              <text x="324" y="120" font-size="11.5" font-weight="800">• Nyitnikék Óvoda <tspan fill="#000">6.549 m³ (23,5 Ft/kWh)</tspan></text>
+              <text x="324" y="132" font-size="11.5" font-weight="800">• Százszorszép Óvoda <tspan fill="#000">5.617 m³</tspan> / Könyvtár <tspan fill="#000">5.300 m³</tspan></text>
+              <text x="324" y="144" font-size="11.5" font-weight="800">• Vásárcsarnok <tspan fill="#000">4.601 m³</tspan> / T25 <tspan fill="#000">4.160 m³</tspan></text>
+              <text x="324" y="156" font-size="11.5" font-weight="800">• Sportpálya <tspan fill="#000">3.500 m³</tspan> / Kult. Közp. <tspan fill="#000">3.400 m³</tspan></text>
+              <text x="324" y="168" font-size="11.5" font-weight="800">• Hétpettyes <tspan fill="#000">3.758 m³</tspan> / Csillagszem <tspan fill="#000">3.152 m³</tspan></text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 3. HUDEX GRAFIKON -->
+        <div class="card">
+          <h3 class="ct"><i class="bi bi-graph-up-arrow"></i> 3. HUDEX Indexált vs. Fix Ár (Ft/m³) <i class="bi bi-exclamation-triangle-fill" style="color:#2c3e50;font-size:13pt"></i></h3>
+          <div style="height:138px"><canvas id="hudexChart"></canvas></div>
+          <div class="note-dashed">
+            <strong>CEEGEX historikus (EUR/MWh):</strong> 2021: 45,42 | 2022: 121,75 | 2023: 41,51 | 2024: 34,34 | 2025:
+            32,75 | 2026 jan–feb: 39,00
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <!-- 4. KOCKÁZATOK -->
+        <div class="card">
+          <h3 class="ct"><i class="bi bi-shield-exclamation"></i> 4. Kritikus Szerződéses Kockázatok</h3>
+          <div class="rl">
+
+            <div class="ri"><strong>Utolsó ajánlattételi jog</strong>Vevő köteles az E2H-nak utolsó ajánlattételi jogot
+              biztosítani: a legjobb külső ajánlatot hitelt érdemlően ismertetni kell, az E2H 5 munkanapon belül
+              ráígérhet, s az automatikusan létrejön.<span class="rs">Fix áras szerz. 2. old. 2.5.9. pont — 12 hónapig
+                terheli a Vevőt</span></div>
+            <div class="ri"><strong>Indikatív ár közlése</strong>Kereskedő köteles 45 nappal korábban tájékoztatni az új
+              árról.<span class="rs">Fix áras szerz. 4. oldal 4.1. pont</span></div>
+            <div class="ri"><strong>Kereszt-felmondási kockázat</strong>Bármely más E2 szerződés 5 napos késedelme
+              esetén ez is
+              felmondható.<span class="rs">Mindkét szerz. 11.12. pont — Kapcsolt szerződések kockázata</span></div>
+            <div class="ri"><strong>Ajánlatkérési kötelezettség</strong>Energia-beruházás előtt kötelező ajánlatot kérni
+              az E2H-tól.<span class="rs">Mindkét szerz. 11.13. pont — Elővásárlási jellegű jog</span></div>
+            <div class="ri"><strong>Díjmódosítási jog</strong>Hatósági ár változásakor visszamenőleges módosítás joga
+              fennáll.<span class="rs">Mindkét szerz. 2.5. pont — Rendszerhas. díjak átterhelése</span></div>
+            <div class="ri"><strong>HUF/EUR kitettség</strong>Forintgyengülés azonnali áremelést okoz az indexált
+              helyeknél.<span class="rs">Pn = (VTP+F) × EUR/HUF (F=felár) — indexált szerz. 4. old.</span></div>
+            <div class="ri"><strong>Kapacitás-pótdíj</strong>130% feletti havi túlfogyasztásnál kötbér keletkezik.<span
+                class="rs">Üzletszabályzat 7.4. pont — indexált szerz. 5. old.</span></div>
+            <div class="ri"><strong>Tolerancia sáv</strong>Éves szintű ±10%-nál nagyobb eltérés esetén az Eladó pótdíjat érvényesíthet.<span
+                class="rs">Fix áras szerz. 3.2. pont — Mennyiségi tolerancia</span></div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- END GRID2 -->
+
+    <!-- 5. ÖSSZESÍTŐ - TELJES SZÉLESSÉGŰ EGYSÉGES BLOKK -->
+    <div style="margin-top:10px">
+      <div class="summary-box">
+        <div class="sb-item">
+          <div class="lbl">Fix áras becsült éves díj</div>
+          <div class="val" id="sumFix">—</div>
+          <div style="font-size:8.5pt;color:#999;font-weight:600">Ft nettó / év</div>
+        </div>
+        <div class="sb-item">
+          <div class="lbl">Indexált becsült éves díj</div>
+          <div class="val" id="sumIdx">—</div>
+          <div style="font-size:8.5pt;color:#999;font-weight:600">Ft nettó / év</div>
+          <div id="sumIdxPred" style="font-size:8.5pt;color:#fa8072;font-weight:800"></div>
+        </div>
+        <div class="sb-item">
+          <div class="lbl">Összes becsült éves díj</div>
+          <div class="val" id="sumAll" style="color:#c00">—</div>
+          <div style="font-size:8.8pt;color:#333;font-weight:600">Ft nettó (teljes portfólió)</div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="grid2">
+      <!-- 6. JOGI JAVASLATOK -->
+      <div class="jogi">
+        <h4><i class="bi bi-gavel"></i> 5. Jogi és Stratégiai Javaslatok (3 db)</h4>
+        <ol>
+          <li><strong>Határozatlanná válás kihasználása:</strong> A fix áras szerződések 2026.04.04-én határozatlan idejűvé válnak. Javasolt a szerződéseket <em>NEM felmondani</em>, hanem megvárni az E2H indikatív árközlőjét, amely alapján 15 napon belül döntés hozható a továbbiak felől. Bázisár: 23,5 Ft/kWh = <strong>246,75 Ft/m³</strong>.
+            <span class="src">Forrás: infók.txt 2. sor; E2H 2026.03.16-i levél (infók.txt 31. sor): „érdemes
+              fenntartani, amennyiben a kereskedő tudja tartani az árat"</span>
+          </li>
+          <li><strong>MVM ajánlat taktikai alkalmazása:</strong> Az MVM Next Zrt. hétfő 10:00-ig várt fix áras ajánlatát
+            — amennyiben kedvezőbb a jelenlegi 23,5 Ft/kWh-nál — hitelt érdemlő módon be kell mutatni az E2H felé, ezzel
+            aktiválva az „utolsó ajánlattételi jogot", amely lehetőséget ad az E2H-nak az árajánlat javítására.
+            <span class="src">Forrás: infók.txt 2–3. sor; Fix áras szerz. 2. old. 2.5.9. pont</span>
+          </li>
+          <li><strong>Felmondási nyilatkozat és új szerződéskötés:</strong> Ha az E2H indikatív árközlőjét nem fogadjuk el, a döntéstől számított <strong>15 napon belül</strong> felmondási nyilatkozatot kell benyújtani, és a következő gázévre új szerződést kell megkötni. A felmondó nyilatkozatot a <strong>6. sz. melléklet</strong> szerinti formában, cégszerű aláírással, tértivevényes postai küldeményként kell megküldeni a <strong>6701 Szeged, Pf. 1271</strong> referenciacímre. Az E2H ezt követően 5 munkanapon belül élhet utolsó ajánlattételi jogával; ha nem ígér kedvezőbb árat, azonnal megindítható az MVM Next Zrt. vagy más alternatív kereskedő kiválasztása, hogy a <strong>2026. október 1-jei gázév-kezdetre</strong> új szerződés hatályban legyen.
+            <span class="src">Forrás: infók.txt 110. sor — E2H tájékoztatás; Fix áras szerz. 3. old. 2.7. pont; 2.5.9. pont (utolsó ajánlattételi jog, 5 munkanap)</span>
+          </li>
+        </ol>
+      </div>
+      <div class="stat">
+        <h4><i class="bi bi-calculator"></i> Statisztikai Észrevételek és Összefüggések (3 db)</h4>
+        <ol>
+          <li><strong>Koncentrációs kockázat:</strong> A Sportcsarnok (30.000 m³) önmagában az indexált portfólió
+            46%-át, az összes fogyasztás 26%-át teszi ki. Egyetlen fogyasztási hely ilyen mértékű dominanciája az
+            árfolyam-érzékenységet fokozottan kitetté teszi.
+            <span class="src">Forrás: adatok.xlsx Munka2 — Sportcsarnok sor; adatok.xlsx Munka2 — Összesítés</span>
+          </li>
+          <li><strong>Fix vs. Indexált arány:</strong> A teljes portfólió 56%-a indexált, 44%-a fix áras. Az indexált
+            részarány magas; a 2022-es 121,75 EUR/MWh jellegű árkiugrás ismétlődése esetén az indexált helyek költsége
+            4–5-szörösére emelkedhet a fix bázishoz képest.
+            <span class="src">Forrás: CEEGEX historikus adatok — GÁZÁR KIÉRTÉKELŐ.html</span>
+          </li>
+          <li><strong>Üres ingatlanok terhe:</strong> A 32 fogyasztási helyből 7 db (22%) nulla vagy minimális
+            fogyasztással rendelkezik (üres üzletek, raktár, üres épületek), mégis alapdíjat generálnak. Javasolt ezek
+            kikapcsolásának vizsgálata a költségoptimalizálás érdekében.
+            <span class="src">Forrás: adatok.xlsx Munka2 — 0 m³ felhasználású sorok; Fix áras szerz. 2.5. pont —
+              Rendszerhas. alapdíjak</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- IDŐVONAL + ÁGAZATOK -->
+    <div class="timeline-wrap">
+      <div class="timeline-title"><i class="bi bi-diagram-3"></i> 6. Kritikus Idővonal – Döntési Forgatókönyvek</div>
+      <div class="tl-row">
+        <div class="tl-track"></div>
+        <div class="tp"><strong>03.28.</strong><span>Előkészítés</span></div>
+        <div class="tp act"><strong>03.30. 14:00</strong><span>Döntési Értekezlet</span></div>
+        <div class="tp red"><strong>03.30. 16:00</strong><span>Felmondási határidő</span></div>
+        <div class="tp"><strong>04.04.</strong><span>Fix &rarr; Határozatlan</span></div>
+        <div class="tp" style="border-style:dashed; border-color:#555; border-width:1.5px">
+          <span style="font-size:7.5pt; font-weight:700; line-height:1.1; color:#000; padding: 0 2px">Nyilatkozat elutasításról,<br>piacmonitorozás, új<br>szerződés megkötése</span>
+        </div>
+        <div class="tp"><strong>10.01.</strong><span>Gázév Start</span></div>
+      </div>
+      <div style="font-size:7.5pt;font-weight:700;text-align:center;margin:6px 0;color:#555">— Két lehetséges
+        forgatókönyv 04.04. után —</div>
+      <div class="tl-branches">
+        <div class="tl-branch" style="background:#f6fff6;border-color:#060">
+          <h5><i class="bi bi-check-circle" style="color:#060"></i> A forgatókönyv — Maradás (várunk)</h5>
+          <ol>
+            <li><strong>04.04.:</strong> Fix szerződések határozatlanná válnak, nem mondjuk fel.</li>
+            <li><strong>04–07. hó:</strong> E2H piaci tájékoztatót küld az árfenntartásról vagy emelésről.</li>
+            <li><strong>Árközlő érkezésekor:</strong> 15 napos döntési ablak – elfogadás vagy tárgyalás.</li>
+            <li>Ha nem fogadjuk el az árközlőt: a döntéstől számított <strong>15 napon belül</strong> a 6. sz. melléklet szerinti felmondási nyilatkozatot cégszerű aláírással, tértivevényes postai küldeményként kell megküldeni a <strong>6701 Szeged, Pf. 1271</strong> referenciacímre. Az E2H 5 munkanapon belül élhet utolsó ajánlattételi jogával — ha nem ajánl kedvezőbb árat, azonnal megindítható az alternatív kereskedő (MVM, Audax stb.) kiválasztása és az új szerződés megkötése a <strong>2026/27-es gázévre</strong>.</li>
+            <li><strong>10.01.:</strong> Portfólió folyamatos, gázév indul.</li>
+          </ol>
+        </div>
+        <div class="tl-branch" style="background:#fff6f6;border-color:#900">
+          <h5><i class="bi bi-x-circle" style="color:#900"></i> B forgatókönyv — Felmondás, mást keresünk</h5>
+          <ol>
+            <li><strong>03.30. 14–16:00:</strong> Döntés: felmondás + MVM ajánlat bemutatása E2H-nak.</li>
+            <li><strong>03.30. 16:00 előtt:</strong> Felmondó nyilatkozat postázása (6. melléklet, tértivevény).</li>
+            <li><strong>04.04.:</strong> Felmondás hatályos; E2H 5 munkanapon belül utolsó ajánlattal reagálhat.</li>
+            <li><strong>04.04–09.30.:</strong> Alternatív kereskedő (MVM, Audax stb.) kiválasztása.</li>
+            <li><strong>10.01.:</strong> Új szerződés hatályba lép, gázév indul.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+  <hr class="section-divider">
+  <!-- 9. STRATÉGIAI ELŐREJELZÉS ÉS PIACI PREDIKCIÓ -->
+  <div
+    style="border:2px solid #2c3e50; border-radius:12px; padding:12px; background:#f4f7f6; font-family:'Inter', sans-serif;">
+    <h3
+      style="font-family:'Outfit', sans-serif; font-weight:800; font-size:12pt; margin-bottom:8px; border-bottom:2px solid #2c3e50; padding-bottom:5px; text-transform:uppercase; color:#2c3e50; display:flex; align-items:center; gap:8px">
+      <i class="bi bi-crystal-ball"></i> 7. Stratégiai Előrejelzés és Piaci Predikció (2026–2027)
+    </h3>
+
+    <div
+      style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; font-size:10pt; font-weight:700; line-height:1.4; text-align:justify; color:#333">
+      <div>
+        <strong style="color:#c0392b; font-size:10.5pt; display:block; margin-bottom:6px">1. Globális kínálati sokk és
+          LNG-hiány</strong>
+        A 2026 tavaszi <strong style="font-weight:900; color:#000">közel-keleti eszkaláció</strong> és a <strong
+          style="font-weight:900; color:#000">Hormuzi-szoros lezárása</strong> kritikus kínálati szűkületet okozott. A
+        katari LNG-infrastruktúra sérülései miatt kiesett a világpiaci rugalmas kínálat jelentős része, ami a <strong style="font-weight:900; color:#000">tőzsdei árakat</strong> a <strong style="font-weight:900; color:#000">45–55 EUR/MWh</strong> sávba
+        kényszerítette. Előrejelzésünk szerint a 2026-os tárolófeltöltési időszakban a beszerzési árak <strong
+          style="font-weight:900; color:#000">40%-kal haladják meg a bázisévet</strong>; az <strong
+          style="font-weight:900; color:#000">ár-ingadozás tetőzése</strong> a következő 3–4 hónapban várható, amíg az
+        alternatív LNG-útvonalak stabilizálódnak.
+      </div>
+      <div>
+        <strong style="color:#2980b9; font-size:10.5pt; display:block; margin-bottom:6px">2. Az április 4-i fordulópont és
+          „befordulás”</strong>
+        A jelenlegi 23,5 Ft/kWh fix áras szerződés <strong style="font-weight:900; color:#000">április 4-i
+          határozatlanná válása</strong> taktikai ablakot nyit. Bár a kereskedő jelenleg az „ártartást” ígéri, a piaci
+        határidős jegyzések alapján egy <strong style="font-weight:900; color:#000">25–30%-os díjmódosítási
+          értesítő</strong> (árközlő) kiküldése a nyári hónapokra <strong style="font-weight:900; color:#000">80%-os
+          valószínűségű</strong>. A „beforduló” státusz fenntartása csak addig javasolt, amíg az árfolyam bázisszinten
+        marad; bármilyen emelés esetén <strong style="font-weight:900; color:#000">azonnali váltás szükséges</strong> a
+        hétfői MVM-ajánlat irányába.
+      </div>
+      <div>
+        <strong style="color:#27ae60; font-size:10.5pt; display:block; margin-bottom:6px">3. 2026/27-es javaslat:
+          „Védőhorgony” stratégia</strong>
+        A portfólió <strong style="font-weight:900; color:#000">indexált hányada (56%)</strong> jelenleg súlyosan kitett
+        a napon belüli árkiugrásoknak. Predikciónk szerint a piaci konszolidáció legkorábban 2027 végére várható, ezért
+        a 2026/27-as gázévre a <strong style="font-weight:900; color:#000">volumen legalább 80%-ának lefixálása
+          javasolt</strong>. Minden olyan ajánlat, amely <strong style="font-weight:900; color:#000">28 Ft/kWh alatt
+          marad</strong>, stratégiailag <strong style="font-weight:900; color:#000">„védőhorgonynak”</strong> tekintendő
+        a várhatóan 40–50 Ft/kWh-ig elszálló piaci spot árakkal szemben a következő 18 hónapos horizonton.
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. VILLAMOSENERGIA - LEGALUL -->
+  </div>
+
+  
+  <!-- RÖVIDÍTÉSEK MAGYARÁZATA -->
+  <div
+    style="margin-top:10px; padding:8px; border:1px solid #000; border-radius:10px; background:#f9f9f9; font-size:9.5pt; font-weight:700; line-height:1.2">
+    <div
+      style="font-size:8pt; border-bottom:1px solid #000; margin-bottom:5px; text-transform:uppercase; display:flex; align-items:center; gap:6px">
+      <i class="bi bi-info-circle"></i> * Technikai fogalmak és rövidítések magyarázata
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px 15px">
+      <div><strong>• TTF / HUDEX:</strong> Holland és magyar gáztőzsdei árindexek (Irányadó beszerzési árak).</div>
+      <div><strong>• POD:</strong> Mérési pont azonosító (Egyedi gázfogyasztási hely azonosító kód).</div>
+      <div><strong>• kWh / MWh:</strong> Kilowattóra / Megawattóra (1000 kWh). Az energia mennyisége.</div>
+      <div><strong>• RHD:</strong> Rendszerhasználati díjak (Gázszállítás és elosztás hatósági költsége).</div>
+      <div><strong>• LNG:</strong> Cseppfolyósított földgáz (Általában hajón érkező, nem vezetékes ellátás).</div>
+      <div><strong>• VTP:</strong> Virtuális kereskedési pont (Gáztőzsdei elszámolási és átadási központ).</div>
+      <div><strong>• Felár (S):</strong> Kereskedelmi árrés a gáztőzsdei nettó ár felett (S = Spread).</div>
+      <div><strong>• HUPX:</strong> Magyar áramtőzsdei árindex (Villamosenergia elszámoló ára).</div>
+      <div><strong>• Spot ár:</strong> Pillanatnyi, napi piaci elszámoló ár a gáztőzsdén.</div>
+      <div><strong>• Pn:</strong> Számított nettó egységár.<br><span style="color:#c00; font-size:9.5pt">Kalkuláció: (HUDEX: 33 + Felár: 31,8) × 398 / 1000 = 25,79 Ft/kWh</span></div>
+    </div>
+  </div>
+  <!-- NYITOTT KÉRDÉSEK ÉS JÖVŐBELI ÉSZREVÉTELEK -->
+  <div
+    style="border:1.2px solid #000; border-radius:12px; padding:12px; background:#fff8f0; font-family:'Inter', sans-serif;">
+    <h3
+      style="font-family:'Outfit', sans-serif; font-weight:800; font-size:11pt; margin-bottom:8px; border-bottom:1px solid #000; padding-bottom:5px; text-transform:uppercase; color:#000; display:flex; align-items:center; gap:8px">
+      <i class="bi bi-question-circle"></i> Nyitott stratégiai kérdések (Checklist)
+    </h3>
+
+    <div
+      style="display:grid; grid-template-columns:1fr 1fr; gap:8px 25px; font-size:10pt; font-weight:700; color:#333">
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Visszatekintés:</strong> Havi tényleges
+        költségkontroll (Gyógyfürdő mintájára)?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Átváltás:</strong> Indexált helyek (Sportcsarnok
+        stb.) átvihetők-e fix árasba?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Utolsó ajánlat:</strong> Felmondás esetén is él-e a
+        preferenciális jog?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Felmondási idő:</strong> 30 napos ablak megnyílik-e
+        04.04. után?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Jégpálya:</strong> Időben bekérésre került-e a
+        jégpálya ellátási ajánlata?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>0 m³ helyek:</strong> Kikapcsolási/szüneteltetési
+        opciók vizsgálata megtörtént?
+      </div>
+    </div>
+  </div>
+
+    <hr class="section-divider">
+    <!-- 8. ADATTÁBLA (MOVED) -->
+    <div class="card">
+      <h3 class="ct"><i class="bi bi-table"></i> 8. Teljes Fogyasztási Adattábla – Intézményi Bontás</h3>
+      <table id="dataTable">
+        <thead>
+          <tr style="text-align:center; white-space:nowrap">
+            <th style="width:10.5%;text-align:center">Fenntartó</th>
+            <th style="width:21%;text-align:center">Fogyasztási hely</th>
+            <th style="width:11%;text-align:center">POD azonosító</th>
+            <th style="width:5.5%;font-size:8pt;text-align:center">Típus<br><span
+                style="font-weight:600; font-size:7pt; display:block; white-space:nowrap;text-align:center">(Index-Fix)</span></th>
+            <th style="width:15%;font-size:8pt;text-align:center">E2 díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#000; display:block; white-space:nowrap;text-align:center">(Ft/kWh|EUR/MWh)</span></th>
+            <th style="width:5%;font-size:8pt;text-align:center">Ft/m³<br><span
+                style="font-size:6.8pt;font-weight:600;color:#000; display:block; white-space:nowrap;text-align:center">(Pn✕10.5)</span>
+            </th>
+            <th style="width:7%;font-size:8pt;text-align:center">Éves m³<br><span
+                style="font-size:6.8pt;font-weight:600;color:#000; display:block; white-space:nowrap;text-align:center">(Fogy.)</span>
+            </th>
+            <th style="width:7.5%;font-size:8pt;text-align:center">Becsült éves díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#000; display:block; white-space:nowrap;text-align:center">(Ft)</span></th>
+            <th style="width:9.5%;font-size:8pt;text-align:center">Telj. díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#000; display:block; white-space:nowrap;text-align:center">(Ft/kWh/h/év)</span>
+            </th>
+            <th style="width:8%;font-size:8pt;text-align:center">Forgalmi díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#000; display:block; white-space:nowrap;text-align:center">(m³ alapú)</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" style="overflow:hidden"></tbody>
+        <tfoot>
+          <tr style="background:#fff0f0;text-align:center">
+            <td colspan="5"
+              style="text-align:left;padding-left:10px;font-weight:900;font-size:13pt !important;color:#c00 !important">
+              MINDÖSSZESEN (nettó)</td>
+            <td></td>
+            <td id="totalM3" style="font-weight:900;font-size:11pt !important;color:#000 !important"></td>
+            <td id="totalCost" style="font-weight:950;font-size:9pt !important;color:#c00 !important"></td>
+            <td id="teljTotal" style="font-weight:900;font-size:11pt !important;color:#000 !important"></td>
+            <td id="forgTotal" style="font-weight:900;font-size:11pt !important;color:#000 !important"></td>
+          </tr>
+          <tr style="background:#f9f9f9">
+            <td colspan="9" style="font-size:9pt;font-style:italic;font-weight:700;color:#333;white-space:nowrap;overflow:visible">Továbbiak: Garzonház – MVM Egyetemes; Kossuth 1. – MVM Fix: 64,54 Ft/kWh; Park Hotel – Audax Kft.; Távhő – gázalapú&nbsp;&nbsp;|&nbsp;&nbsp;Áram: javarészt indexált, 8,76 Ft/kWh (Kereskedelmi árréssel 2027.12.31. napjáig)</td>
+          </tr>
+          <tr style="background:#f9f9f9">
+            <td colspan="9" style="font-size:10pt;font-style:italic;color:#666;white-space:normal">★ RHD: Rendszer
+              Használati Díjak — nulla fogyasztású mérőhelyek esetén a fix alapdíjak a szerződés alapján továbbra is
+              fennállnak.</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div><!-- /a3 -->
+
+  <script>
+    // POD-ok forrás-megjegyzése:
+    // 1. "Korányi S. u. 4. fszt. 3. üres" POD: 39N040064563000F (felhasználó közlése, 2026.03.28.)
+    //    Ár javítva: 32,4 Ft/kWh fix áras (szerzdős 2027.10.-ig érvényes)
+    // 2. "Napsugár Óvoda Alkotmány u. 15." POD: 39N0400035270007 (felhasználó közlése, 2026.03.28.)
+    //    A Munka2.csv 14. sorában és a full_merged_data.json-ban is hiányzott a POD,
+    //    valószínű ok: az IESZ-en belüli közvetett ellátás miatt nem volt az eredeti exportban.
+
+    const rows = [
+      // [fenntartó, cím, POD, típus, díjLabel, kwhPrice, m3, teljDij, forgDij, isCont]
+      ["Nagyatádi Polgármesteri Hivatal", "Polgármesteri Hivatal Baross Gábor u. 9.", "39N040026123000D", "I", "33,0 EUR/MWh", 33.0, 0, "", "", 0],
+      ["Nagyatád Város Önkormányzata", "Kiszely László u. 7. – Judo Club", "39N040056084000Q", "F", "23,5 Ft/kWh", 23.5, 1000, "1508", "3402", 0],
+      ["", "Korányi Sándor u. 4. fszt. 3. – üres üzlet", "39N040064563000F", "F", "32,4 Ft/kWh (27.10.-ig)", 32.4, 0, "", "", 1],
+      ["", "Korányi Sándor u. 4. fszt. 38. – üres üzlet", "39N040324822000T", "F", "23,5 Ft/kWh", 23.5, 50, "1508", "3402", 1],
+      ["", "Dél-Somogy Irodaház Baross Gábor u. 1.", "39N0400248260002", "I", "33,0 EUR/MWh", 33.0, 0, "", "", 1],
+      ["", "Kossuth Lajos u. 7. fsz. 2. – üres üzlet", "39N040070189000O", "F", "23,5 Ft/kWh", 23.5, 0, "1428", "3402", 1],
+      ["", "Klubház Korányi Sándor u. 5.", "39N040065864000I", "F", "23,5 Ft/kWh", 23.5, 0, "1580", "3402", 1],
+      ["Nagyatádi Fürdők", "Széchenyi tér 11.", "39N040002241000H", "I", "33,0 EUR/MWh", 33.0, 562, "", "", 0],
+      ["Nagyatádi Intézmények Ellátó Szervezete", "Árpád Iskola konyha – Árpád u. 2. A ép.", "39N040141151000H", "F", "23,5 Ft/kWh", 23.5, 2762, "1404", "3402", 0],
+      ["", "Kollégium konyha – Baross Gábor u. 10.", "39N0402976650001", "F", "23,5 Ft/kWh", 23.5, 3849, "1434", "3402", 1],
+      ["", "Napsugár Óvoda – Alkotmány u. 15.", "39N0400035270007", "I", "33,0 EUR/MWh", 33.0, 6739, "", "", 1],
+      ["", "Csillagszem Óvoda – Aradi u. 1.", "39N040003846000G", "F", "23,5 Ft/kWh", 23.5, 3152, "1922", "3402", 1],
+      ["", "Hétpettyes Óvoda – Honvéd u. 76.", "39N040037097000F", "F", "23,5 Ft/kWh", 23.5, 3758, "1782", "3402", 1],
+      ["", "Százszorszép Óvoda – Rákóczi u. 41.", "39N040008699000J", "F", "23,5 Ft/kWh", 23.5, 5617, "2426", "3402", 1],
+      ["", "Nyitnikék Óvoda – Rozsnyói u. 2. A ép.", "39N040010744000B", "F", "23,5 Ft/kWh", 23.5, 6549, "2008", "3402", 1],
+      ["Nagyatádi Kulturális és Sport Központ", "Kulturális Központ – Nagy Imre tér 1.", "39N040334186000D", "F", "23,5 Ft/kWh", 23.5, 3400, "", "", 0],
+      ["", "Sportcsarnok – Szent István tér 2.", "39N040122571000O", "I", "33,0 EUR/MWh", 33.0, 23500, "", "", 1],
+      ["", "Mudin Imre Sportpálya – Kiszely László u. 42.", "39N040058790000C", "F", "23,5 Ft/kWh", 23.5, 3500, "", "", 1],
+      ["", "Szoborpark és Látogatóközpont – Göröndi u.", "39N040302666000X", "F", "23,5 Ft/kWh", 23.5, 0, "", "", 1],
+      ["", "Turisztikai Központ – Széchenyi tér 7.", "39N040001215000N", "F", "23,5 Ft/kWh", 23.5, 720, "", "", 1],
+      ["", "Könyvtár – Széchenyi tér 13–14.", "39N040093550000H", "F", "23,5 Ft/kWh", 23.5, 5300, "", "", 1],
+      ["", "Múzeum – Széchenyi tér 2.", "39N0400008890001", "F", "23,5 Ft/kWh", 23.5, 0, "", "", 1],
+      ["", "Ifjúsági Klub – Korányi Sándor u. 2. fsz. 2.", "39N040064139000V", "F", "23,5 Ft/kWh", 23.5, 400, "1508", "3402", 1],
+      ["", "Somogyszobi u. 15/2. – Raktár", "39N040104150000Y", "F", "23,5 Ft/kWh", 23.5, 0, "1508", "3402", 1],
+      ["", "T25 – Széchenyi tér 25.", "39N040003151000A", "F", "23,5 Ft/kWh", 23.5, 4160, "1556", "3402", 1],
+      ["Városgondnokság", "Vg. Telephely – Szabadság u. 17.", "39N0401059250000", "I", "33,0 EUR/MWh", 33.0, 6659, "", "", 0],
+      ["", "Vásárcsarnok – Piac tér 3. A ép.", "39N040006274000Q", "F", "23,5 Ft/kWh", 23.5, 4601, "1924", "3402", 1],
+      ["", "Közfoglalkoztatási Telephely – Kiszely L. u. 15.", "39N040058152000V", "F", "23,5 Ft/kWh", 23.5, 0, "1325", "3402", 1],
+      ["Rinyamenti Szociális Szolgáltató Központ", "Idősek Otthona – Széchenyi tér 3. A ép.", "39N040000928000Z", "I", "33,0 EUR/MWh", 33.0, 460, "12312", "", 0],
+      ["", "Rákóczi u. 43. – üres épület", "39N040008802000K", "I", "33,0 EUR/MWh", 33.0, 0, "12312", "", 1],
+      ["", "Bölcsőde – Árpád u. 18.", "39N0400206690009", "I", "33,0 EUR/MWh", 33.0, 14832, "12312", "", 1],
+      ["", "Lábod, Kossuth u. 43.", "39N040095849000F", "I", "33,0 EUR/MWh", 33.0, 5509, "12312", "", 1]
+    ];
+
+    function fmt(n) { return new Intl.NumberFormat('hu-HU').format(Math.round(n)) }
+
+    function fillTable() {
+      const b = document.getElementById('tableBody');
+      const CAPACITY = 8;
+      let totalM3 = 0, totalEnergyCost = 0, totalTeljCost = 0, totalForgCost = 0;
+      let fixAllCost = 0, idxAllCost = 0;
+      let fixEnergyCost = 0, idxEnergyCost = 0;
+      let fixForgCost = 0, idxForgCost = 0;
+      let idxM3 = 0, idxBaseEnergy = 0;
+
+      // Rowspan számlálás fenntartónként
+      const rowspan = {};
+      let currentStart = -1;
+      rows.forEach((r, i) => {
+        if (r[0]) { currentStart = i; rowspan[i] = 1; }
+        else { rowspan[currentStart] = (rowspan[currentStart] || 1) + 1; }
+      });
+
+      let fenntRendered = {};
+      rows.forEach((r, i) => {
+        const [fennt, cim, pod, type, dijLabel, kwhPrice, m3, teljDijRaw, forgDijRaw, isCont] = r;
+
+        // 1. Energiadíj (nettó) - EUR/MWh bevitel esetén váltószámok alkalmazása
+        let ftm3;
+        if (type === 'I') {
+          // Indexált formula: (HUDEX EUR/MWh + 31,8 Spread) * 398 EURHUF / 1000 * 10,5 
+          ftm3 = (kwhPrice + 31.8) * 398 / 1000 * 10.5;
+        } else {
+          // Fix formula: Ft/kWh * 10,5
+          ftm3 = kwhPrice * 10.5;
+        }
+        const energyCost = m3 * ftm3;
+
+        // 2. Teljesítmény díj (nettó éves) - Alapszabály: ≤1508→4×, >1508→8×
+        //    Kivétel: Sportcsarnok → 40×, Napsugár Óvoda → 16×, Rinyamenti int. → 4×
+        const unitTelj = parseFloat(teljDijRaw) || 1508;
+        let multiplier;
+        const isRinyamenti = ['39N040000928000Z', '39N040008802000K', '39N0400206690009', '39N040095849000F'].includes(pod);
+
+        if (pod === '39N040122571000O') {
+          multiplier = 40;
+        } else if (pod === '39N0400035270007') {
+          multiplier = 16;
+        } else if (isRinyamenti) {
+          multiplier = 4;
+        } else {
+          multiplier = unitTelj <= 1508 ? 4 : 8;
+        }
+        const rowTeljCost = multiplier * unitTelj;
+
+        // 3. Forgalmi díj (nettó éves) - m3 alapú, alapértelmezett 3402 Ft/MWh
+        const unitForg = parseFloat(forgDijRaw) || 3402;
+        const rowForgCost = (m3 * 10.5 / 1000) * unitForg;
+
+        // 4. Sor összesen (energia + telj + forg)
+        const rowTotal = energyCost + rowTeljCost + rowForgCost;
+
+        totalM3 += m3;
+        totalEnergyCost += energyCost;
+        totalTeljCost += rowTeljCost;
+        totalForgCost += rowForgCost;
+
+        if (type === 'F') {
+          fixAllCost += rowTotal;
+          fixEnergyCost += energyCost;
+          fixForgCost += rowForgCost;
+        } else {
+          // Indexált helyeknél a részösszegbe nem számoljuk bele a forgalmi díjat 
+          // a felhasználó kérése alapján (konzisztencia a végösszeggel)
+          idxAllCost += (energyCost + rowTeljCost); 
+          idxEnergyCost += energyCost;
+          idxM3 += m3;
+          idxBaseEnergy += (m3 * kwhPrice);
+          idxForgCost += (m3 * 10.5 / 1000) * unitForg;
+        }
+
+        const tr = document.createElement('tr');
+        if (i % 2 === 1) tr.style.background = '#fdfdfd';
+        else tr.style.background = '#f9f9f9';
+        let fenntCell = '';
+        if (fennt && !fenntRendered[fennt]) {
+          fenntRendered[fennt] = true;
+          const rs = rowspan[i] || 1;
+          fenntCell = `<td class="wrap" rowspan="${rs}" style="vertical-align:middle;font-weight:800;background:#f5f5f5">${fennt}</td>`;
+        } else {
+          fenntCell = '';
+        }
+
+        // Becsült éves díj (energia + telj + forg): ha 0 fogyasztás -> RHD jelölés, egyébként szám
+        const energyCell = m3 === 0 ? '<span style="font-weight:800;font-size:9pt; color:#c00">★ RHD</span>' : fmt(rowTotal);
+
+        tr.innerHTML = `${fenntCell}<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cim}</td><td style="font-size:8pt;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis">${pod}</td><td style="text-align:center;font-weight:800;font-size:9.5pt">${type === 'F' ? 'Fix' : 'Indexált'}</td><td style="text-align:center;white-space:nowrap">${dijLabel}</td><td style="text-align:center;font-weight:800">${fmt(ftm3)}</td><td style="text-align:center">${fmt(m3)}</td><td style="text-align:center; font-weight:800">${energyCell}</td><td style="text-align:center;font-size:10pt">${fmt(rowTeljCost)}<br><span style="font-size:8pt; color:#666">(${multiplier}✕${fmt(unitTelj)})</span></td><td style="text-align:center;font-size:10pt">${fmt(rowForgCost)}</td>`;
+        b.appendChild(tr);
+      });
+
+      document.getElementById('totalM3').innerText = fmt(totalM3) + ' m³';
+
+      // Dinamikus számítás a felhasználói szabályok alapján: csak a FIXÁLT forgalmi díjakat adjuk hozzá
+      const currentTotalAll = totalEnergyCost + totalTeljCost + fixForgCost;
+
+      document.getElementById('totalCost').innerText = fmt(currentTotalAll) + ' Ft';
+      document.getElementById('teljTotal').innerHTML = `${fmt(totalTeljCost)} Ft<br><span style="font-size:8pt; font-weight:600; color:#555">(becsült)</span>`;
+      document.getElementById('forgTotal').innerHTML = `${fmt(fixForgCost)} Ft<br><span style="font-size:8pt; font-weight:600; color:#555">(fixált mennyiségre)</span>`;
+
+      document.getElementById('sumFix').innerText = fmt(fixAllCost) + ' Ft';
+      document.getElementById('sumIdx').innerHTML = fmt(idxAllCost) + ' Ft' + 
+        (idxM3 > 0 ? `<br><span style="font-size:8.5pt; font-weight:600; color:#555">(${ (idxBaseEnergy / idxM3).toFixed(1) } EUR/MWh tőzsdei átlag)</span>` : '');
+
+      // Indexált predikció frissítése (Koherens növekmény a 33&rarr;55 aránnyal)
+      const predIdxTotal = Math.round(idxAllCost * (55 / 33));
+
+      const predEl = document.getElementById('sumIdxPred');
+      if (predEl && idxAllCost > 0) predEl.innerHTML = `<span style="font-size:10.5pt; color:#c00">(Energia 33&rarr;55 predikció: ~${fmt(predIdxTotal)} Ft)</span>`;
+
+      document.getElementById('sumAll').innerText = fmt(currentTotalAll) + ' Ft';
+    }
+
+    const hudexEur = [32.0, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1, 41.8, 36.2];
+    const months = ['25.Jan', '25.Feb', '25.Már', '25.Ápr', '25.Máj', '25.Jún', '25.Júl', '25.Aug', '25.Sze.', '25.Okt', '25.Nov', '25.Dec', '26.Jan', '26.Feb'];
+    const spread = 31.8, eurHuf = 398;
+    const hudexFtM3 = hudexEur.map(v => (v + spread) * eurHuf / 1000 * 10.5);
+    const fixFtM3 = 23.5 * 10.5;
+
+    Chart.register(ChartDataLabels);
+
+    function drawHudex() {
+      new Chart(document.getElementById('hudexChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: months, datasets: [
+            { 
+              label: 'Indexált + Felár (Ft/m³)', 
+              data: hudexFtM3, 
+              backgroundColor: 'rgba(255,255,255,0.9)', 
+              borderColor: hudexFtM3.map(v => v > fixFtM3 ? '#000' : '#555'), 
+              borderWidth: 1.5, 
+              order: 2,
+              datalabels: { display: true, anchor: 'end', align: 'top', font: { size: 7.5, weight: 'bold' }, color: '#000', textAlign: 'center', formatter: v => [ (v / 10.5).toFixed(1), 'Ft/kWh' ] }
+            },
+            { 
+              label: 'Fix bázis: ' + fmt(fixFtM3) + ' Ft/m³', 
+              data: Array(14).fill(fixFtM3), 
+              type: 'line', 
+              borderColor: '#00a', 
+              borderDash: [6, 4], 
+              borderWidth: 2, 
+              pointRadius: 0, 
+              fill: false, 
+              order: 1,
+              datalabels: { display: false }
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: true, position: 'bottom', labels: { color: '#000', font: { size: 10, weight: 'bold' } } } },
+          scales: {
+            y: { 
+              min: 220,
+              max: 330,
+              beginAtZero: false, 
+              title: { display: true, text: 'Ft/m³', color: '#000', font: { size: 11, weight: 'bold' } }, 
+              ticks: { color: '#000', font: { size: 10, weight: 'bold' } } 
+            },
+            y2: {
+              min: 220,
+              max: 330,
+              beginAtZero: false,
+              position: 'right',
+              title: { display: true, text: 'Ft/MJ', color: '#000', font: { size: 11, weight: 'bold' } },
+              ticks: {
+                color: '#444', font: { size: 9, weight: 'bold' },
+                callback: function(value) { return (value / 37.8).toFixed(2); }
+              },
+              grid: { drawOnChartArea: false }
+            },
+            x: { ticks: { color: '#000', font: { size: 10, weight: 'bold' } } }
+          }
+        }
+      });
+    }
+
+    function drawElec() {
+      new Chart(document.getElementById('elecChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['2022', '2023', '2024', '2025', '2026'],
+          datasets: [{
+            label: 'Átlag €/MWh',
+            data: [227.11, 97.33, 82.02, 88.40, 106.42],
+            borderColor: '#000',
+            backgroundColor: 'rgba(0,0,0,0.1)',
+            borderWidth: 2,
+            pointRadius: 3,
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { 
+            legend: { display: false },
+            datalabels: { display: false }
+          },
+          scales: {
+            y: { ticks: { font: { size: 7, weight: 'bold' } }, grid: { display: false } },
+            x: { ticks: { font: { size: 7, weight: 'bold' } }, grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    fillTable();
+    drawHudex();
+    drawElec();
+  </script>
+
+  <script src="./js/main.js"></script>
+  <script>
+    // Initialize standard AGI components
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof App !== 'undefined') {
+            App.init();
+        }
+    });
+  </script>
+        </div>
+    </div>
+</body>
+
+</html>
