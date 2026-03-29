@@ -25,12 +25,13 @@ const App = {
         this.initSearch();
         this.initHeaderBgRotation();
         this.initInteractivity();
+        this.initStars();
         this.initMonitoring();
         this.initIdleDetection();
         this.initEntryAnimations();
         this.checkPowerDeadlines();
-        console.log("Irodai Asszisztens V3.44 initialized (Fast Mode)");
-        document.body.classList.add('ready');
+        console.log("Irodai Asszisztens V3.44 initialized");
+        setTimeout(() => document.body.classList.add('ready'), 300);
     },
 
     initIdleDetection() {
@@ -101,12 +102,14 @@ const App = {
             <nav class="app-nav">
                 <div class="nav-cat">ENERGETIKA <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
+                        <a href="${p}NAGYATÁD_GÁZ_DÖNTÉSTÁMOGATÓ_VÉGLEGES_UTÁNI2.html" class="nav-dropdown-item"><i class="fas fa-check-circle" style="color:#4caf50;"></i> Gáz Döntéstámogató (2026-2027)</a>
+                        <a href="${p}NAGYATÁD GÁZPIACI STRATÉGIA - GRAFIKONOK.mhtml" target="_blank" class="nav-dropdown-item"><i class="fas fa-chart-area" style="color:#ff5722;"></i> Gázpiaci Stratégia - Grafikonok</a>
                         <a href="${p}modules/tools/gas_evaluator.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i> Gázárajánlat kiértékelő</a>
-                        <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok <i class="fas fa-check-circle ms-1" style="color:#4caf50; font-size:0.7rem;"></i></a>
-                        <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló <i class="fas fa-check-circle ms-1" style="color:#4caf50; font-size:0.7rem;"></i></a>
+                        <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
+                        <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
                         <a href="${p}modules/info/geothermal.html" class="nav-dropdown-item"><i class="fas fa-hot-tub" style="color:#ff5722;"></i> Geotermális fűtés</a>
-                        <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások <i class="fas fa-check-circle ms-1" style="color:#4caf50; font-size:0.7rem;"></i></a>
-                        <a href="${p}modules/tools/power_overrun_scheduler.html" class="nav-dropdown-item"><i class="fas fa-calendar-alt" style="color:#ff5722;"></i> Teljesítménytúllépés ütemező <i class="fas fa-check-circle ms-1" style="color:#4caf50; font-size:0.7rem;"></i></a>
+                        <a href="${p}modules/registers/index.html" class="nav-dropdown-item"><i class="fas fa-database" style="color:#2196f3;"></i> Nyilvántartások</a>
+                        <a href="${p}modules/tools/power_overrun_scheduler.html" class="nav-dropdown-item"><i class="fas fa-calendar-alt" style="color:#ff5722;"></i> Teljesítménytúllépés ütemező</a>
                     </div>
                 </div>
                 <div class="nav-cat">TÉRKÉPEK <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
@@ -152,8 +155,8 @@ const App = {
                 </div>
                 <div class="nav-cat">INFORMÁCIÓ <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
-                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás <i class="fas fa-check-circle ms-1" style="color:#4caf50; font-size:0.7rem;"></i></a>
-                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló <i class="fas fa-check-circle ms-1" style="color:#4caf50; font-size:0.7rem;"></i></a>
+                        <a href="${p}modules/info/local_weather.html" class="nav-dropdown-item"><i class="fas fa-temperature-high" style="color:#ff5722;"></i> Helyi Időjárás</a>
+                        <a href="${p}modules/tools/weather_log.html" class="nav-dropdown-item"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i> Időjárás Napló</a>
                         <a href="${p}modules/info/atadhir.html" class="nav-dropdown-item"><i class="fas fa-newspaper" style="color:#607d8b;"></i> Atádi Hírek</a>
                         <a href="${p}modules/info/nagyatad_presentation.html" class="nav-dropdown-item"><i class="fas fa-city" style="color:#2e7d32;"></i> Nagyatád bemutató</a>
                         <a href="${p}modules/info/procedures.html" class="nav-dropdown-item"><i class="fas fa-project-diagram" style="color:#673ab7;"></i> Ügymenetek</a>
@@ -166,7 +169,6 @@ const App = {
                     <div class="nav-cat-dropdown">
                         <a href="${p}modules/info/public_admin.html" class="nav-dropdown-item"><i class="fas fa-university" style="color:#546e7a;"></i> Közigazgatás</a>
                         <a href="${p}modules/info/energetika.html" class="nav-dropdown-item"><i class="fas fa-charging-station" style="color:#ff9800;"></i> Energetika</a>
-                        <a href="${p}modules/ai_atad_villany_black.html" class="nav-dropdown-item"><i class="fas fa-bolt" style="color:#d4a853;"></i> Nagyatád Okoshálózat</a>
                         <a href="${p}modules/info/vibe_code.html" class="nav-dropdown-item"><i class="fas fa-terminal" style="color:#4caf50;"></i> Vájb Kód Bevezető</a>
                         <a href="${p}modules/lean/index.html" class="nav-dropdown-item"><i class="fas fa-keyboard" style="color:#9e9e9e;"></i> Gyorsbillentyűk</a>
                         <a href="${p}modules/tools/lean_office.html" class="nav-dropdown-item"><i class="fas fa-seedling" style="color:#4caf50;"></i> Irodai Lean</a>
@@ -320,10 +322,10 @@ const App = {
 
     initHeaderDrone() {
         const p = this.getPath();
-        const uniqueIndices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35, 37, 39, 40, 41, 42, 43, 44, 47, 48, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 61, 63, 64, 67, 68, 69, 70, 71, 72, 73, 75, 77, 79, 81, 82, 83, 84, 85];
         const update = () => {
-            const randIdx = Math.floor(Math.random() * uniqueIndices.length);
-            const rand = uniqueIndices[randIdx];
+            const min = 1;
+            const max = 86;
+            const rand = Math.floor(Math.random() * (max - min + 1)) + min;
             const imgUrl = `url('${p}pictures/(${rand}).jpg')`;
             document.documentElement.style.setProperty('--bg-drone', imgUrl);
         };
@@ -334,7 +336,89 @@ const App = {
     // --- Cursor Follower removed ---
 
     initStars() {
-        // Star effect removed for performance
+        const canvas = document.getElementById('stars-canvas');
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let animationId;
+
+        const initCanvas = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+
+            // Reduce to 100 stars for better performance
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.5,
+                    speed: Math.random() * 0.3 + 0.1,
+                    opacity: Math.random()
+                });
+            }
+        };
+
+        const drawStar = (star) => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme !== 'dark') return;
+
+            ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+            ctx.fill();
+        };
+
+        const animate = () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+
+            if (theme === 'dark') {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                stars.forEach(star => {
+                    // Twinkling effect
+                    star.opacity += (Math.random() - 0.5) * 0.05;
+                    star.opacity = Math.max(0.2, Math.min(1, star.opacity));
+
+                    drawStar(star);
+                });
+            } else {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            animationId = requestAnimationFrame(animate);
+        };
+
+        const fastAnimate = () => {
+            const theme = document.documentElement.getAttribute('data-theme');
+            if (theme === 'dark' && !this.state.isIdle) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(star => {
+                    star.opacity += (Math.random() - 0.5) * 0.05;
+                    star.opacity = Math.max(0.2, Math.min(1, star.opacity));
+                    drawStar(star);
+                });
+            }
+            setTimeout(() => requestAnimationFrame(fastAnimate), 100); // Throttled animation
+        };
+
+        initCanvas();
+        fastAnimate();
+
+        window.addEventListener('resize', initCanvas);
+
+        const observer = new MutationObserver(() => {
+            const overlay = document.getElementById('auth-overlay');
+            if (overlay && overlay.style.display === 'none') {
+                cancelAnimationFrame(animationId);
+            }
+        });
+
+        const overlay = document.getElementById('auth-overlay');
+        if (overlay) {
+            observer.observe(overlay, { attributes: true, attributeFilter: ['style'] });
+        }
     },
 
     initInteractivity() {
@@ -731,23 +815,32 @@ const App = {
     },
 
     initEntryAnimations() {
-        // Animations simplified to immediate display
+        // 1. Header Animations (Slide from sides)
         const logo = document.querySelector('.logo');
         const headerInfo = document.querySelector('.header-info');
 
-        if (logo) logo.style.opacity = '1';
-        if (headerInfo) headerInfo.style.opacity = '1';
+        if (logo) logo.classList.add('slide-in-left');
+        if (headerInfo) headerInfo.classList.add('slide-in-right');
 
+        // 2. Dashboard & Module Tiles Staggered Entry
         const cards = document.querySelectorAll('.feature-card, .relax-card, .pro-card, .summary-box');
-        cards.forEach(card => {
-            card.style.opacity = '1';
-            card.style.transform = 'none';
+        cards.forEach((card, index) => {
+            // Apply delay based on index for "waterfall" effect
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+                card.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            }, 100 + (index * 40));
         });
 
+        // 3. Section Titles Slide
         const titles = document.querySelectorAll('.section-title, .group-title');
-        titles.forEach(title => {
-            title.style.opacity = '1';
-            title.style.transform = 'none';
+        titles.forEach((title, index) => {
+            setTimeout(() => {
+                title.style.opacity = '1';
+                title.style.transform = 'translateY(0)';
+                title.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            }, 50 + (index * 100));
         });
     }
 };
