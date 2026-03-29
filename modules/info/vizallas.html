@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vízállás Monitor – Babócsai Rinya, Nagyatád</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --bg: #05070f; --card: rgba(255,255,255,0.03); --border: rgba(255,255,255,0.07);
+            --text: #edf2ff; --muted: #64748b; --cyan: #00e8ff; --blue: #4f7cff;
+            --glow-c: 0 0 40px rgba(0,232,255,.25); --glow-b: 0 0 40px rgba(79,124,255,.2);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Outfit',sans-serif; background:var(--bg); color:var(--text);
+            min-height:100vh; display:flex; flex-direction:column;
+            align-items:center; justify-content:center; padding:15px;
+        }
+        .card {
+            position:relative; z-index:1; background:var(--card); backdrop-filter:blur(24px);
+            border:1px solid var(--border); border-radius:28px; padding:25px;
+            width:100%; max-width:640px; box-shadow:0 40px 80px rgba(0,0,0,.5);
+        }
+        .top-bar {
+            height:3px; border-radius:3px;
+            background:linear-gradient(90deg,var(--blue),var(--cyan));
+            margin-bottom:20px; box-shadow:var(--glow-c);
+        }
+        .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:25px; }
+        .station-name { font-size:.72rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--cyan); display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+        .dot { width:7px; height:7px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); animation:pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+        .card-title { font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:700; line-height:1.2; }
+        .subtitle { color:var(--muted); font-size:.88rem; margin-top:4px; }
+        .refresh-btn {
+            display:flex; align-items:center; gap:6px; background:rgba(79,124,255,.12);
+            color:var(--blue); border:1px solid rgba(79,124,255,.3); padding:8px 14px;
+            border-radius:10px; cursor:pointer; font-family:'Outfit',sans-serif;
+            font-size:.85rem; font-weight:600; transition:.25s; white-space:nowrap;
+        }
+        .refresh-btn:hover { background:var(--blue); color:#fff; }
+        .refresh-btn:disabled { opacity:.4; cursor:not-allowed; }
+        .data-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:25px; }
+        .data-block {
+            background:rgba(255,255,255,.025); border:1px solid var(--border);
+            border-radius:16px; padding:18px 20px;
+        }
+        .data-block.current { border-color:rgba(0,232,255,.25); }
+        .block-label { font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+        .block-val { font-family:'Space Grotesk',sans-serif; font-size:2.5rem; font-weight:700; line-height:1; }
+        .block-val .unit { font-family:'Outfit',sans-serif; font-size:1rem; color:var(--muted); margin-left:4px; }
+        .current .block-val { background:linear-gradient(135deg,#fff 40%,var(--cyan)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .block-date { font-size:.8rem; color:var(--muted); margin-top:6px; }
+        .trend {
+            display:inline-flex; align-items:center; gap:5px; font-size:.8rem; font-weight:600;
+            padding:4px 12px; border-radius:20px; margin-top:8px;
+            background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
+        }
+        .trend.same{color:var(--muted)} .trend.up{color:#f87171} .trend.down{color:#34d399}
+        .chart-wrap {
+            background:rgba(255,255,255,.016); border:1px solid var(--border);
+            border-radius:16px; padding:18px; margin-bottom:15px;
+        }
+        .chart-title { font-size:.72rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:14px; }
+        .chart-svg { width:100%; height:130px; overflow:visible; }
+        .status { text-align:center; font-size:.82rem; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:6px; }
+        .status.ok i{color:#34d399} .status.err i{color:#f87171}
+        @keyframes spin{to{transform:rotate(360deg)}} .spin{animation:spin .8s linear infinite;display:inline-block;}
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="top-bar"></div>
+        <div class="header">
+            <div>
+                <div class="station-name"><span class="dot"></span> Vízügyi Monitoring</div>
+                <div class="card-title">Babócsai Rinya</div>
+                <div class="subtitle"><i class="bi bi-geo-alt-fill"></i> Nagyatád mérési pont</div>
+            </div>
+            <button class="refresh-btn" id="btn-refresh" onclick="load()">
+                <i class="bi bi-arrow-clockwise" id="refresh-icon"></i> Frissítés
+            </button>
+        </div>
+
+        <div class="data-row">
+            <div class="data-block current">
+                <div class="block-label"><i class="bi bi-droplet-fill" style="color:var(--cyan)"></i> Jelenlegi</div>
+                <div class="block-val"><span id="val-curr">–</span><span class="unit">cm</span></div>
+                <div class="block-date" id="date-curr">–</div>
+                <div id="trend-badge" class="trend"><i class="bi bi-dash"></i> –</div>
+            </div>
+            <div class="data-block">
+                <div class="block-label"><i class="bi bi-clock-history"></i> Legutóbbi</div>
+                <div class="block-val"><span id="val-prev">–</span><span class="unit">cm</span></div>
+                <div class="block-date" id="date-prev">–</div>
+            </div>
+        </div>
+
+        <div class="chart-wrap">
+            <div class="chart-title"><i class="bi bi-graph-up"></i> Elmúlt 10 óra</div>
+            <svg class="chart-svg" id="chart" viewBox="0 0 580 140" preserveAspectRatio="none">
+                <text x="50%" y="70" text-anchor="middle" fill="#64748b" font-size="13">Adatok betöltése...</text>
+            </svg>
+        </div>
+
+        <div class="status" id="status"><i class="bi bi-wifi spin"></i> Csatlakozás...</div>
+    </div>
+
+    <script>
+        const VIZUGY_URL = 'https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor';
+        const PROXY = 'https://api.allorigins.win/get?url=';
+
+        function setStatus(type, msg) {
+            const el = document.getElementById('status');
+            el.className = 'status ' + type;
+            el.innerHTML = msg;
+        }
+
+        function setTrend(curr, prev) {
+            const b = document.getElementById('trend-badge');
+            const d = curr - prev;
+            if (d > 0)      { b.className='trend up';   b.innerHTML=`<i class="bi bi-arrow-up-short"></i> +${d} cm`; }
+            else if (d < 0) { b.className='trend down'; b.innerHTML=`<i class="bi bi-arrow-down-short"></i> ${d} cm`; }
+            else            { b.className='trend same'; b.innerHTML=`<i class="bi bi-dash"></i> változatlan`; }
+        }
+
+        function drawChart(history) {
+            const data = [...history].reverse();
+            const vals = data.map(r => r.val);
+            const minV = Math.min(...vals) - 3;
+            const maxV = Math.max(...vals) + 3;
+            const W = 580, H = 140, PAD = { t:10, r:10, b:28, l:38 };
+            const cW = W - PAD.l - PAD.r;
+            const cH = H - PAD.t - PAD.b;
+            const n  = data.length;
+
+            const xOf = i => PAD.l + (n < 2 ? cW/2 : (i / (n-1)) * cW);
+            const yOf = v => PAD.t + cH - ((v - minV) / (maxV - minV || 1)) * cH;
+
+            let svg = `<defs>
+                <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#00e8ff" stop-opacity=".25"/>
+                    <stop offset="100%" stop-color="#00e8ff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#4f7cff"/>
+                    <stop offset="100%" stop-color="#00e8ff"/>
+                </linearGradient>
+            </defs>`;
+
+            const steps = 4;
+            for (let i = 0; i <= steps; i++) {
+                const v = minV + ((maxV - minV) / steps) * i;
+                const y = yOf(v);
+                svg += `<line x1="${PAD.l}" y1="${y}" x2="${W - PAD.r}" y2="${y}" stroke="rgba(255,255,255,.05)"/>`;
+                svg += `<text x="${PAD.l - 6}" y="${y + 4}" text-anchor="end" fill="#64748b" font-size="10">${Math.round(v)}</text>`;
+            }
+
+            if (n >= 2) {
+                const areaPoints = data.map((r,i) => `${xOf(i)},${yOf(r.val)}`).join(' ');
+                svg += `<polygon points="${areaPoints} ${xOf(n-1)},${yOf(minV)} ${xOf(0)},${yOf(minV)}" fill="url(#cg)"/>`;
+                const pathD = data.map((r,i) => `${i===0?'M':'L'}${xOf(i)},${yOf(r.val)}`).join(' ');
+                svg += `<path d="${pathD}" fill="none" stroke="url(#lg)" stroke-width="2.5" stroke-linejoin="round"/>`;
+            }
+
+            data.forEach((r, i) => {
+                const x = xOf(i), y = yOf(r.val);
+                svg += `<circle cx="${x}" cy="${y}" r="4" fill="#05070f" stroke="url(#lg)" stroke-width="2"/>`;
+                if (i % 2 === 0 || i === n-1) {
+                    const label = r.date.split(' ').pop();
+                    svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" fill="#64748b" font-size="9.5">${label}</text>`;
+                }
+            });
+
+            document.getElementById('chart').innerHTML = svg;
+        }
+
+        async function load() {
+            const btn = document.getElementById('btn-refresh');
+            const icon = document.getElementById('refresh-icon');
+            btn.disabled = true;
+            icon.className = 'bi bi-arrow-clockwise spin';
+            setStatus('', '<i class="bi bi-wifi spin"></i> Lekérés...');
+
+            try {
+                const res = await fetch(PROXY + encodeURIComponent(VIZUGY_URL));
+                const json = await res.json();
+                const html = json.contents;
+
+                const re = /<td[^>]*>\s*<strong>\s*(\d{4}\.\d{2}\.\d{2}\.\s+\d{2}:\d{2})\s*<\/strong>\s*<\/td>\s*<td[^>]*>\s*<strong>\s*(-?\d+)\s*<\/strong>/gi;
+                const rows = [];
+                let m;
+                while ((m = re.exec(html)) !== null) {
+                    rows.push({ date: m[1].trim(), val: parseInt(m[2], 10) });
+                    if (rows.length >= 10) break;
+                }
+
+                if (!rows.length) throw new Error('Nem találhatók adatsorok.');
+
+                const curr = rows[0], prev = rows[1];
+                document.getElementById('val-curr').innerText = curr.val;
+                document.getElementById('date-curr').innerText = curr.date;
+                document.getElementById('val-prev').innerText = prev ? prev.val : '–';
+                document.getElementById('date-prev').innerText = prev ? prev.date : '–';
+
+                if (prev) setTrend(curr.val, prev.val);
+                drawChart(rows);
+
+                const now = new Date();
+                setStatus('ok', `<i class="bi bi-check-circle-fill"></i> Frissítve: ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`);
+            } catch (err) {
+                setStatus('err', `<i class="bi bi-exclamation-triangle-fill"></i> Hiba: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                icon.className = 'bi bi-arrow-clockwise';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', load);
+        setInterval(load, 10 * 60 * 1000);
+    </script>
+</body>
+</html>
