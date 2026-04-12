@@ -10,7 +10,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.cdnfonts.com/css/biko" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
     <style>
@@ -65,6 +65,15 @@
 
         .neo-shiny-btn i {
             font-size: 1.1rem;
+        }
+
+        .btn-termeles {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white !important;
+            border-color: rgba(255, 255, 255, 0.2);
+            padding: 0.6rem 1.4rem;
+            font-size: 0.85rem;
+            margin-left: 4rem; /* Farther to the right */
         }
 
         @keyframes pulse-pink {
@@ -181,6 +190,9 @@
                         <a href="https://adatb.vercel.app/" target="_blank" class="neo-shiny-btn btn-adatb">
                             <i class="fas fa-database"></i> NEO Adatbázis
                         </a>
+                        <a href="termeles_tervezo_sap.html" class="neo-shiny-btn btn-termeles">
+                            <i class="fas fa-industry"></i> Termelés tervező
+                        </a>
                     </div>
                 </div>
 
@@ -194,11 +206,11 @@
                 <div class="category-group fade-in">
                     <h3 class="group-title"><i class="fas fa-charging-station"></i> ENERGETIKA</h3>
                     <div class="dashboard-grid">
-                        <a href="NAGYATÁD_GÁZ_DÖNTÉSTÁMOGATÓ_VÉGLEGES_UTÁNI2.html" class="feature-card">
+                        <a href="strategia/NAGYATÁD_GÁZ_DÖNTÉSTÁMOGATÓ_VÉGLEGES_UTÁNI2.html" class="feature-card">
                             <i class="fas fa-check-circle" style="color:#4caf50;"></i>
                             <h5>Gáz Döntéstámogató (2026-2027)</h5>
                         </a>
-                        <a href="NAGYATÁD GÁZPIACI STRATÉGIA - GRAFIKONOK.mhtml" target="_blank" class="feature-card">
+                        <a href="strategia/NAGYATÁD GÁZPIACI STRATÉGIA - GRAFIKONOK.mhtml" target="_blank" class="feature-card">
                             <i class="fas fa-chart-area" style="color:#ff5722;"></i>
                             <h5>Gázpiaci Stratégia - Grafikonok</h5>
                         </a>
@@ -312,6 +324,20 @@
                     </div>
                 </div>
 
+                <div class="category-group fade-in">
+                    <h3 class="group-title"><i class="fas fa-vial-circle-check"></i> GYÁRTÁSTERVEZÉS</h3>
+                    <div class="dashboard-grid">
+                        <a href="termeles_tervezo_sap.html" class="feature-card" style="position: relative; overflow: hidden;">
+                            <img src="factory.png" alt="Factory" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; z-index: 0;">
+                            <div style="position: relative; z-index: 1;">
+                                <i class="fas fa-industry" style="color:#2563eb;"></i>
+                                <h5 style="margin-top: 10px;">SAP Termelés Tervező</h5>
+                                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Operatív gyártásirányítás és dokumentáció</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="category-group cat-bill">
                     <div class="group-title"><i class="fas fa-file-invoice"></i> ELSZÁMOLÁS</div>
                     <div class="dashboard-grid">
@@ -403,7 +429,7 @@
                             <i class="fas fa-charging-station" style="color:#ff9800;"></i>
                             <h5>Energetika</h5>
                         </a>
-                        <a href="modules/ai_atad_villany_black.html" class="feature-card">
+                        <img src="assets/media/captain_planet_bg.png" alt="Planet Background" class="header-bg-img">
                             <i class="fas fa-bolt" style="color:#d4a853;"></i>
                             <h5>Nagyatád Okoshálózat</h5>
                         </a>
@@ -464,7 +490,7 @@
             ]
         };
     </script>
-    <script src="js/main.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>
