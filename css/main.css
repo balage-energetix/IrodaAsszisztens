@@ -750,16 +750,20 @@ h6 {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(90deg, var(--bg-card) 0%, rgba(255, 255, 255, 0.7) 40%, rgba(255, 255, 255, 0.7) 60%, var(--bg-card) 100%);
-    backdrop-filter: blur(4px);
+    background: linear-gradient(90deg, #ffffff 0%, rgba(255, 255, 255, 0.4) 40%, rgba(255, 255, 255, 0.4) 60%, #ffffff 100%);
+    backdrop-filter: blur(8px);
 }
 
 [data-theme="dark"] .header-overlay {
     background: linear-gradient(90deg, var(--bg-card) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.6) 60%, var(--bg-card) 100%);
 }
 
-/* Force Black Header */
-.app-header {
+/* Theme-Specific Header Backgrounds */
+[data-theme="light"] .app-header {
+    background: #ffffff !important;
+}
+
+[data-theme="dark"] .app-header {
     background: #000000 !important;
 }
 
