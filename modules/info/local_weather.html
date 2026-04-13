@@ -137,9 +137,11 @@
             if (csapImg) {
                 csapImg.src = `https://www.idokep.hu/automata/omme_nagyatad_csap1.png?t=${Date.now()}`;
             }
-            // Simple Rinya Fetch (Oneshot)
-            fetch('https://corsproxy.org/?' + encodeURIComponent('https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor'))
-                .then(r => r.text()).then(h => {
+            // Simple Rinya Fetch (Oneshot) using allorigins to avoid 403 errors
+            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor'))
+                .then(r => r.json()).then(data => {
+                    const h = data.contents;
+                    if (!h) return;
                     const v = h.match(/Vizallas\s*=\s*new\s*Array\s*\((.*?)\)/)[1].split(',').pop().trim();
                     const t = h.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\)/)[1].split(',').pop().trim().replace(/['"]/g, "");
                     if (v && v !== 'null') document.getElementById('rinya-val').innerText = v + " cm";
