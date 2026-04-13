@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Nagyatád Gázenergia Döntéstámogató 2026-2027</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Inter:wght@400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f0f0;
+      color: #000;
+      line-height: 1.35;
+      padding: 10px;
+      font-weight: 600
+    }
+
+    .a3 {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 6mm;
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative
+    }
+
+    /* HEADER */
+    header.main-header {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      border-bottom: 3px solid #000;
+      padding-bottom: 10px
+    }
+
+    header h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12.5pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      text-decoration: underline;
+      flex: 3;
+      line-height: 1.2;
+      align-self: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .tri-box-compact {
+      border: 1.5px solid #000;
+      border-radius: 10px;
+      padding: 3px 5px;
+      background: #fdfdfd;
+      display: grid;
+      grid-template-columns: 1fr 30px 1.1fr 30px 1fr;
+      grid-template-rows: auto auto;
+      gap: 1px 0;
+      align-items: center;
+      justify-items: center;
+      flex: 0.7;
+      margin-left: 25px
+    }
+
+    .tri-eq {
+      font-size: 21pt;
+      font-weight: 900;
+      line-height: 1;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%
+    }
+
+    .tri-val-c {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      min-width: 65px;
+      text-align: center
+    }
+
+    .tri-val-c .big {
+      display: block;
+      font-size: 12pt;
+      font-weight: 800;
+      line-height: 1
+    }
+
+    .tri-val-c small {
+      font-size: 8pt;
+      text-transform: uppercase;
+      display: block
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 2px solid #000;
+      margin: 6px 0;
+      width: 100%;
+    }
+
+    /* CARDS & CONTAINERS */
+    .tri-arrow {
+      font-size: 10pt;
+      line-height: 1
+    }
+
+    .hdr-date {
+      text-align: center;
+      font-size: 12pt;
+      font-weight: 800;
+      border: 1.5px solid #000;
+      border-radius: 10px;
+      padding: 6px 12px;
+      background: #fff;
+      white-space: nowrap;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px
+    }
+
+    .export-btn {
+      font-size: 8pt;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      cursor: pointer;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      margin-top: 4px
+    }
+
+    .export-btn:hover {
+      background: #333
+    }
+
+    /* GRID */
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    /* CARDS */
+    .card {
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      background: #fff
+    }
+
+    .ct i {
+      font-size: 11pt
+    }
+
+    /* SVG CROP */
+    .svg-crop-container {
+      overflow: hidden;
+      border: 2px solid #000;
+      border-radius: 10px;
+      margin-top: 3px;
+    }
+
+    .svg-crop-container img {
+      margin-top: -132px;
+      margin-bottom: -42px;
+      display: block;
+      width: 100%;
+    }
+
+    /* TREE */
+    .tree {
+      border: 1px solid #000;
+      border-radius: 10px;
+      min-height: 162px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #fcfcfc
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+      font-weight: 700;
+      border: 1.5px solid #000;
+      overflow: hidden;
+      table-layout: fixed
+    }
+
+    th {
+      background: #eee;
+      text-align: left;
+      padding: 4px 5px;
+      font-weight: 800;
+      border: 1px solid #000;
+      font-size: 10pt;
+      word-break: break-word;
+      white-space: normal
+    }
+
+    td {
+      padding: 3px 5px;
+      border: 1px solid #000;
+      font-size: 9.5pt;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle
+    }
+
+    td.wrap {
+      white-space: normal;
+      word-break: break-word
+    }
+
+    td.merged {
+      border-top: none !important;
+      background: #fafafa
+    }
+
+    /* RISKS */
+    .rl {
+      font-size: 8pt;
+      font-weight: 700;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px
+    }
+
+    .ri {
+      border: 1.2px solid #000;
+      border-radius: 10px;
+      padding: 8px;
+      background: #fff
+    }
+
+    .ri strong {
+      display: block;
+      text-decoration: underline;
+      margin-bottom: 3px;
+      font-size: 10.5pt
+    }
+
+    .rs {
+      font-size: 9pt;
+      font-weight: 700;
+      color: #666;
+      margin-top: 4px;
+      font-style: italic;
+      display: block;
+      border-top: 1px dashed #bbb;
+      padding-top: 2px
+    }
+
+    .src {
+      font-size: 9pt;
+      font-weight: 700;
+      font-style: italic;
+      color: #666;
+      display: block;
+      margin-top: 2px;
+      border-top: 1px dashed #bbb;
+      padding-top: 2px
+    }
+
+    /* TIMELINE */
+    .timeline-wrap {
+      border: 1.2px solid #000;
+      border-radius: 12px;
+      padding: 12px 10px;
+      background: #fff
+    }
+
+    .timeline-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 11.5pt;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 6px;
+      text-transform: uppercase
+    }
+
+    .tl-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: relative;
+      margin-bottom: 10px
+    }
+
+    .tl-track {
+      position: absolute;
+      top: 18px;
+      left: 15px;
+      right: 15px;
+      height: 3px;
+      background: #000;
+      z-index: 0
+    }
+
+    .tp {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      background: #fff;
+      padding: 4px 6px;
+      border: 2.5px solid #000;
+      border-radius: 8px;
+      min-width: 88px;
+      font-weight: 800
+    }
+
+    .tp strong {
+      display: block;
+      font-size: 9.5pt;
+      margin-bottom: 1px
+    }
+
+    .tp span {
+      font-size: 9pt;
+      color: #000;
+      display: block
+    }
+
+    .tp.act {
+      background: #fff;
+      color: #000;
+      border: 2.5px solid #000
+    }
+
+    .tp.red {
+      border: 2px solid #c00;
+      color: #c00
+    }
+
+    .tl-branches {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    .tl-branch {
+      border: 1px solid #000;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      background: #fafafa
+    }
+
+    .tl-branch h5 {
+      font-size: 10pt;
+      font-weight: 800;
+      border-bottom: 1px solid #000;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .tl-branch ol {
+      margin-left: 14px
+    }
+
+    .tl-branch li {
+      margin-bottom: 3px
+    }
+
+    /* ELECTRIC */
+    .elr {
+      display: flex;
+      border: 1.5px solid #000;
+      border-radius: 12px;
+      background: #fffbe6;
+      padding: 8px;
+      align-items: center;
+      gap: 12px
+    }
+
+    .elt {
+      font-weight: 800;
+      font-size: 9pt;
+      text-transform: uppercase;
+      border-right: 2px solid #000;
+      padding-right: 10px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .eli {
+      font-size: 8pt;
+      font-weight: 700;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap
+    }
+
+    /* JOGI */
+    .jogi {
+      font-size: 8pt;
+      font-weight: 700;
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 10px;
+      background: #f8fff8
+    }
+
+    .jogi h4 {
+      font-size: 9.5pt;
+      font-weight: 800;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .jogi ol {
+      margin-left: 16px;
+      margin-bottom: 6px
+    }
+
+    .jogi li {
+      margin-bottom: 5px
+    }
+
+    /* .jogi .src shares .rs styling defined above */
+    /* STAT */
+    .stat {
+      font-size: 8pt;
+      font-weight: 700;
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 10px;
+      background: #f8f8ff
+    }
+
+    .stat h4 {
+      font-size: 9.5pt;
+      font-weight: 800;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .stat ol {
+      margin-left: 16px
+    }
+
+    .stat li {
+      margin-bottom: 5px
+    }
+
+    /* SUMMARY */
+    .summary-box {
+      background: #fdfdfd;
+      color: #000;
+      padding: 10px 15px;
+      border-radius: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 0;
+      align-items: center;
+      width: 100%;
+      margin: 0 auto;
+      border: 1.5px solid #000
+    }
+
+    .sb-item {
+      padding: 5px 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border-right: 1px solid #ccc
+    }
+
+    .sb-item:last-child {
+      border-right: none
+    }
+
+    .sb-item .val {
+      font-size: 8.8pt;
+      font-weight: 800;
+      color: #000;
+      margin-top: 2px
+    }
+
+    .sb-item .lbl {
+      font-size: 10pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #444;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px
+    }
+
+    /* SVG */
+    .svg-full {
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 6px;
+      text-align: center;
+      background: #fff
+    }
+
+    .svg-full img {
+      width: 100%;
+      height: auto
+    }
+
+    .svg-full p {
+      font-size: 8pt;
+      font-weight: 800;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px
+    }
+
+    .svg-half {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px
+    }
+
+    /* PROPOSALS */
+    .prop-box {
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 10px;
+      background: #fffef0;
+      font-size: 8pt;
+      font-weight: 700
+    }
+
+    .prop-box strong {
+      font-size: 9.5pt;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px
+    }
+
+    .prop-box ul {
+      margin-left: 16px
+    }
+
+    .prop-box li {
+      margin-bottom: 4px
+    }
+
+    /* Note */
+    .note-dashed {
+      font-size: 10.5pt;
+      font-weight: 700;
+      margin-top: 4px;
+      border: 1px dashed #000;
+      border-radius: 6px;
+      padding: 4px;
+      background: #fefefe;
+      color: #000
+    }
+
+    .pod-note {
+      font-size: 9pt;
+      font-style: italic;
+      color: #555;
+      display: block;
+      margin-top: 1px;
+    }
+
+    @page {
+      size: A3 portrait;
+      margin: 4mm;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #fff;
+        font-size: 6.2pt
+      }
+
+      .a3 {
+        border: 1px solid #000;
+        border-radius: 0;
+        padding: 4mm;
+        max-width: none;
+        width: 100%;
+        height: auto;
+        min-height: 400mm;
+        overflow: visible;
+        background: #fff;
+        gap: 6px
+      }
+
+      .card,
+      .timeline-wrap,
+      .jogi,
+      .stat,
+      .prop-box,
+      .elr,
+      .svg-full {
+        page-break-inside: avoid;
+        border-width: 2px !important;
+        margin-bottom: 6px !important;
+      }
+
+      .export-btn,
+      .no-print {
+        display: none !important
+      }
+
+      table {
+        font-size: 6.5pt;
+        table-layout: fixed;
+        width: 100%
+      }
+
+      th,
+      td {
+        padding: 1px 2px;
+        white-space: normal !important;
+      }
+
+      .ct {
+        margin-bottom: 3px;
+        font-size: 8.2pt;
+        padding-bottom: 2px
+      }
+
+      .summary-box {
+        padding: 4px;
+        gap: 4px;
+        grid-template-columns: 1fr 1fr 1fr !important
+      }
+
+      .sb-item {
+        padding: 3px
+      }
+
+      .sb-item .val {
+        font-size: 10.5pt
+      }
+
+      .sb-item .lbl {
+        font-size: 7pt
+      }
+
+      .timeline-wrap {
+        padding: 6px 4px;
+        margin: 0
+      }
+
+      .tl-row {
+        margin-bottom: 3px
+      }
+
+      .tp {
+        min-width: 68px;
+        padding: 2px 4px
+      }
+
+      .tp strong {
+        font-size: 6.2pt
+      }
+
+      .tp span {
+        font-size: 6.5pt
+      }
+
+      .tl-branches {
+        grid-template-columns: 1fr !important;
+        gap: 6px
+      }
+
+      .tl-branch {
+        padding: 4px;
+        font-size: 6.5pt
+      }
+
+      .svg-full {
+        padding: 3px;
+        margin: 0
+      }
+
+      .svg-full p {
+        font-size: 6.5pt;
+        margin-bottom: 1px
+      }
+
+      .svg-full img {
+        max-height: 110px;
+        width: auto;
+        display: inline-block
+      }
+
+      .svg-half {
+        grid-template-columns: 1fr !important;
+        gap: 8px
+      }
+
+      .tree svg {
+        height: 120px !important
+      }
+
+      canvas#hudexChart {
+        max-height: 80px !important
+      }
+
+      .jogi,
+      .stat,
+      .prop-box,
+      .elr {
+        padding: 4px;
+        font-size: 6.8pt;
+        margin: 0
+      }
+
+      .jogi h4,
+      .stat h4,
+      .prop-box strong,
+      .timeline-title {
+        font-size: 8.2pt;
+        margin-bottom: 3px
+      }
+
+      .jogi ol,
+      .stat ol {
+        margin-bottom: 0
+      }
+
+      .src,
+      .rs {
+        font-size: 6.5pt;
+        color: #666
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="a3" id="mainDoc">
+
+    <header class="main-header" style="position:relative">
+      <div style="position:absolute; top:-15px; left:0; font-size:8.5pt; font-weight:900; color:#000">
+        <i class="bi bi-currency-exchange"></i> EUR/HUF: 398 Ft (2026.03.29.)
+      </div>
+      <h1>Nagyatád Város Önkormányzata – Gázenergia Ellátás Döntéstámogató 2026<small style="font-size:0.7em">.10.</small>–2027<small style="font-size:0.7em">.10.</small></h1>
+      <div class="tri-box-compact" style="grid-template-columns: 1fr auto auto auto 1fr">
+        <div style="grid-column:1/6;display:flex;justify-content:center;margin-bottom:2px">
+          <div class="tri-val-c"><span class="big" style="font-size:11pt">3,6&nbsp;MJ&nbsp;←&nbsp;1&nbsp;kWh</span></div>
+        </div>
+        <div class="tri-val-c" style="background:#fff"><small>Fűtőérték</small><span class="big">34,2</span><small>MJ/m³</small></div>
+        <div class="tri-eq">=</div>
+        <div style="font-size:9pt;font-weight:900;text-align:center;line-height:1.2;background:#eee;border-radius:4px;border:1px solid #ccc;padding:4px 6px;white-space:nowrap">(1&nbsp;m³)&nbsp;gáz</div>
+        <div class="tri-eq">=</div>
+        <div class="tri-val-c" style="background:#fff"><small>Energia</small><span class="big">10,5</span><small>kWh/m³</small></div>
+      </div>
+      <div class="hdr-date">
+        <div><i class="bi bi-calendar-event"></i> 2026. március 30. 14:00 Kiselőadó</div>
+      </div>
+    </header>
+
+    <!-- E2H KERESKEDŐI ÜZENET BLOKK -->
+    <div
+      style="border:1.5px dashed #000;border-radius:12px;padding:12px;background:#fff;display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:start">
+      <div style="border-right:2px solid #000;padding-right:15px;white-space:nowrap">
+        <div
+          style="font-family:'Outfit',sans-serif;font-weight:800;font-size:11pt;text-transform:uppercase;display:flex;align-items:center;gap:8px;color:#000">
+          <i class="bi bi-envelope-exclamation" style="font-size:13pt"></i> E2 Hungary Zrt.
+        </div>
+        <div style="font-size:9pt;font-weight:700;color:#000;margin-top:3px">Utolsó tájékoztató:<br>2026.03.16.</div>
+      </div>
+      <div style="font-size:10.5pt;font-weight:500;color:#000;display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span
+            style="color:#c0392b;font-size:11pt;white-space:nowrap;flex-shrink:0;font-weight:900;text-decoration:underline">PIACI
+            HELYZET</span>
+          <span><strong>Iráni háború:</strong> <strong>globális energiaellátásra</strong> gyakorolt hatás,
+            <strong>kínálati oldal szűkülése</strong> — <strong>jelentős
+              áremelkedés</strong>, <strong>napon belüli kiugrásokkal</strong> mind gáz, mind áram piacán.</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span
+            style="color:#2980b9;font-size:11pt;white-space:nowrap;flex-shrink:0;font-weight:900;text-decoration:underline">AJÁNLATADÁS</span>
+          <span><strong>Újraárazás esetén</strong> <strong>lényegesen magasabb árszinteket</strong> látnak — ahol a
+            beszerzés
+            halasztható, az <strong>ajánlati folyamatokat felfüggesztették</strong>.</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span
+            style="color:#27ae60;font-size:11pt;white-space:nowrap;flex-shrink:0;font-weight:900;text-decoration:underline">JAVASLAT</span>
+          <span><strong>Háború elhúzódására</strong> számítanak — <strong>beforduló (felmondás hiányában meghosszabbodó)
+              szerződés fenntartása javasolt</strong>, ha a kereskedő tudja tartani az árat. Kollégáik dolgoznak az
+            <strong>ártartás biztosításán</strong> minden Ügyfelük számára.</span>
+        </div>
+      </div>
+    </div>
+
+
+    <div
+      style="border:2.5px solid #000;border-radius:12px;padding:12px;background:#fff;display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:start">
+      <div style="border-right:2px solid #000;padding-right:15px;white-space:nowrap">
+        <div
+          style="font-family:'Outfit',sans-serif;font-weight:800;font-size:11pt;text-transform:uppercase;display:flex;align-items:center;gap:8px">
+          <i class="bi bi-building-check"></i> MVM Next Zrt. Ajánlat
+        </div>
+        <div style="font-size:8.5pt;font-weight:700;color:#555;margin-top:3px">Határidő: 2026.03.30. 10:00-ig</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:10pt;font-weight:700">
+        <div style="border:2.5px solid #000;border-radius:8px;padding:8px;text-align:center;background:#fffff0">
+          <div style="font-size:10pt;font-weight:700;text-transform:uppercase">MVM Fix ár</div>
+          <div style="font-size:18pt;font-weight:800;line-height:1.1">&nbsp;</div>
+          <div style="font-size:9pt;color:#666">Ft/kWh &bull; kitöltendő</div>
+        </div>
+        <div style="border:1.5px solid #ccc;border-radius:8px;padding:8px;background:#fafafa">
+          <div style="font-size:9pt;font-weight:700">Szállítás:</div>
+          <div style="margin-top:4px;color:#333;line-height:1.4">________________</div>
+        </div>
+        <div style="border:1.5px solid #ccc;border-radius:8px;padding:8px;background:#fafafa">
+          <div style="font-size:9pt;font-weight:700">Egyéb feltételek:</div>
+          <div style="margin-top:4px;color:#333;line-height:1.6">
+            ________________<br>________________</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="svg-full">
+      <p><i class="bi bi-clock-history"></i> 1. TÍZÉVES EU TŐZSDEI ADATSOR (EUR/MWH)</p>
+      <div class="svg-crop-container">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBjbGFzcz0iaGlnaGNoYXJ0cy1yb290IiBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0hlbHZldGljYSBOZXVlJnF1b3Q7LCBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3NTAiIGhlaWdodD0iNTIwIiB2aWV3Qm94PSIwIDAgNzUwIDUyMCI+PGRlc2M+Q3JlYXRlZCB3aXRoIEhpZ2hjaGFydHMgMTAuMS4wPC9kZXNjPjxkZWZzPjxjbGlwUGF0aCBpZD0iaGlnaGNoYXJ0cy1vOWIzdHFnLTMxNjgtIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjc5IiBoZWlnaHQ9IjQyMCIgZmlsbD0ibm9uZSI+PC9yZWN0PjwvY2xpcFBhdGg+PGNsaXBQYXRoIGlkPSJoaWdoY2hhcnRzLW85YjN0cWctMzY5MS0iPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIiBmaWxsPSJub25lIj48L3JlY3Q+PC9jbGlwUGF0aD48Y2xpcFBhdGggaWQ9ImhpZ2hjaGFydHMtbzliM3RxZy00MjE5LSI+PHJlY3QgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIiBmaWxsPSJub25lIj48L3JlY3Q+PC9jbGlwUGF0aD48L2RlZnM+PHJlY3QgZmlsbD0iI2ZmZmZmZiIgY2xhc3M9ImhpZ2hjaGFydHMtYmFja2dyb3VuZCIgeD0iMCIgeT0iMCIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI1MjAiIHJ4PSIwIiByeT0iMCI+PC9yZWN0PjxyZWN0IGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLXBsb3QtYmFja2dyb3VuZCIgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIj48L3JlY3Q+PGcgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZCBoaWdoY2hhcnRzLXhheGlzLWdyaWQiIGRhdGEtei1pbmRleD0iMSI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDEyNi41IDQwIEwgMTI2LjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDI2MC41IDQwIEwgMjYwLjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDM5NS41IDQwIEwgMzk1LjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDUzMC41IDQwIEwgNTMwLjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDY2NS41IDQwIEwgNjY1LjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQgaGlnaGNoYXJ0cy15YXhpcy1ncmlkIiBkYXRhLXotaW5kZXg9IjEiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDQ2MC41IEwgNjg3IDQ2MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggNDA4LjUgTCA2ODcgNDA4LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCAzNTUuNSBMIDY4NyAzNTUuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDMwMy41IEwgNjg3IDMwMy41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMjUwLjUgTCA2ODcgMjUwLjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCAxOTguNSBMIDY4NyAxOTguNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDE0NS41IEwgNjg3IDE0NS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggOTMuNSBMIDY4NyA5My41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMzkuNSBMIDY4NyAzOS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQgaGlnaGNoYXJ0cy15YXhpcy1ncmlkIiBkYXRhLXotaW5kZXg9IjEiPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkIGhpZ2hjaGFydHMteWF4aXMtZ3JpZCIgZGF0YS16LWluZGV4PSIxIj48L2c+PHJlY3QgZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtcGxvdC1ib3JkZXIiIGRhdGEtei1pbmRleD0iMSIgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIj48L3JlY3Q+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcyBoaWdoY2hhcnRzLXhheGlzIiBkYXRhLXotaW5kZXg9IjIiPjxwYXRoIGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGluZSIgc3Ryb2tlPSIjRTZFNkU2IiBzdHJva2Utd2lkdGg9IjEiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA4IDQ2MC41IEwgNjg3IDQ2MC41Ij48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSIyIj48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA3MjAgNDAgTCA3MjAgNDYwIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSIyIj48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA2LjUgNDAgTCA2LjUgNDYwIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLXNlcmllcy1ncm91cCIgZGF0YS16LWluZGV4PSIzIj48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1zZXJpZXMgaGlnaGNoYXJ0cy1zZXJpZXMtMCBoaWdoY2hhcnRzLWxpbmUtc2VyaWVzIiBkYXRhLXotaW5kZXg9IjkwIiBvcGFjaXR5PSIxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LDQwKSBzY2FsZSgxIDEpIiBjbGlwLXBhdGg9InVybCgjaGlnaGNoYXJ0cy1vOWIzdHFnLTM2OTEtKSI+PHBhdGggZmlsbD0ibm9uZSIgZD0iTSAwIDQwNy43NzkwNSBMIDEuMjkwODc0NTI0NzE0OCA0MDguMjkyNSBMIDIuNTgxNzQ5MDQ5NDI5NyA0MDguMjI5NSBMIDMuODcyNjIzNTc0MTQ0NSA0MDYuMjY2IEwgNS4xNjM0OTgwOTg4NTkzIDQwNi41ODIwNSBMIDYuNDU0MzcyNjIzNTc0MSA0MDYuNDgxMjUgTCA3Ljc0NTI0NzE0ODI4OSA0MDYuNTAzMyBMIDkuMDM2MTIxNjczMDAzOCA0MDYuMzIwNiBMIDEwLjMyNjk5NjE5NzcxOSA0MDUuNDkyMTUgTCAxMS42MTc4NzA3MjI0MzMgNDA1LjAxODYgTCAxMi45MDg3NDUyNDcxNDggNDA1LjMxMzY1IEwgMTQuMTk5NjE5NzcxODYzIDQwNC43NTYxIEwgMTUuNDkwNDk0Mjk2NTc4IDQwNC4zNTUgTCAxNi43ODEzNjg4MjEyOTMgNDA1LjAwNiBMIDE4LjA3MjI0MzM0NjAwOCA0MDUuMTU2MTUgTCAxOS4zNjMxMTc4NzA3MjIgNDA1LjA3MDA1IEwgMjAuNjUzOTkyMzk1NDM3IDQwNC40MDc1IEwgMjEuOTQ0ODY2OTIwMTUyIDQwNC44MTkxIEwgMjMuMjM1NzQxNDQ0ODY3IDQwNS45ODI1IEwgMjQuNTI2NjE1OTY5NTgyIDQwNy4xMTMzNSBMIDI1LjgxNzQ5MDQ5NDI5NyA0MDguODU2MzUgTCAyNy4xMDgzNjUwMTkwMTEgNDA3Ljk5MDEgTCAyOC4zOTkyMzk1NDM3MjYgNDA2LjY0NCBMIDI5LjY5MDExNDA2ODQ0MSA0MDcuNTA1IEwgMzAuOTgwOTg4NTkzMTU2IDQwNi41ODMxIEwgMzIuMjcxODYzMTE3ODcxIDQwNS4yODk1IEwgMzMuNTYyNzM3NjQyNTg2IDQwMy44ODI1IEwgMzQuODUzNjEyMTY3MyA0MDMuMTIxMjUgTCAzNi4xNDQ0ODY2OTIwMTUgNDAzLjA0NTY1IEwgMzcuNDM1MzYxMjE2NzMgNDAyLjM4NjI1IEwgMzguNzI2MjM1NzQxNDQ1IDQwMS44ODc1IEwgNDAuMDE3MTEwMjY2MTYgNDAwLjc0NTEgTCA0MS4zMDc5ODQ3OTA4NzUgNDAxLjAzNDkgTCA0Mi41OTg4NTkzMTU1ODkgNDAxLjIwNzEgTCA0My44ODk3MzM4NDAzMDQgNDAxLjQxMTg1IEwgNDUuMTgwNjA4MzY1MDE5IDQwMS41ODI5OTk5OTk5OTk5NyBMIDQ2LjQ3MTQ4Mjg4OTczNCA0MDIuNjgzNCBMIDQ3Ljc2MjM1NzQxNDQ0OSA0MDEuNjI2MDUgTCA0OS4wNTMyMzE5MzkxNjQgNDAxLjAxNDk1IEwgNTAuMzQ0MTA2NDYzODc4IDM5OS40ODE5NSBMIDUxLjYzNDk4MDk4ODU5MyA0MDAuNTI5ODUgTCA1Mi45MjU4NTU1MTMzMDggMzk4Ljk5MTYgTCA1NC4yMTY3MzAwMzgwMjMgMzk4LjQ4MjM1IEwgNTUuNTA3NjA0NTYyNzM4IDM5OS41MjUgTCA1Ni43OTg0NzkwODc0NTIgMzk2LjY0NDg1IEwgNTguMDg5MzUzNjEyMTY3IDM5OS4yMzk0IEwgNTkuMzgwMjI4MTM2ODgyIDQwMC42MDAyIEwgNjAuNjcxMTAyNjYxNTk3IDQwMS4zMTIxIEwgNjEuOTYxOTc3MTg2MzEyIDQwMi4zOTU3IEwgNjMuMjUyODUxNzExMDI3IDQwMy4wNDI1IEwgNjQuNTQzNzI2MjM1NzQxIDQwMy4yMTc4NSBMIDY1LjgzNDYwMDc2MDQ1NiA0MDMuOTkwNjUgTCA2Ny4xMjU0NzUyODUxNzEgNDAzLjQwODk1IEwgNjguNDE2MzQ5ODA5ODg2IDQwMy4zNzMyNSBMIDY5LjcwNzIyNDMzNDYwMSA0MDMuNTY3NSBMIDcwLjk5ODA5ODg1OTMxNiA0MDIuODYyOTUgTCA3Mi4yODg5NzMzODQwMyA0MDMuMDA4OSBMIDczLjU3OTg0NzkwODc0NSA0MDMuMzg2OSBMIDc0Ljg3MDcyMjQzMzQ2IDQwMy44ODI1IEwgNzYuMTYxNTk2OTU4MTc1IDQwMy43MjUgTCA3Ny40NTI0NzE0ODI4OSA0MDMuODgyNSBMIDc4Ljc0MzM0NjAwNzYwNSA0MDQuMzA5ODUgTCA4MC4wMzQyMjA1MzIzMTkgNDA0LjI0NzkgTCA4MS4zMjUwOTUwNTcwMzQgNDA0LjY3MTA1IEwgODIuNjE1OTY5NTgxNzQ5IDQwNC42NDM3NSBMIDgzLjkwNjg0NDEwNjQ2NCA0MDQuNDE4IEwgODUuMTk3NzE4NjMxMTc5IDQwNC40ODUyIEwgODYuNDg4NTkzMTU1ODk0IDQwNC42MzMyNSBMIDg3Ljc3OTQ2NzY4MDYwOCA0MDQuMzcxOCBMIDg5LjA3MDM0MjIwNTMyMyA0MDQuMjY3ODUgTCA5MC4zNjEyMTY3MzAwMzggNDA0LjI1IEwgOTEuNjUyMDkxMjU0NzUzIDQwMy4xODUzIEwgOTIuOTQyOTY1Nzc5NDY4IDQwMy4wOTcxIEwgOTQuMjMzODQwMzA0MTgzIDQwMi44ODE4NSBMIDk1LjUyNDcxNDgyODg5NyA0MDIuNzY3NCBMIDk2LjgxNTU4OTM1MzYxMiA0MDIuMzczNjUgTCA5OC4xMDY0NjM4NzgzMjcgNDAxLjk0MjEgTCA5OS4zOTczMzg0MDMwNDIgNDAyLjUyMDY1IEwgMTAwLjY4ODIxMjkyNzc2IDQwMS43NDg5IEwgMTAxLjk3OTA4NzQ1MjQ3IDQwMS4wNDg1NSBMIDEwMy4yNjk5NjE5NzcxOSA0MDEuMTYzIEwgMTA0LjU2MDgzNjUwMTkgNDAxLjM0MjU1IEwgMTA1Ljg1MTcxMTAyNjYyIDQwMS40OTkgTCAxMDcuMTQyNTg1NTUxMzMgNDAwLjg3NDI1IEwgMTA4LjQzMzQ2MDA3NjA1IDM5OS4zODUzNSBMIDEwOS43MjQzMzQ2MDA3NiA0MDAuMjA3NSBMIDExMS4wMTUyMDkxMjU0OCAzOTguNTM2OTUgTCAxMTIuMzA2MDgzNjUwMTkgMzk4LjEwNTQgTCAxMTMuNTk2OTU4MTc0OSAzOTguMDAyNSBMIDExNC44ODc4MzI2OTk2MiAzOTcuOTEyMiBMIDExNi4xNzg3MDcyMjQzMyAzOTkuMzQxMjUgTCAxMTcuNDY5NTgxNzQ5MDUgMzk5LjM5Mzc1IEwgMTE4Ljc2MDQ1NjI3Mzc2IDQwMC4xMjY2NSBMIDEyMC4wNTEzMzA3OTg0OCAzOTkuMTUzMyBMIDEyMS4zNDIyMDUzMjMxOSA0MDAuOTE0MTUgTCAxMjIuNjMzMDc5ODQ3OTEgNDAxLjI1NDM1IEwgMTIzLjkyMzk1NDM3MjYyIDQwMC45MDU3NSBMIDEyNS4yMTQ4Mjg4OTczNCA0MDEuMjAzOTUgTCAxMjYuNTA1NzAzNDIyMDUgNDAwLjg4NTggTCAxMjcuNzk2NTc3OTQ2NzcgMzk4LjI1NDUgTCAxMjkuMDg3NDUyNDcxNDggNDAxLjE3ODc1IEwgMTMwLjM3ODMyNjk5NjIgNDAwLjExNjE1IEwgMTMxLjY2OTIwMTUyMDkxIDQwMC4zODcwNSBMIDEzMi45NjAwNzYwNDU2MyA0MDAuNjI0MzUgTCAxMzQuMjUwOTUwNTcwMzQgNDAwLjg4MzcgTCAxMzUuNTQxODI1MDk1MDYgNDAwLjkzMzA1IEwgMTM2LjgzMjY5OTYxOTc3IDM5OS40MiBMIDEzOC4xMjM1NzQxNDQ0OSAzOTkuMjM3MyBMIDEzOS40MTQ0NDg2NjkyIDM5OC43Mzk2IEwgMTQwLjcwNTMyMzE5MzkyIDM5OC41OCBMIDE0MS45OTYxOTc3MTg2MyAzOTcuNjk1OSBMIDE0My4yODcwNzIyNDMzNSAzOTYuODQ0MzUgTCAxNDQuNTc3OTQ2NzY4MDYgMzk2Ljk4NjEgTCAxNDUuODY4ODIxMjkyNzggMzk3LjE1NzI1IEwgMTQ3LjE1OTY5NTgxNzQ5IDM5Ny4zODcyIEwgMTQ4LjQ1MDU3MDM0MjIxIDM5Ny4xNTIgTCAxNDkuNzQxNDQ0ODY2OTIgMzk3LjIzMzkgTCAxNTEuMDMyMzE5MzkxNjMgMzk3LjAzNjUgTCAxNTIuMzIzMTkzOTE2MzUgMzk2LjUyNjIgTCAxNTMuNjE0MDY4NDQxMDYgMzk2LjYyMjggTCAxNTQuOTA0OTQyOTY1NzggMzk3LjAzMjMgTCAxNTYuMTk1ODE3NDkwNDkgMzk3LjAxMzQgTCAxNTcuNDg2NjkyMDE1MjEgMzk2LjYyNTk1IEwgMTU4Ljc3NzU2NjUzOTkyIDM5NS45NzQ5NSBMIDE2MC4wNjg0NDEwNjQ2NCAzOTQuNjM5MzUgTCAxNjEuMzU5MzE1NTg5MzUgMzkzLjc3NjI1IEwgMTYyLjY1MDE5MDExNDA3IDM5Mi44NzExNSBMIDE2My45NDEwNjQ2Mzg3OCAzOTAuNjExNTUgTCAxNjUuMjMxOTM5MTYzNSAzOTEuNzI0NTUgTCAxNjYuNTIyODEzNjg4MjEgMzg5LjgzOTggTCAxNjcuODEzNjg4MjEyOTMgMzkxLjMwNDU1IEwgMTY5LjEwNDU2MjczNzY0IDM5MC43MDI5IEwgMTcwLjM5NTQzNzI2MjM2IDM5Mi4wNDA2IEwgMTcxLjY4NjMxMTc4NzA3IDM5MS43OTkxIEwgMTcyLjk3NzE4NjMxMTc5IDM5NC41MDQ5NSBMIDE3NC4yNjgwNjA4MzY1IDM5NC41MDI4NSBMIDE3NS41NTg5MzUzNjEyMiAzOTQuNDU3NyBMIDE3Ni44NDk4MDk4ODU5MyAzOTIuNzQ2MiBMIDE3OC4xNDA2ODQ0MTA2NSAzOTMuOTQwMDUgTCAxNzkuNDMxNTU4OTM1MzYgMzk0LjA3NDQ1IEwgMTgwLjcyMjQzMzQ2MDA4IDM5NS42OTk4NSBMIDE4Mi4wMTMzMDc5ODQ3OSAzOTQuMTIxNyBMIDE4My4zMDQxODI1MDk1MSAzOTMuODU1IEwgMTg0LjU5NTA1NzAzNDIyIDM5Ni4wNDk1IEwgMTg1Ljg4NTkzMTU1ODk0IDM5NS45MjM1IEwgMTg3LjE3NjgwNjA4MzY1IDM5Ni42MzIyNSBMIDE4OC40Njc2ODA2MDgzNyAzOTYuMjY1OCBMIDE4OS43NTg1NTUxMzMwOCAzOTguMDY2NTUgTCAxOTEuMDQ5NDI5NjU3NzkgMzk5LjczNjA1IEwgMTkyLjM0MDMwNDE4MjUxIDQwMC44MjI4MDAwMDAwMDAwMyBMIDE5My42MzExNzg3MDcyMiA0MDAuOTk1IEwgMTk0LjkyMjA1MzIzMTk0IDQwMS45MDc0NSBMIDE5Ni4yMTI5Mjc3NTY2NSA0MDEuODEyOTUgTCAxOTcuNTAzODAyMjgxMzcgNDAyLjQzNDU1IEwgMTk4Ljc5NDY3NjgwNjA4IDQwMy45ODU0IEwgMjAwLjA4NTU1MTMzMDggNDA0LjgyMzMgTCAyMDEuMzc2NDI1ODU1NTEgNDA1LjA3NjM1IEwgMjAyLjY2NzMwMDM4MDIzIDQwMi41MzUzNSBMIDIwMy45NTgxNzQ5MDQ5NCA0MDMuMzU0MzUgTCAyMDUuMjQ5MDQ5NDI5NjYgNDA0LjgxNDkgTCAyMDYuNTM5OTIzOTU0MzcgNDA0Ljg1NTg1IEwgMjA3LjgzMDc5ODQ3OTA5IDQwNC43MDU3IEwgMjA5LjEyMTY3MzAwMzggNDA1LjMwMzE1IEwgMjEwLjQxMjU0NzUyODUyIDQwNi41MDEyIEwgMjExLjcwMzQyMjA1MzIzIDQwNy4xMzg1NSBMIDIxMi45OTQyOTY1Nzc5NSA0MDguMjM0NzUgTCAyMTQuMjg1MTcxMTAyNjYgNDA3LjkwNCBMIDIxNS41NzYwNDU2MjczOCA0MDguMTE1MDUgTCAyMTYuODY2OTIwMTUyMDkgNDA5LjEyNzI1IEwgMjE4LjE1Nzc5NDY3NjgxIDQwOS4zNzcxNTAwMDAwMDAwMyBMIDIxOS40NDg2NjkyMDE1MiA0MDguMjIzMiBMIDIyMC43Mzk1NDM3MjYyNCA0MDYuMDU4MSBMIDIyMi4wMzA0MTgyNTA5NSA0MDguNjQ2MzUgTCAyMjMuMzIxMjkyNzc1NjcgNDA5LjUzNzggTCAyMjQuNjEyMTY3MzAwMzggNDA3LjM4NjM1IEwgMjI1LjkwMzA0MTgyNTEgNDA3LjM3NDggTCAyMjcuMTkzOTE2MzQ5ODEgNDA4LjQ5NzI1IEwgMjI4LjQ4NDc5MDg3NDUyIDQwOC44ODc4NSBMIDIyOS43NzU2NjUzOTkyNCA0MDYuNTYzMTUgTCAyMzEuMDY2NTM5OTIzOTUgNDA3LjAzMTQ1IEwgMjMyLjM1NzQxNDQ0ODY3IDQwNC41NTM0NSBMIDIzMy42NDgyODg5NzMzOCA0MDYuNjUzNDUgTCAyMzQuOTM5MTYzNDk4MSA0MDcuNDY0MDUgTCAyMzYuMjMwMDM4MDIyODEgNDAzLjQ0MjU1IEwgMjM3LjUyMDkxMjU0NzUzIDQwMy4wNTcyIEwgMjM4LjgxMTc4NzA3MjI0IDQwMy4yMzQ2NSBMIDI0MC4xMDI2NjE1OTY5NiA0MDQuMDAzMjUgTCAyNDEuMzkzNTM2MTIxNjcgNDAzLjAxNDE1IEwgMjQyLjY4NDQxMDY0NjM5IDQwMy4yNjA5IEwgMjQzLjk3NTI4NTE3MTEgNDAzLjUwMTM1IEwgMjQ1LjI2NjE1OTY5NTgyIDQwMy4xNDk2IEwgMjQ2LjU1NzAzNDIyMDUzIDQwMi44NTM1IEwgMjQ3Ljg0NzkwODc0NTI1IDQwNC4xMDE5NSBMIDI0OS4xMzg3ODMyNjk5NiA0MDUuNTA1OCBMIDI1MC40Mjk2NTc3OTQ2OCA0MDUuMDUzMjUgTCAyNTEuNzIwNTMyMzE5MzkgNDA2LjU5NDY1IEwgMjUzLjAxMTQwNjg0NDExIDQwNi4zNjU3NSBMIDI1NC4zMDIyODEzNjg4MiA0MDcuNDYzIEwgMjU1LjU5MzE1NTg5MzU0IDQwOC41MjQ1NSBMIDI1Ni44ODQwMzA0MTgyNSA0MDkuMDIyMjUgTCAyNTguMTc0OTA0OTQyOTcgNDA5Ljc1NzI1IEwgMjU5LjQ2NTc3OTQ2NzY4IDQxMC40Nzg2MDAwMDAwMDAwMyBMIDI2MC43NTY2NTM5OTI0IDQxMC42NzcwNSBMIDI2Mi4wNDc1Mjg1MTcxMSA0MTAuMTE5NSBMIDI2My4zMzg0MDMwNDE4MyA0MTAuNjgyMyBMIDI2NC42MjkyNzc1NjY1NCA0MTAuOTIwNjUgTCAyNjUuOTIwMTUyMDkxMjUgNDEwLjI1MDc1IEwgMjY3LjIxMTAyNjYxNTk3IDQxMS4yOTIzNSBMIDI2OC41MDE5MDExNDA2OCA0MTIuNDIxMSBMIDI2OS43OTI3NzU2NjU0IDQxMi43MzE5IEwgMjcxLjA4MzY1MDE5MDExIDQxMi4zNTcwNSBMIDI3Mi4zNzQ1MjQ3MTQ4MyA0MTIuNjU2MyBMIDI3My42NjUzOTkyMzk1NCA0MTMuOTQxNSBMIDI3NC45NTYyNzM3NjQyNiA0MTMuODY0ODUgTCAyNzYuMjQ3MTQ4Mjg4OTcgNDEzLjg3NzQ1IEwgMjc3LjUzODAyMjgxMzY5IDQxNC41MjExIEwgMjc4LjgyODg5NzMzODQgNDE1LjkxNjU1IEwgMjgwLjExOTc3MTg2MzEyIDQxNS4zOTU3NSBMIDI4MS40MTA2NDYzODc4MyA0MTQuMDA2NiBMIDI4Mi43MDE1MjA5MTI1NSA0MTQuNDYzMzUgTCAyODMuOTkyMzk1NDM3MjYgNDE0LjEwNDI1IEwgMjg1LjI4MzI2OTk2MTk4IDQxNC42Mzk3NSBMIDI4Ni41NzQxNDQ0ODY2OSA0MTMuNjY3NDUgTCAyODcuODY1MDE5MDExNDEgNDE0LjI1MTI1IEwgMjg5LjE1NTg5MzUzNjEyIDQxNC42MzAzIEwgMjkwLjQ0Njc2ODA2MDg0IDQxNC43Mzg0NSBMIDI5MS43Mzc2NDI1ODU1NSA0MTMuNjc1ODUgTCAyOTMuMDI4NTE3MTEwMjcgNDExLjY3MjQ1IEwgMjk0LjMxOTM5MTYzNDk4IDQxMS41ODAwNSBMIDI5NS42MTAyNjYxNTk3IDQxMS45OTY5IEwgMjk2LjkwMTE0MDY4NDQxIDQwOC4yNzI1NSBMIDI5OC4xOTIwMTUyMDkxMyA0MDcuNzMzOSBMIDI5OS40ODI4ODk3MzM4NCA0MDguOTc4MTUgTCAzMDAuNzczNzY0MjU4NTYgNDA3Ljk1MTI1IEwgMzAyLjA2NDYzODc4MzI3IDQwNy43NTA3IEwgMzAzLjM1NTUxMzMwNzk4IDQwNi4zMjI3IEwgMzA0LjY0NjM4NzgzMjcgNDA1LjU1OTM1IEwgMzA1LjkzNzI2MjM1NzQxIDQwNC43NzYwNSBMIDMwNy4yMjgxMzY4ODIxMyA0MDMuODE5NSBMIDMwOC41MTkwMTE0MDY4NCA0MDUuMjM1OTUgTCAzMDkuODA5ODg1OTMxNTYgNDA1LjQwMjkgTCAzMTEuMTAwNzYwNDU2MjcgNDA1LjA0OTA1IEwgMzEyLjM5MTYzNDk4MDk5IDQwNi40NjEzIEwgMzEzLjY4MjUwOTUwNTcgNDA0Ljc5MDc1IEwgMzE0Ljk3MzM4NDAzMDQyIDQwNC42MjQ4NSBMIDMxNi4yNjQyNTg1NTUxMyA0MDMuMjQzMDUgTCAzMTcuNTU1MTMzMDc5ODUgNDAzLjMxOTcgTCAzMTguODQ2MDA3NjA0NTYgNDAxLjQ2ODU1IEwgMzIwLjEzNjg4MjEyOTI4IDM5OS45MjA4NSBMIDMyMS40Mjc3NTY2NTM5OSAzOTguODc2MSBMIDMyMi43MTg2MzExNzg3MSAzOTguNzkgTCAzMjQuMDA5NTA1NzAzNDIgMzk3LjQ0Mjg1IEwgMzI1LjMwMDM4MDIyODE0IDM5OS4xOTAwNSBMIDMyNi41OTEyNTQ3NTI4NSA0MDAuNzAxIEwgMzI3Ljg4MjEyOTI3NzU3IDQwMS41MDExIEwgMzI5LjE3MzAwMzgwMjI4IDQwMi42MTgzIEwgMzMwLjQ2Mzg3ODMyNyA0MDMuNTIxMyBMIDMzMS43NTQ3NTI4NTE3MSA0MDIuODE0NjUwMDAwMDAwMDMgTCAzMzMuMDQ1NjI3Mzc2NDMgNDAwLjYyOTYgTCAzMzQuMzM2NTAxOTAxMTQgNDAxLjg3MDcgTCAzMzUuNjI3Mzc2NDI1ODYgNDAwLjM2NjA1IEwgMzM2LjkxODI1MDk1MDU3IDM5OS44Njk0IEwgMzM4LjIwOTEyNTQ3NTI5IDQwMC4xMTUxIEwgMzM5LjUgMzk4LjQzNTEgTCAzNDAuNzkwODc0NTI0NzEgMzk4Ljk1MTcgTCAzNDIuMDgxNzQ5MDQ5NDMgMzk1LjU1MDc1IEwgMzQzLjM3MjYyMzU3NDE0IDM5NC44NjE5NSBMIDM0NC42NjM0OTgwOTg4NiAzOTEuODI4NSBMIDM0NS45NTQzNzI2MjM1NyAzOTMuOTY2MyBMIDM0Ny4yNDUyNDcxNDgyOSAzOTMuODIyNDUgTCAzNDguNTM2MTIxNjczIDM5Mi45MTUyNSBMIDM0OS44MjY5OTYxOTc3MiAzOTAuNzYyNzUgTCAzNTEuMTE3ODcwNzIyNDMgMzg5LjEyNTggTCAzNTIuNDA4NzQ1MjQ3MTUgMzg1Ljk5Nzg0OTk5OTk5OTk3IEwgMzUzLjY5OTYxOTc3MTg2IDM4Mi4zODE2NSBMIDM1NC45OTA0OTQyOTY1OCAzODEuNTM2NCBMIDM1Ni4yODEzNjg4MjEyOSAzODMuNDE1OSBMIDM1Ny41NzIyNDMzNDYwMSAzODIuNzAwODUgTCAzNTguODYzMTE3ODcwNzIgMzc3LjIwNjIgTCAzNjAuMTUzOTkyMzk1NDQgMzc0LjcyNjEgTCAzNjEuNDQ0ODY2OTIwMTUgMzczLjE0MDYgTCAzNjIuNzM1NzQxNDQ0ODcgMzc1Ljk1ODggTCAzNjQuMDI2NjE1OTY5NTggMzY5LjgwMzcgTCAzNjUuMzE3NDkwNDk0MyAzNjUuOTE5NzUgTCAzNjYuNjA4MzY1MDE5MDEgMzU5LjE4ODIgTCAzNjcuODk5MjM5NTQzNzMgMzUxLjY0MTg1IEwgMzY5LjE5MDExNDA2ODQ0IDM0Ni4yNDggTCAzNzAuNDgwOTg4NTkzMTYgMzIxLjY5Mzc1IEwgMzcxLjc3MTg2MzExNzg3IDMyOC4wMTM3IEwgMzczLjA2MjczNzY0MjU5IDMyMS42Njk2IEwgMzc0LjM1MzYxMjE2NzMgMzI4LjI5NTEgTCAzNzUuNjQ0NDg2NjkyMDIgMzUxLjg5Mjc5OTk5OTk5OTk3IEwgMzc2LjkzNTM2MTIxNjczIDM0Mi4yNzE2NSBMIDM3OC4yMjYyMzU3NDE0NCAzNDAuNTQxMjUgTCAzNzkuNTE3MTEwMjY2MTYgMzI4LjUxODc1IEwgMzgwLjgwNzk4NDc5MDg3IDMyNy44Mzk0IEwgMzgyLjA5ODg1OTMxNTU5IDMyNi4wNDgxIEwgMzgzLjM4OTczMzg0MDMgMzA4LjkzNTIgTCAzODQuNjgwNjA4MzY1MDIgMjc2LjI0MTM1IEwgMzg1Ljk3MTQ4Mjg4OTczIDMwNC4wMDc1NSBMIDM4Ny4yNjIzNTc0MTQ0NSAzNDYuMTM5ODUgTCAzODguNTUzMjMxOTM5MTYgMzI3LjQxNzMgTCAzODkuODQ0MTA2NDYzODggMzI4LjY4MTUgTCAzOTEuMTM0OTgwOTg4NTkgMzM3LjA3MSBMIDM5Mi40MjU4NTU1MTMzMSAzMjMuMzM0OSBMIDM5My43MTY3MzAwMzgwMiAzMzMuMjE1NCBMIDM5NS4wMDc2MDQ1NjI3NCAzMzguNzAyNyBMIDM5Ni4yOTg0NzkwODc0NSAzNDIuNTQ5OSBMIDM5Ny41ODkzNTM2MTIxNyAzMjAuODU2OSBMIDM5OC44ODAyMjgxMzY4OCAyMTcuODIyNSBMIDQwMC4xNzExMDI2NjE2IDI4Mi4yMDk1NTAwMDAwMDAwNCBMIDQwMS40NjE5NzcxODYzMSAzMDkuNzAzOCBMIDQwMi43NTI4NTE3MTEwMyAzMTMuNjY3NTUgTCA0MDQuMDQzNzI2MjM1NzQgMzAyLjI0MjUgTCA0MDUuMzM0NjAwNzYwNDYgMzEwLjkyMzkgTCA0MDYuNjI1NDc1Mjg1MTcgMzE5LjU5OSBMIDQwNy45MTYzNDk4MDk4OSAzMjAuMzgxMjUgTCA0MDkuMjA3MjI0MzM0NiAzMTUuNTc3NSBMIDQxMC40OTgwOTg4NTkzMiAzMTMuMjA2NiBMIDQxMS43ODg5NzMzODQwMyAzMTguMjc0OTUgTCA0MTMuMDc5ODQ3OTA4NzUgMzI3LjcwMjkgTCA0MTQuMzcwNzIyNDMzNDYgMzI4Ljc4MTI1IEwgNDE1LjY2MTU5Njk1ODE3IDMzMi43NDM5NSBMIDQxNi45NTI0NzE0ODI4OSAzMzMuNDEyOCBMIDQxOC4yNDMzNDYwMDc2IDI5Ni4zNzUxIEwgNDE5LjUzNDIyMDUzMjMyIDI4NS4wNjk3NSBMIDQyMC44MjUwOTUwNTcwMyAyNjQuODI2OCBMIDQyMi4xMTU5Njk1ODE3NSAyMzYuMDI3NCBMIDQyMy40MDY4NDQxMDY0NiAyNTIuNDU0NjUgTCA0MjQuNjk3NzE4NjMxMTggMjUyLjE0MjggTCA0MjUuOTg4NTkzMTU1ODkgMjE5LjUzOTI1IEwgNDI3LjI3OTQ2NzY4MDYxIDIxMy44NjQgTCA0MjguNTcwMzQyMjA1MzIgMjAzLjU4NjYgTCA0MjkuODYxMjE2NzMwMDQgMTYzLjIyMjUwMDAwMDAwMDAzIEwgNDMxLjE1MjA5MTI1NDc1IDYzLjg0NDIgTCA0MzIuNDQyOTY1Nzc5NDcgMTk0LjYwMTc1IEwgNDMzLjczMzg0MDMwNDE4IDIwMi41NTQ0NSBMIDQzNS4wMjQ3MTQ4Mjg5IDIyMi44MTczNSBMIDQzNi4zMTU1ODkzNTM2MSAyMjUuMjMwMjUgTCA0MzcuNjA2NDYzODc4MzMgMjIxLjc2IEwgNDM4Ljg5NzMzODQwMzA0IDI1NS45ODI2NSBMIDQ0MC4xODgyMTI5Mjc3NiAyNzAuOTAzMTUgTCA0NDEuNDc5MDg3NDUyNDcgMzAwLjc0NTIgTCA0NDIuNzY5OTYxOTc3MTkgMzAyLjE0MzggTCA0NDQuMDYwODM2NTAxOSAyOTkuNDc0NyBMIDQ0NS4zNTE3MTEwMjY2MiAzMTcuMjU0MzUgTCA0NDYuNjQyNTg1NTUxMzMgMjk4LjcxNTU1IEwgNDQ3LjkzMzQ2MDA3NjA1IDI4OS40MTE1IEwgNDQ5LjIyNDMzNDYwMDc2IDI3Ny42NTk5IEwgNDUwLjUxNTIwOTEyNTQ4IDI3My45MzEzNSBMIDQ1MS44MDYwODM2NTAxOSAyOTguNzc2NDUgTCA0NTMuMDk2OTU4MTc0OSAzMzIuODc0MTUgTCA0NTQuMzg3ODMyNjk5NjIgMzM5Ljg2OTI0OTk5OTk5OTk3IEwgNDU1LjY3ODcwNzIyNDMzIDM0Ni45ODkzIEwgNDU2Ljk2OTU4MTc0OTA1IDM1MS45NDc0IEwgNDU4LjI2MDQ1NjI3Mzc2IDM0OS43NTcxIEwgNDU5LjU1MTMzMDc5ODQ4IDM2MS44MDM3NSBMIDQ2MC44NDIyMDUzMjMxOSAzNTkuMjE2NTUgTCA0NjIuMTMzMDc5ODQ3OTEgMzYzLjM1NTY0OTk5OTk5OTk3IEwgNDYzLjQyMzk1NDM3MjYyIDM2OC41MDA2NSBMIDQ2NC43MTQ4Mjg4OTczNCAzNjYuNDM2MzUgTCA0NjYuMDA1NzAzNDIyMDUgMzcyLjc3MSBMIDQ2Ny4yOTY1Nzc5NDY3NyAzNjQuNTAwMTUgTCA0NjguNTg3NDUyNDcxNDggMzc1LjAwMDE1IEwgNDY5Ljg3ODMyNjk5NjIgMzc2Ljg1MTMgTCA0NzEuMTY5MjAxNTIwOTEgMzY5Ljc2NDg1IEwgNDcyLjQ2MDA3NjA0NTYzIDM3NC43MTg3NSBMIDQ3My43NTA5NTA1NzAzNCAzNzYuNzkzNTUgTCA0NzUuMDQxODI1MDk1MDYgMzc3LjgyNzggTCA0NzYuMzMyNjk5NjE5NzcgMzc5LjUzNTEgTCA0NzcuNjIzNTc0MTQ0NDkgMzgxLjU5NzMgTCA0NzguOTE0NDQ4NjY5MiAzODUuNTk0NjUgTCA0ODAuMjA1MzIzMTkzOTIgMzg4LjMxNTIgTCA0ODEuNDk2MTk3NzE4NjMgMzk0LjI1NCBMIDQ4Mi43ODcwNzIyNDMzNSAzOTUuMTI2NTUgTCA0ODQuMDc3OTQ2NzY4MDYgMzg2LjM0ODU1IEwgNDg1LjM2ODgyMTI5Mjc4IDM4My4yNDE2IEwgNDg2LjY1OTY5NTgxNzQ5IDM4NS44Njc2NSBMIDQ4Ny45NTA1NzAzNDIyMSAzODEuMDQxODUgTCA0ODkuMjQxNDQ0ODY2OTIgMzg0Ljg0ODEgTCA0OTAuNTMyMzE5MzkxNjQgMzkyLjc0NTE1IEwgNDkxLjgyMzE5MzkxNjM1IDM5MC40Mjc4IEwgNDkzLjExNDA2ODQ0MTA2IDM5Mi44NjY5NSBMIDQ5NC40MDQ5NDI5NjU3OCAzODkuNzA0MzUgTCA0OTUuNjk1ODE3NDkwNDkgMzgyLjkzNSBMIDQ5Ni45ODY2OTIwMTUyMSAzODEuNzY5NSBMIDQ5OC4yNzc1NjY1Mzk5MiAzODMuNDg0MTUgTCA0OTkuNTY4NDQxMDY0NjQgMzgyLjYwMjE1IEwgNTAwLjg1OTMxNTU4OTM1IDM4My43NjY2IEwgNTAyLjE1MDE5MDExNDA3IDM4MS42OTI4NSBMIDUwMy40NDEwNjQ2Mzg3OCAzNzguMjE5NDUgTCA1MDQuNzMxOTM5MTYzNSAzNzYuMDQ4MDUgTCA1MDYuMDIyODEzNjg4MjEgMzc5Ljg1NzQ1IEwgNTA3LjMxMzY4ODIxMjkzIDM2My4zMTg5IEwgNTA4LjYwNDU2MjczNzY0IDM2Ni4zMzI0IEwgNTA5Ljg5NTQzNzI2MjM2IDM2Ni45NDE0IEwgNTExLjE4NjMxMTc4NzA3IDM2OS41NDAxNSBMIDUxMi40NzcxODYzMTE3OSAzNzEuMDM2NCBMIDUxMy43NjgwNjA4MzY1IDM3Mi42ODI4IEwgNTE1LjA1ODkzNTM2MTIyIDM3MS4wMTAxNSBMIDUxNi4zNDk4MDk4ODU5MyAzNzQuMzI5MiBMIDUxNy42NDA2ODQ0MTA2NSAzNzkuNDcyMSBMIDUxOC45MzE1NTg5MzUzNiAzODUuMTUxNTUgTCA1MjAuMjIyNDMzNDYwMDggMzg0LjExNzMgTCA1MjEuNTEzMzA3OTg0NzkgMzg2LjAzMjUgTCA1MjIuODA0MTgyNTA5NTEgMzgzLjcyMTQ1IEwgNTI0LjA5NTA1NzAzNDIyIDM4Ni40MDk0NSBMIDUyNS4zODU5MzE1NTg5NCAzOTAuMTQ5NTUgTCA1MjYuNjc2ODA2MDgzNjUgMzkwLjUxNzA1IEwgNTI3Ljk2NzY4MDYwODM3IDM4OS4yMzA4IEwgNTI5LjI1ODU1NTEzMzA4IDM5MS41MjcxNSBMIDUzMC41NDk0Mjk2NTc3OSAzOTMuOTM2OSBMIDUzMS44NDAzMDQxODI1MSAzOTUuOTE5MyBMIDUzMy4xMzExNzg3MDcyMiAzOTIuOTAwNTUgTCA1MzQuNDIyMDUzMjMxOTQgMzkyLjI4ODQgTCA1MzUuNzEyOTI3NzU2NjUgMzkxLjYyMjcgTCA1MzcuMDAzODAyMjgxMzcgMzkwLjgzNTIgTCA1MzguMjk0Njc2ODA2MDggMzkxLjI5MyBMIDUzOS41ODU1NTEzMzA4IDM5Mi4wNjM3IEwgNTQwLjg3NjQyNTg1NTUxIDM4Ny42MjMyNSBMIDU0Mi4xNjczMDAzODAyMyAzODcuNzEyNSBMIDU0My40NTgxNzQ5MDQ5NCAzODkuMTQ3MjIgTCA1NDQuNzQ5MDQ5NDI5NjYgMzg4LjQyNzk3IEwgNTQ2LjAzOTkyMzk1NDM3IDM4OC42NDg1NzUgTCA1NDcuMzMwNzk4NDc5MDkgMzg3LjY5NTgwNSBMIDU0OC42MjE2NzMwMDM4IDM4NC4zNDAzMiBMIDU0OS45MTI1NDc1Mjg1MiAzODMuNjMxMDQ1IEwgNTUxLjIwMzQyMjA1MzIzIDM4NS4xMjgwMyBMIDU1Mi40OTQyOTY1Nzc5NSAzODIuNzY0Mzc1IEwgNTUzLjc4NTE3MTEwMjY2IDM4NC4zNDA5NSBMIDU1NS4wNzYwNDU2MjczOCAzODMuNzY3MTI1IEwgNTU2LjM2NjkyMDE1MjA5IDM4NS4zMzE3MyBMIDU1Ny42NTc3OTQ2NzY4MSAzODYuODUxOTIgTCA1NTguOTQ4NjY5MjAxNTIgMzg2LjY5NzM2IEwgNTYwLjIzOTU0MzcyNjI0IDM4Ni4wMzA4MiBMIDU2MS41MzA0MTgyNTA5NSAzODEuNTE3NSBMIDU2Mi44MjEyOTI3NzU2NyAzNzcuOTQzNDA1IEwgNTY0LjExMjE2NzMwMDM4IDM3OC41OTc2NiBMIDU2NS40MDMwNDE4MjUxIDM4MS41NjQwMTUgTCA1NjYuNjkzOTE2MzQ5ODEgMzc4LjYzNDYyIEwgNTY3Ljk4NDc5MDg3NDUyIDM4MS44MTQzMzUgTCA1NjkuMjc1NjY1Mzk5MjQgMzgyLjUwODU5NSBMIDU3MC41NjY1Mzk5MjM5NSAzODMuNjYyMTI1IEwgNTcxLjg1NzQxNDQ0ODY3IDM3OS40MjY0MjUgTCA1NzMuMTQ4Mjg4OTczMzggMzc3LjIxODggTCA1NzQuNDM5MTYzNDk4MSAzNzguMzA0NSBMIDU3NS43MzAwMzgwMjI4MSAzNzguNjg5MzI1IEwgNTc3LjAyMDkxMjU0NzUzIDM3NC4yMTIxMjUgTCA1NzguMzExNzg3MDcyMjQgMzc5LjExNDg5IEwgNTc5LjYwMjY2MTU5Njk2IDM3NS44NTM1OSBMIDU4MC44OTM1MzYxMjE2NyAzNzIuMDA4ODA1IEwgNTgyLjE4NDQxMDY0NjM5IDM3MC43NjA4OCBMIDU4My40NzUyODUxNzExIDM2OS42OTMzNDUgTCA1ODQuNzY2MTU5Njk1ODIgMzcxLjE0MzI5IEwgNTg2LjA1NzAzNDIyMDUzIDM3Ni43OTY4MDUgTCA1ODcuMzQ3OTA4NzQ1MjUgMzc0LjA2MDcxNSBMIDU4OC42Mzg3ODMyNjk5NiAzNjkuODMwNTggTCA1ODkuOTI5NjU3Nzk0NjggMzY3LjkwOTUgTCA1OTEuMjIwNTMyMzE5MzkgMzcyLjI4OTc4NSBMIDU5Mi41MTE0MDY4NDQxMSAzNzAuMjEzMjAwMDAwMDAwMDMgTCA1OTMuODAyMjgxMzY4ODIgMzY3LjczODI0NSBMIDU5NS4wOTMxNTU4OTM1NCAzNjMuNjUyMjc1MDAwMDAwMDMgTCA1OTYuMzg0MDMwNDE4MjUgMzYxLjIwMTg5IEwgNTk3LjY3NDkwNDk0Mjk3IDM2Ni42MTYyMTUgTCA1OTguOTY1Nzc5NDY3NjggMzcxLjc5NjE4IEwgNjAwLjI1NjY1Mzk5MjQgMzczLjQ1OTE3IEwgNjAxLjU0NzUyODUxNzExIDM3OS4yOTM3MDUgTCA2MDIuODM4NDAzMDQxODMgMzc1LjY0MDg2IEwgNjA0LjEyOTI3NzU2NjU0IDM3NS4zMDYzMyBMIDYwNS40MjAxNTIwOTEyNSAzNzcuMzM5NDQ1IEwgNjA2LjcxMTAyNjYxNTk3IDM4MS42NDcwNyBMIDYwOC4wMDE5MDExNDA2OCAzODQuNzExMjg1IEwgNjA5LjI5Mjc3NTY2NTQgMzgyLjg1NzQwNDk5OTk5OTk3IEwgNjEwLjU4MzY1MDE5MDExIDM4NS45NDY0IEwgNjExLjg3NDUyNDcxNDgzIDM4NS43NDU1MzUgTCA2MTMuMTY1Mzk5MjM5NTQgMzgzLjY2MjAyIEwgNjE0LjQ1NjI3Mzc2NDI2IDM4My4wOTk1MzUgTCA2MTUuNzQ3MTQ4Mjg4OTcgMzgxLjY3MTk1NSBMIDYxNy4wMzgwMjI4MTM2OSAzODQuNDQ2NzkgTCA2MTguMzI4ODk3MzM4NCAzODEuNjQ5OCBMIDYxOS42MTk3NzE4NjMxMiAzODAuNTgwMjcgTCA2MjAuOTEwNjQ2Mzg3ODMgMzc3LjAxMTc0MDAwMDAwMDAzIEwgNjIyLjIwMTUyMDkxMjU1IDM4NC44OTUwMzUgTCA2MjMuNDkyMzk1NDM3MjYgMzg0Ljk2ODMyNSBMIDYyNC43ODMyNjk5NjE5OCAzODIuNjYwOTUgTCA2MjYuMDc0MTQ0NDg2NjkgMzg0LjcyNTI1IEwgNjI3LjM2NTAxOTAxMTQxIDM4NS4zNDc5IEwgNjI4LjY1NTg5MzUzNjEyIDM4NC4zMjk0IEwgNjI5Ljk0Njc2ODA2MDg0IDM4NS45MzE3IEwgNjMxLjIzNzY0MjU4NTU1IDM4Ny40MTc0NTAwMDAwMDAwMyBMIDYzMi41Mjg1MTcxMTAyNyAzODQuNzQ4MzUgTCA2MzMuODE5MzkxNjM0OTggMzg2Ljc5NjkgTCA2MzUuMTEwMjY2MTU5NyAzODYuNDMyNTUgTCA2MzYuNDAxMTQwNjg0NDEgMzg1LjcwNDkgTCA2MzcuNjkyMDE1MjA5MTMgMzg2LjA3NjYgTCA2MzguOTgyODg5NzMzODQgMzg1LjIwODI1IEwgNjQwLjI3Mzc2NDI1ODU2IDM4Ni45OTAxIEwgNjQxLjU2NDYzODc4MzI3IDM4Ni4yMjE1IEwgNjQyLjg1NTUxMzMwNzk4IDM4Ni41OTMyIEwgNjQ0LjE0NjM4NzgzMjcgMzg2LjM4MzIgTCA2NDUuNDM3MjYyMzU3NDEgMzg3LjMyMTkgTCA2NDYuNzI4MTM2ODgyMTMgMzg3LjIzODk1IEwgNjQ4LjAxOTAxMTQwNjg0IDM4Ny4xODc1IEwgNjQ5LjMwOTg4NTkzMTU2IDM4OC4yOTIxIEwgNjUwLjYwMDc2MDQ1NjI3IDM4OS43NDIxNSBMIDY1MS44OTE2MzQ5ODA5OSAzOTEuMzcwNyBMIDY1My4xODI1MDk1MDU3IDM5MC45MzE4IEwgNjU0LjQ3MzM4NDAzMDQyIDM5MC40MzA5NSBMIDY1NS43NjQyNTg1NTUxMyAzOTAuNTI3MjM1IEwgNjU3LjA1NTEzMzA3OTg1IDM4OS41NDU4IEwgNjU4LjM0NjAwNzYwNDU2IDM5MC4yMDczIEwgNjU5LjYzNjg4MjEyOTI4IDM4MS4yNzcwNTAwMDAwMDAwMyBMIDY2MC45Mjc3NTY2NTM5OSAzNzcuOTU5MDUgTCA2NjIuMjE4NjMxMTc4NzEgMzc4Ljc1MDc1IEwgNjYzLjUwOTUwNTcwMzQyIDM4Mi41MjEzIEwgNjY0LjgwMDM4MDIyODE0IDM4NS44NzUgTCA2NjYuMDkxMjU0NzUyODUgMzg2Ljg5ODc1IEwgNjY3LjM4MjEyOTI3NzU3IDM4Ni40NDMwNDk5OTk5OTk5NyBMIDY2OC42NzMwMDM4MDIyOCAzNjMuOTQ1NzUgTCA2NjkuOTYzODc4MzI3IDM2Ny4zNzkyNSBMIDY3MS4yNTQ3NTI4NTE3MSAzNTcuNzgyMjUgTCA2NzIuNTQ1NjI3Mzc2NDMgMzYyLjc0NjY1IiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmFwaCIgZGF0YS16LWluZGV4PSIxIiBzdHJva2U9IiMyOTYyRkYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLW1hcmtlcnMgaGlnaGNoYXJ0cy1zZXJpZXMtMCBoaWdoY2hhcnRzLWxpbmUtc2VyaWVzIiBkYXRhLXotaW5kZXg9IjkwIiBvcGFjaXR5PSIxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LDQwKSBzY2FsZSgxIDEpIiBjbGlwLXBhdGg9Im5vbmUiPjwvZz48L2c+PHRleHQgeD0iNzQwIiB0ZXh0LWFuY2hvcj0iZW5kIiBjbGFzcz0iaGlnaGNoYXJ0cy10aXRsZSIgZGF0YS16LWluZGV4PSI0IiBzdHlsZT0iY29sb3I6IHJnYig1MSwgNTEsIDUxKTsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiByZ2IoNTEsIDUxLCA1MSk7IiB5PSI1MTMiPnNvdXJjZTogdHJhZGluZ2Vjb25vbWljcy5jb208L3RleHQ+PHRleHQgeD0iMTQiIHRleHQtYW5jaG9yPSJzdGFydCIgY2xhc3M9ImhpZ2hjaGFydHMtc3VidGl0bGUiIGRhdGEtei1pbmRleD0iNCIgc3R5bGU9ImNvbG9yOiByZ2IoNTEsIDUxLCA1MSk7IGZpbGw6IHJnYig1MSwgNTEsIDUxKTsgZm9udC1zaXplOiAxNXB4OyIgeT0iMjUiPk5hdHVyYWwgR2FzIEVVPC90ZXh0Pjx0ZXh0IHg9IjAiIHRleHQtYW5jaG9yPSJzdGFydCIgY2xhc3M9ImhpZ2hjaGFydHMtY2FwdGlvbiIgZGF0YS16LWluZGV4PSI0IiBzdHlsZT0iY29sb3I6IHJnYigxMDIsIDEwMiwgMTAyKTsgZmlsbDogcmdiKDEwMiwgMTAyLCAxMDIpOyIgeT0iNTI3Ij48L3RleHQ+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcy1sYWJlbHMgaGlnaGNoYXJ0cy14YXhpcy1sYWJlbHMiIGRhdGEtei1pbmRleD0iNyI+PHRleHQgeD0iMTI2Ljc2MDQ1NjI3Mzc2IiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMTg8L3RleHQ+PHRleHQgeD0iMjYxLjM4MDIyODEzNjg4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjA8L3RleHQ+PHRleHQgeD0iMzk2LjE4NDQxMDY0NjM5IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjI8L3RleHQ+PHRleHQgeD0iNTMwLjgwNDE4MjUwOTUxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjQ8L3RleHQ+PHRleHQgeD0iNjY1LjYwODM2NTAxOTAxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjY8L3RleHQ+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGFiZWxzIGhpZ2hjaGFydHMteWF4aXMtbGFiZWxzIiBkYXRhLXotaW5kZXg9IjciPjx0ZXh0IHg9IjAiIHN0eWxlPSJjb2xvcjogdW5zZXQ7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiB1bnNldDsiIHRleHQtYW5jaG9yPSJzdGFydCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgdmlzaWJpbGl0eT0iaGlkZGVuIj48dHNwYW4+MDwvdHNwYW4+PC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0MTIiIG9wYWNpdHk9IjEiPjUwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIzNjAiIG9wYWNpdHk9IjEiPjEwMDwvdGV4dD48dGV4dCB4PSI2OTUiIHN0eWxlPSJjb2xvcjogdW5zZXQ7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiB1bnNldDsiIHRleHQtYW5jaG9yPSJzdGFydCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iMzA3IiBvcGFjaXR5PSIxIj4xNTA8L3RleHQ+PHRleHQgeD0iNjk1IiBzdHlsZT0iY29sb3I6IHVuc2V0OyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZmlsbDogdW5zZXQ7IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkiIHk9IjI1NSIgb3BhY2l0eT0iMSI+MjAwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIyMDIiIG9wYWNpdHk9IjEiPjI1MDwvdGV4dD48dGV4dCB4PSI2OTUiIHN0eWxlPSJjb2xvcjogdW5zZXQ7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiB1bnNldDsiIHRleHQtYW5jaG9yPSJzdGFydCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iMTUwIiBvcGFjaXR5PSIxIj4zMDA8L3RleHQ+PHRleHQgeD0iNjk1IiBzdHlsZT0iY29sb3I6IHVuc2V0OyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZmlsbDogdW5zZXQ7IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkiIHk9Ijk3IiBvcGFjaXR5PSIxIj4zNTA8L3RleHQ+PHRleHQgeD0iMCIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB2aXNpYmlsaXR5PSJoaWRkZW4iPjQwMDwvdGV4dD48L2c+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcy1sYWJlbHMgaGlnaGNoYXJ0cy15YXhpcy1sYWJlbHMiIGRhdGEtei1pbmRleD0iNyI+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGFiZWxzIGhpZ2hjaGFydHMteWF4aXMtbGFiZWxzIiBkYXRhLXotaW5kZXg9IjciPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1jb250cm9sLXBvaW50cyIgZGF0YS16LWluZGV4PSI5OSIgY2xpcC1wYXRoPSJ1cmwoI2hpZ2hjaGFydHMtbzliM3RxZy00MjE5LSkiPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzIGhpZ2hjaGFydHMteWF4aXMiIGRhdGEtei1pbmRleD0iOTk5OSI+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDQ2MC41IEwgNjkzIDQ2MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDQwOC41IEwgNjkzIDQwOC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDM1NS41IEwgNjkzIDM1NS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDMwMy41IEwgNjkzIDMwMy41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDI1MC41IEwgNjkzIDI1MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDE5OC41IEwgNjkzIDE5OC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDE0NS41IEwgNjkzIDE0NS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDkzLjUgTCA2OTMgOTMuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLXRpY2siIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBkPSJNIDY4OCAzOS41IEwgNjkzIDM5LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIHN0cm9rZT0iI0U2RTZFNiIgc3Ryb2tlLXdpZHRoPSIxIiBkYXRhLXotaW5kZXg9IjciIGQ9Ik0gNjg4LjUgNDAgTCA2ODguNSA0NjAiPjwvcGF0aD48L2c+PHBhdGggZmlsbD0ibm9uZSIgZD0iTSA4IDAgTCAxNTQ0IDAiIHN0cm9rZT0iIzUyNGY0ZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI4LDMiIGRhdGEtei1pbmRleD0iNiIgdmlzaWJpbGl0eT0iaGlkZGVuIiBjbGFzcz0iY3Jvc3NoYWlyLWZpeC1ob3Jpem9udGFsIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgZD0iTSAwIDQwIEwgMCA5MDQiIHN0cm9rZT0iIzUyNGY0ZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI4LDMiIGRhdGEtei1pbmRleD0iNiIgdmlzaWJpbGl0eT0iaGlkZGVuIiBjbGFzcz0iY3Jvc3NoYWlyLWZpeC12ZXJ0aWNhbCI+PC9wYXRoPjwvc3ZnPg==" onerror="this.parentElement.parentElement.style.display='none'">
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <!-- 2. FOGYASZTÁSI STRUKTÚRA -->
+        <div class="card">
+          <h3 class="ct"><i class="bi bi-pie-chart"></i> 2. Fogyasztási Struktúra</h3>
+          <div class="tree">
+            <svg width="100%" height="190" viewBox="0 0 580 190">
+              <rect x="200" y="5" width="180" height="36" stroke="#000" rx="8" fill="#eee" />
+              <text x="290" y="28" text-anchor="middle" font-weight="900" font-size="13">ÖSSZESEN: <tspan fill="#000">~115.000 m³</tspan></text>
+              <line x1="290" y1="41" x2="145" y2="82" stroke="#000" />
+              <text x="195" y="58" font-size="10" font-weight="900" fill="#c00">56%</text>
+              <line x1="290" y1="41" x2="435" y2="82" stroke="#000" />
+              <text x="375" y="58" font-size="10" font-weight="900" fill="#c00">44%</text>
+              <rect x="30" y="77" width="225" height="28" stroke="#000" rx="6" fill="#fdfdfd" />
+              <text x="142" y="96" text-anchor="middle" font-size="11" font-weight="900">INDEXÁLT: <tspan fill="#000">~64.700 m³</tspan></text>
+              <text x="32" y="120" font-size="10.5" font-weight="800">• Sportcsarnok <tspan fill="#000">30.000 m³ (24,163 EUR/MWh)</tspan></text>
+              <text x="32" y="132" font-size="10.5" font-weight="800">• Bölcsőde <tspan fill="#000">14.832 m³ (29,6 EUR/MWh)</tspan></text>
+              <text x="32" y="144" font-size="10.5" font-weight="800">• Napsugár Óvoda <tspan fill="#000">6.739 m³ (36,682 EUR/MWh)</tspan></text>
+              <text x="32" y="156" font-size="10.5" font-weight="800">• VG Telephely <tspan fill="#000">6.659 m³</tspan> / Lábod <tspan fill="#000">5.509 m³</tspan></text>
+              <text x="32" y="168" font-size="10.5" font-weight="800">• Fürdők <tspan fill="#000">562 m³</tspan> / Idősek o. <tspan fill="#000">460 m³</tspan></text>
+              <rect x="322" y="77" width="225" height="28" stroke="#000" rx="6" fill="#fdfdfd" />
+              <text x="435" y="96" text-anchor="middle" font-size="11" font-weight="900">FIX ÁRAS: <tspan fill="#000">~50.300 m³</tspan></text>
+              <text x="324" y="120" font-size="10.5" font-weight="800">• Nyitnikék Óvoda <tspan fill="#000">6.549 m³ (23,5 Ft/kWh)</tspan></text>
+              <text x="324" y="132" font-size="10.5" font-weight="800">• Százszorszép Óvoda <tspan fill="#000">5.617 m³</tspan> / Könyvtár <tspan fill="#000">5.300 m³</tspan></text>
+              <text x="324" y="144" font-size="10.5" font-weight="800">• Vásárcsarnok <tspan fill="#000">4.601 m³</tspan> / T25 <tspan fill="#000">4.160 m³</tspan></text>
+              <text x="324" y="156" font-size="10.5" font-weight="800">• Sportpálya <tspan fill="#000">3.500 m³</tspan> / Kult. Közp. <tspan fill="#000">3.400 m³</tspan></text>
+              <text x="324" y="168" font-size="10.5" font-weight="800">• Hétpettyes <tspan fill="#000">3.758 m³</tspan> / Csillagszem <tspan fill="#000">3.152 m³</tspan></text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 3. HUDEX GRAFIKON -->
+        <div class="card">
+          <h3 class="ct"><i class="bi bi-graph-up-arrow"></i> 3. HUDEX Indexált vs. Fix Ár (Ft/m³)</h3>
+          <div style="height:138px"><canvas id="hudexChart"></canvas></div>
+          <div class="note-dashed">
+            <strong>CEEGEX historikus (EUR/MWh):</strong> 2021: 45,42 | 2022: 121,75 | 2023: 41,51 | 2024: 34,34 | 2025:
+            32,75 | 2026 jan–feb: 39,00
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <!-- 4. KOCKÁZATOK -->
+        <div class="card">
+          <h3 class="ct"><i class="bi bi-shield-exclamation"></i> 4. Kritikus Szerződéses Kockázatok</h3>
+          <div class="rl">
+
+            <div class="ri"><strong>Utolsó ajánlattételi jog</strong>Vevő köteles az E2H-nak utolsó ajánlattételi jogot
+              biztosítani: a legjobb külső ajánlatot hitelt érdemlően ismertetni kell, az E2H 5 munkanapon belül
+              ráígérhet, s az automatikusan létrejön.<span class="rs">Fix áras szerz. 2. old. 2.5.9. pont — 12 hónapig
+                terheli a Vevőt</span></div>
+            <div class="ri"><strong>Indikatív ár közlése</strong>Kereskedő köteles 45 nappal korábban tájékoztatni az új
+              árról.<span class="rs">Fix áras szerz. 4. oldal 4.1. pont</span></div>
+            <div class="ri"><strong>Kereszt-felmondási kockázat</strong>Bármely más E2 szerződés 5 napos késedelme
+              esetén ez is
+              felmondható.<span class="rs">Mindkét szerz. 11.12. pont — Kapcsolt szerződések kockázata</span></div>
+            <div class="ri"><strong>Ajánlatkérési kötelezettség</strong>Energia-beruházás előtt kötelező ajánlatot kérni
+              az E2H-tól.<span class="rs">Mindkét szerz. 11.13. pont — Elővásárlási jellegű jog</span></div>
+            <div class="ri"><strong>Díjmódosítási jog</strong>Hatósági ár változásakor visszamenőleges módosítás joga
+              fennáll.<span class="rs">Mindkét szerz. 2.5. pont — Rendszerhas. díjak átterhelése</span></div>
+            <div class="ri"><strong>HUF/EUR kitettség</strong>Forintgyengülés azonnali áremelést okoz az indexált
+              helyeknél.<span class="rs">Pn = (VTP+F) × EUR/HUF (F=felár) — indexált szerz. 4. old.</span></div>
+            <div class="ri"><strong>Kapacitás-pótdíj</strong>130% feletti havi túlfogyasztásnál kötbér keletkezik.<span
+                class="rs">Üzletszabályzat 7.4. pont — indexált szerz. 5. old.</span></div>
+            <div class="ri"><strong>Tolerancia sáv (Take-or-Pay)</strong>Éves szintű ±10%-nál nagyobb eltérés esetén az Eladó pótdíjat érvényesíthet.<span
+                class="rs">Fix áras szerz. 3.2. pont — Mennyiségi tolerancia</span></div>
+          </div>
+        </div>
+      </div>
+    </div> <!-- END GRID2 -->
+
+    <!-- 5. ÖSSZESÍTŐ - TELJES SZÉLESSÉGŰ EGYSÉGES BLOKK -->
+    <div style="margin-top:10px">
+      <div class="summary-box">
+        <div class="sb-item">
+          <div class="lbl">Fix áras becsült éves díj</div>
+          <div class="val" id="sumFix">—</div>
+          <div style="font-size:8.5pt;color:#999;font-weight:600">Ft nettó / év</div>
+        </div>
+        <div class="sb-item">
+          <div class="lbl">Indexált becsült éves díj</div>
+          <div class="val" id="sumIdx">—</div>
+          <div style="font-size:8.5pt;color:#999;font-weight:600">Ft nettó / év</div>
+          <div id="sumIdxPred" style="font-size:8.5pt;color:#fa8072;font-weight:800"></div>
+        </div>
+        <div class="sb-item">
+          <div class="lbl">Összes becsült éves díj</div>
+          <div class="val" id="sumAll" style="color:#c00">—</div>
+          <div style="font-size:8.8pt;color:#333;font-weight:600">Ft nettó (teljes portfólió)</div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <hr class="section-divider">
+    <!-- 5. ADATTÁBLA -->
+    <div class="card">
+      <h3 class="ct"><i class="bi bi-table"></i> 5. Teljes Fogyasztási Adattábla – Intézményi Bontás</h3>
+      <table id="dataTable">
+        <thead>
+          <tr style="text-align:center; white-space:nowrap">
+            <th style="width:10.5%;text-align:left">Fenntartó</th>
+            <th style="width:21%;text-align:left">Fogyasztási hely</th>
+            <th style="width:11%;text-align:center">POD azonosító</th>
+            <th style="width:5.5%;font-size:8pt">Típus<br><span
+                style="font-weight:600; font-size:7pt; display:block; white-space:nowrap">(Index-Fix)</span></th>
+            <th style="width:15%;font-size:8pt">E2 díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#555; display:block; white-space:nowrap">(Ft/kWh|EUR/MWh)</span></th>
+            <th style="width:5%;font-size:8pt">Ft/m³<br><span
+                style="font-size:6.8pt;font-weight:600;color:#555; display:block; white-space:nowrap">(Pn✕10.5)</span>
+            </th>
+            <th style="width:7%;font-size:8pt">Éves m³<br><span
+                style="font-size:6.8pt;font-weight:600;color:#555; display:block; white-space:nowrap">(Fogy.)</span>
+            </th>
+            <th style="width:7.5%;font-size:8pt">Becsült éves díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#555; display:block; white-space:nowrap">(Ft)</span></th>
+            <th style="width:9.5%;font-size:8pt">Telj. díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#555; display:block; white-space:nowrap">(Ft/kWh/h/év)</span>
+            </th>
+            <th style="width:8%;font-size:8pt">Forgalmi díj<br><span
+                style="font-size:6.8pt;font-weight:600;color:#555; display:block; white-space:nowrap">(m³ alapú)</span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" style="overflow:hidden"></tbody>
+        <tfoot>
+          <tr style="background:#fff0f0;text-align:center">
+            <td colspan="5"
+              style="text-align:left;padding-left:10px;font-weight:900;font-size:13pt !important;color:#c00 !important">
+              MINDÖSSZESEN (nettó)</td>
+            <td></td>
+            <td id="totalM3" style="font-weight:900;font-size:11pt !important;color:#000 !important"></td>
+            <td id="totalCost" style="font-weight:950;font-size:9pt !important;color:#c00 !important"></td>
+            <td id="teljTotal" style="font-weight:900;font-size:11pt !important;color:#000 !important"></td>
+            <td id="forgTotal" style="font-weight:900;font-size:11pt !important;color:#000 !important"></td>
+          </tr>
+          <tr style="background:#f9f9f9">
+            <td colspan="9" style="font-size:9pt;font-style:italic;font-weight:700;color:#333;white-space:nowrap;overflow:visible">Továbbiak: Garzonház – MVM Egyetemes; Kossuth 1. – MVM Fix: 64,54 Ft/kWh; Park Hotel – Audax Kft.; Távhő – gázalapú&nbsp;&nbsp;|&nbsp;&nbsp;Áram: javarészt indexált, 8,76 Ft/kWh (Kereskedelmi árréssel 2027.12.31. napjáig)</td>
+          </tr>
+          <tr style="background:#f9f9f9">
+            <td colspan="9" style="font-size:10pt;font-style:italic;color:#666;white-space:normal">★ RHD: Rendszer
+              Használati Díjak — nulla fogyasztású mérőhelyek esetén a fix alapdíjak a szerződés alapján továbbra is
+              fennállnak.</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="grid2">
+      <!-- 6. JOGI JAVASLATOK -->
+      <div class="jogi">
+        <h4><i class="bi bi-gavel"></i> 6. Jogi és Stratégiai Javaslatok (3 db)</h4>
+        <ol>
+          <li><strong>Határozatlanná válás kihasználása:</strong> A fix áras szerződések 2026.04.04-én határozatlan idejűvé válnak. Javasolt a szerződéseket <em>NEM felmondani</em>, hanem megvárni az E2H indikatív árközlőjét, amely alapján 15 napon belül döntés hozható a továbbiak felől. Bázisár: 23,5 Ft/kWh = <strong>246,75 Ft/m³</strong>.
+            <span class="src">Forrás: infók.txt 2. sor; E2H 2026.03.16-i levél (infók.txt 31. sor): „érdemes
+              fenntartani, amennyiben a kereskedő tudja tartani az árat"</span>
+          </li>
+          <li><strong>MVM ajánlat taktikai alkalmazása:</strong> Az MVM Next Zrt. hétfő 10:00-ig várt fix áras ajánlatát
+            — amennyiben kedvezőbb a jelenlegi 23,5 Ft/kWh-nál — hitelt érdemlő módon be kell mutatni az E2H felé, ezzel
+            aktiválva az „utolsó ajánlattételi jogot", amely lehetőséget ad az E2H-nak az árajánlat javítására.
+            <span class="src">Forrás: infók.txt 2–3. sor; Fix áras szerz. 2. old. 2.5.9. pont</span>
+          </li>
+          <li><strong>Felmondási nyilatkozat és új szerződéskötés:</strong> Ha az E2H indikatív árközlőjét nem fogadjuk el, a döntéstől számított <strong>15 napon belül</strong> felmondási nyilatkozatot kell benyújtani, és a következő gázévre új szerződést kell megkötni. A felmondó nyilatkozatot a <strong>6. sz. melléklet</strong> szerinti formában, cégszerű aláírással, tértivevényes postai küldeményként kell megküldeni a <strong>6701 Szeged, Pf. 1271</strong> referenciacímre. Az E2H ezt követően 5 munkanapon belül élhet utolsó ajánlattételi jogával; ha nem ígér kedvezőbb árat, azonnal megindítható az MVM Next Zrt. vagy más alternatív kereskedő kiválasztása, hogy a <strong>2026. október 1-jei gázév-kezdetre</strong> új szerződés hatályban legyen.
+            <span class="src">Forrás: infók.txt 110. sor — E2H tájékoztatás; Fix áras szerz. 3. old. 2.7. pont; 2.5.9. pont (utolsó ajánlattételi jog, 5 munkanap)</span>
+          </li>
+        </ol>
+      </div>
+      <div class="stat">
+        <h4><i class="bi bi-calculator"></i> Statisztikai Észrevételek és Összefüggések (3 db)</h4>
+        <ol>
+          <li><strong>Koncentrációs kockázat:</strong> A Sportcsarnok (30.000 m³) önmagában az indexált portfólió
+            46%-át, az összes fogyasztás 26%-át teszi ki. Egyetlen fogyasztási hely ilyen mértékű dominanciája az
+            árfolyam-érzékenységet fokozottan kitetté teszi.
+            <span class="src">Forrás: adatok.xlsx Munka2 — Sportcsarnok sor; adatok.xlsx Munka2 — Összesítés</span>
+          </li>
+          <li><strong>Fix vs. Indexált arány:</strong> A teljes portfólió 56%-a indexált, 44%-a fix áras. Az indexált
+            részarány magas; a 2022-es 121,75 EUR/MWh jellegű árkiugrás ismétlődése esetén az indexált helyek költsége
+            4–5-szörösére emelkedhet a fix bázishoz képest.
+            <span class="src">Forrás: CEEGEX historikus adatok — GÁZÁR KIÉRTÉKELŐ.html</span>
+          </li>
+          <li><strong>Üres ingatlanok terhe:</strong> A 32 fogyasztási helyből 7 db (22%) nulla vagy minimális
+            fogyasztással rendelkezik (üres üzletek, raktár, üres épületek), mégis alapdíjat generálnak. Javasolt ezek
+            kikapcsolásának vizsgálata a költségoptimalizálás érdekében.
+            <span class="src">Forrás: adatok.xlsx Munka2 — 0 m³ felhasználású sorok; Fix áras szerz. 2.5. pont —
+              Rendszerhas. alapdíjak</span>
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- IDŐVONAL + ÁGAZATOK -->
+    <div class="timeline-wrap">
+      <div class="timeline-title"><i class="bi bi-diagram-3"></i> 7. Kritikus Idővonal – Döntési Forgatókönyvek</div>
+      <div class="tl-row">
+        <div class="tl-track"></div>
+        <div class="tp"><strong>03.28.</strong><span>Előkészítés</span></div>
+        <div class="tp act"><strong>03.30. 14:00</strong><span>Döntési Értekezlet</span></div>
+        <div class="tp red"><strong>03.30. 16:00</strong><span>Felmondási határidő</span></div>
+        <div class="tp"><strong>04.04.</strong><span>Fix &rarr; Határozatlan</span></div>
+        <div class="tp"><strong>10.01.</strong><span>Gázév Start</span></div>
+      </div>
+      <div style="font-size:7.5pt;font-weight:700;text-align:center;margin:6px 0;color:#555">— Két lehetséges
+        forgatókönyv 04.04. után —</div>
+      <div class="tl-branches">
+        <div class="tl-branch" style="background:#f6fff6;border-color:#060">
+          <h5><i class="bi bi-check-circle" style="color:#060"></i> A forgatókönyv — Maradás (várunk)</h5>
+          <ol>
+            <li><strong>04.04.:</strong> Fix szerződések határozatlanná válnak, nem mondjuk fel.</li>
+            <li><strong>04–07. hó:</strong> E2H piaci tájékoztatót küld az árfenntartásról vagy emelésről.</li>
+            <li><strong>Árközlő érkezésekor:</strong> 15 napos döntési ablak – elfogadás vagy tárgyalás.</li>
+            <li>Ha nem fogadjuk el az árközlőt: a döntéstől számított <strong>15 napon belül</strong> a 6. sz. melléklet szerinti felmondási nyilatkozatot cégszerű aláírással, tértivevényes postai küldeményként kell megküldeni a <strong>6701 Szeged, Pf. 1271</strong> referenciacímre. Az E2H 5 munkanapon belül élhet utolsó ajánlattételi jogával — ha nem ajánl kedvezőbb árat, azonnal megindítható az alternatív kereskedő (MVM, Audax stb.) kiválasztása és az új szerződés megkötése a <strong>2026/27-es gázévre</strong>.</li>
+            <li><strong>10.01.:</strong> Portfólió folyamatos, gázév indul.</li>
+          </ol>
+        </div>
+        <div class="tl-branch" style="background:#fff6f6;border-color:#900">
+          <h5><i class="bi bi-x-circle" style="color:#900"></i> B forgatókönyv — Felmondás, mást keresünk</h5>
+          <ol>
+            <li><strong>03.30. 14–16:00:</strong> Döntés: felmondás + MVM ajánlat bemutatása E2H-nak.</li>
+            <li><strong>03.30. 16:00 előtt:</strong> Felmondó nyilatkozat postázása (6. melléklet, tértivevény).</li>
+            <li><strong>04.04.:</strong> Felmondás hatályos; E2H 5 munkanapon belül utolsó ajánlattal reagálhat.</li>
+            <li><strong>04.04–09.30.:</strong> Alternatív kereskedő (MVM, Audax stb.) kiválasztása.</li>
+            <li><strong>10.01.:</strong> Új szerződés hatályba lép, gázév indul.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+
+  <hr class="section-divider">
+  <!-- 9. STRATÉGIAI ELŐREJELZÉS ÉS PIACI PREDIKCIÓ -->
+  <div
+    style="border:2px solid #2c3e50; border-radius:12px; padding:12px; background:#f4f7f6; font-family:'Inter', sans-serif;">
+    <h3
+      style="font-family:'Outfit', sans-serif; font-weight:800; font-size:12pt; margin-bottom:8px; border-bottom:2px solid #2c3e50; padding-bottom:5px; text-transform:uppercase; color:#2c3e50; display:flex; align-items:center; gap:8px">
+      <i class="bi bi-crystal-ball"></i> 9. Stratégiai Előrejelzés és Piaci Predikció (2026–2027)
+    </h3>
+
+    <div
+      style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; font-size:10pt; font-weight:700; line-height:1.4; text-align:justify; color:#333">
+      <div>
+        <strong style="color:#c0392b; font-size:10.5pt; display:block; margin-bottom:6px">1. Globális kínálati sokk és
+          LNG-hiány</strong>
+        A 2026 tavaszi <strong style="font-weight:900; color:#000">közel-keleti eszkaláció</strong> és a <strong
+          style="font-weight:900; color:#000">Hormuzi-szoros lezárása</strong> kritikus kínálati szűkületet okozott. A
+        katari LNG-infrastruktúra sérülései miatt kiesett a világpiaci rugalmas kínálat jelentős része, ami a TTF and
+        HUDEX indexeket tartósan a <strong style="font-weight:900; color:#000">45–55 EUR/MWh</strong> sávba
+        kényszerítette. Előrejelzésünk szerint a 2026-os tárolófeltöltési időszakban a beszerzési árak <strong
+          style="font-weight:900; color:#000">40%-kal haladják meg a bázisévet</strong>; az <strong
+          style="font-weight:900; color:#000">ár-ingadozás tetőzése</strong> a következő 3–4 hónapban várható, amíg az
+        alternatív LNG-útvonalak stabilizálódnak.
+      </div>
+      <div>
+        <strong style="color:#2980b9; font-size:10.5pt; display:block; margin-bottom:6px">2. Az április 4-i fordulópont és
+          „befordulás”</strong>
+        A jelenlegi 23,5 Ft/kWh fix áras szerződés <strong style="font-weight:900; color:#000">április 4-i
+          határozatlanná válása</strong> taktikai ablakot nyit. Bár a kereskedő jelenleg az „ártartást” ígéri, a piaci
+        határidős jegyzések alapján egy <strong style="font-weight:900; color:#000">25–30%-os díjmódosítási
+          értesítő</strong> (árközlő) kiküldése a nyári hónapokra <strong style="font-weight:900; color:#000">80%-os
+          valószínűségű</strong>. A „beforduló” státusz fenntartása csak addig javasolt, amíg az árfolyam bázisszinten
+        marad; bármilyen emelés esetén <strong style="font-weight:900; color:#000">azonnali váltás szükséges</strong> a
+        hétfői MVM-ajánlat irányába.
+      </div>
+      <div>
+        <strong style="color:#27ae60; font-size:10.5pt; display:block; margin-bottom:6px">3. 2026/27-es javaslat:
+          „Védőhorgony” stratégia</strong>
+        A portfólió <strong style="font-weight:900; color:#000">indexált hányada (56%)</strong> jelenleg súlyosan kitett
+        a napon belüli árkiugrásoknak. Predikciónk szerint a piaci konszolidáció legkorábban 2027 végére várható, ezért
+        a 2026/27-as gázévre a <strong style="font-weight:900; color:#000">volumen legalább 80%-ának lefixálása
+          javasolt</strong>. Minden olyan ajánlat, amely <strong style="font-weight:900; color:#000">28 Ft/kWh alatt
+          marad</strong>, stratégiailag <strong style="font-weight:900; color:#000">„védőhorgonynak”</strong> tekintendő
+        a várhatóan 40–50 Ft/kWh-ig elszálló piaci spot árakkal szemben a következő 18 hónapos horizonton.
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. VILLAMOSENERGIA - LEGALUL -->
+  </div>
+
+  <!-- EGYÉVES + ÖTÉVES SVG-K LEGALUL -->
+  <div class="svg-half" style="margin-top:10px">
+    <div class="svg-full">
+      <p><i class="bi bi-eye"></i> EGYÉVES GÁZPIACI ÁR-INGADOZÁS ÉS TRENDEK</p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBjbGFzcz0iaGlnaGNoYXJ0cy1yb290IiBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0hlbHZldGljYSBOZXVlJnF1b3Q7LCBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3NTAiIGhlaWdodD0iNTIwIiB2aWV3Qm94PSIwIDAgNzUwIDUyMCI+PGRlc2M+Q3JlYXRlZCB3aXRoIEhpZ2hjaGFydHMgMTAuMS4wPC9kZXNjPjxkZWZzPjxjbGlwUGF0aCBpZD0iaGlnaGNoYXJ0cy1vOWIzdHFnLTUzMi0iPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIiBmaWxsPSJub25lIj48L3JlY3Q+PC9jbGlwUGF0aD48Y2xpcFBhdGggaWQ9ImhpZ2hjaGFydHMtbzliM3RxZy03OTItIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjc5IiBoZWlnaHQ9IjQyMCIgZmlsbD0ibm9uZSI+PC9yZWN0PjwvY2xpcFBhdGg+PGNsaXBQYXRoIGlkPSJoaWdoY2hhcnRzLW85YjN0cWctMTA1Ny0iPjxyZWN0IHg9IjgiIHk9IjQwIiB3aWR0aD0iNjc5IiBoZWlnaHQ9IjQyMCIgZmlsbD0ibm9uZSI+PC9yZWN0PjwvY2xpcFBhdGg+PC9kZWZzPjxyZWN0IGZpbGw9IiNmZmZmZmYiIGNsYXNzPSJoaWdoY2hhcnRzLWJhY2tncm91bmQiIHg9IjAiIHk9IjAiIHdpZHRoPSI3NTAiIGhlaWdodD0iNTIwIiByeD0iMCIgcnk9IjAiPjwvcmVjdD48cmVjdCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1wbG90LWJhY2tncm91bmQiIHg9IjgiIHk9IjQwIiB3aWR0aD0iNjc5IiBoZWlnaHQ9IjQyMCI+PC9yZWN0PjxnIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQgaGlnaGNoYXJ0cy14YXhpcy1ncmlkIiBkYXRhLXotaW5kZXg9IjEiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0VERjNGNiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA2Ni41IDQwIEwgNjYuNSA0NjAiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFREYzRjYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gMTc3LjUgNDAgTCAxNzcuNSA0NjAiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFREYzRjYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gMjkxLjUgNDAgTCAyOTEuNSA0NjAiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFREYzRjYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gNDA1LjUgNDAgTCA0MDUuNSA0NjAiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFREYzRjYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gNTE2LjUgNDAgTCA1MTYuNSA0NjAiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFREYzRjYiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gNjIzLjUgNDAgTCA2MjMuNSA0NjAiIG9wYWNpdHk9IjEiPjwvcGF0aD48L2c+PGcgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZCBoaWdoY2hhcnRzLXlheGlzLWdyaWQiIGRhdGEtei1pbmRleD0iMSI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggNDYwLjUgTCA2ODcgNDYwLjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCA0MTguNSBMIDY4NyA0MTguNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDM3Ni41IEwgNjg3IDM3Ni41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMzM0LjUgTCA2ODcgMzM0LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCAyOTIuNSBMIDY4NyAyOTIuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDI1MC41IEwgNjg3IDI1MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMjA4LjUgTCA2ODcgMjA4LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCAxNjYuNSBMIDY4NyAxNjYuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDEyNC41IEwgNjg3IDEyNC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggODIuNSBMIDY4NyA4Mi41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMzkuNSBMIDY4NyAzOS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQgaGlnaGNoYXJ0cy15YXhpcy1ncmlkIiBkYXRhLXotaW5kZXg9IjEiPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkIGhpZ2hjaGFydHMteWF4aXMtZ3JpZCIgZGF0YS16LWluZGV4PSIxIj48L2c+PHJlY3QgZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtcGxvdC1ib3JkZXIiIGRhdGEtei1pbmRleD0iMSIgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIj48L3JlY3Q+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcyBoaWdoY2hhcnRzLXhheGlzIiBkYXRhLXotaW5kZXg9IjIiPjxwYXRoIGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGluZSIgc3Ryb2tlPSIjRTZFNkU2IiBzdHJva2Utd2lkdGg9IjEiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA4IDQ2MC41IEwgNjg3IDQ2MC41Ij48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSIyIj48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA3MTIgNDAgTCA3MTIgNDYwIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSIyIj48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA2LjUgNDAgTCA2LjUgNDYwIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLXNlcmllcy1ncm91cCIgZGF0YS16LWluZGV4PSIzIj48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1zZXJpZXMgaGlnaGNoYXJ0cy1zZXJpZXMtMCBoaWdoY2hhcnRzLWxpbmUtc2VyaWVzIiBkYXRhLXotaW5kZXg9IjkwIiBvcGFjaXR5PSIxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LDQwKSBzY2FsZSgxIDEpIiBjbGlwLXBhdGg9InVybCgjaGlnaGNoYXJ0cy1vOWIzdHFnLTc5Mi0pIj48cGF0aCBmaWxsPSJub25lIiBkPSJNIDAgMjQ3LjkzMzU2IEwgMi41ODE3NDkwNDk0Mjk4IDIyOS42MzMzMiBMIDUuMTYzNDk4MDk4ODU5NiAyNDMuNjA3NTYgTCA3Ljc0NTI0NzE0ODI4OTUgMjU1Ljc0OTc2IEwgMTAuMzI2OTk2MTk3NzE5IDI4MS4xNzY1NiBMIDEyLjkwODc0NTI0NzE0OSAyODYuNjE1NTU5OTk5OTk5OTYgTCAxNS40OTA0OTQyOTY1NzkgMjg5LjU2MTQ0IEwgMTguMDcyMjQzMzQ2MDA5IDMwNi45NDg2IEwgMjAuNjUzOTkyMzk1NDM5IDMwNy43Nzc2ODAwMDAwMDAwMyBMIDIzLjIzNTc0MTQ0NDg2OCAzMDUuNjkwMjgwMDAwMDAwMDMgTCAyNS44MTc0OTA0OTQyOTggMjk3LjA4MTk2IEwgMjguMzk5MjM5NTQzNzI4IDMwMC4wMzEyIEwgMzAuOTgwOTg4NTkzMTU4IDI5MC43NzUyNCBMIDMzLjU2MjczNzY0MjU4OCAyOTAuOTk4NjgwMDAwMDAwMDQgTCAzNi4xNDQ0ODY2OTIwMTcgMjkwLjg1OTI0IEwgMzguNzI2MjM1NzQxNDQ3IDI5MC44Njc2NCBMIDQxLjMwNzk4NDc5MDg3NyAyOTkuNDY3NTYgTCA0My44ODk3MzM4NDAzMDIgMzAxLjgyOTY0IEwgNDYuNDcxNDgyODg5NzMxIDMwNS45NzgzOTk5OTk5OTk5NyBMIDQ5LjA1MzIzMTkzOTE2MSAzMTUuNTcxMiBMIDUxLjYzNDk4MDk4ODU5MSAzMjEuMTMyIEwgNTQuMjE2NzMwMDM4MDIxIDMyMC43MDAyNCBMIDU2Ljc5ODQ3OTA4NzQ1MSAzMTguOTMzNzIgTCA1OS4zODAyMjgxMzY4ODEgMzIwLjEzNTc2IEwgNjEuOTYxOTc3MTg2MzEgMzEzLjk2NDI4MDAwMDAwMDAzIEwgNjQuNTQzNzI2MjM1NzQgMzEwLjM4ODQgTCA2Ny4xMjU0NzUyODUxNyAyOTQuNjkxMzIgTCA2OS43MDcyMjQzMzQ2IDMwMC4zMDkyNCBMIDcyLjI4ODk3MzM4NDAzIDI4OC43NjAwOCBMIDc0Ljg3MDcyMjQzMzQ1OSAyOTcuMjk2MTYgTCA3Ny40NTI0NzE0ODI4ODkgMjkyLjgxMzA4IEwgODAuMDM0MjIwNTMyMzE5IDI4OC4zOTIxNiBMIDgyLjYxNTk2OTU4MTc0OSAyOTUuOTUyMTYgTCA4NS4xOTc3MTg2MzExNzkgMjkwLjk5NTMyIEwgODcuNzc5NDY3NjgwNjA5IDI5Mi43OTYyOCBMIDkwLjM2MTIxNjczMDAzOCAyOTMuMTAxMiBMIDkyLjk0Mjk2NTc3OTQ2OCAyNzcuMTU4IEwgOTUuNTI0NzE0ODI4ODk4IDI4MS4yNDcxMiBMIDk4LjEwNjQ2Mzg3ODMyOCAyODIuNTMwNjQgTCAxMDAuNjg4MjEyOTI3NzYgMjgxLjM3NTY0IEwgMTAzLjI2OTk2MTk3NzE5IDI3NS4wNzQ4IEwgMTA1Ljg1MTcxMTAyNjYyIDI3Ny4xNDk1OTk5OTk5OTk5NiBMIDEwOC40MzM0NjAwNzYwNSAyODEuMTQ4IEwgMTExLjAxNTIwOTEyNTQ4IDI5My41NDMwNCBMIDExMy41OTY5NTgxNzQ5MSAzMDMuNTc0MzIgTCAxMTYuMTc4NzA3MjI0MzQgMjk0LjE5MzIgTCAxMTguNzYwNDU2MjczNzcgMjg1LjAwNDQ0IEwgMTIxLjM0MjIwNTMyMzIgMjg4LjQ3OTUyIEwgMTIzLjkyMzk1NDM3MjYzIDI4MC4xNjI2OCBMIDEyNi41MDU3MDM0MjIwNiAyODEuMTk4NCBMIDEyOS4wODc0NTI0NzE0OCAyODkuMjQxNCBMIDEzMS42NjkyMDE1MjA5MSAyOTUuODYxNDQgTCAxMzQuMjUwOTUwNTcwMzQgMjg1Ljc2MjEyIEwgMTM2LjgzMjY5OTYxOTc3IDI4Mi4zMTMwOCBMIDEzOS40MTQ0NDg2NjkyIDI3Mi42NDIxNiBMIDE0MS45OTYxOTc3MTg2MyAyNjkuNzU5MjggTCAxNDQuNTc3OTQ2NzY4MDYgMjU4LjUzMTg0IEwgMTQ3LjE1OTY5NTgxNzQ5IDI2MC4wMjUzNiBMIDE0OS43NDE0NDQ4NjY5MiAyMzkuNjA4MzIgTCAxNTIuMzIzMTkzOTE2MzUgMjQ0LjA5MzkyIEwgMTU0LjkwNDk0Mjk2NTc4IDI0Ni43MzkwOCBMIDE1Ny40ODY2OTIwMTUyMSAyODguODM0IEwgMTYwLjA2ODQ0MTA2NDY0IDI5MC42MzE2IEwgMTYyLjY1MDE5MDExNDA3IDMwNi42IEwgMTY1LjIzMTkzOTE2MzUgMzA3LjE2MDI4IEwgMTY3LjgxMzY4ODIxMjkzIDMxMC4zMTUzMiBMIDE3MC4zOTU0MzcyNjIzNiAzMDMuMzMwNzIgTCAxNzIuOTc3MTg2MzExNzkgMzA4LjI0MjIgTCAxNzUuNTU4OTM1MzYxMjIgMzA0LjgwMTU2IEwgMTc4LjE0MDY4NDQxMDY1IDMwNy43NDY2IEwgMTgwLjcyMjQzMzQ2MDA4IDMwMS4yNjYgTCAxODMuMzA0MTgyNTA5NTEgMzAwLjU2MDQgTCAxODUuODg1OTMxNTU4OTQgMjk5Ljg0NjQgTCAxODguNDY3NjgwNjA4MzcgMjkyLjU3MiBMIDE5MS4wNDk0Mjk2NTc4IDI4OS4yODc2IEwgMTkzLjYzMTE3ODcwNzIzIDI5MC4xODY0IEwgMTk2LjIxMjkyNzc1NjY2IDI5OC42NjIwMDAwMDAwMDAwMyBMIDE5OC43OTQ2NzY4MDYwOSAyOTUuNjA0NCBMIDIwMS4zNzY0MjU4NTU1MiAyOTguOTgxMiBMIDIwMy45NTgxNzQ5MDQ5NSAzMDUuODAyIEwgMjA2LjUzOTkyMzk1NDM3IDMwOS40NjQ0IEwgMjA5LjEyMTY3MzAwMzggMzA5Ljg2NzYgTCAyMTEuNzAzNDIyMDUzMjMgMzEzLjQwNCBMIDIxNC4yODUxNzExMDI2NiAzMTYuMTkyODAwMDAwMDAwMDMgTCAyMTYuODY2OTIwMTUyMDkgMzEwLjc4MzE5OTk5OTk5OTk3IEwgMjE5LjQ0ODY2OTIwMTUyIDMwNi42NzU2MDAwMDAwMDAwMyBMIDIyMi4wMzA0MTgyNTA5NSAyOTYuMjM0NCBMIDIyNC42MTIxNjczMDAzOCAyOTIuNTU1MiBMIDIyNy4xOTM5MTYzNDk4MSAyOTEuNjU2Mzk5OTk5OTk5OTYgTCAyMjkuNzc1NjY1Mzk5MjQgMzAyLjYzNTIgTCAyMzIuMzU3NDE0NDQ4NjcgMzAwLjAyMjggTCAyMzQuOTM5MTYzNDk4MSAyOTguOTg5NiBMIDIzNy41MjA5MTI1NDc1MyAzMDguNjQxMiBMIDI0MC4xMDI2NjE1OTY5NiAzMTEuMjExNiBMIDI0Mi42ODQ0MTA2NDYzOSAzMTUuNDUzNiBMIDI0NS4yNjYxNTk2OTU4MiAzMTAuODA4NCBMIDI0Ny44NDc5MDg3NDUyNSAzMTUuNzY0NCBMIDI1MC40Mjk2NTc3OTQ2OCAzMTQuMTU5OTk5OTk5OTk5OTcgTCAyNTMuMDExNDA2ODQ0MTEgMzE4LjAxNTYgTCAyNTUuNTkzMTU1ODkzNTQgMzI3LjMzOTYgTCAyNTguMTc0OTA0OTQyOTcgMzI1LjMxNTIgTCAyNjAuNzU2NjUzOTkyNCAzMjUuNjkzMiBMIDI2My4zMzg0MDMwNDE4MyAzMTkuOTg5NiBMIDI2NS45MjAxNTIwOTEyNiAzMDkuMzMgTCAyNjguNTAxOTAxMTQwNjkgMzA1Ljk4NjggTCAyNzEuMDgzNjUwMTkwMTIgMzAyLjYyNjggTCAyNzMuNjY1Mzk5MjM5NTQgMzA1LjU1ODQgTCAyNzYuMjQ3MTQ4Mjg4OTcgMzEzLjU2MzYgTCAyNzguODI4ODk3MzM4NCAzMjEuNjUyOCBMIDI4MS40MTA2NDYzODc4MyAzMjIuMzc1MiBMIDI4My45OTIzOTU0MzcyNiAzMTguNjg3NiBMIDI4Ni41NzQxNDQ0ODY2OSAzMjEuMTE1MiBMIDI4OS4xNTU4OTM1MzYxMiAzMTguMjU5MiBMIDI5MS43Mzc2NDI1ODU1NSAzMTUuNzM5MiBMIDI5NC4zMTkzOTE2MzQ5OCAzMTkuNDYwNCBMIDI5Ni45MDExNDA2ODQ0MSAzMTAuMjYyNCBMIDI5OS40ODI4ODk3MzM4NCAzMTEuMzc5NiBMIDMwMi4wNjQ2Mzg3ODMyNyAzMDcuODQxNTIgTCAzMDQuNjQ2Mzg3ODMyNyAzMTYuNDg2OCBMIDMwNy4yMjgxMzY4ODIxMyAzMTMuNjM5MiBMIDMwOS44MDk4ODU5MzE1NiAzMTcuOTA2NCBMIDMxMi4zOTE2MzQ5ODA5OSAzMTYuNDM2NCBMIDMxNC45NzMzODQwMzA0MiAzMTUuODMxNiBMIDMxNy41NTUxMzMwNzk4NSAzMTEuMjAzMiBMIDMyMC4xMzY4ODIxMjkyOCAzMTYuNjEyOCBMIDMyMi43MTg2MzExNzg3MSAzMjAuNTEwNCBMIDMyNS4zMDAzODAyMjgxNCAzMTYuOTc0IEwgMzI3Ljg4MjEyOTI3NzU3IDMxNS45NjYgTCAzMzAuNDYzODc4MzI3IDMxMS43MjQgTCAzMzMuMDQ1NjI3Mzc2NDMgMzA5LjY2NiBMIDMzNS42MjczNzY0MjU4NiAzMTQuNDAzNiBMIDMzOC4yMDkxMjU0NzUyOSAzMjQuMTQ3NiBMIDM0MC43OTA4NzQ1MjQ3MSAzMjQuNzg2IEwgMzQzLjM3MjYyMzU3NDE0IDMyMy43NzggTCAzNDUuOTU0MzcyNjIzNTcgMzIzLjkyMDggTCAzNDguNTM2MTIxNjczIDMwOS44MjU2IEwgMzUxLjExNzg3MDcyMjQzIDMwOC43MzM2IEwgMzUzLjY5OTYxOTc3MTg2IDMxMy4zMiBMIDM1Ni4yODEzNjg4MjEyOSAzMTYuMTUwOCBMIDM1OC44NjMxMTc4NzA3MiAzMTcuNzcyIEwgMzYxLjQ0NDg2NjkyMDE1IDMyMy42MSBMIDM2NC4wMjY2MTU5Njk1OCAzMjAuODcxNiBMIDM2Ni42MDgzNjUwMTkwMSAzMjAuNjYxNiBMIDM2OS4xOTAxMTQwNjg0NCAzMTYuMDI0OCBMIDM3MS43NzE4NjMxMTc4NyAzMjAuNzQ1NTk5OTk5OTk5OTcgTCAzNzQuMzUzNjEyMTY3MyAzMjEuMzkyNCBMIDM3Ni45MzUzNjEyMTY3MyAzMTcuNTIgTCAzNzkuNTE3MTEwMjY2MTYgMzIxLjE0ODggTCAzODIuMDk4ODU5MzE1NTkgMzE1LjM4NjQgTCAzODQuNjgwNjA4MzY1MDIgMzE5LjA2NTYgTCAzODcuMjYyMzU3NDE0NDUgMzIyLjExNDggTCAzODkuODQ0MTA2NDYzODggMzIxLjIwNzYgTCAzOTIuNDI1ODU1NTEzMzEgMzE4LjIxNzIgTCAzOTUuMDA3NjA0NTYyNzQgMzI0LjQ3NTIgTCAzOTcuNTg5MzUzNjEyMTcgMzI2LjU3NTIgTCA0MDAuMTcxMTAyNjYxNiAzMjEuMzc1NiBMIDQwMi43NTI4NTE3MTEwMyAzMTQuNTcxNiBMIDQwNS4zMzQ2MDA3NjA0NiAzMjAuNzIwNCBMIDQwNy45MTYzNDk4MDk4OCAzMjIuOTk2OCBMIDQxMC40OTgwOTg4NTkzMSAzMjUuOTExNiBMIDQxMy4wNzk4NDc5MDg3NCAzMjcuMDAzNiBMIDQxNS42NjE1OTY5NTgxNyAzMjYuNzQzMiBMIDQxOC4yNDMzNDYwMDc2IDMyOC4xNjI4IEwgNDIwLjgyNTA5NTA1NzAzIDMzMi4xNTI4IEwgNDIzLjQwNjg0NDEwNjQ2IDMyNS41IEwgNDI1Ljk4ODU5MzE1NTg5IDMyNC4wODg4IEwgNDI4LjU3MDM0MjIwNTMyIDMyMS43NzA0IEwgNDMxLjE1MjA5MTI1NDc1IDMyOC4xMDQgTCA0MzMuNzMzODQwMzA0MTggMzI2LjI2NDQgTCA0MzYuMzE1NTg5MzUzNjEgMzM0LjMzNjggTCA0MzguODk3MzM4NDAzMDQgMzM2LjgwNjQgTCA0NDEuNDc5MDg3NDUyNDcgMzM5Ljc1NDggTCA0NDQuMDYwODM2NTAxOSAzNDAuMjI1MiBMIDQ0Ni42NDI1ODU1NTEzMyAzNDIuODYyOCBMIDQ0OS4yMjQzMzQ2MDA3NiAzNDUuOTM3MiBMIDQ1MS44MDYwODM2NTAxOSAzNTAuODkzMiBMIDQ1NC4zODc4MzI2OTk2MiAzNTIuMzggTCA0NTYuOTY5NTgxNzQ5MDUgMzUxLjA2OTYgTCA0NTkuNTUxMzMwNzk4NDggMzYwLjQ2MDggTCA0NjIuMTMzMDc5ODQ3OTEgMzU4Ljk2NTYgTCA0NjQuNzE0ODI4ODk3MzQgMzYyLjI4MzYgTCA0NjcuMjk2NTc3OTQ2NzcgMzU3LjA5MjQgTCA0NjkuODc4MzI2OTk2MiAzNjQuNTQzMiBMIDQ3Mi40NjAwNzYwNDU2MyAzNjIuODM4IEwgNDc1LjA0MTgyNTA5NTA1IDM1NS40NTQ0IEwgNDc3LjYyMzU3NDE0NDQ4IDM1Ny42MyBMIDQ4MC4yMDUzMjMxOTM5MSAzNjMuMTgyNDAwMDAwMDAwMDMgTCA0ODIuNzg3MDcyMjQzMzQgMzU4LjIwMTIgTCA0ODUuMzY4ODIxMjkyNzcgMzU1LjcyMzIgTCA0ODcuOTUwNTcwMzQyMiAzNTEuNDQ3NTk5OTk5OTk5OTcgTCA0OTAuNTMyMzE5MzkxNjMgMzU1LjQyOTIgTCA0OTMuMTE0MDY4NDQxMDYgMzU2LjU4ODQgTCA0OTUuNjk1ODE3NDkwNDkgMzUzLjM5NjM5OTk5OTk5OTk3IEwgNDk4LjI3NzU2NjUzOTkyIDM1Mi4yMTc4OCBMIDUwMC44NTkzMTU1ODkzNSAzNTAuMTc5MiBMIDUwMy40NDEwNjQ2Mzg3OCAzNTYuNzY0OCBMIDUwNi4wMjI4MTM2ODgyMSAzNTEuNDQ3NTk5OTk5OTk5OTcgTCA1MDguNjA0NTYyNzM3NjQgMzUxLjE2Nzg3OTk5OTk5OTk3IEwgNTExLjE4NjMxMTc4NzA3IDM0NC4zNjY0IEwgNTEzLjc2ODA2MDgzNjUgMzU3Ljg0ODM5OTk5OTk5OTk3IEwgNTE2LjM0OTgwOTg4NTkzIDM1Mi4xOTUyIEwgNTE4LjkzMTU1ODkzNTM2IDM0Ni4yNzMyIEwgNTIxLjUxMzMwNzk4NDc5IDM1NS4zMjg0IEwgNTI0LjA5NTA1NzAzNDIyIDM0OS42NTg0MDAwMDAwMDAwMyBMIDUyNi42NzY4MDYwODM2NSAzMzMuOTMzNiBMIDUyOS4yNTg1NTUxMzMwOCAzMjMuNjI2OCBMIDUzMS44NDAzMDQxODI1MSAzMjAuNzcwOCBMIDUzNC40MjIwNTMyMzE5NCAzMDkuNDcyOCBMIDUzNy4wMDM4MDIyODEzNyAyNzguMjE2NCBMIDUzOS41ODU1NTEzMzA4IDI5MC42ODIgTCA1NDIuMTY3MzAwMzgwMjMgMjg2LjU0OTIwMDAwMDAwMDA0IEwgNTQ0Ljc0OTA0OTQyOTY2IDI1OC42NTI4IEwgNTQ3LjMzMDc5ODQ3OTA5IDI2OC4xMzY0IEwgNTQ5LjkxMjU0NzUyODUyIDI1MS42NzI0IEwgNTUyLjQ5NDI5NjU3Nzk1IDI3My43ODEyIEwgNTU1LjA3NjA0NTYyNzM3IDI3My4xNjggTCA1NTcuNjU3Nzk0Njc2OCAyNzYuNDc3NiBMIDU2MC4yMzk1NDM3MjYyMyAyNjMuODEwMzk5OTk5OTk5OTYgTCA1NjIuODIxMjkyNzc1NjYgMjU4LjAwNiBMIDU2NS40MDMwNDE4MjUwOSAzMDIuODYxOTk5OTk5OTk5OTcgTCA1NjcuOTg0NzkwODc0NTIgMzExLjk3NiBMIDU3MC41NjY1Mzk5MjM5NSAzMDYuNTkxNTk5OTk5OTk5OTcgTCA1NzMuMTQ4Mjg4OTczMzggMzA0LjYyNiBMIDU3NS43MzAwMzgwMjI4MSAyODguMTcwNCBMIDU3OC4zMTE3ODcwNzIyNCAzMDYuNjMzNiBMIDU4MC44OTM1MzYxMjE2NyAzMjAuNDkzNiBMIDU4My40NzUyODUxNzExIDMxNy43OTcyIEwgNTg2LjA1NzAzNDIyMDUzIDMxMC44NTA0IEwgNTg4LjYzODc4MzI2OTk2IDMxNSBMIDU5MS4yMjA1MzIzMTkzOSAzMjguNDE0OCBMIDU5My44MDIyODEzNjg4MiAzMzcuNDk1MiBMIDU5Ni4zODQwMzA0MTgyNSAzMjMuNTU5NiBMIDU5OC45NjU3Nzk0Njc2OCAzMTEuNTg5NiBMIDYwMS41NDc1Mjg1MTcxMSAzMjMuMTkgTCA2MDQuMTI5Mjc3NTY2NTQgMzIzLjc2OTU5OTk5OTk5OTk3IEwgNjA2LjcxMTAyNjYxNTk3IDMzMS4zNTQ4IEwgNjA5LjI5Mjc3NTY2NTQgMzI4LjIxMzIwMDAwMDAwMDAzIEwgNjExLjg3NDUyNDcxNDgzIDMxNy45NTY4IEwgNjE0LjQ1NjI3Mzc2NDI2IDMxOS41NDQ0IEwgNjE3LjAzODAyMjgxMzY5IDIxNC4xNDk2IEwgNjE5LjYxOTc3MTg2MzEyIDEzMS45NjQgTCA2MjIuMjAxNTIwOTEyNTUgMTc4LjM1NzIgTCA2MjQuNzgzMjY5OTYxOTggMTYxLjg1OTYgTCA2MjcuMzY1MDE5MDExNDEgMTM5LjU2NTk5OTk5OTk5OTk3IEwgNjI5Ljk0Njc2ODA2MDg0IDExMy43OTQ4MDAwMDAwMDAwMSBMIDYzMi41Mjg1MTcxMTAyNyAxODkuODk4OCBMIDYzNS4xMTAyNjYxNTk3IDE2OC4wOTI0IEwgNjM3LjY5MjAxNTIwOTEyIDE2MC42OTIgTCA2NDAuMjczNzY0MjU4NTUgMTY3LjAzNCBMIDY0Mi44NTU1MTMzMDc5OCAxNjAuNTQ5MTk5OTk5OTk5OTggTCA2NDUuNDM3MjYyMzU3NDEgMTU0LjkwNDQgTCA2NDguMDE5MDExNDA2ODQgMTI4LjgzOTIgTCA2NTAuNjAwNzYwNDU2MjcgNjguNDQzMTk5OTk5OTk5OTkgTCA2NTMuMTgyNTA5NTA1NyA5MC4yNTc5OTk5OTk5OTk5OCBMIDY1NS43NjQyNTg1NTUxMyAxMDkuNDI2ODAwMDAwMDAwMDEgTCA2NTguMzQ2MDA3NjA0NTYgMTMyLjEzMiBMIDY2MC45Mjc3NTY2NTM5OSAxNDIuMjU0MDAwMDAwMDAwMDIgTCA2NjMuNTA5NTA1NzAzNDIgMTIxLjQ4OTE5OTk5OTk5OTk4IEwgNjY2LjA5MTI1NDc1Mjg1IDEyOS45NzMyMDAwMDAwMDAwMiIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JhcGgiIGRhdGEtei1pbmRleD0iMSIgc3Ryb2tlPSIjMjk2MkZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+PC9wYXRoPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1tYXJrZXJzIGhpZ2hjaGFydHMtc2VyaWVzLTAgaGlnaGNoYXJ0cy1saW5lLXNlcmllcyIgZGF0YS16LWluZGV4PSI5MCIgb3BhY2l0eT0iMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOCw0MCkgc2NhbGUoMSAxKSIgY2xpcC1wYXRoPSJub25lIj48L2c+PC9nPjx0ZXh0IHg9Ijc0MCIgdGV4dC1hbmNob3I9ImVuZCIgY2xhc3M9ImhpZ2hjaGFydHMtdGl0bGUiIGRhdGEtei1pbmRleD0iNCIgc3R5bGU9ImNvbG9yOiByZ2IoNTEsIDUxLCA1MSk7IGZvbnQtc2l6ZTogMTVweDsgZmlsbDogcmdiKDUxLCA1MSwgNTEpOyIgeT0iNTEzIj5zb3VyY2U6IHRyYWRpbmdlY29ub21pY3MuY29tPC90ZXh0Pjx0ZXh0IHg9IjE0IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGNsYXNzPSJoaWdoY2hhcnRzLXN1YnRpdGxlIiBkYXRhLXotaW5kZXg9IjQiIHN0eWxlPSJjb2xvcjogcmdiKDUxLCA1MSwgNTEpOyBmaWxsOiByZ2IoNTEsIDUxLCA1MSk7IGZvbnQtc2l6ZTogMTVweDsiIHk9IjI1Ij5OYXR1cmFsIEdhcyBFVTwvdGV4dD48dGV4dCB4PSIwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGNsYXNzPSJoaWdoY2hhcnRzLWNhcHRpb24iIGRhdGEtei1pbmRleD0iNCIgc3R5bGU9ImNvbG9yOiByZ2IoMTAyLCAxMDIsIDEwMik7IGZpbGw6IHJnYigxMDIsIDEwMiwgMTAyKTsiIHk9IjUyNyI+PC90ZXh0PjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGFiZWxzIGhpZ2hjaGFydHMteGF4aXMtbGFiZWxzIiBkYXRhLXotaW5kZXg9IjciPjx0ZXh0IHg9IjY3LjM4MDIyODEzNjg4MSIgc3R5bGU9ImNvbG9yOiBibGFjazsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZvbnQtd2VpZ2h0OiA0MDA7IGZpbGw6IGJsYWNrOyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iNDgwIiBvcGFjaXR5PSIxIj5NYXk8L3RleHQ+PHRleHQgeD0iMTc4LjM5NTQzNzI2MjM2IiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0ODAiIG9wYWNpdHk9IjEiPkp1bDwvdGV4dD48dGV4dCB4PSIyOTEuOTkyMzk1NDM3MjYiIHN0eWxlPSJjb2xvcjogYmxhY2s7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmb250LXdlaWdodDogNDAwOyBmaWxsOiBibGFjazsiIHRleHQtYW5jaG9yPSJtaWRkbGUiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkiIHk9IjQ4MCIgb3BhY2l0eT0iMSI+U2VwPC90ZXh0Pjx0ZXh0IHg9IjQwNi40NDk5MzY2Mjg2NSIgc3R5bGU9ImNvbG9yOiBibGFjazsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZvbnQtd2VpZ2h0OiA0MDA7IGZpbGw6IGJsYWNrOyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iNDgwIiBvcGFjaXR5PSIxIj5Ob3Y8L3RleHQ+PHRleHQgeD0iNTE2LjYwNDU2MjczNzY0IiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjY8L3RleHQ+PHRleHQgeD0iNjI0LjE3NzQzOTc5NzIxIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0ODAiIG9wYWNpdHk9IjEiPk1hcjwvdGV4dD48L2c+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcy1sYWJlbHMgaGlnaGNoYXJ0cy15YXhpcy1sYWJlbHMiIGRhdGEtei1pbmRleD0iNyI+PHRleHQgeD0iMCIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB2aXNpYmlsaXR5PSJoaWRkZW4iPjIwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0MjMiIG9wYWNpdHk9IjEiPjI1PC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIzODEiIG9wYWNpdHk9IjEiPjMwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIzMzkiIG9wYWNpdHk9IjEiPjM1PC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIyOTciIG9wYWNpdHk9IjEiPjQwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIyNTUiIG9wYWNpdHk9IjEiPjQ1PC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIyMTMiIG9wYWNpdHk9IjEiPjUwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIxNzEiIG9wYWNpdHk9IjEiPjU1PC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIxMjkiIG9wYWNpdHk9IjEiPjYwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI4NyIgb3BhY2l0eT0iMSI+NjU8L3RleHQ+PHRleHQgeD0iMCIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB2aXNpYmlsaXR5PSJoaWRkZW4iPjcwPC90ZXh0PjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxhYmVscyBoaWdoY2hhcnRzLXlheGlzLWxhYmVscyIgZGF0YS16LWluZGV4PSI3Ij48L2c+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcy1sYWJlbHMgaGlnaGNoYXJ0cy15YXhpcy1sYWJlbHMiIGRhdGEtei1pbmRleD0iNyI+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWNvbnRyb2wtcG9pbnRzIiBkYXRhLXotaW5kZXg9Ijk5IiBjbGlwLXBhdGg9InVybCgjaGlnaGNoYXJ0cy1vOWIzdHFnLTEwNTctKSI+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSI5OTk5Ij48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggNDYwLjUgTCA2OTMgNDYwLjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggNDE4LjUgTCA2OTMgNDE4LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMzc2LjUgTCA2OTMgMzc2LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMzM0LjUgTCA2OTMgMzM0LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMjkyLjUgTCA2OTMgMjkyLjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMjUwLjUgTCA2OTMgMjUwLjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMjA4LjUgTCA2OTMgMjA4LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMTY2LjUgTCA2OTMgMTY2LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggMTI0LjUgTCA2OTMgMTI0LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy10aWNrIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgZD0iTSA2ODggODIuNSBMIDY5MyA4Mi41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDM5LjUgTCA2OTMgMzkuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGluZSIgc3Ryb2tlPSIjRTZFNkU2IiBzdHJva2Utd2lkdGg9IjEiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA2ODguNSA0MCBMIDY4OC41IDQ2MCI+PC9wYXRoPjwvZz48cGF0aCBmaWxsPSJub25lIiBkPSJNIDggMCBMIDE1NDQgMCIgc3Ryb2tlPSIjNTI0ZjRmIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9IjgsMyIgZGF0YS16LWluZGV4PSI2IiB2aXNpYmlsaXR5PSJoaWRkZW4iIGNsYXNzPSJjcm9zc2hhaXItZml4LWhvcml6b250YWwiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBkPSJNIDAgNDAgTCAwIDkwNCIgc3Ryb2tlPSIjNTI0ZjRmIiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9IjgsMyIgZGF0YS16LWluZGV4PSI2IiB2aXNpYmlsaXR5PSJoaWRkZW4iIGNsYXNzPSJjcm9zc2hhaXItZml4LXZlcnRpY2FsIj48L3BhdGg+PC9zdmc+"
+        onerror="this.parentElement.style.display='none'">
+    </div>
+    <div class="svg-full">
+      <p><i class="bi bi-bar-chart-steps"></i> ÖTÉVES KÖZÉPTÁVÚ TREND</p><img src="data:image/svg+xml;base64,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBjbGFzcz0iaGlnaGNoYXJ0cy1yb290IiBzdHlsZT0iZm9udC1mYW1pbHk6ICZxdW90O0hlbHZldGljYSBOZXVlJnF1b3Q7LCBIZWx2ZXRpY2EsIEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6IDEycHg7IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3NTAiIGhlaWdodD0iNTIwIiB2aWV3Qm94PSIwIDAgNzUwIDUyMCI+PGRlc2M+Q3JlYXRlZCB3aXRoIEhpZ2hjaGFydHMgMTAuMS4wPC9kZXNjPjxkZWZzPjxjbGlwUGF0aCBpZD0iaGlnaGNoYXJ0cy1vOWIzdHFnLTE1ODctIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjc5IiBoZWlnaHQ9IjQyMCIgZmlsbD0ibm9uZSI+PC9yZWN0PjwvY2xpcFBhdGg+PGNsaXBQYXRoIGlkPSJoaWdoY2hhcnRzLW85YjN0cWctMTg0OS0iPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIiBmaWxsPSJub25lIj48L3JlY3Q+PC9jbGlwUGF0aD48Y2xpcFBhdGggaWQ9ImhpZ2hjaGFydHMtbzliM3RxZy0yMTE2LSI+PHJlY3QgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIiBmaWxsPSJub25lIj48L3JlY3Q+PC9jbGlwUGF0aD48L2RlZnM+PHJlY3QgZmlsbD0iI2ZmZmZmZiIgY2xhc3M9ImhpZ2hjaGFydHMtYmFja2dyb3VuZCIgeD0iMCIgeT0iMCIgd2lkdGg9Ijc1MCIgaGVpZ2h0PSI1MjAiIHJ4PSIwIiByeT0iMCI+PC9yZWN0PjxyZWN0IGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLXBsb3QtYmFja2dyb3VuZCIgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIj48L3JlY3Q+PGcgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZCBoaWdoY2hhcnRzLXhheGlzLWdyaWQiIGRhdGEtei1pbmRleD0iMSI+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDEwOS41IDQwIEwgMTA5LjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDI0Mi41IDQwIEwgMjQyLjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDM3Ni41IDQwIEwgMzc2LjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDUxMC41IDQwIEwgNTEwLjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRURGM0Y2IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDY0NC41IDQwIEwgNjQ0LjUgNDYwIiBvcGFjaXR5PSIxIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQgaGlnaGNoYXJ0cy15YXhpcy1ncmlkIiBkYXRhLXotaW5kZXg9IjEiPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDQ2MC41IEwgNjg3IDQ2MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggNDA4LjUgTCA2ODcgNDA4LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCAzNTUuNSBMIDY4NyAzNTUuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDMwMy41IEwgNjg3IDMwMy41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMjUwLjUgTCA2ODcgMjUwLjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNFN0U3RTciIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLWRhc2hhcnJheT0ibm9uZSIgZGF0YS16LWluZGV4PSIxIiBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkLWxpbmUiIGQ9Ik0gOCAxOTguNSBMIDY4NyAxOTguNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSJub25lIiBkYXRhLXotaW5kZXg9IjEiIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQtbGluZSIgZD0iTSA4IDE0NS41IEwgNjg3IDE0NS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggOTMuNSBMIDY4NyA5My41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIHN0cm9rZS1kYXNoYXJyYXk9Im5vbmUiIGRhdGEtei1pbmRleD0iMSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JpZC1saW5lIiBkPSJNIDggMzkuNSBMIDY4NyAzOS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWdyaWQgaGlnaGNoYXJ0cy15YXhpcy1ncmlkIiBkYXRhLXotaW5kZXg9IjEiPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1ncmlkIGhpZ2hjaGFydHMteWF4aXMtZ3JpZCIgZGF0YS16LWluZGV4PSIxIj48L2c+PHJlY3QgZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtcGxvdC1ib3JkZXIiIGRhdGEtei1pbmRleD0iMSIgeD0iOCIgeT0iNDAiIHdpZHRoPSI2NzkiIGhlaWdodD0iNDIwIj48L3JlY3Q+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcyBoaWdoY2hhcnRzLXhheGlzIiBkYXRhLXotaW5kZXg9IjIiPjxwYXRoIGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGluZSIgc3Ryb2tlPSIjRTZFNkU2IiBzdHJva2Utd2lkdGg9IjEiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA4IDQ2MC41IEwgNjg3IDQ2MC41Ij48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSIyIj48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA3MjAgNDAgTCA3MjAgNDYwIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMgaGlnaGNoYXJ0cy15YXhpcyIgZGF0YS16LWluZGV4PSIyIj48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIGRhdGEtei1pbmRleD0iNyIgZD0iTSA2LjUgNDAgTCA2LjUgNDYwIj48L3BhdGg+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLXNlcmllcy1ncm91cCIgZGF0YS16LWluZGV4PSIzIj48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1zZXJpZXMgaGlnaGNoYXJ0cy1zZXJpZXMtMCBoaWdoY2hhcnRzLWxpbmUtc2VyaWVzIiBkYXRhLXotaW5kZXg9IjkwIiBvcGFjaXR5PSIxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4LDQwKSBzY2FsZSgxIDEpIiBjbGlwLXBhdGg9InVybCgjaGlnaGNoYXJ0cy1vOWIzdHFnLTE4NDktKSI+PHBhdGggZmlsbD0ibm9uZSIgZD0iTSAwIDM5OS44Njk0IEwgMi41NjIyNjQxNTA5NDM0IDQwMC4xMTUxIEwgNS4xMjQ1MjgzMDE4ODY4IDM5OC40MzUxIEwgNy42ODY3OTI0NTI4MzAyIDM5OC45NTE3IEwgMTAuMjQ5MDU2NjAzNzc0IDM5NS41NTA3NSBMIDEyLjgxMTMyMDc1NDcxNyAzOTQuODYxOTUgTCAxNS4zNzM1ODQ5MDU2NiAzOTEuODI4NSBMIDE3LjkzNTg0OTA1NjYwNCAzOTMuOTY2MyBMIDIwLjQ5ODExMzIwNzU0NyAzOTMuODIyNDUgTCAyMy4wNjAzNzczNTg0OTEgMzkyLjkxNTI1IEwgMjUuNjIyNjQxNTA5NDM0IDM5MC43NjI3NSBMIDI4LjE4NDkwNTY2MDM3NyAzODkuMTI1OCBMIDMwLjc0NzE2OTgxMTMyMSAzODUuOTk3ODQ5OTk5OTk5OTcgTCAzMy4zMDk0MzM5NjIyNjQgMzgyLjM4MTY1IEwgMzUuODcxNjk4MTEzMjA4IDM4MS41MzY0IEwgMzguNDMzOTYyMjY0MTUxIDM4My40MTU5IEwgNDAuOTk2MjI2NDE1MDk0IDM4Mi43MDA4NSBMIDQzLjU1ODQ5MDU2NjAzOCAzNzcuMjA2MiBMIDQ2LjEyMDc1NDcxNjk4MSAzNzQuNzI2MSBMIDQ4LjY4MzAxODg2NzkyNSAzNzMuMTQwNiBMIDUxLjI0NTI4MzAxODg2OCAzNzUuOTU4OCBMIDUzLjgwNzU0NzE2OTgxMSAzNjkuODAzNyBMIDU2LjM2OTgxMTMyMDc1NSAzNjUuOTE5NzUgTCA1OC45MzIwNzU0NzE2OTggMzU5LjE4ODIgTCA2MS40OTQzMzk2MjI2NDIgMzUxLjY0MTg1IEwgNjQuMDU2NjAzNzczNTg1IDM0Ni4yNDggTCA2Ni42MTg4Njc5MjQ1MjggMzIxLjY5Mzc1IEwgNjkuMTgxMTMyMDc1NDcyIDMyOC4wMTM3IEwgNzEuNzQzMzk2MjI2NDE1IDMyMS42Njk2IEwgNzQuMzA1NjYwMzc3MzU4IDMyOC4yOTUxIEwgNzYuODY3OTI0NTI4MzAyIDM1MS44OTI3OTk5OTk5OTk5NyBMIDc5LjQzMDE4ODY3OTI0NSAzNDIuMjcxNjUgTCA4MS45OTI0NTI4MzAxODkgMzQwLjU0MTI1IEwgODQuNTU0NzE2OTgxMTMyIDMyOC41MTg3NSBMIDg3LjExNjk4MTEzMjA3NSAzMjcuODM5NCBMIDg5LjY3OTI0NTI4MzAxOSAzMjYuMDQ4MSBMIDkyLjI0MTUwOTQzMzk2MiAzMDguOTM1MiBMIDk0LjgwMzc3MzU4NDkwNiAyNzYuMjQxMzUgTCA5Ny4zNjYwMzc3MzU4NDkgMzA0LjAwNzU1IEwgOTkuOTI4MzAxODg2NzkyIDM0Ni4xMzk4NSBMIDEwMi40OTA1NjYwMzc3NCAzMjcuNDE3MyBMIDEwNS4wNTI4MzAxODg2OCAzMjguNjgxNSBMIDEwNy42MTUwOTQzMzk2MiAzMzcuMDcxIEwgMTEwLjE3NzM1ODQ5MDU3IDMyMy4zMzQ5IEwgMTEyLjczOTYyMjY0MTUxIDMzMy4yMTU0IEwgMTE1LjMwMTg4Njc5MjQ1IDMzOC43MDI3IEwgMTE3Ljg2NDE1MDk0MzQgMzQyLjU0OTkgTCAxMjAuNDI2NDE1MDk0MzQgMzIwLjg1NjkgTCAxMjIuOTg4Njc5MjQ1MjggMjE3LjgyMjUgTCAxMjUuNTUwOTQzMzk2MjMgMjgyLjIwOTU1MDAwMDAwMDA0IEwgMTI4LjExMzIwNzU0NzE3IDMwOS43MDM4IEwgMTMwLjY3NTQ3MTY5ODExIDMxMy42Njc1NSBMIDEzMy4yMzc3MzU4NDkwNiAzMDIuMjQyNSBMIDEzNS44IDMxMC45MjM5IEwgMTM4LjM2MjI2NDE1MDk0IDMxOS41OTkgTCAxNDAuOTI0NTI4MzAxODkgMzIwLjM4MTI1IEwgMTQzLjQ4Njc5MjQ1MjgzIDMxNS41Nzc1IEwgMTQ2LjA0OTA1NjYwMzc3IDMxMy4yMDY2IEwgMTQ4LjYxMTMyMDc1NDcyIDMxOC4yNzQ5NSBMIDE1MS4xNzM1ODQ5MDU2NiAzMjcuNzAyOSBMIDE1My43MzU4NDkwNTY2IDMyOC43ODEyNSBMIDE1Ni4yOTgxMTMyMDc1NSAzMzIuNzQzOTUgTCAxNTguODYwMzc3MzU4NDkgMzMzLjQxMjggTCAxNjEuNDIyNjQxNTA5NDMgMjk2LjM3NTEgTCAxNjMuOTg0OTA1NjYwMzggMjg1LjA2OTc1IEwgMTY2LjU0NzE2OTgxMTMyIDI2NC44MjY4IEwgMTY5LjEwOTQzMzk2MjI2IDIzNi4wMjc0IEwgMTcxLjY3MTY5ODExMzIxIDI1Mi40NTQ2NSBMIDE3NC4yMzM5NjIyNjQxNSAyNTIuMTQyOCBMIDE3Ni43OTYyMjY0MTUwOSAyMTkuNTM5MjUgTCAxNzkuMzU4NDkwNTY2MDQgMjEzLjg2NCBMIDE4MS45MjA3NTQ3MTY5OCAyMDMuNTg2NiBMIDE4NC40ODMwMTg4Njc5MiAxNjMuMjIyNTAwMDAwMDAwMDMgTCAxODcuMDQ1MjgzMDE4ODcgNjMuODQ0MiBMIDE4OS42MDc1NDcxNjk4MSAxOTQuNjAxNzUgTCAxOTIuMTY5ODExMzIwNzUgMjAyLjU1NDQ1IEwgMTk0LjczMjA3NTQ3MTcgMjIyLjgxNzM1IEwgMTk3LjI5NDMzOTYyMjY0IDIyNS4yMzAyNSBMIDE5OS44NTY2MDM3NzM1OCAyMjEuNzYgTCAyMDIuNDE4ODY3OTI0NTMgMjU1Ljk4MjY1IEwgMjA0Ljk4MTEzMjA3NTQ3IDI3MC45MDMxNSBMIDIwNy41NDMzOTYyMjY0MiAzMDAuNzQ1MiBMIDIxMC4xMDU2NjAzNzczNiAzMDIuMTQzOCBMIDIxMi42Njc5MjQ1MjgzIDI5OS40NzQ3IEwgMjE1LjIzMDE4ODY3OTI1IDMxNy4yNTQzNSBMIDIxNy43OTI0NTI4MzAxOSAyOTguNzE1NTUgTCAyMjAuMzU0NzE2OTgxMTMgMjg5LjQxMTUgTCAyMjIuOTE2OTgxMTMyMDggMjc3LjY1OTkgTCAyMjUuNDc5MjQ1MjgzMDIgMjczLjkzMTM1IEwgMjI4LjA0MTUwOTQzMzk2IDI5OC43NzY0NSBMIDIzMC42MDM3NzM1ODQ5MSAzMzIuODc0MTUgTCAyMzMuMTY2MDM3NzM1ODUgMzM5Ljg2OTI0OTk5OTk5OTk3IEwgMjM1LjcyODMwMTg4Njc5IDM0Ni45ODkzIEwgMjM4LjI5MDU2NjAzNzc0IDM1MS45NDc0IEwgMjQwLjg1MjgzMDE4ODY4IDM0OS43NTcxIEwgMjQzLjQxNTA5NDMzOTYyIDM2MS44MDM3NSBMIDI0NS45NzczNTg0OTA1NyAzNTkuMjE2NTUgTCAyNDguNTM5NjIyNjQxNTEgMzYzLjM1NTY0OTk5OTk5OTk3IEwgMjUxLjEwMTg4Njc5MjQ1IDM2OC41MDA2NSBMIDI1My42NjQxNTA5NDM0IDM2Ni40MzYzNSBMIDI1Ni4yMjY0MTUwOTQzNCAzNzIuNzcxIEwgMjU4Ljc4ODY3OTI0NTI4IDM2NC41MDAxNSBMIDI2MS4zNTA5NDMzOTYyMyAzNzUuMDAwMTUgTCAyNjMuOTEzMjA3NTQ3MTcgMzc2Ljg1MTMgTCAyNjYuNDc1NDcxNjk4MTEgMzY5Ljc2NDg1IEwgMjY5LjAzNzczNTg0OTA2IDM3NC43MTg3NSBMIDI3MS42IDM3Ni43OTM1NSBMIDI3NC4xNjIyNjQxNTA5NCAzNzcuODI3OCBMIDI3Ni43MjQ1MjgzMDE4OSAzNzkuNTM1MSBMIDI3OS4yODY3OTI0NTI4MyAzODEuNTk3MyBMIDI4MS44NDkwNTY2MDM3NyAzODUuNTk0NjUgTCAyODQuNDExMzIwNzU0NzIgMzg4LjMxNTIgTCAyODYuOTczNTg0OTA1NjYgMzk0LjI1NCBMIDI4OS41MzU4NDkwNTY2IDM5NS4xMjY1NSBMIDI5Mi4wOTgxMTMyMDc1NSAzODYuMzQ4NTUgTCAyOTQuNjYwMzc3MzU4NDkgMzgzLjI0MTYgTCAyOTcuMjIyNjQxNTA5NDMgMzg1Ljg2NzY1IEwgMjk5Ljc4NDkwNTY2MDM4IDM4MS4wNDE4NSBMIDMwMi4zNDcxNjk4MTEzMiAzODQuODQ4MSBMIDMwNC45MDk0MzM5NjIyNiAzOTIuNzQ1MTUgTCAzMDcuNDcxNjk4MTEzMjEgMzkwLjQyNzggTCAzMTAuMDMzOTYyMjY0MTUgMzkyLjg2Njk1IEwgMzEyLjU5NjIyNjQxNTA5IDM4OS43MDQzNSBMIDMxNS4xNTg0OTA1NjYwNCAzODIuOTM1IEwgMzE3LjcyMDc1NDcxNjk4IDM4MS43Njk1IEwgMzIwLjI4MzAxODg2NzkyIDM4My40ODQxNSBMIDMyMi44NDUyODMwMTg4NyAzODIuNjAyMTUgTCAzMjUuNDA3NTQ3MTY5ODEgMzgzLjc2NjYgTCAzMjcuOTY5ODExMzIwNzUgMzgxLjY5Mjg1IEwgMzMwLjUzMjA3NTQ3MTcgMzc4LjIxOTQ1IEwgMzMzLjA5NDMzOTYyMjY0IDM3Ni4wNDgwNSBMIDMzNS42NTY2MDM3NzM1OCAzNzkuODU3NDUgTCAzMzguMjE4ODY3OTI0NTMgMzYzLjMxODkgTCAzNDAuNzgxMTMyMDc1NDcgMzY2LjMzMjQgTCAzNDMuMzQzMzk2MjI2NDIgMzY2Ljk0MTQgTCAzNDUuOTA1NjYwMzc3MzYgMzY5LjU0MDE1IEwgMzQ4LjQ2NzkyNDUyODMgMzcxLjAzNjQgTCAzNTEuMDMwMTg4Njc5MjUgMzcyLjY4MjggTCAzNTMuNTkyNDUyODMwMTkgMzcxLjAxMDE1IEwgMzU2LjE1NDcxNjk4MTEzIDM3NC4zMjkyIEwgMzU4LjcxNjk4MTEzMjA4IDM3OS40NzIxIEwgMzYxLjI3OTI0NTI4MzAyIDM4NS4xNTE1NSBMIDM2My44NDE1MDk0MzM5NiAzODQuMTE3MyBMIDM2Ni40MDM3NzM1ODQ5MSAzODYuMDMyNSBMIDM2OC45NjYwMzc3MzU4NSAzODMuNzIxNDUgTCAzNzEuNTI4MzAxODg2NzkgMzg2LjQwOTQ1IEwgMzc0LjA5MDU2NjAzNzc0IDM5MC4xNDk1NSBMIDM3Ni42NTI4MzAxODg2OCAzOTAuNTE3MDUgTCAzNzkuMjE1MDk0MzM5NjIgMzg5LjIzMDggTCAzODEuNzc3MzU4NDkwNTcgMzkxLjUyNzE1IEwgMzg0LjMzOTYyMjY0MTUxIDM5My45MzY5IEwgMzg2LjkwMTg4Njc5MjQ1IDM5NS45MTkzIEwgMzg5LjQ2NDE1MDk0MzQgMzkyLjkwMDU1IEwgMzkyLjAyNjQxNTA5NDM0IDM5Mi4yODg0IEwgMzk0LjU4ODY3OTI0NTI4IDM5MS42MjI3IEwgMzk3LjE1MDk0MzM5NjIzIDM5MC44MzUyIEwgMzk5LjcxMzIwNzU0NzE3IDM5MS4yOTMgTCA0MDIuMjc1NDcxNjk4MTEgMzkyLjA2MzcgTCA0MDQuODM3NzM1ODQ5MDYgMzg3LjYyMzI1IEwgNDA3LjQgMzg3LjcxMjUgTCA0MDkuOTYyMjY0MTUwOTQgMzg5LjE0NzIyIEwgNDEyLjUyNDUyODMwMTg5IDM4OC40Mjc5NyBMIDQxNS4wODY3OTI0NTI4MyAzODguNjQ4NTc1IEwgNDE3LjY0OTA1NjYwMzc3IDM4Ny42OTU4MDUgTCA0MjAuMjExMzIwNzU0NzIgMzg0LjM0MDMyIEwgNDIyLjc3MzU4NDkwNTY2IDM4My42MzEwNDUgTCA0MjUuMzM1ODQ5MDU2NiAzODUuMTI4MDMgTCA0MjcuODk4MTEzMjA3NTUgMzgyLjc2NDM3NSBMIDQzMC40NjAzNzczNTg0OSAzODQuMzQwOTUgTCA0MzMuMDIyNjQxNTA5NDMgMzgzLjc2NzEyNSBMIDQzNS41ODQ5MDU2NjAzOCAzODUuMzMxNzMgTCA0MzguMTQ3MTY5ODExMzIgMzg2Ljg1MTkyIEwgNDQwLjcwOTQzMzk2MjI2IDM4Ni42OTczNiBMIDQ0My4yNzE2OTgxMTMyMSAzODYuMDMwODIgTCA0NDUuODMzOTYyMjY0MTUgMzgxLjUxNzUgTCA0NDguMzk2MjI2NDE1MDkgMzc3Ljk0MzQwNSBMIDQ1MC45NTg0OTA1NjYwNCAzNzguNTk3NjYgTCA0NTMuNTIwNzU0NzE2OTggMzgxLjU2NDAxNSBMIDQ1Ni4wODMwMTg4Njc5MiAzNzguNjM0NjIgTCA0NTguNjQ1MjgzMDE4ODcgMzgxLjgxNDMzNSBMIDQ2MS4yMDc1NDcxNjk4MSAzODIuNTA4NTk1IEwgNDYzLjc2OTgxMTMyMDc1IDM4My42NjIxMjUgTCA0NjYuMzMyMDc1NDcxNyAzNzkuNDI2NDI1IEwgNDY4Ljg5NDMzOTYyMjY0IDM3Ny4yMTg4IEwgNDcxLjQ1NjYwMzc3MzU4IDM3OC4zMDQ1IEwgNDc0LjAxODg2NzkyNDUzIDM3OC42ODkzMjUgTCA0NzYuNTgxMTMyMDc1NDcgMzc0LjIxMjEyNSBMIDQ3OS4xNDMzOTYyMjY0MiAzNzkuMTE0ODkgTCA0ODEuNzA1NjYwMzc3MzYgMzc1Ljg1MzU5IEwgNDg0LjI2NzkyNDUyODMgMzcyLjAwODgwNSBMIDQ4Ni44MzAxODg2NzkyNSAzNzAuNzYwODggTCA0ODkuMzkyNDUyODMwMTkgMzY5LjY5MzM0NSBMIDQ5MS45NTQ3MTY5ODExMyAzNzEuMTQzMjkgTCA0OTQuNTE2OTgxMTMyMDggMzc2Ljc5NjgwNSBMIDQ5Ny4wNzkyNDUyODMwMiAzNzQuMDYwNzE1IEwgNDk5LjY0MTUwOTQzMzk2IDM2OS44MzA1OCBMIDUwMi4yMDM3NzM1ODQ5MSAzNjcuOTA5NSBMIDUwNC43NjYwMzc3MzU4NSAzNzIuMjg5Nzg1IEwgNTA3LjMyODMwMTg4Njc5IDM3MC4yMTMyMDAwMDAwMDAwMyBMIDUwOS44OTA1NjYwMzc3NCAzNjcuNzM4MjQ1IEwgNTEyLjQ1MjgzMDE4ODY4IDM2My42NTIyNzUwMDAwMDAwMyBMIDUxNS4wMTUwOTQzMzk2MiAzNjEuMjAxODkgTCA1MTcuNTc3MzU4NDkwNTcgMzY2LjYxNjIxNSBMIDUyMC4xMzk2MjI2NDE1MSAzNzEuNzk2MTggTCA1MjIuNzAxODg2NzkyNDUgMzczLjQ1OTE3IEwgNTI1LjI2NDE1MDk0MzQgMzc5LjI5MzcwNSBMIDUyNy44MjY0MTUwOTQzNCAzNzUuNjQwODYgTCA1MzAuMzg4Njc5MjQ1MjggMzc1LjMwNjMzIEwgNTMyLjk1MDk0MzM5NjIzIDM3Ny4zMzk0NDUgTCA1MzUuNTEzMjA3NTQ3MTcgMzgxLjY0NzA3IEwgNTM4LjA3NTQ3MTY5ODExIDM4NC43MTEyODUgTCA1NDAuNjM3NzM1ODQ5MDYgMzgyLjg1NzQwNDk5OTk5OTk3IEwgNTQzLjIgMzg1Ljk0NjQgTCA1NDUuNzYyMjY0MTUwOTQgMzg1Ljc0NTUzNSBMIDU0OC4zMjQ1MjgzMDE4OSAzODMuNjYyMDIgTCA1NTAuODg2NzkyNDUyODMgMzgzLjA5OTUzNSBMIDU1My40NDkwNTY2MDM3NyAzODEuNjcxOTU1IEwgNTU2LjAxMTMyMDc1NDcyIDM4NC40NDY3OSBMIDU1OC41NzM1ODQ5MDU2NiAzODEuNjQ5OCBMIDU2MS4xMzU4NDkwNTY2IDM4MC41ODAyNyBMIDU2My42OTgxMTMyMDc1NSAzNzcuMDExNzQwMDAwMDAwMDMgTCA1NjYuMjYwMzc3MzU4NDkgMzg0Ljg5NTAzNSBMIDU2OC44MjI2NDE1MDk0MyAzODQuOTY4MzI1IEwgNTcxLjM4NDkwNTY2MDM4IDM4Mi42NjA5NSBMIDU3My45NDcxNjk4MTEzMiAzODQuNzI1MjUgTCA1NzYuNTA5NDMzOTYyMjYgMzg1LjM0NzkgTCA1NzkuMDcxNjk4MTEzMjEgMzg0LjMyOTQgTCA1ODEuNjMzOTYyMjY0MTUgMzg1LjkzMTcgTCA1ODQuMTk2MjI2NDE1MDkgMzg3LjQxNzQ1MDAwMDAwMDAzIEwgNTg2Ljc1ODQ5MDU2NjA0IDM4NC43NDgzNSBMIDU4OS4zMjA3NTQ3MTY5OCAzODYuNzk2OSBMIDU5MS44ODMwMTg4Njc5MiAzODYuNDMyNTUgTCA1OTQuNDQ1MjgzMDE4ODcgMzg1LjcwNDkgTCA1OTcuMDA3NTQ3MTY5ODEgMzg2LjA3NjYgTCA1OTkuNTY5ODExMzIwNzUgMzg1LjIwODI1IEwgNjAyLjEzMjA3NTQ3MTcgMzg2Ljk5MDEgTCA2MDQuNjk0MzM5NjIyNjQgMzg2LjIyMTUgTCA2MDcuMjU2NjAzNzczNTggMzg2LjU5MzIgTCA2MDkuODE4ODY3OTI0NTMgMzg2LjM4MzIgTCA2MTIuMzgxMTMyMDc1NDcgMzg3LjMyMTkgTCA2MTQuOTQzMzk2MjI2NDIgMzg3LjIzODk1IEwgNjE3LjUwNTY2MDM3NzM2IDM4Ny4xODc1IEwgNjIwLjA2NzkyNDUyODMgMzg4LjI5MjEgTCA2MjIuNjMwMTg4Njc5MjUgMzg5Ljc0MjE1IEwgNjI1LjE5MjQ1MjgzMDE5IDM5MS4zNzA3IEwgNjI3Ljc1NDcxNjk4MTEzIDM5MC45MzE4IEwgNjMwLjMxNjk4MTEzMjA4IDM5MC40MzA5NSBMIDYzMi44NzkyNDUyODMwMiAzOTAuNTI3MjM1IEwgNjM1LjQ0MTUwOTQzMzk2IDM4OS41NDU4IEwgNjM4LjAwMzc3MzU4NDkxIDM5MC4yMDczIEwgNjQwLjU2NjAzNzczNTg1IDM4MS4yNzcwNTAwMDAwMDAwMyBMIDY0My4xMjgzMDE4ODY3OSAzNzcuOTU5MDUgTCA2NDUuNjkwNTY2MDM3NzQgMzc4Ljc1MDc1IEwgNjQ4LjI1MjgzMDE4ODY4IDM4Mi41MjEzIEwgNjUwLjgxNTA5NDMzOTYyIDM4NS44NzUgTCA2NTMuMzc3MzU4NDkwNTcgMzg2Ljg5ODc1IEwgNjU1LjkzOTYyMjY0MTUxIDM4Ni40NDMwNDk5OTk5OTk5NyBMIDY1OC41MDE4ODY3OTI0NSAzNjMuOTQ1NzUgTCA2NjEuMDY0MTUwOTQzNCAzNjcuMzc5MjUgTCA2NjMuNjI2NDE1MDk0MzQgMzU3Ljc4MjI1IEwgNjY2LjE4ODY3OTI0NTI4IDM2Mi43NDY2NSIgY2xhc3M9ImhpZ2hjaGFydHMtZ3JhcGgiIGRhdGEtei1pbmRleD0iMSIgc3Ryb2tlPSIjMjk2MkZGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+PC9wYXRoPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1tYXJrZXJzIGhpZ2hjaGFydHMtc2VyaWVzLTAgaGlnaGNoYXJ0cy1saW5lLXNlcmllcyIgZGF0YS16LWluZGV4PSI5MCIgb3BhY2l0eT0iMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOCw0MCkgc2NhbGUoMSAxKSIgY2xpcC1wYXRoPSJub25lIj48L2c+PC9nPjx0ZXh0IHg9Ijc0MCIgdGV4dC1hbmNob3I9ImVuZCIgY2xhc3M9ImhpZ2hjaGFydHMtdGl0bGUiIGRhdGEtei1pbmRleD0iNCIgc3R5bGU9ImNvbG9yOiByZ2IoNTEsIDUxLCA1MSk7IGZvbnQtc2l6ZTogMTVweDsgZmlsbDogcmdiKDUxLCA1MSwgNTEpOyIgeT0iNTEzIj5zb3VyY2U6IHRyYWRpbmdlY29ub21pY3MuY29tPC90ZXh0Pjx0ZXh0IHg9IjE0IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGNsYXNzPSJoaWdoY2hhcnRzLXN1YnRpdGxlIiBkYXRhLXotaW5kZXg9IjQiIHN0eWxlPSJjb2xvcjogcmdiKDUxLCA1MSwgNTEpOyBmaWxsOiByZ2IoNTEsIDUxLCA1MSk7IGZvbnQtc2l6ZTogMTVweDsiIHk9IjI1Ij5OYXR1cmFsIEdhcyBFVTwvdGV4dD48dGV4dCB4PSIwIiB0ZXh0LWFuY2hvcj0ic3RhcnQiIGNsYXNzPSJoaWdoY2hhcnRzLWNhcHRpb24iIGRhdGEtei1pbmRleD0iNCIgc3R5bGU9ImNvbG9yOiByZ2IoMTAyLCAxMDIsIDEwMik7IGZpbGw6IHJnYigxMDIsIDEwMiwgMTAyKTsiIHk9IjUyNyI+PC90ZXh0PjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGFiZWxzIGhpZ2hjaGFydHMteGF4aXMtbGFiZWxzIiBkYXRhLXotaW5kZXg9IjciPjx0ZXh0IHg9IjEwOS43NTg0OTA1NjYwNCIgc3R5bGU9ImNvbG9yOiBibGFjazsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZvbnQtd2VpZ2h0OiA0MDA7IGZpbGw6IGJsYWNrOyIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iNDgwIiBvcGFjaXR5PSIxIj4yMDIyPC90ZXh0Pjx0ZXh0IHg9IjI0My4zNjIyNjQxNTA5NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgc3R5bGU9ImNvbG9yOiBibGFjazsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZvbnQtd2VpZ2h0OiA0MDA7IGZpbGw6IGJsYWNrOyIgeT0iNDgwIiBvcGFjaXR5PSIxIj4yMDIzPC90ZXh0Pjx0ZXh0IHg9IjM3Ni45NjYwMzc3MzU4NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgc3R5bGU9ImNvbG9yOiBibGFjazsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZvbnQtd2VpZ2h0OiA0MDA7IGZpbGw6IGJsYWNrOyIgeT0iNDgwIiBvcGFjaXR5PSIxIj4yMDI0PC90ZXh0Pjx0ZXh0IHg9IjUxMC45MzU4NDkwNTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjU8L3RleHQ+PHRleHQgeD0iNjQ0LjUzOTYyMjY0MTUxIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiBzdHlsZT0iY29sb3I6IGJsYWNrOyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZm9udC13ZWlnaHQ6IDQwMDsgZmlsbDogYmxhY2s7IiB5PSI0ODAiIG9wYWNpdHk9IjEiPjIwMjY8L3RleHQ+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGFiZWxzIGhpZ2hjaGFydHMteWF4aXMtbGFiZWxzIiBkYXRhLXotaW5kZXg9IjciPjx0ZXh0IHg9IjAiIHN0eWxlPSJjb2xvcjogdW5zZXQ7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiB1bnNldDsiIHRleHQtYW5jaG9yPSJzdGFydCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgdmlzaWJpbGl0eT0iaGlkZGVuIj48dHNwYW4+MDwvdHNwYW4+PC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSI0MTIiIG9wYWNpdHk9IjEiPjUwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIzNjAiIG9wYWNpdHk9IjEiPjEwMDwvdGV4dD48dGV4dCB4PSI2OTUiIHN0eWxlPSJjb2xvcjogdW5zZXQ7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiB1bnNldDsiIHRleHQtYW5jaG9yPSJzdGFydCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iMzA3IiBvcGFjaXR5PSIxIj4xNTA8L3RleHQ+PHRleHQgeD0iNjk1IiBzdHlsZT0iY29sb3I6IHVuc2V0OyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZmlsbDogdW5zZXQ7IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkiIHk9IjI1NSIgb3BhY2l0eT0iMSI+MjAwPC90ZXh0Pjx0ZXh0IHg9IjY5NSIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB5PSIyMDIiIG9wYWNpdHk9IjEiPjI1MDwvdGV4dD48dGV4dCB4PSI2OTUiIHN0eWxlPSJjb2xvcjogdW5zZXQ7IGN1cnNvcjogZGVmYXVsdDsgZm9udC1zaXplOiAxNXB4OyBmaWxsOiB1bnNldDsiIHRleHQtYW5jaG9yPSJzdGFydCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgeT0iMTUwIiBvcGFjaXR5PSIxIj4zMDA8L3RleHQ+PHRleHQgeD0iNjk1IiBzdHlsZT0iY29sb3I6IHVuc2V0OyBjdXJzb3I6IGRlZmF1bHQ7IGZvbnQtc2l6ZTogMTVweDsgZmlsbDogdW5zZXQ7IiB0ZXh0LWFuY2hvcj0ic3RhcnQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAsMCkiIHk9Ijk3IiBvcGFjaXR5PSIxIj4zNTA8L3RleHQ+PHRleHQgeD0iMCIgc3R5bGU9ImNvbG9yOiB1bnNldDsgY3Vyc29yOiBkZWZhdWx0OyBmb250LXNpemU6IDE1cHg7IGZpbGw6IHVuc2V0OyIgdGV4dC1hbmNob3I9InN0YXJ0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIiB2aXNpYmlsaXR5PSJoaWRkZW4iPjQwMDwvdGV4dD48L2c+PGcgY2xhc3M9ImhpZ2hjaGFydHMtYXhpcy1sYWJlbHMgaGlnaGNoYXJ0cy15YXhpcy1sYWJlbHMiIGRhdGEtei1pbmRleD0iNyI+PC9nPjxnIGNsYXNzPSJoaWdoY2hhcnRzLWF4aXMtbGFiZWxzIGhpZ2hjaGFydHMteWF4aXMtbGFiZWxzIiBkYXRhLXotaW5kZXg9IjciPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1jb250cm9sLXBvaW50cyIgZGF0YS16LWluZGV4PSI5OSIgY2xpcC1wYXRoPSJ1cmwoI2hpZ2hjaGFydHMtbzliM3RxZy0yMTE2LSkiPjwvZz48ZyBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzIGhpZ2hjaGFydHMteWF4aXMiIGRhdGEtei1pbmRleD0iOTk5OSI+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDQ2MC41IEwgNjkzIDQ2MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDQwOC41IEwgNjkzIDQwOC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDM1NS41IEwgNjkzIDM1NS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDMwMy41IEwgNjkzIDMwMy41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDI1MC41IEwgNjkzIDI1MC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDE5OC41IEwgNjkzIDE5OC41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDE0NS41IEwgNjkzIDE0NS41IiBvcGFjaXR5PSIxIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgY2xhc3M9ImhpZ2hjaGFydHMtdGljayIgc3Ryb2tlPSIjRTdFN0U3IiBzdHJva2Utd2lkdGg9IjEiIGQ9Ik0gNjg4IDkzLjUgTCA2OTMgOTMuNSIgb3BhY2l0eT0iMSI+PC9wYXRoPjxwYXRoIGZpbGw9Im5vbmUiIGNsYXNzPSJoaWdoY2hhcnRzLXRpY2siIHN0cm9rZT0iI0U3RTdFNyIgc3Ryb2tlLXdpZHRoPSIxIiBkPSJNIDY4OCAzOS41IEwgNjkzIDM5LjUiIG9wYWNpdHk9IjEiPjwvcGF0aD48cGF0aCBmaWxsPSJub25lIiBjbGFzcz0iaGlnaGNoYXJ0cy1heGlzLWxpbmUiIHN0cm9rZT0iI0U2RTZFNiIgc3Ryb2tlLXdpZHRoPSIxIiBkYXRhLXotaW5kZXg9IjciIGQ9Ik0gNjg4LjUgNDAgTCA2ODguNSA0NjAiPjwvcGF0aD48L2c+PHBhdGggZmlsbD0ibm9uZSIgZD0iTSA4IDAgTCAxNTQ0IDAiIHN0cm9rZT0iIzUyNGY0ZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI4LDMiIGRhdGEtei1pbmRleD0iNiIgdmlzaWJpbGl0eT0iaGlkZGVuIiBjbGFzcz0iY3Jvc3NoYWlyLWZpeC1ob3Jpem9udGFsIj48L3BhdGg+PHBhdGggZmlsbD0ibm9uZSIgZD0iTSAwIDQwIEwgMCA5MDQiIHN0cm9rZT0iIzUyNGY0ZiIgc3Ryb2tlLXdpZHRoPSIxIiBzdHJva2UtZGFzaGFycmF5PSI4LDMiIGRhdGEtei1pbmRleD0iNiIgdmlzaWJpbGl0eT0iaGlkZGVuIiBjbGFzcz0iY3Jvc3NoYWlyLWZpeC12ZXJ0aWNhbCI+PC9wYXRoPjwvc3ZnPg=="
+        onerror="this.parentElement.style.display='none'">
+    </div>
+  </div>
+  <!-- RÖVIDÍTÉSEK MAGYARÁZATA -->
+  <div
+    style="margin-top:10px; padding:8px; border:1px solid #000; border-radius:10px; background:#f9f9f9; font-size:9.5pt; font-weight:700; line-height:1.2">
+    <div
+      style="font-size:8pt; border-bottom:1px solid #000; margin-bottom:5px; text-transform:uppercase; display:flex; align-items:center; gap:6px">
+      <i class="bi bi-info-circle"></i> * Technikai fogalmak és rövidítések magyarázata
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px 15px">
+      <div><strong>• TTF / HUDEX:</strong> Holland és magyar gáztőzsdei árindexek (Irányadó beszerzési árak).</div>
+      <div><strong>• POD:</strong> Mérési pont azonosító (Egyedi gázfogyasztási hely azonosító kód).</div>
+      <div><strong>• kWh / MWh:</strong> Kilowattóra / Megawattóra (1000 kWh). Az energia mennyisége.</div>
+      <div><strong>• RHD:</strong> Rendszerhasználati díjak (Gázszállítás és elosztás hatósági költsége).</div>
+      <div><strong>• LNG:</strong> Cseppfolyósított földgáz (Általában hajón érkező, nem vezetékes ellátás).</div>
+      <div><strong>• VTP:</strong> Virtuális kereskedési pont (Gáztőzsdei elszámolási és átadási központ).</div>
+      <div><strong>• Felár (S):</strong> Kereskedelmi árrés a gáztőzsdei nettó ár felett (S = Spread).</div>
+      <div><strong>• HUPX:</strong> Magyar áramtőzsdei árindex (Villamosenergia elszámoló ára).</div>
+      <div><strong>• Spot ár:</strong> Pillanatnyi, napi piaci elszámoló ár a gáztőzsdén.</div>
+      <div><strong>• Pn:</strong> Számított nettó egységár.<br><span style="color:#c00; font-size:9.5pt">Kalkuláció: (HUDEX: 33,25 + Felár: 31,8) × 398 / 1000 = 25,89 Ft/kWh</span></div>
+    </div>
+  </div>
+  <!-- NYITOTT KÉRDÉSEK ÉS JÖVŐBELI ÉSZREVÉTELEK -->
+  <div
+    style="border:1.2px solid #000; border-radius:12px; padding:12px; background:#fff8f0; font-family:'Inter', sans-serif;">
+    <h3
+      style="font-family:'Outfit', sans-serif; font-weight:800; font-size:11pt; margin-bottom:8px; border-bottom:1px solid #000; padding-bottom:5px; text-transform:uppercase; color:#000; display:flex; align-items:center; gap:8px">
+      <i class="bi bi-question-circle"></i> Nyitott stratégiai kérdések (Checklist)
+    </h3>
+
+    <div
+      style="display:grid; grid-template-columns:1fr 1fr; gap:8px 25px; font-size:10pt; font-weight:700; color:#333">
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Visszatekintés:</strong> Havi tényleges
+        költségkontroll (Gyógyfürdő mintájára)?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Átváltás:</strong> Indexált helyek (Sportcsarnok
+        stb.) átvihetők-e fix árasba?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Utolsó ajánlat:</strong> Felmondás esetén is él-e a
+        preferenciális jog?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Felmondási idő:</strong> 30 napos ablak megnyílik-e
+        04.04. után?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>Jégpálya:</strong> Időben bekérésre került-e a
+        jégpálya ellátási ajánlata?
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; border-bottom:1px dashed #ccc; padding-bottom:4px">
+        <i class="bi bi-square" style="font-size:10pt"></i> <strong>0 m³ helyek:</strong> Kikapcsolási/szüneteltetési
+        opciók vizsgálata megtörtént?
+      </div>
+    </div>
+  </div>
+  </div><!-- /a3 -->
+
+  <script>
+    // POD-ok forrás-megjegyzése:
+    // 1. "Korányi S. u. 4. fszt. 3. üres" POD: 39N040064563000F (felhasználó közlése, 2026.03.28.)
+    //    Ár javítva: 32,4 Ft/kWh fix áras (szerzdős 2027.10.-ig érvényes)
+    // 2. "Napsugár Óvoda Alkotmány u. 15." POD: 39N0400035270007 (felhasználó közlése, 2026.03.28.)
+    //    A Munka2.csv 14. sorában és a full_merged_data.json-ban is hiányzott a POD,
+    //    valószínű ok: az IESZ-en belüli közvetett ellátás miatt nem volt az eredeti exportban.
+
+    const rows = [
+      // [fenntartó, cím, POD, típus, díjLabel, kwhPrice, m3, teljDij, forgDij, isCont]
+      ["Nagyatádi Polgármesteri Hivatal", "Polgármesteri Hivatal Baross Gábor u. 9.", "39N040026123000D", "I", "74,769 EUR/MWh", 74.769, 0, "", "", 0],
+      ["Nagyatád Város Önkormányzata", "Kiszely László u. 7. – Judo Club", "39N040056084000Q", "F", "23,5 Ft/kWh", 23.5, 1000, "1508", "3402", 0],
+      ["", "Korányi Sándor u. 4. fszt. 3. – üres üzlet", "39N040064563000F", "F", "32,4 Ft/kWh (27.10.-ig)", 32.4, 0, "", "", 1],
+      ["", "Korányi Sándor u. 4. fszt. 38. – üres üzlet", "39N040324822000T", "F", "23,5 Ft/kWh", 23.5, 50, "1508", "3402", 1],
+      ["", "Dél-Somogy Irodaház Baross Gábor u. 1.", "39N0400248260002", "I", "69,717 EUR/MWh", 69.717, 0, "", "", 1],
+      ["", "Kossuth Lajos u. 7. fsz. 2. – üres üzlet", "39N040070189000O", "F", "23,5 Ft/kWh", 23.5, 0, "1428", "3402", 1],
+      ["", "Klubház Korányi Sándor u. 5.", "39N040065864000I", "F", "23,5 Ft/kWh", 23.5, 0, "1580", "3402", 1],
+      ["Nagyatádi Fürdők", "Széchenyi tér 11.", "39N040002241000H", "I", "36,913 EUR/MWh", 36.913, 562, "", "", 0],
+      ["Nagyatádi Intézmények Ellátó Szervezete", "Árpád Iskola konyha – Árpád u. 2. A ép.", "39N040141151000H", "F", "23,5 Ft/kWh", 23.5, 2762, "1404", "3402", 0],
+      ["", "Kollégium konyha – Baross Gábor u. 10.", "39N0402976650001", "F", "23,5 Ft/kWh", 23.5, 3849, "1434", "3402", 1],
+      ["", "Napsugár Óvoda – Alkotmány u. 15.", "39N0400035270007", "I", "36,682 EUR/MWh", 36.682, 6739, "", "", 1],
+      ["", "Csillagszem Óvoda – Aradi u. 1.", "39N040003846000G", "F", "23,5 Ft/kWh", 23.5, 3152, "1922", "3402", 1],
+      ["", "Hétpettyes Óvoda – Honvéd u. 76.", "39N040037097000F", "F", "23,5 Ft/kWh", 23.5, 3758, "1782", "3402", 1],
+      ["", "Százszorszép Óvoda – Rákóczi u. 41.", "39N040008699000J", "F", "23,5 Ft/kWh", 23.5, 5617, "2426", "3402", 1],
+      ["", "Nyitnikék Óvoda – Rozsnyói u. 2. A ép.", "39N040010744000B", "F", "23,5 Ft/kWh", 23.5, 6549, "2008", "3402", 1],
+      ["Nagyatádi Kulturális és Sport Központ", "Kulturális Központ – Nagy Imre tér 1.", "39N040334186000D", "F", "23,5 Ft/kWh", 23.5, 3400, "", "", 0],
+      ["", "Sportcsarnok – Szent István tér 2.", "39N040122571000O", "I", "24,163 EUR/MWh", 24.163, 30000, "", "", 1],
+      ["", "Mudin Imre Sportpálya – Kiszely László u. 42.", "39N040058790000C", "F", "23,5 Ft/kWh", 23.5, 3500, "", "", 1],
+      ["", "Szoborpark és Látogatóközpont – Göröndi u.", "39N040302666000X", "F", "23,5 Ft/kWh", 23.5, 0, "", "", 1],
+      ["", "Turisztikai Központ – Széchenyi tér 7.", "39N040001215000N", "F", "23,5 Ft/kWh", 23.5, 720, "", "", 1],
+      ["", "Könyvtár – Széchenyi tér 13–14.", "39N040093550000H", "F", "23,5 Ft/kWh", 23.5, 5300, "", "", 1],
+      ["", "Múzeum – Széchenyi tér 2.", "39N0400008890001", "F", "23,5 Ft/kWh", 23.5, 0, "", "", 1],
+      ["", "Ifjúsági Klub – Korányi Sándor u. 2. fsz. 2.", "39N040064139000V", "F", "23,5 Ft/kWh", 23.5, 400, "1508", "3402", 1],
+      ["", "Somogyszobi u. 15/2. – Raktár", "39N040104150000Y", "F", "23,5 Ft/kWh", 23.5, 0, "1508", "3402", 1],
+      ["", "T25 – Széchenyi tér 25.", "39N040003151000A", "F", "23,5 Ft/kWh", 23.5, 4160, "1556", "3402", 1],
+      ["Városgondnokság", "Vg. Telephely – Szabadság u. 17.", "39N0401059250000", "I", "24,163 EUR/MWh", 24.163, 6659, "", "", 0],
+      ["", "Vásárcsarnok – Piac tér 3. A ép.", "39N040006274000Q", "F", "23,5 Ft/kWh", 23.5, 4601, "1924", "3402", 1],
+      ["", "Közfoglalkoztatási Telephely – Kiszely L. u. 15.", "39N040058152000V", "F", "23,5 Ft/kWh", 23.5, 0, "1325", "3402", 1],
+      ["Rinyamenti Szociális Szolgáltató Központ", "Idősek Otthona – Széchenyi tér 3. A ép.", "39N040000928000Z", "I", "29,6 EUR/MWh", 29.6, 460, "12312", "", 0],
+      ["", "Rákóczi u. 43. – üres épület", "39N040008802000K", "I", "29,6 EUR/MWh", 29.6, 0, "12312", "", 1],
+      ["", "Bölcsőde – Árpád u. 18.", "39N0400206690009", "I", "29,6 EUR/MWh", 29.6, 14832, "12312", "", 1],
+      ["", "Lábod, Kossuth u. 43.", "39N040095849000F", "I", "29,6 EUR/MWh", 29.6, 5509, "12312", "", 1]
+    ];
+
+    function fmt(n) { return new Intl.NumberFormat('hu-HU').format(Math.round(n)) }
+
+    function fillTable() {
+      const b = document.getElementById('tableBody');
+      const CAPACITY = 8;
+      let totalM3 = 0, totalEnergyCost = 0, totalTeljCost = 0, totalForgCost = 0;
+      let fixAllCost = 0, idxAllCost = 0;
+      let fixEnergyCost = 0, idxEnergyCost = 0;
+      let fixForgCost = 0, idxForgCost = 0;
+
+      // Rowspan számlálás fenntartónként
+      const rowspan = {};
+      let currentStart = -1;
+      rows.forEach((r, i) => {
+        if (r[0]) { currentStart = i; rowspan[i] = 1; }
+        else { rowspan[currentStart] = (rowspan[currentStart] || 1) + 1; }
+      });
+
+      let fenntRendered = {};
+      rows.forEach((r, i) => {
+        const [fennt, cim, pod, type, dijLabel, kwhPrice, m3, teljDijRaw, forgDijRaw, isCont] = r;
+
+        // 1. Energiadíj (nettó) - EUR/MWh bevitel esetén váltószámok alkalmazása
+        let ftm3;
+        if (type === 'I') {
+          // Indexált formula: (HUDEX EUR/MWh + 31,8 Spread) * 398 EURHUF / 1000 * 10,5 
+          ftm3 = (kwhPrice + 31.8) * 398 / 1000 * 10.5;
+        } else {
+          // Fix formula: Ft/kWh * 10,5
+          ftm3 = kwhPrice * 10.5;
+        }
+        const energyCost = m3 * ftm3;
+
+        // 2. Teljesítmény díj (nettó éves) - Alapszabály: ≤1508→4×, >1508→8×
+        //    Kivétel: Sportcsarnok (39N040122571000O) → 40×, Alkotmány u. Napsugár Óvoda (39N0400035270007) → 16×
+        const unitTelj = parseFloat(teljDijRaw) || 1508;
+        let multiplier;
+        if (pod === '39N040122571000O') {
+          multiplier = 40;
+        } else if (pod === '39N0400035270007') {
+          multiplier = 16;
+        } else {
+          multiplier = unitTelj <= 1508 ? 4 : 8;
+        }
+        const rowTeljCost = multiplier * unitTelj;
+
+        // 3. Forgalmi díj (nettó éves) - m3 alapú, alapértelmezett 3402 Ft/MWh
+        const unitForg = parseFloat(forgDijRaw) || 3402;
+        const rowForgCost = (m3 * 10.5 / 1000) * unitForg;
+
+        // 4. Sor összesen (energia + telj + forg)
+        const rowTotal = energyCost + rowTeljCost + rowForgCost;
+
+        totalM3 += m3;
+        totalEnergyCost += energyCost;
+        totalTeljCost += rowTeljCost;
+        totalForgCost += rowForgCost;
+
+        if (type === 'F') {
+          fixAllCost += rowTotal;
+          fixEnergyCost += energyCost;
+          fixForgCost += rowForgCost;
+        } else {
+          // Indexált helyeknél a részösszegbe nem számoljuk bele a forgalmi díjat 
+          // a felhasználó kérése alapján (konzisztencia a végösszeggel)
+          idxAllCost += (energyCost + rowTeljCost); 
+          idxEnergyCost += energyCost;
+          idxForgCost += (m3 * 10.5 / 1000) * unitForg;
+        }
+
+        const tr = document.createElement('tr');
+        if (i % 2 === 1) tr.style.background = '#fdfdfd';
+        else tr.style.background = '#f9f9f9';
+        let fenntCell = '';
+        if (fennt && !fenntRendered[fennt]) {
+          fenntRendered[fennt] = true;
+          const rs = rowspan[i] || 1;
+          fenntCell = `<td class="wrap" rowspan="${rs}" style="vertical-align:middle;font-weight:800;background:#f5f5f5">${fennt}</td>`;
+        } else {
+          fenntCell = '';
+        }
+
+        // Becsült éves díj (energia + telj + forg): ha 0 fogyasztás -> RHD jelölés, egyébként szám
+        const energyCell = m3 === 0 ? '<span style="font-weight:800;font-size:9pt; color:#c00">★ RHD</span>' : fmt(rowTotal);
+
+        tr.innerHTML = `${fenntCell}<td style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cim}</td><td style="font-size:8pt;white-space:nowrap;text-align:center;overflow:hidden;text-overflow:ellipsis">${pod}</td><td style="text-align:center;font-weight:800;font-size:9.5pt">${type === 'F' ? 'Fix' : 'Indexált'}</td><td style="text-align:center;white-space:nowrap">${dijLabel}</td><td style="text-align:center;font-weight:800">${fmt(ftm3)}</td><td style="text-align:center">${fmt(m3)}</td><td style="text-align:center; font-weight:800">${energyCell}</td><td style="text-align:center;font-size:10pt">${fmt(rowTeljCost)}<br><span style="font-size:8pt; color:#666">(${multiplier}✕${fmt(unitTelj)})</span></td><td style="text-align:center;font-size:10pt">${fmt(rowForgCost)}</td>`;
+        b.appendChild(tr);
+      });
+
+      document.getElementById('totalM3').innerText = fmt(totalM3) + ' m³';
+
+      // Dinamikus számítás a felhasználói szabályok alapján: csak a FIXÁLT forgalmi díjakat adjuk hozzá
+      const currentTotalAll = totalEnergyCost + totalTeljCost + fixForgCost;
+
+      document.getElementById('totalCost').innerText = fmt(currentTotalAll) + ' Ft';
+      document.getElementById('teljTotal').innerHTML = `${fmt(totalTeljCost)} Ft<br><span style="font-size:8pt; font-weight:600; color:#555">(becsült)</span>`;
+      document.getElementById('forgTotal').innerHTML = `${fmt(fixForgCost)} Ft<br><span style="font-size:8pt; font-weight:600; color:#555">(fixált mennyiségre)</span>`;
+
+      document.getElementById('sumFix').innerText = fmt(fixAllCost) + ' Ft';
+      document.getElementById('sumIdx').innerText = fmt(idxAllCost) + ' Ft';
+
+      // Indexált predikció frissítése (Koherens növekmény a 33.25->55 aránnyal)
+      const predIdxTotal = Math.round(idxAllCost * (55 / 33.25));
+
+      const predPct = Math.round((55 - 33) / 33 * 100);
+      const predEl = document.getElementById('sumIdxPred');
+      if (predEl && idxAllCost > 0) predEl.innerHTML = `<span style="font-size:10.5pt; color:#c00">(Energia 33.25→55 predikció: ~${fmt(predIdxTotal)} Ft)</span>`;
+
+      document.getElementById('sumAll').innerText = fmt(currentTotalAll) + ' Ft';
+    }
+
+    const hudexEur = [32.0, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1, 41.8, 36.2];
+    const months = ['25.Jan', '25.Feb', '25.Már', '25.Ápr', '25.Máj', '25.Jún', '25.Júl', '25.Aug', '25.Sze.', '25.Okt', '25.Nov', '25.Dec', '26.Jan', '26.Feb'];
+    const spread = 31.8, eurHuf = 398;
+    const hudexFtM3 = hudexEur.map(v => (v + spread) * eurHuf / 1000 * 10.5);
+    const fixFtM3 = 23.5 * 10.5;
+
+    function drawHudex() {
+      new Chart(document.getElementById('hudexChart').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: months, datasets: [
+            { label: 'Indexált + Felár (Ft/m³)', data: hudexFtM3, backgroundColor: 'rgba(255,255,255,0.9)', borderColor: hudexFtM3.map(v => v > fixFtM3 ? '#000' : '#555'), borderWidth: 1.5, order: 2 },
+            { label: 'Fix bázis: ' + fmt(fixFtM3) + ' Ft/m³', data: Array(14).fill(fixFtM3), type: 'line', borderColor: '#00a', borderDash: [6, 4], borderWidth: 2, pointRadius: 0, fill: false, order: 1 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: true, position: 'bottom', labels: { color: '#000', font: { size: 10, weight: 'bold' } } } },
+          scales: { y: { beginAtZero: false, title: { display: true, text: 'Ft/m³', color: '#000', font: { size: 11, weight: 'bold' } }, ticks: { color: '#000', font: { size: 10, weight: 'bold' } } }, x: { ticks: { color: '#000', font: { size: 10, weight: 'bold' } } } }
+        }
+      });
+    }
+
+    function drawElec() {
+      new Chart(document.getElementById('elecChart').getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['2022', '2023', '2024', '2025', '2026'],
+          datasets: [{
+            label: 'Átlag €/MWh',
+            data: [227.11, 97.33, 82.02, 88.40, 106.42],
+            borderColor: '#000',
+            backgroundColor: 'rgba(0,0,0,0.1)',
+            borderWidth: 2,
+            pointRadius: 3,
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { ticks: { font: { size: 7, weight: 'bold' } }, grid: { display: false } },
+            x: { ticks: { font: { size: 7, weight: 'bold' } }, grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    fillTable();
+    drawHudex();
+    drawElec();
+  </script>
+
+  <!-- IDEIGLENES SEGÉDLINKEK A FELDOLGOZÁSHOZ (KÖNNYEN TÖRÖLHETŐ) -->
+  <div class="no-print"
+    style="margin-top:20px; padding:15px; border-top:1px dashed #ccc; display:flex; gap:30px; justify-content:center; font-family:'Inter', sans-serif; font-size:9pt; font-weight:700">
+    <a href="https://cloudconvert.com/html-to-png" target="_blank"
+      style="color:#c0392b; text-decoration:none; display:flex; align-items:center; gap:8px">
+      <i class="bi bi-file-earmark-image"></i> 1. HTML &rarr; PNG (CloudConvert)
+    </a>
+    <a href="https://png2pdf.com/" target="_blank"
+      style="color:#2980b9; text-decoration:none; display:flex; align-items:center; gap:8px">
+      <i class="bi bi-file-earmark-pdf"></i> 2. PNG &rarr; PDF (PNG2PDF)
+    </a>
+  </div>
+</body>
+
+</html>
