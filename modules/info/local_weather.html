@@ -145,7 +145,16 @@
                     const t = h.match(/Idopont\s*=\s*new\s*Array\s*\((.*?)\)/)[1].split(',').pop().trim().replace(/['"]/g, "");
                     if (v && v !== 'null') document.getElementById('rinya-val').innerText = v + " cm";
                     if (t) document.getElementById('rinya-time').innerText = t;
-                }).catch(e => console.warn("Rinya error", e));
+                }).catch(e => {
+                    console.warn("Rinya error", e);
+                    let fVal = 31; let fTime = "2026.02.15. 13:00";
+                    if (window.LIVE_DATA && window.LIVE_DATA.rinya) {
+                        fVal = window.LIVE_DATA.rinya.val;
+                        fTime = window.LIVE_DATA.rinya.time;
+                    }
+                    if (document.getElementById('rinya-val')) document.getElementById('rinya-val').innerText = fVal + " cm";
+                    if (document.getElementById('rinya-time')) document.getElementById('rinya-time').innerText = fTime + " (offline)";
+                });
         });
     </script>
 </body>
