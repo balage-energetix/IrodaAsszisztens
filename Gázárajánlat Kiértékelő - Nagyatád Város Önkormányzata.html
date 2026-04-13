@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)https://h-balazs-energetika.github.io/energetika/index.html -->
+<html lang="hu" data-theme="dark" class=" epjicndeq idc0_350">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata</title>
+    <!-- Font and Icons -->
+    <link href="./Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata_files/all.min.css">
+    <!-- Chart.js -->
+    <script src="./Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata_files/chart.js.letöltés"></script>
+    <!-- html2pdf.js -->
+    <script
+        src="./Gázárajánlat Kiértékelő - Nagyatád Város Önkormányzata_files/html2pdf.bundle.min.js.letöltés"></script>
+
+    <style>
+        :root {
+            --primary: #000000;
+            --secondary: #333333;
+            --accent: #000000;
+            --bg-main: #ffffff;
+            --bg-card: #ffffff;
+            --text-main: #000000;
+            --text-muted: #666666;
+            --border-color: #dddddd;
+            --success: #008000;
+            --danger: #cc0000;
+            --warning: #ff8000;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(123, 97, 255, 0.15) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Toggle Button */
+        .unit-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-end;
+            z-index: 10;
+        }
+
+        .unit-btn-group {
+            display: flex;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.35rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #434eb0 0%, #5c6bc0 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 25px rgba(92, 107, 192, 0.3);
+            white-space: nowrap;
+            letter-spacing: 0.02em;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(92, 107, 192, 0.4);
+            filter: brightness(1.15);
+        }
+
+        .unit-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            color: var(--text-muted);
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .unit-btn.active {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(123, 97, 255, 0.4);
+        }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 1100px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 0.25rem;
+            margin-bottom: 2rem;
+            box-shadow: none;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Inputs */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 0.25rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(123, 97, 255, 0.2);
+        }
+
+        .slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .slider-wrap span {
+            min-width: 60px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        /* Comparison Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Summary Bar */
+        .summary-banner {
+            grid-column: 1 / -1;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-weight: 800;
+        }
+
+        .winner-fix {
+            background: rgba(38, 166, 154, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .winner-indexed {
+            background: rgba(123, 97, 255, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* Tables & Inputs */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--primary);
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary);
+            background: #f9f9f9;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        .table-container {
+            border-radius: 0;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Specific Table Constraints */
+        #consumptionCard {
+            max-width: 600px;
+            margin-left: 0;
+        }
+
+        #detailsTable tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 0.25rem;
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            accent-color: var(--primary);
+        }
+
+        /* Analysis Sections */
+        .alert-box {
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .alert-warning {
+            background: rgba(255, 183, 77, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        .alert-danger {
+            background: rgba(239, 83, 80, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-success {
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .chart-container {
+            height: 350px;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .risk-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .risk-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .risk-item i {
+            margin-top: 0.25rem;
+        }
+
+        .tag-info {
+            background: #eee;
+            color: #000;
+            border: 1px solid #ddd;
+        }
+
+        /* Dashboard & Analysis Grids */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stat-item {
+            padding: 1.5rem;
+            background: #fcfcfc;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Savings Results */
+        #savingsResult {
+            padding: 2rem;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+            justify-content: center;
+            border-width: 2px;
+        }
+
+        .winner-panel {
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 1rem;
+            border-radius: 0.4rem;
+            text-align: center;
+        }
+
+        #savingsMsg {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+
+        /* Remove Scrollbars and Compression */
+        .table-container {
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        #detailsTable,
+        #historicalTable {
+            min-width: 100%;
+        }
+
+        /* Analysis Card Text Fixes */
+        .analysis-content p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+
+        .analysis-content {
+            column-count: 2;
+            column-gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .analysis-content {
+                column-count: 1;
+            }
+        }
+
+        header h1 {
+            background: none !important;
+            -webkit-text-fill-color: var(--primary) !important;
+        }
+
+        /* PDF Export - Extreme Optimization Pass */
+        .pdf-export-mode {
+            background: #ffffff !important;
+            color: #000000 !important;
+            font-size: 8pt !important;
+            width: 420mm !important;
+            margin: 0 !important;
+        }
+
+        .pdf-export-mode .container {
+            width: 420mm !important;
+            max-width: 420mm !important;
+            padding: 5mm !important;
+            margin: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .pdf-export-mode .card {
+            border: 1px solid #000 !important;
+            margin: 0 0 5pt 0 !important;
+            padding: 5pt !important;
+            background: #fff !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            page-break-inside: avoid !important;
+        }
+
+        .pdf-export-mode #riskAnalysisCard {
+            border-top: 3pt solid #000 !important;
+        }
+
+        .pdf-export-mode .analysis-content {
+            column-count: 4 !important;
+            column-gap: 1.5rem !important;
+            font-size: 7pt !important;
+            line-height: 1.2 !important;
+            text-align: justify !important;
+        }
+
+        .pdf-export-mode .analysis-content p {
+            margin-bottom: 3pt !important;
+            font-size: 7pt !important;
+            line-height: 1.1 !important;
+        }
+
+        .pdf-export-mode th,
+        .pdf-export-mode td {
+            padding: 2pt !important;
+            font-size: 7pt !important;
+            border: 0.5pt solid #eee !important;
+        }
+
+        .pdf-export-mode .dashboard-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr 2fr !important;
+            gap: 5pt !important;
+        }
+
+        .pdf-export-mode .chart-container {
+            padding: 3pt 5pt !important;
+            border: 0.5pt solid #000 !important;
+        }
+
+        /* Timeline Horizontal Mode */
+        .pdf-export-mode #timelineSection {
+            margin-top: 15pt !important;
+            padding-top: 10pt !important;
+            border-top: 2pt solid #000 !important;
+        }
+
+        .pdf-export-mode .timeline-container {
+            display: grid !important;
+            grid-template-columns: repeat(6, 1fr) !important;
+            gap: 10pt !important;
+            padding: 0 !important;
+            margin-top: 10pt !important;
+        }
+
+        .pdf-export-mode .timeline-line,
+        .pdf-export-mode .timeline-progress,
+        .pdf-export-mode .timeline-dot,
+        .pdf-export-mode .status-badge,
+        .pdf-export-mode .current-day-marker,
+        .pdf-export-mode .unit-toggle,
+        .pdf-export-mode .export-btn,
+        .pdf-export-mode i.fas {
+            display: none !important;
+        }
+
+        .pdf-export-mode .timeline-item {
+            display: block !important;
+            width: 100% !important;
+        }
+
+        .pdf-export-mode .content-card {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 6pt !important;
+            border: 0.5pt solid #000 !important;
+            min-height: 140pt !important;
+        }
+
+        .pdf-export-mode .date-tag {
+            border: 1pt solid #000 !important;
+            padding: 2pt 5pt !important;
+            font-size: 7pt !important;
+            font-weight: 800 !important;
+        }
+
+        .pdf-export-mode .info-panel {
+            margin: 10pt 0 0 0 !important;
+            padding: 8pt !important;
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+        }
+
+        .pdf-export-mode .info-grid {
+            display: contents !important;
+        }
+
+        .pdf-export-mode .stat-value {
+            font-size: 11pt !important;
+            font-weight: 900 !important;
+        }
+
+        /* Elements to Hide */
+        .pdf-export-mode .unit-btn-group,
+        .pdf-export-mode .input-group div,
+        .pdf-export-mode #savingsResult i,
+        .pdf-export-mode .tag-info {
+            display: none !important;
+        }
+
+        /* Timeline Design (Horizontal by Default) */
+        #timelineSection {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--primary);
+        }
+
+        .timeline-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 1.5rem;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1;
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            height: 2px;
+            background: var(--primary);
+            z-index: 2;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .timeline-dot {
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .content-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            transition: transform 0.3s ease;
+            position: relative;
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .date-tag {
+            display: inline-block;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: #f0f0f0;
+            color: #000;
+        }
+
+        .date-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .tag-blue,
+        .tag-amber,
+        .tag-emerald,
+        .tag-rose {
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid #000;
+        }
+
+        .timeline-item .description {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0.7;
+            color: var(--text-muted);
+        }
+
+        .info-panel {
+            margin: 3rem auto;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            max-width: 800px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .info-stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-stat .stat-label {
+            margin-bottom: 0.25rem;
+        }
+
+        .info-stat .stat-value {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .current-day-marker {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--secondary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 800;
+            box-shadow: 0 10px 25px rgba(38, 166, 154, 0.3);
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+
+            .timeline-line,
+            .timeline-progress {
+                left: 30px;
+                transform: none;
+            }
+
+            .timeline-dot {
+                left: 30px;
+            }
+
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                justify-content: flex-start;
+                padding-left: 60px;
+                padding-right: 0;
+            }
+
+            .content-card {
+                width: 100%;
+                margin: 0;
+            }
+        }
+
+        @media print {
+
+            .unit-toggle,
+            .export-btn {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>Gázenergia Ajánlat-elemző</h1>
+                <p class="subtitle">Nagyatád Város Önkormányzata • Irodai Döntéstámogató Rendszer</p>
+            </div>
+            <div class="unit-toggle">
+                <button class="export-btn" onclick="exportPDF()">
+                    <i class="fas fa-file-pdf"></i> PDF Export (A3)
+                </button>
+                <div class="unit-btn-group">
+                    <button id="btnKWh" class="unit-btn active" onclick="setUnit('kWh')">Ft/kWh</button>
+                    <button id="btnMJ" class="unit-btn" onclick="setUnit('MJ')">Ft/MJ</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page 1 Content Group -->
+        <div id="pdfPage1">
+            <!-- Részletes Szerződési Kockázatelemzés -->
+            <div id="detailedRiskCard" class="card" style="margin-bottom: 2rem; border-top: 4px solid var(--danger);">
+                <h3 class="card-title" style="color: var(--danger); font-size: 1.4rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-exclamation-circle"></i> Részletes Szerződési Kockázatelemzés (Fogyasztói Oldal)
+                </h3>
+                <div class="analysis-content" style="color: var(--text-main);">
+                    <p><strong>1. Ráutaló magatartással történő szerződéskötés:</strong> A dokumentum egyik
+                        legveszélyesebb pontja, hogy az ajánlat elutasításának hiánya (hallgatás) automatikusan a
+                        szerződés létrejöttét eredményezi. A fogyasztónak mindössze 15 napja van az írásbeli
+                        elutasításra, különben a hűségidővel terhelt új feltételek érvénybe lépnek.</p>
+                    <p><strong>2. Hosszú távú, 3 éves elköteleződés:</strong> Az ajánlat 2026. október 1-től 2029.
+                        október 1-ig tartó hűségidőszakot ír elő. Ez a három éves kötöttség rendkívül hosszú idő a
+                        jelenlegi instabil geopolitikai és energiapiaci helyzetben, jelentősen korlátozva az
+                        önkormányzat mozgásterét.</p>
+                    <p><strong>3. Indexált árazás piaci volatilitása:</strong> A tőzsdei (VTP) árazás közvetlenül
+                        kitettséget jelent a piaci kilengéseknek. Míg a csökkenő trend előnyös, egy hirtelen gázpiaci
+                        sokk (háború, vezetékleállás) azonnali és drasztikus költségnövekedést okoz a fix díjas
+                        konstrukciókkal szemben.</p>
+                    <p><strong>4. EUR/HUF devizakockázat:</strong> Mivel az elszámolás alapja EUR/MWh, a számlázás
+                        viszont forintban történik, az önkormányzat teljes mértékben viseli a forint gyengülésének
+                        kockázatát. Egy tartós árfolyamromlás önmagában, a piaci gázár változása nélkül is jelentősen
+                        drágíthatja az energiát.</p>
+                    <p><strong>5. Kereskedői egyoldalú árrögzítési jog:</strong> A szerződés 2.2-es pontja felhatalmazza
+                        az eladót, hogy egyoldalúan rögzítse az árat (maximum 50 EUR/MWh szintig). Ez azt jelenti, hogy
+                        a kereskedő akkor "fagyaszthatja be" az árat, amikor az neki kedvező, elvéve a fogyasztótól a
+                        további piaci árcsökkenés előnyét.</p>
+                    <p><strong>6. Felmondási jog kizárása árrögzítéskor:</strong> Különösen hátrányos a 2.4-es pont,
+                        amely kimondja, hogy ha a kereskedő él az egyoldalú árrögzítési jogával, a fogyasztó nem
+                        jogosult a szerződés felmondására. Ez lényegében csapdába ejti a vevőt egy fixált, de esetleg
+                        piaci feletti árfolyamon.</p>
+                    <p><strong>7. Az "utolsó ajánlattételi jog" versenytorzító hatása:</strong> A 2.12-es pont kötelezi
+                        az önkormányzatot, hogy a szerződés lejárta után is megmutassa a legjobb versenytársi ajánlatát
+                        az E2-nek. Ez elriasztja a többi kereskedőt a valódi versenyzéstől, hiszen tudják, hogy az
+                        inkumbens szolgáltató bármikor ráígérhet az ajánlatukra.</p>
+                    <p><strong>8. Súlyos pótdíjak alkalmazása:</strong> Amennyiben a fogyasztó nem biztosítja az utolsó
+                        ajánlattételi jogot, 500.000 Ft-os, vagy akár ennél is magasabb pótdíj megfizetésére
+                        kötelezhető. Ez az összeg többszörösen is kivethető, ami jelentős pénzügyi fenyegetést jelent.
+                    </p>
+                    <p><strong>9. Rendkülül szűk felmondási ablak:</strong> A szerződés rendes felmondása csak a gázév
+                        fordulója előtt, a 210. és 180. nap közötti szűk, 30 napos intervallumban lehetséges. Aki elvéti
+                        ezt az időpontot, az automatikusan bent marad a rendszerben a következő időszakra is.</p>
+                    <p><strong>10. Automatikus meghosszabbodás kockázata:</strong> A felmondás elmaradása esetén a
+                        szerződés határozatlan idejűvé válik, de a kereskedőnek továbbra is joga marad az árközlésre,
+                        amivel szemben a fogyasztó védtelen marad, ha nem figyel a határidőkre.</p>
+                    <p><strong>11. ÁSZF egyoldalú módosíthatósága:</strong> A szerződés hivatkozik a kereskedő
+                        Üzletszabályzatára és ÁSZF-ére, amelyeket a szolgáltató egyoldalúan módosíthat. Bár elvileg van
+                        felmondási jog módosításkor, a folyamat bonyolultsága miatt a fogyasztók ritkán élnek ezzel.</p>
+                    <p><strong>12. Rejtett és áthárítható költségek:</strong> A 2.5-ös pont szerint a kereskedő jogosult
+                        minden olyan extra adót, díjat vagy költséget áthárítani, "amely máshonnan nem térülne meg
+                        számára". Ez egy biankó felhatalmazás a jövőbeni szabályozói változások költségeinek fogyasztóra
+                        terhelésére.</p>
+                    <p><strong>13. Kapacitástúllépési többletköltségek:</strong> A 130%-ot meghaladó havi fogyasztás
+                        esetén a vevőnek extra rendszerhasználati díjakat kell fizetnie. Ez a rugalmatlanság bünteti az
+                        önkormányzatot, ha például egy hidegebb tél miatt a tervezettnél több gázt kényszerül használni.
+                    </p>
+                    <p><strong>14. Ügyfélminősítés és előrefizetési kényszer:</strong> A kereskedő fenntartja the right,
+                        hogy bármikor egyoldalúan negatívan minősítse az ügyfelet, és biztosíték nyújtását vagy
+                        előrefizetést követeljen. Ez likviditási válságot okozhat az önkormányzati gazdálkodásban.</p>
+                    <p><strong>15. Feltűnő értékaránytalanság kizárása:</strong> A 11.18-as pontban a felek előre
+                        lemondanak arról, hogy a szerződést feltűnő értékaránytalanság (túlzottan drága ár) miatt
+                        megtámadják. Ez egy fontos jogi védelmi vonalat vesz el a fogyasztótól.</p>
+                    <p><strong>16. Bonyolult árképzési mechanizmus:</strong> A VTP Day-Ahead Index és a Heren Árak napi
+                        súlyozott átlaga olyan komplex számítást igényel, amelyet egy átlagos irodai alkalmazott
+                        képtelen ellenőrizni. Emiatt a fogyasztó kénytelen vakon bízni a kereskedő számlázásának
+                        helyességében.</p>
+                    <p><strong>17. Extrém piaci környezet szabályai:</strong> A szerződés hivatkozik az extrém
+                        árkörnyezet esetén irányadó, rendkívüli elszámolási szabályokra. Ezek a szabályok általában a
+                        kereskedő veszteségeinek minimalizálását szolgálják a fogyasztó kárára válsághelyzetben.</p>
+                    <p><strong>18. A nominálás felelőssége:</strong> Bár alapértelmezésben az eladó nominál, az
+                        esetleges pontatlan adatszolgáltatásból vagy kapacitásmódosításból eredő pótdíjakat végül a
+                        vevőre háríthatják át különféle jogcímeken.</p>
+                    <p><strong>19. Adatkezelési és kártalanítási felelősség:</strong> Az adatvédelmi felelősség (GDPR)
+                        áthárítása és az ezzel kapcsolatos bírságok teljes mértékű továbbhárítása a fogyasztóra szintén
+                        olyan pont, ami egy egyszerű közüzemi szerződéshez képest aránytalan terhet róhat a vevőre.</p>
+                    <p><strong>20. Összegzés és kritikus javaslat:</strong> A szerződéstervezet rendkívül aszimmetrikus,
+                        a kockázatok nagy részét a fogyasztóra hárítja, miközben a kereskedőnek számos egyoldalú
+                        beavatkozási lehetőséget biztosít. Javasolt a 15 napos határidőn belüli hivatalos elutasítás és
+                        egy kedvezőbb, tárgyalásos alapú feltételrendszer kérése.</p>
+                </div>
+            </div>
+
+            <!-- Kockázatelemzés summary (dynamic) -->
+            <div id="riskAnalysisCard" class="card" style="margin-bottom: 2rem;">
+                <h3 class="card-title" style="color: var(--warning);">
+                    <i class="fas fa-shield-alt"></i> Szakmai Kiértékelés &amp; Kockázati Javaslat
+                </h3>
+                <div class="analysis-content" id="riskAnalysis">
+                    <div class="alert-box alert-success">
+                        <i class="fas fa-check-double fa-2x"></i>
+                        <div>
+                            <strong>Javaslat: Átállás Indexáltra ajánlott.</strong>
+                            A modell alapján az éves megtakarítás eléri a <strong>1&nbsp;351&nbsp;801 Ft</strong>-ot.
+                            Az átlagos egységár (20.77 Ft/kWh) 10-15%-kal a jelenlegi fix ár alatt marad.
+                        </div>
+                    </div>
+                    <p style="margin-top:1.5rem; font-weight:700; color:var(--text-main);"><i
+                            class="fas fa-exclamation-triangle text-warning"></i> Kritikus kockázati tényezők:</p>
+                    <ul class="risk-list">
+                        <li class="risk-item"><i class="fas fa-money-bill-wave text-warning"></i>
+                            <span><strong>Valutakockázat:</strong> Az EUR/HUF árfolyam minden 5 Ft-os romlása kB. 0.5
+                                Ft-tal drágítja az indexált energiát.</span>
+                        </li>
+                        <li class="risk-item"><i class="fas fa-globe-europe text-primary"></i>
+                            <span><strong>Geopolitika:</strong> Az indexált ár azonnal leköveti a gázpiaci sokkokat, míg
+                                a fix ár pufferként szolgál.</span>
+                        </li>
+                        <li class="risk-item"><i class="fas fa-balance-scale text-secondary"></i>
+                            <span><strong>Likviditás:</strong> Az indexált számlázás változó havi költségei nehezítik az
+                                önkormányzati cash-flow tervezést.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ROW 1: Trend Table + Consumption Table -->
+            <div class="dashboard-grid"
+                style="grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: stretch;">
+                <div class="card" style="margin-bottom: 0;">
+                    <h3 class="card-title">Piaci Trendelemzés (14 Hónap)</h3>
+                    <div class="table-container">
+                        <table id="detailsTable">
+                            <thead>
+                                <tr>
+                                    <th>Hónap</th>
+                                    <th>HUDEX EUR</th>
+                                    <th style="color:var(--text-muted);">FIX ÁR</th>
+                                    <th style="color:var(--accent);">INDEXÁLT</th>
+                                    <th>Kül.</th>
+                                    <th style="text-align:center;">Státusz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>25.Jan</td>
+                                    <td>32.0</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">19.76</td>
+                                    <td class="text-success" style="font-weight:bold;">3.74</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Feb</td>
+                                    <td>33.5</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">20.33</td>
+                                    <td class="text-success" style="font-weight:bold;">3.17</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Már</td>
+                                    <td>31.0</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">19.38</td>
+                                    <td class="text-success" style="font-weight:bold;">4.12</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Ápr</td>
+                                    <td>29.5</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">18.81</td>
+                                    <td class="text-success" style="font-weight:bold;">4.69</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Máj</td>
+                                    <td>30.2</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">19.08</td>
+                                    <td class="text-success" style="font-weight:bold;">4.42</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Jún</td>
+                                    <td>32.8</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">20.06</td>
+                                    <td class="text-success" style="font-weight:bold;">3.44</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Júl</td>
+                                    <td>34.1</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">20.56</td>
+                                    <td class="text-success" style="font-weight:bold;">2.94</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Aug</td>
+                                    <td>35.5</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">21.09</td>
+                                    <td class="text-success" style="font-weight:bold;">2.41</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Szept</td>
+                                    <td>34.8</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">20.82</td>
+                                    <td class="text-success" style="font-weight:bold;">2.68</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Okt</td>
+                                    <td>36.2</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">21.36</td>
+                                    <td class="text-success" style="font-weight:bold;">2.14</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Nov</td>
+                                    <td>38.5</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">22.23</td>
+                                    <td class="text-success" style="font-weight:bold;">1.27</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>25.Dec</td>
+                                    <td>39.1</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">22.46</td>
+                                    <td class="text-success" style="font-weight:bold;">1.04</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>26.Jan</td>
+                                    <td>41.8</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">23.48</td>
+                                    <td class="text-success" style="font-weight:bold;">0.02</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                                <tr>
+                                    <td>26.Feb</td>
+                                    <td>36.2</td>
+                                    <td style="font-weight:600;">23.5</td>
+                                    <td style="font-weight:700; color:var(--accent);">21.36</td>
+                                    <td class="text-success" style="font-weight:bold;">2.14</td>
+                                    <td style="text-align:center;"><i class="fas fa-check-circle text-success"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card" id="consumptionCard" style="margin-bottom: 0;">
+                    <h3 class="card-title">Fogyasztási Helyek</h3>
+                    <div class="table-container">
+                        <table id="consumptionTable" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Helyszín</th>
+                                    <th style="text-align: right;">kWh/év</th>
+                                </tr>
+                            </thead>
+                            <tbody id="consumptionTableBody">
+                                <tr>
+                                    <td>Korányi Sándor utca 2. fszt. 2.</td>
+                                    <td style="text-align: right; font-weight: 600;">2112</td>
+                                </tr>
+                                <tr>
+                                    <td>Széchenyi tér 25.</td>
+                                    <td style="text-align: right; font-weight: 600;">10&nbsp;561</td>
+                                </tr>
+                                <tr>
+                                    <td>Somogyszobi utca 15/2</td>
+                                    <td style="text-align: right; font-weight: 600;">12</td>
+                                </tr>
+                                <tr>
+                                    <td>Kiszely László utca 42.</td>
+                                    <td style="text-align: right; font-weight: 600;">50&nbsp;824</td>
+                                </tr>
+                                <tr>
+                                    <td>Széchenyi tér 7.</td>
+                                    <td style="text-align: right; font-weight: 600;">6706</td>
+                                </tr>
+                                <tr>
+                                    <td>Göröndi utca</td>
+                                    <td style="text-align: right; font-weight: 600;">1353</td>
+                                </tr>
+                                <tr>
+                                    <td>Széchenyi tér 13-14.</td>
+                                    <td style="text-align: right; font-weight: 600;">48&nbsp;271</td>
+                                </tr>
+                                <tr>
+                                    <td>Nagy Imre tér 1.</td>
+                                    <td style="text-align: right; font-weight: 600;">8341</td>
+                                </tr>
+                                <tr>
+                                    <td>Szent István park 2.</td>
+                                    <td style="text-align: right; font-weight: 600;">274&nbsp;128</td>
+                                </tr>
+                                <tr>
+                                    <td>Baross Gábor utca 1.</td>
+                                    <td style="text-align: right; font-weight: 600;">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Baross Gábor utca 9.</td>
+                                    <td style="text-align: right; font-weight: 600;">428</td>
+                                </tr>
+                                <tr>
+                                    <td>Korányi Sándor utca 5.</td>
+                                    <td style="text-align: right; font-weight: 600;">21&nbsp;119</td>
+                                </tr>
+                                <tr>
+                                    <td>Korányi Sándor utca 4. fszt 38.</td>
+                                    <td style="text-align: right; font-weight: 600;">528</td>
+                                </tr>
+                                <tr>
+                                    <td>Kiszely László 7.</td>
+                                    <td style="text-align: right; font-weight: 600;">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Kossuth Lajos utca 7. fszt 2.</td>
+                                    <td style="text-align: right; font-weight: 600;">0</td>
+                                </tr>
+                            </tbody>
+                            <tfoot id="consumptionTableFoot">
+                                <tr style="background: #f9f9f9; border-top: 2px solid #000;">
+                                    <td style="font-weight: 800;">Összesen</td>
+                                    <td id="consumptionTotal" style="text-align: right; font-weight: 900;">424&nbsp;383
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ROW 2: Calculations + Result -->
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1.5fr; gap: 2rem;">
+                <div class="card control-panel" style="margin-bottom: 0;">
+                    <h3 class="card-title">Kalkulációs Paraméterek</h3>
+                    <div class="input-group">
+                        <label>Éves fogyasztás (kWh)</label>
+                        <input type="number" id="annualIn" value="424383" oninput="calculate()">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            Kb. <span id="secEquivalent"
+                                style="font-weight: 800; color: var(--accent);">40&nbsp;417</span> <span
+                                id="secUnit">m3</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Transzparens FIX ár (Ft/kWh)</label>
+                        <input type="number" id="fixPriceIn" value="23.5" step="0.1" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label>Kereskedői árrés (EUR/MWh)</label>
+                        <input type="number" id="traderMargin" value="20" oninput="calculate()">
+                    </div>
+                    <div class="input-group">
+                        <label>EUR/HUF Árfolyam</label>
+                        <input type="range" id="eurRateRange" min="300" max="500" value="380"
+                            oninput="document.getElementById('eurRateVal').innerText=this.value; calculate()">
+                        <div style="text-align:right; font-weight:800; color:var(--accent);" id="eurRateVal">380</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Piaci elmozdulás (%)</label>
+                        <input type="range" id="marketShift" min="-50" max="50" value="0"
+                            oninput="document.getElementById('shiftVal').innerText=(this.value>0?'+':'')+this.value; calculate()">
+                        <div style="text-align:right; font-weight:800; color:var(--accent);" id="shiftVal">0</div>
+                    </div>
+                </div>
+
+                <div class="card main-panel" style="margin-bottom: 0;">
+                    <h3 class="card-title">Gyorselemzés és Eredmények</h3>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-label">Fix Összköltség (14 hó)</span>
+                            <span class="stat-value" id="totalFixPrice">11&nbsp;635&nbsp;167 Ft</span>
+                            <div style="font-size: 0.7rem; color: var(--text-muted);">Bázis: <span
+                                    id="histFixVal">23.5</span> Ft</div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Indexált Összköltség (14 hó)</span>
+                            <span class="stat-value" id="totalIndexedPrice">10&nbsp;283&nbsp;366 Ft</span>
+                        </div>
+                        <div class="stat-item" style="grid-column: span 2; border: 2px solid #000; padding: 1rem;">
+                            <span class="stat-label" style="color: #000; font-size: 0.8rem;">Piaci Tényadatok
+                                (2026)</span>
+                            <div style="display: flex; justify-content: space-around; margin-top: 0.5rem;">
+                                <div><small>JAN:</small> <strong>41.8 EUR</strong></div>
+                                <div><small>FEB:</small> <strong>36.2 EUR</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="savingsResult" class="summary-banner winner-indexed"
+                        style="margin-top: 1rem; display: flex;">
+                        <div class="stat-label">Időszakos pénzügyi előny/hátrány:</div>
+                        <div id="savingsValue" style="font-size: 1.5rem; font-weight: 800;">1&nbsp;351&nbsp;801 Ft
+                            megtakarítás</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="html2pdf__page-break"></div>
+
+    <!-- Page 2 Content Group -->
+    <div id="pdfPage2">
+        <div class="card">
+            <h3 class="card-title">Vizuális Árfolyam- és Trendelemzés</h3>
+            <div class="chart-container">
+                <canvas id="marketChart" style="display: block; box-sizing: border-box; height: 350px; width: 1457.6px;"
+                    width="1822" height="437"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">Történeti Kitekintés</h3>
+            <div class="table-container">
+                <table id="historicalTable">
+                    <thead>
+                        <tr>
+                            <th>Év</th>
+                            <th>EUR/MWh</th>
+                            <th>Ft/kWh</th>
+                            <th>Összehasonlítás</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historicalTableBody">
+                        <tr>
+                            <td style="font-weight:700;">2026 (Jan-Feb Tény)</td>
+                            <td>39.00</td>
+                            <td style="font-weight:700; color:var(--accent);">16.16</td>
+                            <td>23.5</td>
+                            <td class="text-success" style="font-weight:bold;">ELŐNY: 7.34 Ft</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">2025 (Technikai Bázis)</td>
+                            <td>32.75</td>
+                            <td style="font-weight:700; color:var(--accent);">12.78</td>
+                            <td>23.5</td>
+                            <td class="text-success" style="font-weight:bold;">ELŐNY: 10.72 Ft</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">2024</td>
+                            <td>34.34</td>
+                            <td style="font-weight:700; color:var(--accent);">13.75</td>
+                            <td>23.5</td>
+                            <td class="text-success" style="font-weight:bold;">ELŐNY: 9.75 Ft</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">2023</td>
+                            <td>41.51</td>
+                            <td style="font-weight:700; color:var(--accent);">16.60</td>
+                            <td>23.5</td>
+                            <td class="text-success" style="font-weight:bold;">ELŐNY: 6.90 Ft</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">2022</td>
+                            <td>121.75</td>
+                            <td style="font-weight:700; color:var(--accent);">48.71</td>
+                            <td>23.5</td>
+                            <td class="text-danger" style="font-weight:bold;">HÁTRÁNY: 25.21 Ft</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight:700;">2021</td>
+                            <td>45.42</td>
+                            <td style="font-weight:700; color:var(--accent);">18.18</td>
+                            <td>23.5</td>
+                            <td class="text-success" style="font-weight:bold;">ELŐNY: 5.32 Ft</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Gazszerződés Felmondási Idővonal -->
+            <div id="timelineSection" style="margin-top: 2rem;">
+                <h3 class="card-title" style="text-align: center; margin-bottom: 2rem;">Váltási és Felmondási Ütemterv
+                </h3>
+                <div class="timeline-container" id="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-progress" id="progressBar" style="width: 0%;"></div>
+
+                    <div class="timeline-item active">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-blue">Ma</span>
+                            <h3 class="card-title" style="font-size: 0.9rem; margin-bottom: 0.25rem;">Jelenlegi állapot
+                            </h3>
+                            <p class="description" style="font-size: 0.75rem; line-height: 1.3;">A gázszerződés 2026.
+                                szeptember 30-ig határozott idejű. Folyamatos piaci monitoring javasolt.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="item-cancel-start">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-rose" id="date-cancel-start">2026.03.05</span>
+                            <h3 class="card-title" style="font-size: 0.9rem; margin-bottom: 0.25rem;">Felmondási ablak
+                                nyitása</h3>
+                            <p class="description" style="font-size: 0.75rem; line-height: 1.3;">Megnyílik a jogi
+                                lehetőség a szerződés felmondására. Itt kell beadni a felmondó nyilatkozatot.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="item-cancel-end">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-amber" id="date-cancel-end">2026.04.04</span>
+                            <h3 class="card-title" style="font-size: 0.9rem; margin-bottom: 0.25rem;">Felmondási
+                                határnap</h3>
+                            <p class="description" style="font-size: 0.75rem; line-height: 1.3;">Utolsó nap a felmondás
+                                benyújtására. Ezt követően a szerződés automatikusan átfordul.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="item-offer-start">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-amber" id="date-offer-start">2026.07.18</span>
+                            <h3 class="card-title" style="font-size: 0.9rem; margin-bottom: 0.25rem;">Ajánlatkérések
+                                indítása</h3>
+                            <p class="description" style="font-size: 0.75rem; line-height: 1.3;">Megkezdődik az új
+                                kereskedők versenyeztetése és az ajánlatok szakmai bekérése.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-emerald" id="date-trader-deadline">2026.08.17</span>
+                            <h3 class="card-title" style="font-size: 0.9rem; margin-bottom: 0.25rem;">Új kereskedő
+                                leigazolása</h3>
+                            <p class="description" style="font-size: 0.75rem; line-height: 1.3;">Eddig meg kell lennie
+                                az aláírt szerződésnek a zökkenőmentes szolgáltatóváltáshoz.</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" id="item-final">
+                        <div class="timeline-dot"></div>
+                        <div class="content-card">
+                            <span class="date-tag tag-blue">2026.10.01</span>
+                            <h3 class="card-title" style="font-size: 0.9rem; margin-bottom: 0.25rem;">Határozatlan idejű
+                                váltás</h3>
+                            <p class="description" style="font-size: 0.75rem; line-height: 1.3;">A szerződés váltása
+                                megtörténik. Az új kereskedő átveszi a földgázszolgáltatást.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <script>
+        // HUDEX Adatsor (25.Jan - 26.Feb)
+        const hudexSequence = [32.0, 33.5, 31, 29.5, 30.2, 32.8, 34.1, 35.5, 34.8, 36.2, 38.5, 39.1, 41.8, 36.2];
+        const months = ['25.Jan', '25.Feb', '25.Már', '25.Ápr', '25.Máj', '25.Jún', '25.Júl', '25.Aug', '25.Szept', '25.Okt', '25.Nov', '25.Dec', '26.Jan', '26.Feb'];
+
+        const consumptionData = [
+            { name: 'Korányi Sándor utca 2. fszt. 2.', kwh: 2112 },
+            { name: 'Széchenyi tér 25.', kwh: 10561 },
+            { name: 'Somogyszobi utca 15/2', kwh: 12 },
+            { name: 'Kiszely László utca 42.', kwh: 50824 },
+            { name: 'Széchenyi tér 7.', kwh: 6706 },
+            { name: 'Göröndi utca', kwh: 1353 },
+            { name: 'Széchenyi tér 13-14.', kwh: 48271 },
+            { name: 'Nagy Imre tér 1.', kwh: 8341 },
+            { name: 'Szent István park 2.', kwh: 274128 },
+            { name: 'Baross Gábor utca 1.', kwh: 0 },
+            { name: 'Baross Gábor utca 9.', kwh: 428 },
+            { name: 'Korányi Sándor utca 5.', kwh: 21119 },
+            { name: 'Korányi Sándor utca 4. fszt 38.', kwh: 528 },
+            { name: 'Kiszely László 7.', kwh: 0 },
+            { name: 'Kossuth Lajos utca 7. fszt 2.', kwh: 0 }
+        ];
+
+        // Historical CEEGEX data (Price in Ft/MJ)
+        const historicalData = [
+            { year: '2026 (Jan-Feb Tény)', eurMwh: 39.00, ftMj: 4.49 }, // Actual Jan-Feb 2026 avg
+            { year: '2025 (Technikai Bázis)', eurMwh: 32.75, ftMj: 3.55 }, // 2025 referenced Jan-Feb avg
+            { year: 2024, eurMwh: 34.34, ftMj: 3.82 },
+            { year: 2023, eurMwh: 41.51, ftMj: 4.61 },
+            { year: 2022, eurMwh: 121.75, ftMj: 13.53 },
+            { year: 2021, eurMwh: 45.42, ftMj: 5.05 }
+        ];
+
+        let currentUnit = 'kWh'; // 'kWh' or 'MJ'
+        let chartObj = null;
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('hu-HU').format(Math.round(num));
+        }
+
+        function updateConsumptionDisplay() {
+            const tableBody = document.getElementById('consumptionTableBody');
+            tableBody.innerHTML = '';
+            let total = 0;
+            consumptionData.forEach(d => {
+                const val = currentUnit === 'MJ' ? d.kwh * 3.6 : d.kwh;
+                total += val;
+                const row = tableBody.insertRow();
+                row.innerHTML = `<td>${d.name}</td><td style="text-align: right; font-weight: 600;">${formatNumber(val)}</td>`;
+            });
+            document.getElementById('consumptionTotal').innerText = formatNumber(total);
+        }
+
+        function setUnit(unit) {
+            if (currentUnit === unit) return;
+
+            const oldUnit = currentUnit;
+            currentUnit = unit;
+
+            // Update UI buttons
+            document.getElementById('btnKWh').classList.toggle('active', unit === 'kWh');
+            document.getElementById('btnMJ').classList.toggle('active', unit === 'MJ');
+
+            // Update labels
+            document.querySelectorAll('.unit-label').forEach(el => el.innerText = unit);
+
+            // Convert input values
+            const annualIn = document.getElementById('annualIn');
+            const fixPriceIn = document.getElementById('fixPriceIn');
+
+            if (unit === 'MJ') {
+                annualIn.value = (parseFloat(annualIn.value) * 3.6).toFixed(0);
+                fixPriceIn.value = (parseFloat(fixPriceIn.value) / 3.6).toFixed(2);
+            } else {
+                annualIn.value = (parseFloat(annualIn.value) / 3.6).toFixed(0);
+                fixPriceIn.value = (parseFloat(fixPriceIn.value) * 3.6).toFixed(1);
+            }
+
+            updateConsumptionDisplay();
+            calculate();
+        }
+
+        function calculate() {
+            const annualIn = parseFloat(document.getElementById('annualIn').value) || 0;
+            const fixPriceIn = parseFloat(document.getElementById('fixPriceIn').value) || 0;
+            const marginEUR = parseFloat(document.getElementById('traderMargin').value) || 0;
+            const eurRate = parseFloat(document.getElementById('eurRateRange').value);
+            const shiftFactor = 1 + (parseFloat(document.getElementById('marketShift').value) / 100);
+
+            let annualKWh, fixPriceKWh;
+
+            if (currentUnit === 'MJ') {
+                annualKWh = annualIn / 3.6;
+                fixPriceKWh = fixPriceIn * 3.6;
+                const secEqEl = document.getElementById('secEquivalent');
+                const secUnEl = document.getElementById('secUnit');
+                if (secEqEl) secEqEl.innerText = formatNumber(annualIn / 10.5 / 3.6);
+                if (secUnEl) secUnEl.innerText = 'm3';
+            } else {
+                annualKWh = annualIn;
+                fixPriceKWh = fixPriceIn;
+                const secEqEl = document.getElementById('secEquivalent');
+                const secUnEl = document.getElementById('secUnit');
+                if (secEqEl) secEqEl.innerText = formatNumber(annualIn / 10.5);
+                if (secUnEl) secUnEl.innerText = 'm3';
+            }
+
+            const totalKWh = annualKWh;
+            const monthlyKWh = totalKWh / 12;
+
+            // Normalized for 14 months (Apples to Apples)
+            let totalFixCost = monthlyKWh * 14 * fixPriceKWh;
+            let totalIndexedCost = 0;
+
+            const displayIndexedRates = [];
+            const tableBody = document.querySelector('#detailsTable tbody');
+            tableBody.innerHTML = '';
+
+            hudexSequence.forEach((baseEUR, i) => {
+                const adjustedBase = baseEUR * shiftFactor;
+                const indexedRateKWh = ((adjustedBase + marginEUR) * eurRate) / 1000;
+                const monthlyCost = monthlyKWh * indexedRateKWh;
+                totalIndexedCost += monthlyCost;
+
+                const displayRate = currentUnit === 'MJ' ? (indexedRateKWh / 3.6).toFixed(2) : indexedRateKWh.toFixed(2);
+                displayIndexedRates.push(displayRate);
+
+                const displayFix = fixPriceIn.toFixed(currentUnit === 'MJ' ? 2 : 1);
+                const diff = fixPriceIn - parseFloat(displayRate);
+                const statusIcon = diff > 0 ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-exclamation-triangle text-danger"></i>';
+                const diffClass = diff > 0 ? 'text-success' : 'text-danger';
+
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                <td>${months[i]}</td>
+                <td>${adjustedBase.toFixed(1)}</td>
+                <td style="font-weight:600;">${displayFix}</td>
+                <td style="font-weight:700; color:var(--accent);">${displayRate}</td>
+                <td class="${diffClass}" style="font-weight:bold;">${(Math.abs(diff)).toFixed(2)}</td>
+                <td style="text-align:center;">${statusIcon}</td>
+            `;
+            });
+
+            // Update Stats
+            document.getElementById('totalFixPrice').innerText = formatNumber(totalFixCost) + " Ft";
+            document.getElementById('totalIndexedPrice').innerText = formatNumber(totalIndexedCost) + " Ft";
+            const hfv = document.getElementById('histFixVal');
+            if (hfv) hfv.innerText = fixPriceIn.toFixed(currentUnit === 'MJ' ? 2 : 1);
+
+            const savings = totalFixCost - totalIndexedCost;
+            const savingsEl = document.getElementById('savingsResult');
+            const savingsVal = document.getElementById('savingsValue');
+
+            savingsEl.style.display = 'flex';
+            if (savings > 0) {
+                savingsEl.className = 'summary-banner winner-indexed';
+                savingsVal.innerText = formatNumber(savings) + " Ft megtakarítás";
+            } else {
+                savingsEl.className = 'summary-banner alert-danger';
+                savingsVal.innerText = formatNumber(Math.abs(savings)) + " Ft veszteség";
+            }
+
+            updateRiskAnalysis(savings, fixPriceKWh, displayIndexedRates, eurRate, fixPriceIn);
+            updateChart(displayIndexedRates, fixPriceIn);
+            updateHistorical(fixPriceIn);
+        }
+
+        function updateHistorical(currentFixIn) {
+            const hBody = document.getElementById('historicalTableBody');
+            hBody.innerHTML = '';
+
+            historicalData.forEach(d => {
+                const histValIn = currentUnit === 'MJ' ? d.ftMj : d.ftMj * 3.6;
+                const diff = currentFixIn - histValIn;
+                const row = hBody.insertRow();
+                const colorClass = diff > 0 ? 'text-success' : 'text-danger';
+
+                row.innerHTML = `
+                <td style="font-weight:700;">${d.year}</td>
+                <td>${d.eurMwh.toFixed(2)}</td>
+                <td style="font-weight:700; color:var(--accent);">${histValIn.toFixed(2)}</td>
+                <td>${currentFixIn.toFixed(currentUnit === 'MJ' ? 2 : 1)}</td>
+                <td class="${colorClass}" style="font-weight:bold;">${diff > 0 ? 'ELŐNY: ' : 'HÁTRÁNY: '}${Math.abs(diff).toFixed(2)} Ft</td>
+            `;
+            });
+        }
+
+        function updateRiskAnalysis(savings, fixPriceKWh, indexedRates, eurRate, fixPriceIn) {
+            const riskEl = document.getElementById('riskAnalysis');
+            let html = '';
+
+            const avgIndexed = indexedRates.reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / indexedRates.length;
+
+            if (savings > 0) {
+                html += `
+                <div class="alert-box alert-success">
+                    <i class="fas fa-check-double fa-2x"></i>
+                    <div>
+                        <strong>Javaslat: Átállás Indexáltra ajánlott.</strong> 
+                        A modell alapján az éves megtakarítás eléri a <strong>${formatNumber(savings)} Ft</strong>-ot. 
+                        Az átlagos egységár (${avgIndexed.toFixed(2)} Ft/${currentUnit}) 10-15%-kal a jelenlegi fix ár alatt marad.
+                    </div>
+                </div>
+            `;
+            } else {
+                html += `
+                <div class="alert-box alert-danger">
+                    <i class="fas fa-hand-paper fa-2x"></i>
+                    <div>
+                        <strong>Javaslat: Maradás a FIX díjas szerződésben.</strong> 
+                        A jelenlegi piaci viszonyok mellett az indexált ár átlagosan ${Math.abs(avgIndexed - fixPriceIn).toFixed(2)} Ft-tal magasabb a fix díjnál.
+                    </div>
+                </div>
+            `;
+            }
+
+            html += '<p style="margin-top:1.5rem; font-weight:700; color:var(--text-main);"><i class="fas fa-exclamation-triangle text-warning"></i> Kritikus kockázati tényezők:</p>';
+            html += '<ul class="risk-list">';
+            html += `<li class="risk-item"><i class="fas fa-money-bill-wave text-warning"></i> <span><strong>Valutakockázat:</strong> Az EUR/HUF árfolyam minden 5 Ft-os romlása kB. ${currentUnit === 'MJ' ? '0.14' : '0.5'} Ft-tal drágítja az indexált energiát.</span></li>`;
+            html += `<li class="risk-item"><i class="fas fa-globe-europe text-primary"></i> <span><strong>Geopolitika:</strong> Az indexált ár azonnal leköveti a gázpiaci sokkokat, míg a fix ár pufferként szolgál.</span></li>`;
+            html += `<li class="risk-item"><i class="fas fa-balance-scale text-secondary"></i> <span><strong>Likviditás:</strong> Az indexált számlázás változó havi költségei nehezítik az önkormányzati cash-flow tervezést.</span></li>`;
+            html += '</ul>';
+
+            riskEl.innerHTML = html;
+        }
+
+        function updateChart(indexedData, fixValue) {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            const fixData = Array(12).fill(fixValue);
+
+            if (chartObj) {
+                chartObj.data.datasets[0].data = indexedData;
+                chartObj.data.datasets[0].label = `Indexált ár (Ft/${currentUnit})`;
+                chartObj.data.datasets[1].data = fixData;
+                chartObj.data.datasets[1].label = `Fix ár (Ft/${currentUnit})`;
+                chartObj.options.scales.y.title.text = `Ft/${currentUnit}`;
+                chartObj.update();
+            } else {
+                chartObj = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: `Indexált ár (Ft/${currentUnit})`,
+                                data: indexedData,
+                                borderColor: '#7b61ff',
+                                backgroundColor: 'rgba(123, 97, 255, 0.1)',
+                                fill: true,
+                                tension: 0.4,
+                                borderWidth: 3
+                            },
+                            {
+                                label: `Fix ár (Ft/${currentUnit})`,
+                                data: fixData,
+                                borderColor: '#000000',
+                                pointBackgroundColor: '#000000',
+                                pointBorderColor: '#000000',
+                                borderDash: [5, 5],
+                                fill: false,
+                                tension: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#000000', font: { weight: 'bold' } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return context.dataset.label + ': ' + context.parsed.y + ' Ft/' + currentUnit;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                ticks: { color: '#000000' },
+                                title: { display: true, text: 'Ft/' + currentUnit, color: '#000000' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#000000' }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function exportPDF() {
+            const element = document.querySelector('.container');
+            document.body.classList.add('pdf-export-mode');
+            window.scrollTo(0, 0);
+
+            // Force Chart.js to black for export
+            if (chartObj) {
+                chartObj.options.plugins.legend.labels.color = '#000000';
+                chartObj.options.scales.x.ticks.color = '#000000';
+                chartObj.options.scales.y.ticks.color = '#000000';
+                chartObj.options.scales.x.grid.color = 'rgba(0,0,0,0.05)';
+                chartObj.options.scales.y.grid.color = 'rgba(0,0,0,0.05)';
+                chartObj.update();
+            }
+
+            const opt = {
+                margin: 0,
+                filename: 'Gaz_Ajanlat_Professional_Report_A3.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    width: 1587,
+                    scrollX: 0,
+                    scrollY: 0,
+                    logging: false
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a3',
+                    orientation: 'landscape',
+                    compress: true
+                },
+                pagebreak: {
+                    mode: ['css', 'legacy'],
+                    after: '.html2pdf__page-break'
+                }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.body.classList.remove('pdf-export-mode');
+            }).catch(err => {
+                console.error('PDF export failed:', err);
+                document.body.classList.remove('pdf-export-mode');
+            });
+        }
+
+        // Timeline Logic
+        const timelineBaseDate = new Date('2026-10-01');
+        const timelineToday = new Date('2026-02-12'); // Local time is 2026-02-12
+
+        function formatTimelineDate(date) {
+            return date.toISOString().split('T')[0].replaceAll('-', '.');
+        }
+
+        function updateTimeline() {
+            const items = document.querySelectorAll('#timelineSection .timeline-item');
+            if (items.length === 0) return;
+            let lastActiveIndex = 0;
+
+            const tCancelStart = new Date(timelineBaseDate);
+            tCancelStart.setDate(timelineBaseDate.getDate() - 210);
+
+            const tCancelEnd = new Date(timelineBaseDate);
+            tCancelEnd.setDate(timelineBaseDate.getDate() - 180);
+
+            const tTraderDeadline = new Date(timelineBaseDate);
+            tTraderDeadline.setDate(timelineBaseDate.getDate() - 45);
+
+            const tOfferStart = new Date(tTraderDeadline);
+            tOfferStart.setDate(tTraderDeadline.getDate() - 30);
+
+            // Update UI Dates
+            const dcs = document.getElementById('date-cancel-start');
+            const dce = document.getElementById('date-cancel-end');
+            const dos = document.getElementById('date-offer-start');
+            const dtd = document.getElementById('date-trader-deadline');
+            const tm = document.getElementById('todayMarker');
+
+            if (dcs) dcs.innerText = formatTimelineDate(tCancelStart);
+            if (dce) dce.innerText = formatTimelineDate(tCancelEnd);
+            if (dos) dos.innerText = formatTimelineDate(tOfferStart);
+            if (dtd) dtd.innerText = formatTimelineDate(tTraderDeadline);
+            if (tm) tm.innerText = `MA: ${formatTimelineDate(timelineToday)}`;
+
+            const milestones = [
+                timelineToday,
+                tCancelStart,
+                tCancelEnd,
+                tOfferStart,
+                tTraderDeadline,
+                timelineBaseDate
+            ];
+
+            milestones.forEach((date, index) => {
+                if (index < items.length && timelineToday >= date) {
+                    items[index].classList.add('active');
+                    lastActiveIndex = index;
+                }
+            });
+
+            const timelineEl = document.getElementById('timeline');
+            const progressLine = document.getElementById('progressBar');
+            if (timelineEl && progressLine) {
+                const progressWidth = (lastActiveIndex / (items.length - 1)) * 100;
+                progressLine.style.width = `${progressWidth}%`;
+            }
+        }
+
+        updateConsumptionDisplay();
+        calculate();
+        updateTimeline();
+    </script>
+
+
+
+</body>
+
+</html>

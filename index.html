@@ -10,82 +10,47 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.cdnfonts.com/css/biko" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="css/main.css">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
     <style>
-
-        /* Giccses Csalogató Gombok Stilusa */
-        .neo-shiny-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem 1.8rem;
-            border-radius: 3rem;
-            font-size: 0.95rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-decoration: none;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid transparent;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            z-index: 1;
+        /* Prevention of content flickering before JS auth check */
+        body:not(.authenticated) #app-main {
+            display: none !important;
         }
 
-        .btn-irattar {
-            background: linear-gradient(135deg, #ff0080, #7928ca);
-            color: white !important;
-            border-color: rgba(255, 255, 255, 0.3);
-            animation: pulse-pink 2s infinite;
-        }
-
-        .btn-adatb {
-            background: linear-gradient(135deg, #00f2ff, #0061ff);
-            color: white !important;
-            border-color: rgba(255, 255, 255, 0.3);
-            animation: pulse-blue 2s infinite;
-        }
-
-        .neo-shiny-btn:hover {
-            transform: scale(1.08) translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            filter: brightness(1.2);
-        }
-
-        .neo-shiny-btn i {
-            font-size: 1.1rem;
-        }
-
-        .btn-termeles {
-            background: linear-gradient(135deg, #2563eb, #1e40af);
-            color: white !important;
-            border-color: rgba(255, 255, 255, 0.2);
-            padding: 0.6rem 1.4rem;
-            font-size: 0.85rem;
-            margin-left: 4rem; /* Farther to the right */
-        }
-
-        @keyframes pulse-pink {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 0, 128, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0); }
-        }
-
-        @keyframes pulse-blue {
-            0% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 242, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 242, 255, 0); }
+        body.authenticated #auth-overlay {
+            display: none !important;
         }
     </style>
 </head>
 
 <body>
 
+    <div id="auth-overlay"
+        style="position: fixed; inset: 0; background: #000000; z-index: 2000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(20px);">
+        <!-- Modernized Login Box -->
+        <div class="auth-box-modern">
+            <div class="auth-icon-wrapper">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <h2 class="auth-title">Irodai Asszisztens</h2>
+            <p class="auth-subtitle">Biztonságos belépés a rendszerbe</p>
 
-    <div id="app-main">
+            <div class="auth-input-group">
+                <i class="fas fa-lock input-icon"></i>
+                <input type="password" id="auth-password-input" placeholder="Belépési kód...">
+            </div>
+
+            <button onclick="App.login()" class="auth-submit-btn">
+                <span>Belépés</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="auth-footer-note">V3.44 • Secure Access</div>
+        </div>
+    </div>
+
+    <div id="app-main" style="display: none;">
         <header class="app-header">
             <a href="index.html" class="logo">
                 <i class="fab fa-android"></i>
@@ -95,7 +60,7 @@
                 <!-- Data injected by main.js -->
             </div>
         </header>
-        <div id="flashlight-overlay" style="display: none;"></div>
+        <div id="flashlight-overlay"></div>
 
         <div class="container py-3">
             <main class="dashboard-content fade-in">
@@ -152,36 +117,21 @@
                 </div>
 
                 <!-- News & Updates Bar (Ultra-Compact) -->
-                <div class="news-bar" style="background: none; border: none; box-shadow: none;">
-                    <div style="display: flex; gap: 2rem; justify-content: center; width: 100%;">
-                        <a href="https://irattar.vercel.app/" target="_blank" class="neo-shiny-btn btn-irattar">
-                            <i class="fas fa-archive"></i> Irattár
-                        </a>
-                        <a href="https://adatb.vercel.app/" target="_blank" class="neo-shiny-btn btn-adatb">
-                            <i class="fas fa-database"></i> NEO Adatbázis
-                        </a>
-                        <a href="termeles_tervezo_sap.html" class="neo-shiny-btn btn-termeles">
-                            <i class="fas fa-industry"></i> Termelés tervező
-                        </a>
+                <div class="news-bar">
+                    <div class="news-item">
+                        <span class="news-badge">Hír</span>
+                        <span>V3.44: Bővült drónfotó galéria (86 kép) és 30 kérdéses Bolygó Kapitánya kvíz.</span>
                     </div>
-                </div>
-
-                <div class="news-disclaimer"
-                    style="width: 100%; text-align: center; font-size: 0.65rem; color: var(--text-muted); opacity: 0.8; margin-bottom: 2rem; padding-top: 0.4rem;">
-                    minden oldal tartalma generált és a pontatlan utasítások miatt téves infókat tartalmazhat.
+                    <div style="opacity: 0.3; font-size: 0.8rem;">|</div>
+                    <div class="news-item">
+                        <span class="update-badge">Frissítés</span>
+                        <span>V3.44: Podcast támogatás gázelemzéshez, színes grafikon és belépési animációk.</span>
+                    </div>
                 </div>
 
                 <div class="category-group fade-in">
                     <h3 class="group-title"><i class="fas fa-charging-station"></i> ENERGETIKA</h3>
                     <div class="dashboard-grid">
-                        <a href="strategia/NAGYATÁD_GÁZ_DÖNTÉSTÁMOGATÓ_VÉGLEGES_UTÁNI2.html" class="feature-card">
-                            <i class="fas fa-check-circle" style="color:#4caf50;"></i>
-                            <h5>Gáz Döntéstámogató (2026-2027)</h5>
-                        </a>
-                        <a href="strategia/NAGYATÁD GÁZPIACI STRATÉGIA - GRAFIKONOK.mhtml" target="_blank" class="feature-card">
-                            <i class="fas fa-chart-area" style="color:#ff5722;"></i>
-                            <h5>Gázpiaci Stratégia - Grafikonok</h5>
-                        </a>
                         <a href="modules/tools/gas_evaluator.html" class="feature-card">
                             <i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i>
                             <h5>Gázárajánlat Kiértékelő</h5>
@@ -292,20 +242,6 @@
                     </div>
                 </div>
 
-                <div class="category-group fade-in">
-                    <h3 class="group-title"><i class="fas fa-vial-circle-check"></i> GYÁRTÁSTERVEZÉS</h3>
-                    <div class="dashboard-grid">
-                        <a href="termeles_tervezo_sap.html" class="feature-card" style="position: relative; overflow: hidden;">
-                            <img src="factory.png" alt="Factory" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; z-index: 0;">
-                            <div style="position: relative; z-index: 1;">
-                                <i class="fas fa-industry" style="color:#2563eb;"></i>
-                                <h5 style="margin-top: 10px;">SAP Termelés Tervező</h5>
-                                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 5px;">Operatív gyártásirányítás és dokumentáció</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
                 <div class="category-group cat-bill">
                     <div class="group-title"><i class="fas fa-file-invoice"></i> ELSZÁMOLÁS</div>
                     <div class="dashboard-grid">
@@ -331,7 +267,7 @@
                         </a>
                         <a href="modules/polc/index.html" class="feature-card">
                             <i class="fas fa-microchip" style="color:#2196f3;"></i>
-                            <h5>NEO Polc</h5>
+                            <h5>POLC Online</h5>
                         </a>
                         <a href="modules/calc/index.html" class="feature-card">
                             <i class="fas fa-file-invoice-dollar" style="color:#d32f2f;"></i>
@@ -397,11 +333,6 @@
                             <i class="fas fa-charging-station" style="color:#ff9800;"></i>
                             <h5>Energetika</h5>
                         </a>
-                        <a href="modules/info/okoshalozat.html" class="feature-card">
-                            <img src="assets/media/captain_planet_bg.png" alt="Planet Background" class="header-bg-img">
-                            <i class="fas fa-bolt" style="color:#d4a853;"></i>
-                            <h5>Nagyatád Okoshálózat</h5>
-                        </a>
                         <a href="modules/info/vibe_code.html" class="feature-card">
                             <i class="fas fa-terminal" style="color:#4caf50;"></i>
                             <h5>Vájb Kód Bevezető</h5>
@@ -442,13 +373,13 @@
 
         <footer
             style="text-align: center; padding: 3rem 2rem; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border-color); margin-top: 2rem;">
-            © 2024-2025 Irodai Asszisztens | V3.44 | Minden jog fenntartva.
+            © 2024-2025 Irodai Asszisztens | V3.43 | Minden jog fenntartva.
         </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="assets/js/water_data.js"></script>
-    <script src="assets/js/live_data.js"></script>
+    <script src="js/water_data.js"></script>
+    <script src="js/live_data.js"></script>
     <script>
         window.LIVE_DATA = {
             rinya: { val: 31, time: "2026.02.15. 13:00", timestamp: Date.now() },
@@ -459,7 +390,7 @@
             ]
         };
     </script>
-    <script src="assets/js/main.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
