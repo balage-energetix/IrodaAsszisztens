@@ -103,7 +103,7 @@ const App = {
                 <div class="nav-cat">ENERGETIKA <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}strategia_gaz_viewer.html" class="nav-dropdown-item"><i class="fas fa-check-circle" style="color:#4caf50;"></i> Gáz Döntéstámogató</a>
-                        <a href="${p}termeles_tervezo_viewer.html" class="nav-dropdown-item"><i class="fas fa-industry" style="color:#4caf50;"></i> SAP Termelés Tervező</a>
+                        <a href="${p}termeles_tervezo_viewer.html" class="nav-dropdown-item"><i class="fas fa-industry" style="color:#4caf50;"></i> Felkészítő ismeretek</a>
                         <a href="${p}modules/tools/gas_evaluator.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i> Gázárajánlat kiértékelő</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
