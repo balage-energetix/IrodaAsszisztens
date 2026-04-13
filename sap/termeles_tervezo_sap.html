@@ -191,176 +191,89 @@
 
         <section id="munkakor" class="content-card">
             <h2>Termeléstervező Feladat- és Munkakör</h2>
-            <p>A termeléstervező szerepköre a <strong>hajszárító gyártás</strong> során egy kritikus koordinációs pont, ahol a <strong>precíziós összeszerelés</strong> találkozik a <strong>logisztikai optimalizációval</strong>. Feladata nem csupán a gépek beosztása, hanem a teljes <strong>ellátási lánc dinamikus menedzselése</strong> a gyáron belül.</p>
-            
-            <p>A munkafolyamat a hosszú távú igények elemzésével kezdődik (<strong>Master Production Schedule - MPS</strong>). A tervezőnek látnia kell, hogy a következő negyedévben hány hajszárító egységre lesz szükség, és ez alapján kell meghatároznia az előgyártási szinteket. Mivel <strong>nagymértékű termelésről</strong> beszélünk, minden egyes munkafázis szinkronizálása elengedhetetlen a <strong>targoncás és békás raktár</strong> és a szerelősorok között.</p>
-            
-            <div class="highlight">
-                <strong>Gyártási Szűk Keresztmetszetek:</strong> A <strong>galvanizálás</strong> és a <strong>maratás</strong> technológiai okokból limitált kapacitású. A tervező itt <strong>batch-eket (adagokat)</strong> hoz létre. Nem gazdaságos eljárásonként váltani a maratófürdőben minden darab után, ezért az azonos felületkezelésű házakat csoportosan kell a sorra küldeni, minimalizálva az <strong>átállási időket (Setup Time Reduction)</strong>. Ez a lépés akár <strong>15-20%-os hatékonyságnövekedést</strong> is eredményezhet napi szinten.
-            </div>
-
-            <p>A napi rutin része a <strong>targoncás raktár koordinációja</strong> is. A raktári operátorok az <strong>SAP-tól</strong> kapják a lehívásokat (<strong>Pick orders</strong>). Ha a tervező rosszul ütemezi a prioritásokat, a szerelősor alkatrészre várva állhat, ami óránként jelentős veszteséget termel. Folyamatosan egyeztetni kell a <strong>karbantartó csapattal</strong> is, hogy a tervezett gépleállások (<strong>Preventive Maintenance</strong>) ne ütközzenek a kiemelt vevői rendelések teljesítésével.</p>
-            
-            <h3>Részletes Tevékenységi Lista:</h3>
-            <ul>
-                <li><strong>Ütemezés:</strong> Napi és heti gyártási tervek készítése a <strong>kapacitás</strong> és <strong>alapanyag rendelkezésre állás</strong> függvényében.</li>
-                <li><strong>Batch-képzés:</strong> A galvanizáló és marató üzem hatékonyságának maximalizálása azonos technológiai igényű darabok sorolásával.</li>
-                <li><strong>Raktárkoordináció:</strong> A targoncás kiszedési sorrend finomhangolása a szerelősorok <strong>valós idejű igényeihez</strong>.</li>
-                <li><strong>Kommunikáció:</strong> Állandó kapcsolat a <strong>beszerzéssel</strong>, <strong>logisztikával</strong> és a gyártásvezetőkkel a váratlan események (pl. alapanyag hiány vagy gépmeghibásodás) kezelésére.</li>
-                <li><strong>Folyamatfejlesztés:</strong> A <strong>gyártási átfutási idők (Lead Time)</strong> elemzése és javaslat tétele a szűk keresztmetszetek feloldására.</li>
-                <li><strong>Adatkezelés:</strong> A <strong>darabjegyzékek (BOM)</strong> és <strong>művelettervek (Routing)</strong> pontosságának ellenőrzése az SAP-ban.</li>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Alapcél:</strong> A szerelősorok és a logisztika (raktár) szinkronizálása a <strong>hajszárító gyártásban</strong>.</li>
+                <li><strong>Ütemezés:</strong> Napi/heti MPS tervek bontása, gépi és emberi kapacitások allokálása és folyamatos felügyelete.</li>
+                <li><strong>Batch-képzés:</strong> Galvanizáló és marató szűk keresztmetszetek (Bottleneck) feloldása "összeváró" adagok beiktatásával az átállási idő csökkentésére.</li>
+                <li><strong>JIT Logisztika:</strong> Targoncás (Pick orders) raktári kiszolgálás koordinálása Lean alapelvek szerint a WIP (félkésztermék) drasztikus minimalizálásáért.</li>
             </ul>
-
-            <p>A tervező felelőssége kiterjed a <strong>Lean alapelvek</strong> betartatására is. A <strong>Just-in-Time (JIT)</strong> szemlélet jegyében törekedni kell a minimális félkésztermék (<strong>WIP - Work in Progress</strong>) készletre, ugyanakkor rugalmasnak kell maradni a hirtelen változó vevői igények kiszolgálására. <strong>Ez a kettősség teszi a szakmát valódi kihívássá.</strong></p>
         </section>
 
         <section id="sap-rendszer" class="content-card">
             <h2>SAP Rendszer Alkalmazása és Parancsok</h2>
-            <p>Az <strong>SAP ERP rendszer</strong> a gyártásirányítás gerince. A hajszárító gyártásánál az <strong>SAP PP (Production Planning)</strong> és <strong>MM (Materials Management)</strong> modulok összehangolt használata teszi lehetővé a stabil folyamatokat.</p>
-            
-            <div class="code-block">
-                <span class="t-code">MD04</span> - Stock/Requirement List <span class="comment">// A tervező fő "pilótafülkéje", itt látszódik minden készlet és igény</span><br>
-                <span class="t-code">CO01 / CO02</span> - Create/Change Order <span class="comment">// Gyártási rendelések kezelése</span><br>
-                <span class="t-code">MD01</span> - MRP Run <span class="comment">// Alapanyag-szükséglet tervezés futtatása</span><br>
-                <span class="t-code">COOIS</span> - Order Info System <span class="comment">// Komplex jelentések lekérése a rendelések állapotáról</span><br>
-                <span class="t-code">CM21</span> - Capacity Leveling <span class="comment">// Kapacitáskiegyenlítés a galvanizáló sorhoz</span><br>
-                <span class="t-code">MB1B</span> - Goods Movement <span class="comment">// Anyagok áthelyezése a raktárból az üzembe</span><br>
-                <span class="t-code">CO11N</span> - Enter Time Ticket <span class="comment">// Gyártási fázisok készre jelentése darabszámmal</span><br>
-                <span class="t-code">LB10</span> - TR to TO <span class="comment">// Áttárolási igények kezelése a targoncás raktárban</span>
+            <div class="code-block" style="padding:15px; margin:15px 0;">
+                <span class="t-code">MD04</span>: Készletek/Igények &nbsp;|&nbsp; <span class="t-code">CO01/CO02</span>: Rendelés mozgások &nbsp;|&nbsp; <span class="t-code">COOIS</span>: Riportok &nbsp;|&nbsp; <span class="t-code">CM21</span>: Kapacitás &nbsp;|&nbsp; <span class="t-code">MB1B</span>: Készletmozgások
             </div>
-
-            <h3>Gyakorlati példa és paraméterek:</h3>
-            <p>Vegyünk egy hajszárító ház maratási rendelést. A tervező a <strong><span class="t-code">COOIS</span></strong> tranzakcióban először szűr azokra a rendelésekre, amelyeknek az anyaga <strong><span class="t-code">DRYER-HOUSING-ABS</span></strong> és a felülete <strong><span class="t-code">ETCH-CHROME</span></strong>. Ezeket csoportosítja (<strong>Grouping</strong>), majd a <strong><span class="t-code">CO05N</span></strong> tranzakcióval tömegesen felszabadítja (<strong>Release</strong>) őket. Ekkor a <strong>raktári operátorok</strong> megkapják az utasítást az alapanyagok kiadására és a targoncás mozgatásra.</p>
-            
-            <p>Fontos az SAP-ban a <strong>"Backflushing"</strong> beállítása is: amikor a gépsor végén lejelentik a kész hajszárítót, a rendszer automatikusan levonja a raktárból a felhasznált motort, burkolatot és elektronikai komponenseket, biztosítva a <strong>valós idejű készletkövetést</strong>. Ez kiküszöböli a manuális adminisztrációs hibák <strong>legalább 90%-át</strong>.</p>
-
-            <div class="image-container">
-                <img src="dashboard.png" alt="SAP Dashboard vizualizáció">
-            </div>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Folyamat:</strong> Rendelés indítása (tranzakció: COOIS) > Anyagok logikai csoportosítása > Kiadás a logisztikának (Release - CO05N).</li>
+                <li><strong>Backflushing elv:</strong> A szerelősoron készre jelentett végtermékek alkatrészeit a rendszer automatikusan és visszamenőleg levonja a raktárból, ezáltal csökkentve az adminisztrációt.</li>
+            </ul>
         </section>
 
         <section id="minosegugy" class="content-card">
             <h2>Minőségügyi Reklamációk Kezelése</h2>
-            <p>A nagyszériás gyártásnál elkerülhetetlenek a hibák, de a tervező feladata ezek hatásának minimalizálása az operációra. A minőségügyi visszacsatolás az <strong>SAP QM (Quality Management)</strong> modulon keresztül érkezik.</p>
-            
-            <p><strong>Példa reklamációra:</strong> Ha a maratás utáni vizuális ellenőrzésnél foltos felületet találnak, egy <strong>QM értesítést (Quality Notification)</strong> hoznak létre az SAP-ban (<strong><span class="t-code">QM01</span></strong>). A tervező feladata ekkor:</p>
-            <ul>
-                <li><strong>Azonnali készletzárolás</strong> az <strong><span class="t-code">MB1B / 344</span></strong> mozgásnemmel, hogy a gyanús alkatrészek ne kerüljenek a szerelősorra.</li>
-                <li><strong>Új gyártási rendelés (Rework Order)</strong> beillesztése a tervbe a selejt vagy javítás pótlására.</li>
-                <li><strong>A gyártási terv átütemezése:</strong> ha egy teljes batch hibás, más típusú termékeket kell előrehozni, hogy a gépsorok ne üljenek üresen.</li>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Kezelés (QM modul):</strong> Vizuális vagy funkcionális hibák (pl. foltos galvanizálás) esetén SAP QM01 értesítés generálása és az érintett készlet azonnali zárolása (MB1B/344).</li>
+                <li><strong>Reaktív intézkedés:</strong> Rework Order (javító rendelés) azonnali indítása és a sor rugalmas átütemezése az üresjárat elkerülése végett.</li>
+                <li><strong>Preveció:</strong> A minőségüggyel egyeztetve a rendszeres hibák kiértékelése alapján módosítják a Safety Stock (biztonsági készlet) minimum értékét.</li>
             </ul>
-            <p>A reklamációkból származó adatokat a tervező felhasználja a <strong>"Safety Stock" (biztonsági készlet)</strong> felülvizsgálatakor. Ha egy alkatrész gyakran hibásodik meg a galvanizálás során, érdemes több tartalékkal tervezni, hogy ne álljon le a végszerelés. <strong>A cél a vevői elégedettség és a gyártási folyamat folytonossága közötti egyensúly megőrzése.</strong></p>
         </section>
 
         <section id="riportok" class="content-card">
             <h2>Riportálás, Jelentések és KPI-ok</h2>
-            <p>A termelés hatékonyságát <strong>mérhető adatokkal</strong> kell igazolni. A tervező napi, heti és havi jelentéseket készít a felsővezetés számára, amelyek alapja a <strong>tiszta és validált adatsor</strong>.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-val">96.5%</span>
-                    <span class="stat-label">On-time Delivery</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-val">84.2%</span>
-                    <span class="stat-label">OEE Efficiency</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-val">1.9%</span>
-                    <span class="stat-label">Scrap Rate</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-val">12.5h</span>
-                    <span class="stat-label">Avg Lead Time</span>
-                </div>
+            <div class="stats-grid" style="margin-top:20px; margin-bottom:20px;">
+                <div class="stat-item"><span class="stat-val">96.5%</span><span class="stat-label">OTD (Pontosság)</span></div>
+                <div class="stat-item"><span class="stat-val">84.2%</span><span class="stat-label">OEE (Hatékonyság)</span></div>
+                <div class="stat-item"><span class="stat-val">1.9%</span><span class="stat-label">Scrap Rate</span></div>
+                <div class="stat-item"><span class="stat-val">12h</span><span class="stat-label">Avg Lead Time</span></div>
             </div>
-
-            <p style="margin-top: 25px;">A jelentések alapja az SAP-ból exportált adathalmaz, amit gyakran <strong>PowerBI rendszerben</strong> vizualizálnak. A tervező elemzi a <strong>tervezett és tanúsított idő (Standard vs. Actual time)</strong> közötti különbségeket. Ha a galvanizáló üzemben a sorváltások túl sok időt vesznek el, azt a riportban jelezni kell, és javaslatot kell tenni az ütemezés optimalizálására. <strong>A KPI-ok nem csak számok, hanem a jövőbeli beruházások és fejlesztések alapkövei.</strong></p>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Adatalapú Elemzések:</strong> Tervezett (Standard) kontra Tényleges (Actual) gyártási idők összevetése SAP exportok és validált PowerBI riportok alapján.</li>
+            </ul>
         </section>
 
         <section id="muszak" class="content-card">
             <h2>Műszakátadás és Operatív Kommunikáció</h2>
-            <p>A <strong>24/7-es gyártási ciklusban</strong> a <strong>műszakátadás (Shift Handover)</strong> a folyamat legkritikusabb pontja. A tervező felelős azért, hogy a következő műszak pontosan tudja, hol tart a galvanizáló sor, és melyik <strong>high-priority (magas prioritású)</strong> rendelésnek kell elkészülnie reggelre.</p>
-            
-            <p><strong>Kommunikációs protokoll:</strong> Minden műszak végén a tervező frissíti az <strong>operatív műszaki naplót</strong>, amely tartalmazza a váratlan gépleállásokat, az alapanyag fogyásokat és a minőségügyi incidenseket. Ez biztosítja, hogy a <strong>termelési láncban ne keletkezzen információs rés</strong>.</p>
-            
-            <p>A tervezőnek emellett szorosan együtt kell működnie a <strong>műszakvezetőkkel</strong>, hogy a valós idejű emberi erőforrás kapacitás (pl. váratlan hiányzás) esetén azonnal módosítani tudja a napi tervet az SAP-ban. <strong>A proaktív kommunikáció csökkenti a stresszt a gyártósoron és növeli a dolgozói elégedettséget.</strong></p>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Shift Handover:</strong> A 24/7 folyamatos gyártásban a high-priority rendelések és az éjszakai gépleállások pontos dokumentálása a műszaknaplóban, elkerülve az információs rést.</li>
+                <li><strong>Folyamatos Riadókészültség:</strong> Azonnali reagálás és újra-ütemezés humánerőforrás hiány vagy alkatrészhiba esetén a műszakvezetővel vállvetve.</li>
+            </ul>
         </section>
 
         <section id="interju-felkeszules" class="content-card">
-            <h2>Minőségügyi Mérnök Interjú Felkészülés</h2>
-            <p>Az autóipari és nagyszériás gyártási környezetben zajló minőségügyi mérnök interjúk során a <strong>szakmai alapfogalmak magabiztos ismerete</strong> a siker kulcsa. Alapvető az <strong>ISO 9001:2015</strong> és az autóspecifikus <strong>IATF 16949:2016</strong> szabványok ismerete, kiemelten a PDCA ciklusra, a folyamatszemléletre és a kockázatalapú gondolkodásmódra.</p>
-            
-            <p>A <strong>Core Tools (Alapeszközök)</strong> ismerete kötelező: az <strong>APQP</strong> (Termékminőség-tervezés) folyamata, az 5 fázis mérföldkövei, valamint a <strong>PPAP</strong> (Termék- és gyártási folyamat jóváhagyási eljárás) dokumentációs csomagja (PSW, Control Plan, Flowchart, Lab report). Készüljön fel a submission szintek (Level 1-5) közötti különbségek magyarázatára.</p>
-            
-            <p>A <strong>FMEA</strong> (Hiba mód és hatás elemzés) kapcsán ismernie kell a kockázatértékelés módszertanát (Súlyosság, Előfordulás, Észlelhetőség), és az AIAG-VDA harmonizált szabvány szerinti <strong>Action Priority (AP)</strong> táblázatok használatát. Fontos megkülönböztetni a DFMEA-t (Tervezési) a PFMEA-tól (Gyártási), utóbbinál fókuszálva a folyamatlépések technológiai kockázataira.</p>
-            
-            <p>Problémamegoldás terén a <strong>8D módszertan</strong> a sztenderd: a D3 (Containment) azonnali intézkedések, a D5/D6 gyökérokok feltárása és a helyesbítő intézkedések bevezetése, valamint a D7 (Preventive) megelőzés rendszer szinten. A gyökérokelemzéshez használja a <strong>3x5 Miért</strong> (Occurrence, Escape, Systemic) és az <strong>Ishikawa (szálka-diagram)</strong> módszereket.</p>
-            
-            <p>Statisztikai téren az <strong>SPC</strong> (Statisztikai folyamatszabályozás) eszköztára elengedhetetlen: folyamatképességi mutatók (<strong>Cp, Cpk, Pp, Ppk</strong>) értelmezése, szabályozókártyák (X-bar, R) kiértékelése és a speciális hibaokok (trendek, eltolódások) felismerése. Az <strong>MSA</strong> (Mérőrendszer elemzés) keretében tudja magyarázni a <strong>Gage R&R</strong> (Ismételhetőség és Reprodukálhatóság) fontosságát.</p>
-            
-            <p>A mérnöki rajzolvasás és a <strong>GD&T</strong> (Geometriai méretezés és tűrésezés) alapjai szintén kritikusak. Ismerje a mérőeszközök használatát (tolómérő, mikrométer, 3D CMM alapok) és a kalibrálási lánc fontosságát. A reklamációkezelés során (Customer claim) fontos a vevői portálok (SupplyOn, SAP) rutinszerű kezelése és a válaszadási határidők (24h/14 nap) szigorú betartása.</p>
-            
-            <p>Módszertani szinten legyen tisztában a <strong>Lean</strong> (Muda, 5S, Kaizen) és a <strong>Six Sigma (DMAIC)</strong> folyamatfejlesztési alapelveivel. A hibázásmentes gyártás érdekében kiemelten kezelje a <strong>Poka-Yoke</strong> (error-proofing) megoldások tervezését és validálását a gyártósori munkahelyeken.</p>
-            
-            <p>Végül, az auditálási tapasztalat (Belső, Vevői, Tanúsító) és a <strong>VDA 6.3</strong> szerinti folyamatauditok ismerete nagy előnyt jelent. Készüljön fel konkrét példákkal a nem-megfelelőségek (NCR) kezelésére és a hatékonyság-ellenőrzési módszerekre. <strong>Az interjún a proaktív, adatalapú döntéshozatal és a rendszerszemlélet demonstrálása hozza meg a sikert.</strong></p>
+            <h2>Minőségügyi Mérnök (Quality Engineer)</h2>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Szabványok és Rendszerek:</strong> ISO 9001:2015, IATF 16949 (autóipar), VDA 6.3 nyílt folyamatauditok ismerete és PDCA alapú fejlesztések adaptálása.</li>
+                <li><strong>Core Tools (Alapeszközök):</strong> APQP (Terméktervezés), PPAP (Termékjóváhagyás - PSW, Control Plan), FMEA (Kockázatelemzés, egykori RPN / új AP táblázat szerinti értékelés).</li>
+                <li><strong>Problémamegoldási Metodika:</strong> 8D riportálás és vevői reklamációkezelés. Gyökérok elemzés (3x5 Miért, Ishikawa), D3 Containment és D7 Preventive actions. SPC/MSA statisztikai szabályozás.</li>
+            </ul>
         </section>
 
         <section id="folyamatmernok" class="content-card">
             <h2>Folyamatmérnöki Gyorstalpaló (Process Engineering)</h2>
-            <p>A folyamatmérnök (Process Engineer) a gyártósorok "karmestere", akinek elsődleges célja a <strong>termelési folyamatok hatékonyságának maximalizálása</strong> és a veszteségek (<strong>Muda</strong>) eliminálása. A modern gyártási környezetben a folyamatmérnök híd a fejlesztés (R&D) és a napi operáció között, biztosítva a zökkenőmentes termelést.</p>
-            
-            <p>A legfontosabb mérőszám az <strong>OEE (Overall Equipment Effectiveness)</strong>, amely a rendelkezésre állás (Availability), a teljesítmény (Performance) és a minőség (Quality) szorzata. A folyamatmérnök feladata, hogy a gépleállásokat (Downtime), a sebességveszteségeket és a selejtet folyamatosan mérje, elemezze, és javító intézkedéseket (<strong>Kaizen</strong>) indítson a mutatók növelése érdekében.</p>
-            
-            <p><strong>Ciklusidő és Takt Time:</strong> A gyártósort a vevői igényekhez (Takt Time) kell igazítani. Ennek eléréséhez elengedhetetlen a <strong>sor-kiegyenlítés (Line Balancing / Yamazumi)</strong>. A folyamatmérnök stopperrel (vagy modern kamera-rendszerekkel) méri a műveleti időket, azonosítja a szűk keresztmetszeteket (<strong>Bottleneck</strong>), és újraelosztja a feladatokat a munkaállomások között, hogy mindenki közel azonos leterheltséggel dolgozzon.</p>
-            
-            <p>Az <strong>Értékáram-térképezés (Value Stream Mapping - VSM)</strong> a makro folyamatok optimalizálásának eszköze. A jelenállapot (Current State) felmérése után a mérnök egy jövőállapotot (Future State) tervez, amelyben minimalizálja az anyagmozgatási és várakozási időket (Lead Time). A <strong>Spagetti-diagram</strong> használatával a fizikai bejárási utak rövidíthetők, optimalizálva a Layout-ot (üzemi elrendezést).</p>
-            
-            <p>A <strong>Standard Work (Szabványosított Munka)</strong> a folyamatstabilitás alapja. A folyamatmérnök vizuális <strong>SOP (Standard Operating Procedure)</strong> dokumentumokat, hiba-ellenőrző listákat készít, és biztosítja, hogy minden operátor pontosan ugyanabban a ritmusban és minőségben végezze el a rábízott feladatot. Szoros a kapcsolat az <strong>Ergonómiával</strong> is: a munkaállomásokat úgy kell kialakítani (pl. emelők, megfelelő világítás), hogy a fáradás és a munkahelyi sérülések esélye minimális legyen.</p>
-            
-            <p><strong>Gyors átállás (SMED - Single-Minute Exchange of Die):</strong> A rugalmas gyártás kulcsa, hogy a termékváltások a lehető legkevesebb állásidővel járjanak. A belső (csak álló gépnél végezhető) lépéseket külső (járó gép mellett végezhető) előkészítő lépésekké kell alakítani, amivel az átállási idő gyakran a töredékére csökkenthető, növelve a kapacitást.</p>
-            
-            <p>Az <strong>NPI (New Product Introduction)</strong> és <strong>DFM (Design for Manufacturing)</strong> során a folyamatmérnök már a tervezőasztalnál beavatkozik. A cél, hogy az új termék könnyen gyártható (szerelhető Poka-Yoke elemekkel) legyen. A minőségüggyel szorosan együttműködve részt vesz a <strong>PFMEA (Process FMEA)</strong> elkészítésében, ahol a gyártási folyamat kritikus pontjait értékelik, és hibamegelőző lépéseket (pl. szenzoros ellenőrzés) építenek be.</p>
-            
-            <p>Napjainkban az <strong>Ipar 4.0 és automatizáció</strong> a legfőbb irányvonal. A cobotok (kollaboratív robotok) integrálása az ember mellé, az AGV-k (Automated Guided Vehicles) bevezetése a logisztikába, vagy az IoT (Dolgok Internete) alapú valós idejű adatgyűjtés (MES rendszerek) hatalmas lehetőségeket biztosítanak. <strong>A sikeres folyamatmérnök interjún a logikus gondolkodás, a fizikai terek gyakorlati átlátása és az adatalapú elemző képesség bemutatása a kulcs.</strong></p>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Fő Célkitűzés:</strong> Gyártósori hatékonyság (OEE) maximalizálása és a klasszikus Lean veszteségek (7 Muda) könyörtelen megszüntetése az operációban.</li>
+                <li><strong>Rendszeroptimalizáció:</strong> Sorkiegyenlítés (Yamazumi), Ciklusidő/Takt Time szinkronizálása, Értékáram-térképezés (VSM), Spagetti-diagramos elrendezés (Layout).</li>
+                <li><strong>Proaktív Eszköztár:</strong> SMED (Belső lépések külsővé tétele az átállás gyorsítására), standardizált munkautasítások (SOP), Cobotok és MES adatintegráció (Ipar 4.0).</li>
+            </ul>
         </section>
 
         <section id="beszerzo" class="content-card">
             <h2>Beszerzői Gyorstalpaló (Purchasing/Sourcing)</h2>
-            <p>A beszerző (Buyer / Sourcing Specialist) az ellátási lánc kapuőre és a vállalat nyereségességének egyik elsődleges mozgatórugója. Feladata nem csupán a megrendelések leadása, hanem egy <strong>reziliens (ellenálló) és költséghatékony beszállítói bázis</strong> kiépítése. A direkt (gyártáshoz szorosan kötődő) és indirekt (üzemeltetési) beszerzések elkülönítése az első lépés ezen az úton.</p>
-
-            <p>A modern beszerzés legfontosabb koncepciója a <strong>TCO (Total Cost of Ownership - Teljes Birtoklási Költség)</strong> mérlegelése. Egy interjún kiemelten fontos hangsúlyozni, hogy nem csak a darabárat vizsgáljuk, hanem a szállítási díjakat, a minőségi kockázatokat, a vámokat és az adminisztratív terheket (pl. csomagolási visszáruk) is. Egy olcsóbb ázsiai beszállító a TCO alapján gyakran drágább lehet, mint egy helyi partner.</p>
-
-            <p>A beszállító-kiválasztási folyamat az <strong>RFI (Request for Information)</strong>, <strong>RFQ (Request for Quotation)</strong> és <strong>RFP (Request for Proposal)</strong> hármasára épül. Az árajánlatok bekérése után a beszerző "Open Book" (nyílt könyves) ár-bontást is kérhet, ahol pontosan látja az alapanyag, a munkaerő és az árrés arányát. Ez a <strong>Cost Breakdown (Költségbontás)</strong> a sikeres tárgyalástechnika legfőbb fegyvere.</p>
-
-            <p>A beszállítói teljesítmény mérése kulcsfontosságú. Ezt jellemzően <strong>Beszállítói Értékelés (Supplier Evaluation)</strong> formájában végzik, ahol mérik a minőséget (PPM hibaarány), a szállítási pontosságot (OTD - On Time Delivery) és a kommunikációs hajlandóságot. A gyengén teljesítő partnereknél javító intézkedéseket (SCAR - Supplier Corrective Action Request) kell indítani.</p>
-
-            <p><strong>A kockázatmenedzsment (Risk Management)</strong> manapság kritikus fókuszterület. A "Single Sourcing" (egy beszállító) kockázatos, ezért a beszerzők <strong>Dual Sourcing</strong> vagy <strong>Multi Sourcing</strong> stratégiákat dolgoznak ki a geopolitikai, időjárási vagy kapacitási kockázatok porlasztására. A biztonsági készletek (Safety Stock) méretezése egy folyamatos "kötéltánc" a tőkekötöttség és az ellátásbiztonság között.</p>
-
-            <p>Tárgyalástechnikai szempontból a <strong>BATNA (Best Alternative to a Negotiated Agreement)</strong> ismerete a legfontosabb: tudnunk kell, mi a legjobb alternatívánk, ha nem jön létre a megállapodás. A modern beszerző "Win-Win" szituációkra törekszik, például hosszútávú volumen-elköteleződésért (Blanket Order) cserébe árengedményt (Volume Discount) kérve.</p>
-
-            <p>Az IT rendszerek (ERP, főként SAP MM) használata a mindennapok része. Megrendelések létrehozása (<strong>PO - Purchase Order</strong>), készletlekérdezések, <strong>MRP (Anyagszükséglet-tervezés)</strong> futtatások mind a beszerző napi feladataihoz tartoznak. <strong>JIT (Just-in-Time)</strong> és <strong>JIS (Just-in-Sequence)</strong> beszállítások paraméterezése is szoros IT koordinációt igényel.</p>
-
-            <p><strong>Az interjúra készülve</strong> elengedhetetlen a proaktív probléma-megoldási készség felmutatása. A "cost-down" (költségcsökkentési) projektek bemutatása, a nyersanyagipari trendek globális ismerete, valamint a határozott, de asszertív kommunikáció a győzelem kulcsa lehet.</p>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Döntési Alapok (TCO):</strong> A teljes birtoklási költség értelmezése (darabár, vám, minőség, szállítás összege). RFI/RFQ tenderek lefolytatása "Open Book" költségbontás alapján.</li>
+                <li><strong>Ellenállóképesség:</strong> Geopolitikai és környezeti kockázatok kivédése Single vs. Dual/Multi Sourcing stratégiákkal, BATNA alternatívák folyamatos naprakészen tartása.</li>
+                <li><strong>Teljesítménymérés:</strong> Beszállítók rendszeres OTD (szállítás) és PPM (minőség) alapú értékelése (Supplier Evaluation), ismétlődő hiba esetén SCAR (javító intézkedés) kiírása.</li>
+            </ul>
         </section>
 
         <section id="logisztikus" class="content-card">
             <h2>Logisztikai Gyorstalpaló (Logistics/Supply Chain)</h2>
-            <p>A logisztikus feladata az áruk és információk zökkenőmentes áramlásának (<strong>Material and Information Flow</strong>) biztosítása a beszerzési forrástól egészen a végső fogyasztóig. Két fő területe az <strong>Inbound (Bejövő)</strong> logisztika (alapanyagellátás) és az <strong>Outbound (Kimenő)</strong> logisztika (késztermék disztribúció).</p>
-
-            <p>A raktárgazdálkodás (<strong>Warehousing</strong>) a logisztika szíve. Az alapvető anyagmozgatási elvek a <strong>FIFO (First In, First Out)</strong> és a romlandó vagy lejárattal rendelkező termékek esetén a <strong>FEFO (First Expired, First Out)</strong>. Ezek garantálják, hogy a régebbi készletek ne értéktelenedjenek el. A raktár Layout-jának megtervezésénél pedig az <strong>ABC-analízis</strong> segít: a legjobban forgó "A" típusú árukat a kapukhoz legközelebb eső "Hot Zone"-ba kell pozícionálni.</p>
-
-            <p>Felvevőpiaci és gyártási szempontból kiemelt fontosságú a készletoptimalizálás. A leggyakoribb KPI a <strong>Készletforduló (Inventory Turnover)</strong>, ami megmutatja, hány alkalommal térült meg az év során a raktárban tartott készletünk értéke. Cél a készletszintek csökkentése anélkül, hogy az <strong>OTIF (On-Time In-Full)</strong>, azaz a hiánytalan és időre történő szállítási mutató csorbát szenvedne.</p>
-
-            <p>A <strong>Szállítmányozás (Freight Management)</strong> egy külön "tudományág". Interjún elvárás az Incoterms (szállítási paritások, pl. EXW, DAP, DDP) pontos ismerete, amelyek tisztázzák a költségek és kockázatok átszállását a vevő és az eladó között. Ugyanilyen fontos az LTL (Less Than Truckload) és FTL (Full Truckload) fogalmak, vagy a tengeri szállítmányozás FCL/LCL konténer logisztikájának menedzselése.</p>
-
-            <p>A vállalaton belüli intralogisztikában (Intralogistics) a logisztikus irányítja a dolgozókat (targoncások, anyagmozgatók) és szervezi meg az alapanyagok gyártósori kijuttatását (<strong>Line-feeding</strong>). A <strong>Kanban-kártyás rendszer</strong>, a <strong>Milk-run (tejcsarnok-járat)</strong> koncepciók alkalmazása vagy a szupermarket hálózatok kiépítése tipikus Lean logisztikai feladatok a napi ügymenetben.</p>
-
-            <p>Folyamatos a kapcsolattartás az egyedi fuvarszervezőkkel (Freight Forwarders). Egy váratlan anyaghiány esetén <strong>Eszkalációs folyamatot</strong> indít: Prémium fuvart, "Time Critical" vagy "Air Charter" szállítást kell azonnal szervezni, megelőzve a teljes gyártósori leállást (Line stop), aminek percdíja többszöröse a prémium fuvardíjnak.</p>
-
-            <p>Nyomon követhetőség (<strong>Traceability</strong>) és egyedi azonosítás technológiái (Barcode, RFID rendszerek) szorosan összefüggnek az ERP rendszer logisztikai moduljaival (SAP WM/EWM). Ezen rendszerek ismerete nélkül a modern intralogisztika menedzselése lehetetlen.</p>
-
-            <p><strong>A logisztikus interjún</strong> a fókusz a stressztűrő képességen van. Mindennaposak a válsághelyzetek, amikor a szállítmány késik. A munkáltatók olyan szakembereket keresnek, akik a Tűzoltás "Fire-fighting" mellett képesek stratégiában gondolkodni, és preventív megoldásokkal fejleszteni az ellátási láncot.</p>
+            <ul style="line-height:1.7; font-size:1.05rem;">
+                <li><strong>Raktár és Anyagáramlás:</strong> A FIFO/FEFO elvek szigorú betartása az in/outbound mozgásoknál. ABC-analízis szerinti optimalizált raktárkialakítás ("Hot Zone"-ok).</li>
+                <li><strong>Makro KPI Mutatók:</strong> A lekötött tőke és a Készletforduló (Inventory Turnover) maximalizálása anélkül, hogy az OTIF (szállítási megbízhatóság) mutatója csökkenne.</li>
+                <li><strong>Belső/Külső Folyamatok:</strong> Intralogisztikai Milk-run (tejcsarnok-járat) a gyártósorok Lean Line-feeding-je érdekében. Incoterms fuvarparitások és prémium fuvareszkaláció.</li>
+            </ul>
         </section>
 
         <footer>
