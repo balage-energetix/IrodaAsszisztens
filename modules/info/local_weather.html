@@ -119,13 +119,14 @@
 
 
 
-        <!-- Embedded Full Rinya Widget -->
+        <!-- Embedded Full Rinya Widget (INAKTÍV MIVEL A VÍZÜGYI SZERVER LETILTOTTA A LEKÉRDEZÉST) 
         <div class="radar-card" style="max-width: 900px; margin-inline: auto; margin-top: 3rem; padding: 0; overflow: hidden; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(123, 97, 255, 0.2);">
             <div style="padding: 1rem 1.5rem; background: var(--bg-card); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
                 <h4 style="font-family:'Outfit'; font-weight:800; margin:0;"><i class="fas fa-chart-line text-primary me-2"></i>Rinya Vízállás Monitor</h4>
             </div>
             <iframe src="./vizallas.html" style="width: 100%; height: 600px; border: none;" title="Rinya Vízállás Widget"></iframe>
         </div>
+        -->
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -137,6 +138,7 @@
             if (csapImg) {
                 csapImg.src = `https://www.idokep.hu/automata/omme_nagyatad_csap1.png?t=${Date.now()}`;
             }
+            /* INAKTÍV VÍZÜGYI LEKÉRDEZÉS
             // Simple Rinya Fetch (Oneshot) using codetabs proxy to avoid 403 WAF errors
             fetch('https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent('https://www.vizugy.hu/?mapModule=OpGrafikon&AllomasVOA=164962AF-97AB-11D4-BB62-00508BA24287&mapData=Idosor'))
                 .then(r => r.text()).then(h => {
@@ -155,6 +157,7 @@
                     if (document.getElementById('rinya-val')) document.getElementById('rinya-val').innerText = fVal + " cm";
                     if (document.getElementById('rinya-time')) document.getElementById('rinya-time').innerText = fTime + " (offline)";
                 });
+            */
         });
     </script>
 </body>
