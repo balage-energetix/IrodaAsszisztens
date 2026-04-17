@@ -59,19 +59,37 @@ const App = {
             const data = await res.json();
             if (!data.current) return;
 
-            const tempVal = document.getElementById('header-temp-val');
-            if (tempVal) tempVal.innerText = `${Math.round(data.current.temperature_2m)}°C`;
+            const temp = Math.round(data.current.temperature_2m);
+            const wind = Math.round(data.current.wind_speed_10m);
+            const hum  = data.current.relative_humidity_2m;
+            const pres = Math.round(data.current.surface_pressure);
+
+            // Header updates
+            const headerTemp = document.getElementById('header-temp-val');
+            if (headerTemp) headerTemp.innerText = `${temp}°C`;
+
+            // Module updates (local_weather.html)
+            const mTemp = document.getElementById('weather-temp');
+            const mWind = document.getElementById('weather-wind');
+            const mHum  = document.getElementById('weather-humid');
+            const mPres = document.getElementById('weather-press');
+
+            if (mTemp) mTemp.innerText = `${temp}°C`;
+            if (mWind) mWind.innerText = `${wind} km/h`;
+            if (mHum)  mHum.innerText  = `${hum}%`;
+            if (mPres) mPres.innerText = `${pres} hPa`;
             
-            // Sun info update if container exists
+            // Sun info update
             const sunInfo = document.querySelector('.sun-info, .h-info-val');
             if (sunInfo && data.daily) {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset  = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU',  { hour: '2-digit', minute: '2-digit' });
-                // If it's the combined sun-info box
-                const sunBox = document.querySelector('.sun-box .ig-val, .sun-info');
+                const sunBox = document.querySelector('.sun-box .ig-val, .sun-info, .h-info-item-sun');
                 if (sunBox) sunBox.innerText = `${sunrise} | ${sunset}`;
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error("Weather fetch failed", e);
+        }
     },
 
     async initMonitoring() {
