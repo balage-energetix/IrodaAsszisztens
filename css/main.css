@@ -53,13 +53,12 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
     display: none;
     position: absolute;
     top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0; /* Align to left edge of parent */
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    min-width: 180px;
+    min-width: 200px;
     padding: 0.3rem;
     z-index: 2010;
 }
@@ -72,10 +71,10 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
 .header-info-line { 
     display: flex; 
     align-items: center; 
-    gap: 1.25rem; 
+    gap: 1.5rem; 
     flex: 1; 
     justify-content: flex-end;
-    min-width: 450px; /* Stable width to prevent pushing nav */
+    min-width: 500px; /* Stronger stability */
 }
 
 .h-info-item { 
