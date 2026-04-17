@@ -40,10 +40,13 @@ const App = {
     initClock() {
         const days = ['vasárnap', 'hétfő', 'kedd', 'szerda', 'csütörtök', 'péntek', 'szombat'];
         const update = () => {
-            const el = document.getElementById('global-clock');
-            if (!el) return;
+            const timeEl = document.getElementById('global-clock-time');
+            const dateEl = document.getElementById('global-clock-date');
+            if (!timeEl || !dateEl) return;
+            
             const now = new Date();
-            el.innerHTML = `<div class="clock-time">${now.toLocaleTimeString('hu-HU')}</div><div class="clock-date">${now.toLocaleDateString('hu-HU')}, ${days[now.getDay()]}</div>`;
+            timeEl.innerText = now.toLocaleTimeString('hu-HU');
+            dateEl.innerText = `${now.toLocaleDateString('hu-HU')}, ${days[now.getDay()].charAt(0).toUpperCase() + days[now.getDay()].slice(1)}`;
         };
         setInterval(update, 1000);
         update();
@@ -56,13 +59,17 @@ const App = {
             const data = await res.json();
             if (!data.current) return;
 
-            const weatherEl = document.getElementById('header-weather');
-            if (weatherEl) {
+            const tempVal = document.getElementById('header-temp-val');
+            if (tempVal) tempVal.innerText = `${Math.round(data.current.temperature_2m)}°C`;
+            
+            // Sun info update if container exists
+            const sunInfo = document.querySelector('.sun-info, .h-info-val');
+            if (sunInfo && data.daily) {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset  = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU',  { hour: '2-digit', minute: '2-digit' });
-                weatherEl.innerHTML = `
-                    <div class="hw-temp"><i class="fas fa-temperature-low"></i>${Math.round(data.current.temperature_2m)}°C</div>
-                    <div class="hw-sub"><i class="fas fa-sun"></i>${sunrise} <span>|</span> <i class="fas fa-moon"></i>${sunset}</div>`;
+                // If it's the combined sun-info box
+                const sunBox = document.querySelector('.sun-box .ig-val, .sun-info');
+                if (sunBox) sunBox.innerText = `${sunrise} | ${sunset}`;
             }
         } catch (e) {}
     },
@@ -131,23 +138,7 @@ const App = {
     },
 
     injectGlobalNav() {
-        const headerInfo = document.querySelector('.header-info');
-        if (!headerInfo) return;
-
-        const themeIcon   = this.state.theme === 'dark' ? 'fa-sun' : 'fa-moon';
-
-        headerInfo.innerHTML = `
-            <div class="info-wrapper">
-                <div class="weather-clock-group">
-                    <div id="header-weather" class="hw-block"></div>
-                    <div id="global-clock" class="clock-block"></div>
-                </div>
-                <div class="header-actions">
-                    <button class="icon-btn" onclick="App.toggleTheme()"><i class="fas ${themeIcon}"></i></button>
-                    <button class="icon-btn" onclick="App.logout()"><i class="fas fa-sign-out-alt"></i></button>
-                </div>
-            </div>`;
-        this.initClock();
+        // Obsolete in V3.60+ - Logic moved to static HTML for better stability
     },
 
     checkLogin() {
