@@ -45,12 +45,14 @@
                         <a href="viewers/strategia_gaz_viewer.html"><i class="fas fa-check-circle"></i> Gáz Döntéstámogató</a>
                         <a href="modules/tools/gas_evaluator.html"><i class="fas fa-file-invoice-dollar"></i> Gázárajánlat</a>
                         <a href="modules/tools/energy_reports.html"><i class="fas fa-solar-panel"></i> Riportok</a>
+                        <a href="modules/tools/power_optimizer.html"><i class="fas fa-chart-line"></i> Optimalizáló</a>
                     </div>
                 </div>
                 <div class="nav-cat">Eszközök
                     <div class="nav-cat-dropdown">
                         <a href="modules/tools/pdfeditor.html"><i class="fas fa-file-pdf"></i> PDF Szerkesztő</a>
                         <a href="modules/tools/checklist.html"><i class="fas fa-clipboard-check"></i> Check-lista</a>
+                        <a href="modules/tools/notes.html"><i class="fas fa-sticky-note"></i> Jegyzetek</a>
                     </div>
                 </div>
                 <div class="nav-cat">Elszámolás
@@ -59,23 +61,22 @@
                         <a href="modules/tenants/index.html"><i class="fas fa-file-invoice"></i> Bérlők</a>
                     </div>
                 </div>
+                <div class="nav-cat">Információ
+                    <div class="nav-cat-dropdown">
+                        <a href="modules/info/local_weather.html"><i class="fas fa-cloud-sun"></i> Időjárás</a>
+                        <a href="modules/info/atadhir.html"><i class="fas fa-newspaper"></i> Atádi Hírek</a>
+                    </div>
+                </div>
             </nav>
 
             <div class="header-info">
-                <div class="hw-box">
-                    <i class="fas fa-cloud-sun" style="color:#f59e0b;"></i>
-                    <div>
-                        <div class="hw-val" id="header-temp-val">19°C</div>
-                        <div class="hw-city">Nagyatád</div>
-                    </div>
-                </div>
                 <div class="info-box">
-                    <div class="info-time" id="global-clock-time">19:35:34</div>
+                    <div class="info-time" id="global-clock-time">19:36:25</div>
                     <div class="info-date" id="global-clock-date">2026. 04. 17., Péntek</div>
                 </div>
                 <div style="display: flex; gap: 0.5rem; border-left: 1px solid var(--border); padding-left: 1rem;">
-                    <button onclick="App.toggleTheme()" class="icon-btn" title="Sötét/Világos mód"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
-                    <button onclick="App.logout()" class="icon-btn" title="Kijelentkezés"><i class="fas fa-sign-out-alt"></i></button>
+                    <button onclick="App.toggleTheme()" class="icon-btn"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+                    <button onclick="App.logout()" class="icon-btn"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </header>
@@ -88,10 +89,25 @@
                     <div class="toolbar-center"><div class="toolbar-search-wrapper"><i class="fas fa-search"></i><input type="text" id="dashboard-search" placeholder="Gyorskereső..."></div></div>
                     <div class="toolbar-right">
                         <div class="compact-monitoring">
-                            <div class="c-item"><span class="c-label">Energia</span><div class="prices"><span class="gas"><i class="fas fa-fire"></i> 413 Ft</span><span class="electricity"><i class="fas fa-bolt"></i> 96 Ft</span></div></div>
-                            <div class="c-item"><span class="c-label">Előrejelzés</span><div id="forecast-items">...</div></div>
-                            <div class="c-item"><span class="c-label">Hőmérséklet</span><div class="c-chart-box"><canvas id="daily-temp-chart"></canvas></div></div>
-                            <div class="c-item"><span class="c-label">Átlag</span><strong id="three-day-avg">15.6°C</strong></div>
+                            <div class="c-item">
+                                <span class="c-label">Energia</span>
+                                <div class="prices">
+                                    <span class="gas"><i class="fas fa-fire"></i> 413 Ft</span>
+                                    <span class="electricity"><i class="fas fa-bolt"></i> 96 Ft</span>
+                                </div>
+                            </div>
+                            <div class="c-item">
+                                <span class="c-label">Előrejelzés</span>
+                                <div id="forecast-items">...</div>
+                            </div>
+                            <div class="c-item">
+                                <span class="c-label">Hőmérséklet</span>
+                                <div class="c-chart-box"><canvas id="daily-temp-chart"></canvas></div>
+                            </div>
+                            <div class="c-item">
+                                <span class="c-label">Átlag</span>
+                                <strong id="three-day-avg">15.6°C</strong>
+                            </div>
                         </div>
                     </div>
                 </div>
