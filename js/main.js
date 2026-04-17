@@ -135,7 +135,6 @@ const App = {
         if (!headerInfo) return;
 
         const themeIcon   = this.state.theme === 'dark' ? 'fa-sun' : 'fa-moon';
-        const alertBadge  = this.state.powerAlert ? '<span class="header-alert-badge"></span>' : '';
 
         headerInfo.innerHTML = `
             <div class="info-wrapper">
@@ -145,7 +144,6 @@ const App = {
                 </div>
                 <div class="header-actions">
                     <button class="icon-btn" onclick="App.toggleTheme()"><i class="fas ${themeIcon}"></i></button>
-                    <a href="modules/tools/deadlines.html" class="icon-btn" style="position:relative;"><i class="fas fa-bell"></i>${alertBadge}</a>
                     <button class="icon-btn" onclick="App.logout()"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>`;
