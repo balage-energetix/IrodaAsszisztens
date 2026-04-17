@@ -41,12 +41,12 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
     gap: 1rem;
 }
 
-.logo { text-decoration: none; display: flex; align-items: center; gap: 0.3rem; color: var(--text-main); flex: 1; justify-content: flex-start; }
+.logo { text-decoration: none; display: flex; align-items: center; gap: 0.3rem; color: var(--text-main); flex-shrink: 0; }
 .logo i { font-size: 1rem; color: var(--accent); }
 .logo span { font-family: var(--font-title); font-weight: 800; font-size: 0.6rem; text-transform: uppercase; line-height: 1; }
 
-.app-nav { display: flex; gap: 1.25rem; flex-shrink: 0; justify-content: center; width: auto; font-size: 0.75rem; }
-.nav-cat { position: relative; font-family: var(--font-title); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); cursor: pointer; }
+.app-nav { display: flex; gap: 1.5rem; flex-shrink: 0; justify-content: flex-start; margin-left: 3rem; }
+.nav-cat { position: relative; font-family: var(--font-title); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); cursor: pointer; padding: 0.5rem 0; }
 .nav-cat:hover { color: var(--accent); }
 
 .nav-cat-dropdown {
@@ -72,9 +72,8 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
     display: flex; 
     align-items: center; 
     gap: 1.5rem; 
-    flex: 1; 
-    justify-content: flex-end;
-    min-width: 500px; /* Stronger stability */
+    flex-shrink: 0; 
+    margin-left: auto; /* Push to the far right */
 }
 
 .h-info-item { 
