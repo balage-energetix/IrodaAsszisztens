@@ -41,11 +41,11 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
     gap: 1rem;
 }
 
-.logo { text-decoration: none; display: flex; align-items: center; gap: 0.3rem; color: var(--text-main); flex-shrink: 0; }
+.logo { text-decoration: none; display: flex; align-items: center; gap: 0.3rem; color: var(--text-main); flex: 1; justify-content: flex-start; }
 .logo i { font-size: 1rem; color: var(--accent); }
 .logo span { font-family: var(--font-title); font-weight: 800; font-size: 0.5rem; text-transform: uppercase; line-height: 1; }
 
-.app-nav { display: flex; gap: 1rem; flex: 1; justify-content: center; }
+.app-nav { display: flex; gap: 1.25rem; flex-shrink: 0; justify-content: center; width: auto; }
 .nav-cat { position: relative; font-family: var(--font-title); font-weight: 700; font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); cursor: pointer; }
 .nav-cat:hover { color: var(--accent); }
 
@@ -69,11 +69,39 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
 .nav-cat-dropdown a:hover { background: var(--bg-hover); color: var(--accent); }
 
 /* Single-Line Header Info */
-.header-info-line { display: flex; align-items: center; gap: 1rem; flex-shrink: 0; }
+.header-info-line { 
+    display: flex; 
+    align-items: center; 
+    gap: 1.25rem; 
+    flex: 1; 
+    justify-content: flex-end;
+    min-width: 450px; /* Stable width to prevent pushing nav */
+}
 
-.h-info-item { display: flex; align-items: center; gap: 4px; font-size: 0.55rem; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
-.h-info-item i { font-size: 0.7rem; color: var(--accent); }
-.h-info-val { font-family: var(--font-title); font-weight: 800; font-size: 0.65rem; color: var(--text-main); }
+.h-info-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    font-size: 0.55rem; 
+    font-weight: 800; 
+    color: var(--text-muted); 
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums; /* Critical: prevents jitter */
+}
+.h-info-item i { font-size: 0.75rem; color: var(--accent); }
+.h-info-val { 
+    font-family: var(--font-title); 
+    font-weight: 800; 
+    font-size: 0.65rem; 
+    color: var(--text-main);
+    font-variant-numeric: tabular-nums;
+}
+
+#global-clock-time {
+    font-family: 'JetBrains Mono', 'Courier New', monospace; /* Extra stability */
+    font-size: 0.75rem;
+    letter-spacing: -0.5px;
+}
 
 .header-btns { display: flex; gap: 0.25rem; border-left: 1px solid var(--border); padding-left: 0.75rem; }
 .icon-btn-tiny { background: transparent; border: none; color: var(--text-muted); width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; border-radius: 4px; }
