@@ -5,215 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hiba jelölő térkép - Irodai Asszisztens</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <link rel="stylesheet" href="../../css/main.css">
-    <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512'><path fill='%239fb0ff' d='M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7,70.59a12,12,0,0,1,0,24H147.15a12,12,0,0,1,0-24ZM532,224H480V128a128,128,0,0,0-256,0v96H172a52,52,0,0,0-52,52V460a52,52,0,0,0,52,52H404a52,52,0,0,0,52-52V276a52,52,0,0,0-52-52ZM272,128a80,80,0,0,1,160,0v32H272Zm132,332H172a20,20,0,0,1-20-20V276a20,20,0,0,1,20-20H404a20,20,0,0,1,20,20V440a20,20,0,0,1-20,20M96,192V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0m448,0V112a16,16,0,0,0-32,0v80a16,16,0,0,0,32,0'/></svg>">
     <style>
-        #map-container {
-            height: 75vh;
-            border-radius: 2rem;
-            border: 3px solid var(--border-color);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .context-menu {
-            display: none;
-            position: fixed;
-            z-index: 5000;
-            background: var(--bg-card);
-            border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            min-width: 220px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .context-menu div {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .context-menu div:hover {
-            background: var(--bg-light);
-            color: var(--primary);
-        }
+        #map-container { height: 60vh; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; position: relative; margin-top: 1rem; }
+        .context-menu { display: none; position: fixed; z-index: 5000; background: var(--bg-card); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border: 1px solid var(--border); min-width: 180px; }
+        .context-menu div { padding: 0.6rem 1rem; cursor: pointer; transition: 0.2s; font-weight: 600; font-size: 0.75rem; border-bottom: 1px solid var(--border); }
+        .context-menu div:last-child { border-bottom: none; }
+        .context-menu div:hover { background: var(--bg-hover); color: var(--accent); }
+        .issues-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+        .issues-table th { text-align: left; padding: 0.75rem; background: var(--bg-hover); color: var(--accent); font-weight: 800; border-bottom: 2px solid var(--border); }
+        .issues-table td { padding: 0.75rem; border-bottom: 1px solid var(--border); }
+        .status-tag { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 800; font-size: 0.6rem; text-transform: uppercase; background: var(--accent-soft); color: var(--accent); }
     </style>
 </head>
 
 <body>
     <header class="app-header">
-        <a href="../../index.html" class="logo"><i class="fab fa-android"
-                style="color:var(--accent-purple) !important;"></i><span
-                style="color:var(--accent-purple) !important;">IRODAI<br>ASSZISZTENS</span></a>
-        <div class="header-info">
-            <div id="header-weather"></div>
-            <div id="global-clock"></div>
-            <button onclick="App.toggleTheme()"
-                style="background:none; border:none; font-size:1.4rem; color:var(--text-main); cursor:pointer;"><i
-                    id="theme-toggle-icon" class="fas fa-moon"></i></button>
-        </div>
+        <a href="../../index.html" class="logo">
+            <i class="fab fa-android"></i>
+            <span>IRODAI<br>ASSZISZTENS</span>
+        </a>
+        <nav class="app-nav">
+            <div class="nav-cat">Energetika</div>
+            <div class="nav-cat">Eszközök</div>
+            <div class="nav-cat">Információ</div>
+        </nav>
+        <div class="header-info"></div>
     </header>
 
-    <main class="container-fluid py-4 fade-in">
-        <!-- Használati Tippek Sáv -->
-        <div class="tips-bar"
-            style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.75rem 1.5rem; border-radius: 1rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; font-size: 0.9rem; box-shadow: 0 4px 10px rgba(0,0,0,0.03);">
-            <i class="fas fa-lightbulb text-warning"></i>
-            <strong>Használati tippek:</strong>
-            <span><i class="fas fa-mouse-pointer me-1"></i> Jobb klikk a térképen: Új jelölő</span>
-            <span class="ms-3"><i class="fas fa-arrows-alt me-1"></i> Bal klikk + húzás: Jelölő áthelyezése</span>
-            <span class="ms-3"><i class="fas fa-mouse me-1"></i> Jobb klikk a jelölőn: Törlés</span>
-            <span class="ms-3"><i class="fas fa-draw-polygon me-1"></i> Távolságmérő (megszakítása: Esc gom)</span>
-        </div>
-
-        <!-- Dynamic Daily Status Image Section -->
-        <div class="daily-status-container"
-            style="margin-top: 2rem; background: var(--bg-card); border-radius: 1.5rem; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
-                        class="fas fa-calendar-day text-primary me-2"></i>Aktuális napi állapot (Napló)</h3>
-                <div class="actions">
-                    <button class="btn btn-outline-primary"
-                        onclick="App.notify('Napi állás exportálása folyamatban...', 'info')">
-                        <i class="fas fa-download me-2"></i> NAPLÓ EXPORT
-                    </button>
-                </div>
-            </div>
-            <div class="status-image-wrapper"
-                style="border-radius: 1rem; overflow: hidden; border: 2px dashed var(--border-color); min-height: 200px; display: flex; align-items: center; justify-content: center; background: var(--bg-light);">
-                <img id="daily-status-img" src="../../Irodai_Problem_Map_20260126_1702.png"
-                    onerror="this.style.display='none'; document.getElementById('status-placeholder').style.display='flex';"
-                    style="max-width: 100%; height: auto; display: block;">
-                <div id="status-placeholder"
-                    style="display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); text-align: center; padding: 2rem;">
-                    <i class="fas fa-image" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                    <p style="font-weight: 600;">Nincs még feltöltve a mai napi állás
-                        (Irodai_Problem_Map_20260126_1702.png)</p>
-                    <small>Másolja a napi képet a gyökérkönyvtárba!</small>
-                </div>
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 class="section-title"><i class="fas fa-map-marked-alt"></i> Hiba jelölő térkép</h2>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="primary" onclick="exportMapPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
+                <button onclick="exportMapPNG()"><i class="fas fa-image"></i> PNG</button>
             </div>
         </div>
 
-        <div
-            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding: 0 1rem; margin-top: 3rem;">
-            <h2 style="font-family:'Outfit'; font-weight:800; margin:0;"><i
-                    class="fas fa-map-marked-alt text-primary me-2"></i>Hiba jelölő térkép</h2>
-            <button class="back-btn"
-                style="position:static; padding:0.6rem 1.25rem; width:auto; height:auto; border-radius:1rem;"
-                onclick="exportMapPDF()">
-                <i class="fas fa-file-pdf me-2"></i> PDF EXPORT
-            </button>
-            <button class="back-btn"
-                style="position:static; padding:0.6rem 1.25rem; width:auto; height:auto; border-radius:1rem; background: #e91e63 !important; box-shadow: 0 4px 0 #c2185b !important;"
-                onclick="exportMapPNG()">
-                <i class="fas fa-image me-2"></i> PNG EXPORT
-            </button>
-        </div>
         <div id="map-container"></div>
 
-        <div id="map-context-menu" class="context-menu">
-            <div onclick="addPointer('danger', 'fa-lightbulb', '#ff5252')"><i class="fas fa-lightbulb"></i>
-                Lámpahiba</div>
-            <div onclick="addPointer('primary', 'fa-lightbulb', '#f9a825')"><i class="fas fa-lightbulb"></i>
-                Szakaszhiba (Közvilág.)</div>
-            <div onclick="addPointer('danger', 'fa-exclamation-triangle', '#ef233c')"><i
-                    class="fas fa-exclamation-triangle"></i> Általános hiba</div>
-            <div onclick="addPointer('danger', 'fa-droplet', '#2196f3')"><i class="fas fa-droplet"></i> Csőtörés</div>
-            <div onclick="addPointer('danger', 'fa-tree', '#4caf50')"><i class="fas fa-tree"></i> Fakivágás</div>
-            <div onclick="addPointer('danger', 'fa-road-circle-exclamation', '#d32f2f')"><i
-                    class="fas fa-road-circle-exclamation"></i> Úthiba</div>
-            <div onclick="addPointer('danger', 'fa-person-walking-arrow-loop-left', '#7b1fa2')"><i
-                    class="fas fa-person-walking-arrow-loop-left"></i> Járdahiba</div>
-            <div onclick="addPointer('warning', 'fa-person-digging', '#ff9800')"><i class="fas fa-person-digging"></i>
-                Közterületbontás</div>
+        <div class="card" style="margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h4 style="font-family: var(--font-title); font-weight: 800; font-size: 0.8rem;"><i class="fas fa-calendar-day"></i> Aktuális napi állapot (Napló)</h4>
+                <button class="primary" onclick="App.notify('Exportálás...')"><i class="fas fa-download"></i> NAPLÓ EXPORT</button>
+            </div>
+            
+            <div class="status-image-wrapper">
+                <img id="daily-status-img" src="../../Irodai_Problem_Map_20260126_1702.png" 
+                     onerror="this.style.display='none'; document.getElementById('status-placeholder').style.display='flex';"
+                     style="max-width: 100%; height: auto; display: block; border-radius: 8px;">
+                <div id="status-placeholder" style="display: none; flex-direction: column; align-items: center;">
+                    <i class="fas fa-image"></i>
+                    <p>Nincs még feltöltve a mai napi állás</p>
+                    <small>(Irodai_Problem_Map_20260126_1702.png)</small>
+                </div>
+            </div>
         </div>
 
-
-        <!-- Aktuális Hibahelyek Táblázat -->
-        <div class="issues-table-container"
-            style="margin-top: 2rem; background: var(--bg-card); border-radius: 1.5rem; padding: 2rem; border: 1px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-            <h3 style="font-family:'Outfit'; font-weight:800; margin-bottom: 1.5rem;"><i
-                    class="fas fa-list-ul text-primary me-2"></i>Aktuális krónikus hibahelyek</h3>
-            <div class="table-responsive">
-                <style>
-                    .issues-table {
-                        width: 100%;
-                        border-collapse: collapse;
-                        font-size: 0.9rem;
-                    }
-
-                    .issues-table th {
-                        text-align: left;
-                        padding: 1rem;
-                        background: var(--bg-light);
-                        color: var(--primary);
-                        font-weight: 800;
-                        border-bottom: 2px solid var(--border-color);
-                    }
-
-                    .issues-table td {
-                        padding: 1rem;
-                        border-bottom: 1px solid var(--border-color);
-                    }
-
-                    .status-tag {
-                        padding: 0.2rem 0.6rem;
-                        border-radius: 0.5rem;
-                        font-weight: 800;
-                        font-size: 0.75rem;
-                        text-transform: uppercase;
-                    }
-
-                    .status-work {
-                        background: #fef3c7;
-                        color: #92400e;
-                    }
-                </style>
+        <div class="card" style="margin-top: 1.5rem;">
+            <h4 style="margin-bottom: 1rem;"><i class="fas fa-list-ul"></i> Aktuális krónikus hibahelyek</h4>
+            <div style="overflow-x: auto;">
                 <table class="issues-table">
                     <thead>
                         <tr>
                             <th>Helyszín</th>
-                            <th>Hiba jellege</th>
-                            <th>Leírás / Megjegyzés</th>
+                            <th>Típus</th>
+                            <th>Leírás</th>
                             <th>Állapot</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td style="font-weight: 700;">Somogyszobi utca 40.</td>
-                            <td><i class="fas fa-lightbulb text-danger me-1"></i> Zárlatos lámpa</td>
-                            <td>Somogyszobi utca 40. szám előtti lámpatest vezetéke zárlatos, elégett karbantartartó cég
-                                általi cseréje szükséges.</td>
-                            <td><span class="status-tag status-work">Folyamatban</span></td>
+                            <td><i class="fas fa-lightbulb text-danger"></i> Zárlat</td>
+                            <td>Lámpatest vezetéke zárlatos, csere szükséges.</td>
+                            <td><span class="status-tag">Folyamatban</span></td>
                         </tr>
                         <tr>
                             <td style="font-weight: 700;">Kiszely L. u. tömbök</td>
-                            <td><i class="fas fa-droplet text-primary me-1"></i> Alapvezeték törés</td>
-                            <td>Mellékleágazás szivárgása az 5. lépcsőház előtt, DRV értesítve.</td>
-                            <td><span class="status-tag status-work">Bejelentve</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 700;">Árpád utca 2.</td>
-                            <td><i class="fas fa-road-circle-exclamation text-danger me-1"></i> Aszfalthiba</td>
-                            <td>Nagyméretű kátyú a buszmegálló előtt, balesetveszélyes.</td>
-                            <td><span class="status-tag status-work">Ütemezve</span></td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 700;">Borostyán köz</td>
-                            <td><span style="color:#f9a825;"><i class="fas fa-lightbulb me-1"></i></span> Sötét
-                                útszakasz</td>
-                            <td>3 db egymást követő lámpaoszlop üzemen kívül, csoportos hiba.</td>
-                            <td><span class="status-tag status-work">Kivizsgálás alatt</span></td>
+                            <td><i class="fas fa-droplet text-primary"></i> Csőtörés</td>
+                            <td>Mellékleágazás szivárgása az 5. lépcsőház előtt.</td>
+                            <td><span class="status-tag">Bejelentve</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -221,42 +99,33 @@
         </div>
     </main>
 
+    <div id="map-context-menu" class="context-menu">
+        <div onclick="addPointer('danger', 'fa-lightbulb', '#ff5252')"><i class="fas fa-lightbulb"></i> Lámpahiba</div>
+        <div onclick="addPointer('primary', 'fa-lightbulb', '#f9a825')"><i class="fas fa-lightbulb"></i> Szakaszhiba</div>
+        <div onclick="addPointer('danger', 'fa-exclamation-triangle', '#ef233c')"><i class="fas fa-exclamation-triangle"></i> Általános</div>
+        <div onclick="addPointer('danger', 'fa-droplet', '#2196f3')"><i class="fas fa-droplet"></i> Csőtörés</div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../js/main.js"></script>
     <script src="map_logic.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            MapLogic.init('map-container');
-        });
-
-        function addPointer(type, icon, color) {
-            MapLogic.addPointer(icon, color, type);
-        }
-
-        function exportMapPDF() {
-            MapLogic.exportPDF('map-container', 'IRODAI ASSZISZTENS - HIBA TÉRKÉP');
-        }
-
+        document.addEventListener('DOMContentLoaded', () => { MapLogic.init('map-container'); });
+        function addPointer(type, icon, color) { MapLogic.addPointer(icon, color, type); }
+        function exportMapPDF() { MapLogic.exportPDF('map-container', 'HIBA TÉRKÉP'); }
         function exportMapPNG() {
             const mapContainer = document.getElementById('map-container');
-            App.notify("Kép generálása folyamatban...");
-
-            html2canvas(mapContainer, {
-                useCORS: true,
-                scale: 2
-            }).then(canvas => {
+            html2canvas(mapContainer, { useCORS: true, scale: 2 }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = App.getExportFileName('Problem_Map', 'png');
+                link.download = 'Problem_Map.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
         }
     </script>
 </body>
-
 </html>
-<!-- Module refreshed -->
