@@ -43,45 +43,40 @@
                 <div class="nav-cat">Energetika
                     <div class="nav-cat-dropdown">
                         <a href="viewers/strategia_gaz_viewer.html"><i class="fas fa-check-circle"></i> Gáz Döntéstámogató</a>
-                        <a href="viewers/termeles_tervezo_viewer.html"><i class="fas fa-industry"></i> Szakmai ismeretek</a>
                         <a href="modules/tools/gas_evaluator.html"><i class="fas fa-file-invoice-dollar"></i> Gázárajánlat</a>
                         <a href="modules/tools/energy_reports.html"><i class="fas fa-solar-panel"></i> Riportok</a>
-                        <a href="modules/tools/power_optimizer.html"><i class="fas fa-chart-line"></i> Optimalizáló</a>
-                        <a href="modules/info/geothermal.html"><i class="fas fa-hot-tub"></i> Geotermális</a>
-                        <a href="modules/registers/index.html"><i class="fas fa-database"></i> Nyilvántartások</a>
                     </div>
                 </div>
                 <div class="nav-cat">Eszközök
                     <div class="nav-cat-dropdown">
                         <a href="modules/tools/pdfeditor.html"><i class="fas fa-file-pdf"></i> PDF Szerkesztő</a>
-                        <a href="modules/tools/pdfreader.html"><i class="fas fa-book-open"></i> PDF kinyerő</a>
-                        <a href="modules/tools/generator.html"><i class="fas fa-file-signature"></i> Generátor</a>
-                        <a href="modules/gallery/index.html"><i class="fas fa-images"></i> Drón fotók</a>
-                        <a href="modules/tools/stt.html"><i class="fas fa-microphone"></i> Beszéd írnok</a>
                         <a href="modules/tools/checklist.html"><i class="fas fa-clipboard-check"></i> Check-lista</a>
                     </div>
                 </div>
                 <div class="nav-cat">Elszámolás
                     <div class="nav-cat-dropdown">
                         <a href="modules/calc/contracts.html"><i class="fas fa-file-contract"></i> Szerződések</a>
-                        <a href="modules/calc/hupx_calc.html"><i class="fas fa-calculator"></i> Kalkulátor</a>
-                        <a href="modules/calc/budget_planner.html"><i class="fas fa-file-invoice-dollar"></i> Költségvetés</a>
                         <a href="modules/tenants/index.html"><i class="fas fa-file-invoice"></i> Bérlők</a>
-                        <a href="modules/tools/heating.html"><i class="fas fa-temperature-arrow-up"></i> Fűtésvezérlés</a>
                     </div>
                 </div>
             </nav>
 
             <div class="header-info">
-                <div class="info-group">
-                    <div class="info-main" id="global-clock-time">19:32:52</div>
-                    <div class="info-sub" id="global-clock-date">2026. 04. 17., Péntek</div>
+                <div class="hw-box">
+                    <i class="fas fa-cloud-sun" style="color:#f59e0b;"></i>
+                    <div>
+                        <div class="hw-val" id="header-temp-val">19°C</div>
+                        <div class="hw-city">Nagyatád</div>
+                    </div>
                 </div>
-                <div class="info-group" style="margin-left: 1rem;">
-                    <div class="info-main" id="header-temp-val">19°C</div>
-                    <div class="info-sub">Nagyatád</div>
+                <div class="info-box">
+                    <div class="info-time" id="global-clock-time">19:35:34</div>
+                    <div class="info-date" id="global-clock-date">2026. 04. 17., Péntek</div>
                 </div>
-                <button onclick="App.toggleTheme()" class="icon-btn" style="margin-left: 1rem;"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+                <div style="display: flex; gap: 0.5rem; border-left: 1px solid var(--border); padding-left: 1rem;">
+                    <button onclick="App.toggleTheme()" class="icon-btn" title="Sötét/Világos mód"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+                    <button onclick="App.logout()" class="icon-btn" title="Kijelentkezés"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
             </div>
         </header>
 
@@ -94,7 +89,8 @@
                     <div class="toolbar-right">
                         <div class="compact-monitoring">
                             <div class="c-item"><span class="c-label">Energia</span><div class="prices"><span class="gas"><i class="fas fa-fire"></i> 413 Ft</span><span class="electricity"><i class="fas fa-bolt"></i> 96 Ft</span></div></div>
-                            <div class="c-item"><span class="c-label">7 nap</span><div class="c-chart-box"><canvas id="daily-temp-chart"></canvas></div></div>
+                            <div class="c-item"><span class="c-label">Előrejelzés</span><div id="forecast-items">...</div></div>
+                            <div class="c-item"><span class="c-label">Hőmérséklet</span><div class="c-chart-box"><canvas id="daily-temp-chart"></canvas></div></div>
                             <div class="c-item"><span class="c-label">Átlag</span><strong id="three-day-avg">15.6°C</strong></div>
                         </div>
                     </div>
@@ -112,9 +108,9 @@
                     <div class="category-column">
                         <h3 class="group-title"><i class="fas fa-charging-station"></i> ENERGETIKA</h3>
                         <div class="tiles-grid-2col">
-                            <a href="viewers/strategia_gaz_viewer.html" class="feature-card"><i class="fas fa-check-circle" style="color:#4caf50;"></i><h5>Gáz Döntéstámogató</h5></a>
+                            <a href="viewers/strategia_gaz_viewer.html" class="feature-card"><i class="fas fa-check-circle" style="color:#4caf50;"></i><h5>Gáz Stratégia</h5></a>
                             <a href="viewers/termeles_tervezo_viewer.html" class="feature-card"><i class="fas fa-industry" style="color:#4caf50;"></i><h5>Szakmai ismeretek</h5></a>
-                            <a href="modules/tools/gas_evaluator.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i><h5>Gázárajánlat</h5></a>
+                            <a href="modules/tools/gas_evaluator.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i><h5>Gázajánlat</h5></a>
                             <a href="modules/tools/energy_reports.html" class="feature-card"><i class="fas fa-solar-panel" style="color:#d4af37;"></i><h5>Riportok</h5></a>
                             <a href="modules/tools/power_optimizer.html" class="feature-card"><i class="fas fa-chart-line" style="color:#f44336;"></i><h5>Optimalizáló</h5></a>
                             <a href="modules/info/geothermal.html" class="feature-card"><i class="fas fa-hot-tub" style="color:#ff5722;"></i><h5>Geotermális</h5></a>
@@ -148,7 +144,7 @@
                             <a href="modules/tenants/index.html" class="feature-card"><i class="fas fa-file-invoice" style="color:#e91e63;"></i><h5>Bérlői elszámolás</h5></a>
                             <a href="modules/tools/heating.html" class="feature-card"><i class="fas fa-temperature-arrow-up" style="color:#d32f2f;"></i><h5>Fűtésvezérlés</h5></a>
                             <a href="modules/polc/index.html" class="feature-card"><i class="fas fa-microchip" style="color:#2196f3;"></i><h5>POLC Online</h5></a>
-                            <a href="modules/calc/index.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#d32f2f;"></i><h5>Számlázási Segéd</h5></a>
+                            <a href="modules/calc/index.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#d32f2f;"></i><h5>Számlázás</h5></a>
                             <a href="modules/consumption/index.html" class="feature-card"><i class="fas fa-building-circle-check" style="color:#4caf50;"></i><h5>Fogyasztási Helyek</h5></a>
                         </div>
                     </div>
@@ -196,7 +192,7 @@
             </main>
         </div>
 
-        <footer style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 2rem;">
+        <footer style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 2rem;">
             © 2024-2026 Irodai Asszisztens | V3.60 | Minden jog fenntartva.
         </footer>
     </div>
