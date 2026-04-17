@@ -49,7 +49,6 @@
                         <a href="modules/tools/power_optimizer.html"><i class="fas fa-chart-line"></i> Optimalizáló</a>
                         <a href="modules/info/geothermal.html"><i class="fas fa-hot-tub"></i> Geotermális</a>
                         <a href="modules/registers/index.html"><i class="fas fa-database"></i> Nyilvántartások</a>
-                        <a href="modules/tools/power_overrun_scheduler.html"><i class="fas fa-calendar-alt"></i> Ütemező</a>
                     </div>
                 </div>
                 <div class="nav-cat">Eszközök
@@ -58,13 +57,8 @@
                         <a href="modules/tools/pdfreader.html"><i class="fas fa-book-open"></i> PDF kinyerő</a>
                         <a href="modules/tools/generator.html"><i class="fas fa-file-signature"></i> Generátor</a>
                         <a href="modules/gallery/index.html"><i class="fas fa-images"></i> Drón fotók</a>
-                        <a href="modules/tools/speech.html"><i class="fas fa-volume-up"></i> Felolvasó</a>
                         <a href="modules/tools/stt.html"><i class="fas fa-microphone"></i> Beszéd írnok</a>
                         <a href="modules/tools/checklist.html"><i class="fas fa-clipboard-check"></i> Check-lista</a>
-                        <a href="modules/tools/notes.html"><i class="fas fa-sticky-note"></i> Jegyzetek</a>
-                        <a href="modules/tools/deadlines.html"><i class="fas fa-calendar-check"></i> Határidők</a>
-                        <a href="modules/tech/notebooklm_intro.html"><i class="fas fa-robot"></i> NotebookLM</a>
-                        <a href="modules/info/message_board.html"><i class="fas fa-bullhorn"></i> Üzenőfal</a>
                     </div>
                 </div>
                 <div class="nav-cat">Elszámolás
@@ -75,9 +69,6 @@
                         <a href="modules/tenants/index.html"><i class="fas fa-file-invoice"></i> Bérlők</a>
                         <a href="modules/tools/heating.html"><i class="fas fa-temperature-arrow-up"></i> Fűtésvezérlés</a>
                         <a href="modules/polc/index.html"><i class="fas fa-microchip"></i> POLC Online</a>
-                        <a href="modules/calc/index.html"><i class="fas fa-file-invoice-dollar"></i> Számlázás</a>
-                        <a href="modules/consumption/index.html"><i class="fas fa-building-circle-check"></i> Fogyasztási helyek</a>
-                        <a href="modules/stocks/index.html"><i class="fas fa-chart-line"></i> Tőzsdei árak</a>
                     </div>
                 </div>
                 <div class="nav-cat">Térképek
@@ -92,10 +83,6 @@
                         <a href="modules/tools/weather_log.html"><i class="fas fa-cloud-sun"></i> Időjárás Napló</a>
                         <a href="modules/info/atadhir.html"><i class="fas fa-newspaper"></i> Atádi Hírek</a>
                         <a href="modules/info/nagyatad_presentation.html"><i class="fas fa-city"></i> Nagyatád</a>
-                        <a href="modules/info/procedures.html"><i class="fas fa-project-diagram"></i> Ügymenetek</a>
-                        <a href="modules/phonebook/index.html"><i class="fas fa-address-book"></i> Telefonkönyv</a>
-                        <a href="modules/links/index.html"><i class="fas fa-link"></i> Linkek</a>
-                        <a href="modules/info/help.html"><i class="fas fa-question-circle"></i> Súgó</a>
                     </div>
                 </div>
                 <div class="nav-cat">Ismeretek
@@ -104,12 +91,8 @@
                         <a href="modules/info/energetika.html"><i class="fas fa-charging-station"></i> Energetika</a>
                         <a href="modules/info/vibe_code.html"><i class="fas fa-terminal"></i> Vájb Kód</a>
                         <a href="modules/lean/index.html"><i class="fas fa-keyboard"></i> Gyorsbillentyűk</a>
-                        <a href="modules/tools/lean_office.html"><i class="fas fa-seedling"></i> Irodai Lean</a>
                         <a href="modules/tools/efficiency.html"><i class="fas fa-rocket"></i> Hatékonyság</a>
-                        <a href="modules/info/regulations.html"><i class="fas fa-gavel"></i> Rendeletek</a>
-                        <a href="modules/tools/iso50001.html"><i class="fas fa-leaf"></i> ISO 50001</a>
                         <a href="modules/tools/relax_center.html"><i class="fas fa-mug-hot"></i> Relax Center</a>
-                        <a href="#"><i class="fas fa-play-circle"></i> Videótár</a>
                     </div>
                 </div>
             </nav>
@@ -125,127 +108,91 @@
                     <div class="toolbar-center"><div class="toolbar-search-wrapper"><i class="fas fa-search"></i><input type="text" id="dashboard-search" placeholder="Gyorskereső..."></div></div>
                     <div class="toolbar-right">
                         <div class="compact-monitoring">
-                            <div class="c-item">
-                                <span class="c-label">Energiaárak</span>
-                                <div class="prices">
-                                    <span class="gas" title="Gázár (bruttó)"><i class="fas fa-fire"></i> 413 Ft</span>
-                                    <span class="electricity" title="Áramár (bruttó)"><i class="fas fa-bolt"></i> 96 Ft</span>
-                                </div>
-                            </div>
-                            <div class="c-item">
-                                <span class="c-label">Előrejelzés</span>
-                                <div id="forecast-items">...</div>
-                            </div>
-                            <div class="c-item chart-wrapper">
-                                <span class="c-label">Hőmérséklet (7 nap)</span>
-                                <div class="c-chart-box"><canvas id="daily-temp-chart"></canvas></div>
-                            </div>
-                            <div class="c-item avg-wrapper">
-                                <span class="c-label">Átlag</span>
-                                <strong id="three-day-avg">--°C</strong>
-                            </div>
+                            <div class="c-item"><span class="c-label">Energia</span><div class="prices"><span class="gas"><i class="fas fa-fire"></i> 413 Ft</span><span class="electricity"><i class="fas fa-bolt"></i> 96 Ft</span></div></div>
+                            <div class="c-item"><span class="c-label">Előrejelzés</span><div id="forecast-items">...</div></div>
+                            <div class="c-item"><span class="c-label">7 nap</span><div class="c-chart-box"><canvas id="daily-temp-chart"></canvas></div></div>
+                            <div class="c-item avg-wrapper"><span class="c-label">Átlag</span><strong id="three-day-avg">--°C</strong></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="news-bar">
-                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <a href="https://irattar.vercel.app/" target="_blank" class="btn-premium btn-irattar"><i class="fas fa-archive"></i> Irattár</a>
-                        <a href="https://adatb.vercel.app/" target="_blank" class="btn-premium btn-adatb"><i class="fas fa-database"></i> NEO Adatbázis</a>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <a href="https://irattar.vercel.app/" target="_blank" class="btn-premium"><i class="fas fa-archive"></i> Irattár</a>
+                        <a href="https://adatb.vercel.app/" target="_blank" class="btn-premium"><i class="fas fa-database"></i> Adatbázis</a>
                     </div>
                 </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-charging-station"></i> ENERGETIKA</h3>
-                    <div class="dashboard-grid">
-                        <a href="viewers/strategia_gaz_viewer.html" class="feature-card"><i class="fas fa-check-circle" style="color:#4caf50;"></i><h5>Gáz Döntéstámogató<br>(2026-2027)</h5></a>
-                        <a href="viewers/termeles_tervezo_viewer.html" class="feature-card"><i class="fas fa-industry" style="color:#4caf50;"></i><h5>Bevezető szakmai<br>ismeretek</h5></a>
-                        <a href="modules/tools/gas_evaluator.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i><h5>Gázárajánlat Kiértékelő</h5></a>
-                        <a href="modules/tools/energy_reports.html" class="feature-card"><i class="fas fa-solar-panel" style="color:#d4af37;"></i><h5>Energetikai Riportok</h5></a>
-                        <a href="modules/tools/power_optimizer.html" class="feature-card"><i class="fas fa-chart-line" style="color:#f44336;"></i><h5>Teljesítmény Optimalizáló</h5></a>
-                        <a href="modules/info/geothermal.html" class="feature-card"><i class="fas fa-hot-tub" style="color:#ff5722;"></i><h5>Geotermális fűtés</h5></a>
-                        <a href="modules/registers/index.html" class="feature-card"><i class="fas fa-database" style="color:#2196f3;"></i><h5>Nyilvántartások</h5></a>
-                        <a href="modules/tools/power_overrun_scheduler.html" class="feature-card"><i class="fas fa-calendar-alt" style="color:#ff5722;"></i><h5>Teljesítmény-<br>túllépés ütemező</h5></a>
+                <!-- Transposed Layout Structure -->
+                <div class="dashboard-sections-container">
+                    
+                    <div class="category-column">
+                        <h3 class="group-title"><i class="fas fa-charging-station"></i> ENERGETIKA</h3>
+                        <div class="tiles-vertical-stack">
+                            <a href="viewers/strategia_gaz_viewer.html" class="feature-card"><i class="fas fa-check-circle" style="color:#4caf50;"></i><h5>Gáz Döntéstámogató</h5></a>
+                            <a href="viewers/termeles_tervezo_viewer.html" class="feature-card"><i class="fas fa-industry" style="color:#4caf50;"></i><h5>Bevezető ismeretek</h5></a>
+                            <a href="modules/tools/gas_evaluator.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i><h5>Gázajánlat</h5></a>
+                            <a href="modules/tools/energy_reports.html" class="feature-card"><i class="fas fa-solar-panel" style="color:#d4af37;"></i><h5>Riportok</h5></a>
+                            <a href="modules/tools/power_optimizer.html" class="feature-card"><i class="fas fa-chart-line" style="color:#f44336;"></i><h5>Optimalizáló</h5></a>
+                            <a href="modules/info/geothermal.html" class="feature-card"><i class="fas fa-hot-tub" style="color:#ff5722;"></i><h5>Geotermális</h5></a>
+                            <a href="modules/registers/index.html" class="feature-card"><i class="fas fa-database" style="color:#2196f3;"></i><h5>Nyilvántartások</h5></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-map-location-dot"></i> TÉRKÉPEK</h3>
-                    <div class="dashboard-grid">
-                        <a href="modules/map/index.html" class="feature-card"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i><h5>Probléma térkép</h5></a>
-                        <a href="modules/publiclight/index.html" class="feature-card"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i><h5>Közvilágítási hibatérkép</h5></a>
+                    <div class="category-column">
+                        <h3 class="group-title"><i class="fas fa-tools"></i> ESZKÖZÖK</h3>
+                        <div class="tiles-vertical-stack">
+                            <a href="modules/tools/pdfeditor.html" class="feature-card"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i><h5>PDF Szerkesztő</h5></a>
+                            <a href="modules/tools/pdfreader.html" class="feature-card"><i class="fas fa-book-open" style="color:#3f51b5;"></i><h5>PDF kinyerő</h5></a>
+                            <a href="modules/tools/generator.html" class="feature-card"><i class="fas fa-file-signature" style="color:#9c27b0;"></i><h5>Generátor</h5></a>
+                            <a href="modules/gallery/index.html" class="feature-card"><i class="fas fa-images" style="color:#2196f3;"></i><h5>Drón fotók</h5></a>
+                            <a href="modules/tools/stt.html" class="feature-card"><i class="fas fa-microphone" style="color:#e91e63;"></i><h5>Beszéd írnok</h5></a>
+                            <a href="modules/tools/checklist.html" class="feature-card"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i><h5>Check-lista</h5></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-microchip"></i> MŰSZAKI ESZKÖZÖK</h3>
-                    <div class="dashboard-grid">
-                        <a href="#" class="feature-card disabled-access"><i class="fas fa-gauge-high" style="color:#9c27b0;"></i><h5>Mérőállás Rögzítő</h5></a>
-                        <a href="modules/tools/checklist.html" class="feature-card"><i class="fas fa-clipboard-check" style="color:#ff9800;"></i><h5>Check-lista</h5></a>
-                        <a href="modules/info/message_board.html" class="feature-card"><i class="fas fa-bullhorn" style="color:#ff4081;"></i><h5>Üzenőfal</h5></a>
-                        <a href="modules/tech/notebooklm_intro.html" class="feature-card"><i class="fas fa-robot" style="color:#4285f4;"></i><h5>NotebookLM</h5></a>
+                    <div class="category-column">
+                        <h3 class="group-title"><i class="fas fa-file-invoice"></i> ELSZÁMOLÁS</h3>
+                        <div class="tiles-vertical-stack">
+                            <a href="modules/calc/contracts.html" class="feature-card"><i class="fas fa-file-contract" style="color:#e67e22;"></i><h5>Szerződések</h5></a>
+                            <a href="modules/calc/hupx_calc.html" class="feature-card"><i class="fas fa-calculator" style="color:#4caf50;"></i><h5>Kalkulátor</h5></a>
+                            <a href="modules/calc/budget_planner.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i><h5>Költségvetés</h5></a>
+                            <a href="modules/tenants/index.html" class="feature-card"><i class="fas fa-file-invoice" style="color:#e91e63;"></i><h5>Bérlői elszámolás</h5></a>
+                            <a href="modules/tools/heating.html" class="feature-card"><i class="fas fa-temperature-arrow-up" style="color:#d32f2f;"></i><h5>Fűtésvezérlés</h5></a>
+                            <a href="modules/polc/index.html" class="feature-card"><i class="fas fa-microchip" style="color:#2196f3;"></i><h5>POLC Online</h5></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-tools"></i> ESZKÖZÖK</h3>
-                    <div class="dashboard-grid">
-                        <a href="modules/tools/pdfeditor.html" class="feature-card"><i class="fas fa-file-pdf" style="color:#d32f2f;"></i><h5>PDF Szerkesztő</h5></a>
-                        <a href="modules/tools/pdfreader.html" class="feature-card"><i class="fas fa-book-open" style="color:#3f51b5;"></i><h5>PDF kinyerő</h5></a>
-                        <a href="modules/tools/generator.html" class="feature-card"><i class="fas fa-file-signature" style="color:#9c27b0;"></i><h5>Nyomtatvány generátor</h5></a>
-                        <a href="modules/gallery/index.html" class="feature-card"><i class="fas fa-images" style="color:#2196f3;"></i><h5>Drón fotók</h5></a>
-                        <a href="modules/tools/speech.html" class="feature-card"><i class="fas fa-volume-up" style="color:#9c27b0;"></i><h5>Szöveg Felolvasó</h5></a>
-                        <a href="modules/tools/stt.html" class="feature-card"><i class="fas fa-microphone" style="color:#e91e63;"></i><h5>Beszéd írnok</h5></a>
-                        <a href="modules/tools/deadlines.html" class="feature-card"><i class="fas fa-calendar-check" style="color: #ff9800;"></i><h5>Határidők</h5></a>
-                        <a href="modules/utils/index.html" class="feature-card"><i class="fas fa-bolt" style="color:#fbc02d;"></i><h5>Gyorsító Eszközök</h5></a>
-                        <a href="modules/tools/notes.html" class="feature-card"><i class="fas fa-sticky-note" style="color:#ffee58;"></i><h5>Gyors Feljegyzés</h5></a>
-                        <a href="modules/tools/translator.html" class="feature-card"><i class="fas fa-language" style="color:#4caf50;"></i><h5>Fordító Segéd</h5></a>
+                    <div class="category-column">
+                        <h3 class="group-title"><i class="fas fa-map-marked-alt"></i> TÉRKÉPEK</h3>
+                        <div class="tiles-vertical-stack">
+                            <a href="modules/map/index.html" class="feature-card"><i class="fas fa-map-marked-alt" style="color:#4caf50;"></i><h5>Hiba térkép</h5></a>
+                            <a href="modules/publiclight/index.html" class="feature-card"><i class="fas fa-lightbulb" style="color:#fbc02d;"></i><h5>Közvilágítás</h5></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-file-invoice"></i> ELSZÁMOLÁS</h3>
-                    <div class="dashboard-grid">
-                        <a href="modules/calc/contracts.html" class="feature-card"><i class="fas fa-file-contract" style="color:#e67e22;"></i><h5>Szerződés Nyilvántartó</h5></a>
-                        <a href="modules/calc/hupx_calc.html" class="feature-card"><i class="fas fa-calculator" style="color:#4caf50;"></i><h5>Energiaszámla kalkulátor</h5></a>
-                        <a href="modules/calc/budget_planner.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#3498db;"></i><h5>Költségvetési tervező</h5></a>
-                        <a href="modules/tenants/index.html" class="feature-card"><i class="fas fa-file-invoice" style="color:#e91e63;"></i><h5>Bérlői elszámolások</h5></a>
-                        <a href="modules/tools/heating.html" class="feature-card"><i class="fas fa-temperature-arrow-up" style="color:#d32f2f;"></i><h5>Fűtésvezérlés</h5></a>
-                        <a href="modules/polc/index.html" class="feature-card"><i class="fas fa-microchip" style="color:#2196f3;"></i><h5>POLC Online</h5></a>
-                        <a href="modules/calc/index.html" class="feature-card"><i class="fas fa-file-invoice-dollar" style="color:#d32f2f;"></i><h5>Számlázási Segéd</h5></a>
-                        <a href="modules/consumption/index.html" class="feature-card"><i class="fas fa-building-circle-check" style="color:#4caf50;"></i><h5>Fogyasztási Helyek</h5></a>
-                        <a href="modules/stocks/index.html" class="feature-card"><i class="fas fa-chart-line" style="color:#fbc02d;"></i><h5>Tőzsdei Árak</h5></a>
+                    <div class="category-column">
+                        <h3 class="group-title"><i class="fas fa-info-circle"></i> INFORMÁCIÓ</h3>
+                        <div class="tiles-vertical-stack">
+                            <a href="modules/info/local_weather.html" class="feature-card"><i class="fas fa-temperature-high" style="color:#ff5722;"></i><h5>Időjárás</h5></a>
+                            <a href="modules/tools/weather_log.html" class="feature-card"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i><h5>Időjárás Napló</h5></a>
+                            <a href="modules/info/atadhir.html" class="feature-card"><i class="fas fa-newspaper" style="color:#607d8b;"></i><h5>Atádi Hírek</h5></a>
+                            <a href="modules/info/nagyatad_presentation.html" class="feature-card"><i class="fas fa-city" style="color:#2e7d32;"></i><h5>Nagyatád</h5></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-info-circle"></i> INFORMÁCIÓ</h3>
-                    <div class="dashboard-grid">
-                        <a href="modules/info/local_weather.html" class="feature-card"><i class="fas fa-temperature-high" style="color:#ff5722;"></i><h5>Helyi Időjárás</h5></a>
-                        <a href="modules/tools/weather_log.html" class="feature-card"><i class="fas fa-cloud-sun" style="color:#03a9f4;"></i><h5>Időjárás Napló</h5></a>
-                        <a href="modules/info/atadhir.html" class="feature-card"><i class="fas fa-newspaper" style="color:#607d8b;"></i><h5>Atádi Hírek</h5></a>
-                        <a href="modules/info/nagyatad_presentation.html" class="feature-card"><i class="fas fa-city" style="color:#2e7d32;"></i><h5>Nagyatád bemutató</h5></a>
-                        <a href="modules/info/procedures.html" class="feature-card"><i class="fas fa-project-diagram" style="color:#673ab7;"></i><h5>Ügymenetek</h5></a>
-                        <a href="modules/info/help.html" class="feature-card"><i class="fas fa-question-circle" style="color:#009688;"></i><h5>Súgó</h5></a>
-                        <a href="modules/phonebook/index.html" class="feature-card"><i class="fas fa-address-book" style="color:#795548;"></i><h5>Telefonkönyv</h5></a>
-                        <a href="modules/links/index.html" class="feature-card"><i class="fas fa-link" style="color:#009688;"></i><h5>Linkgyűjtemény</h5></a>
+                    <div class="category-column">
+                        <h3 class="group-title"><i class="fas fa-graduation-cap"></i> ISMERETEK</h3>
+                        <div class="tiles-vertical-stack">
+                            <a href="modules/info/public_admin.html" class="feature-card"><i class="fas fa-university" style="color:#546e7a;"></i><h5>Közigazgatás</h5></a>
+                            <a href="modules/info/energetika.html" class="feature-card"><i class="fas fa-charging-station" style="color:#ff9800;"></i><h5>Energetika</h5></a>
+                            <a href="modules/info/vibe_code.html" class="feature-card"><i class="fas fa-terminal" style="color:#4caf50;"></i><h5>Vájb Kód</h5></a>
+                            <a href="modules/lean/index.html" class="feature-card"><i class="fas fa-keyboard" style="color:#9e9e9e;"></i><h5>Gyorsbillentyűk</h5></a>
+                            <a href="modules/tools/efficiency.html" class="feature-card"><i class="fas fa-rocket" style="color:#ff5722;"></i><h5>Hatékonyság</h5></a>
+                            <a href="modules/tools/relax_center.html" class="feature-card"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i><h5>Relax Center</h5></a>
+                        </div>
                     </div>
-                </div>
 
-                <div class="category-group">
-                    <h3 class="group-title"><i class="fas fa-graduation-cap"></i> ISMERETEK</h3>
-                    <div class="dashboard-grid">
-                        <a href="modules/info/public_admin.html" class="feature-card"><i class="fas fa-university" style="color:#546e7a;"></i><h5>Közigazgatás</h5></a>
-                        <a href="modules/info/energetika.html" class="feature-card"><i class="fas fa-charging-station" style="color:#ff9800;"></i><h5>Energetika</h5></a>
-                        <a href="modules/info/vibe_code.html" class="feature-card"><i class="fas fa-terminal" style="color:#4caf50;"></i><h5>Vájb Kód Bevezető</h5></a>
-                        <a href="modules/lean/index.html" class="feature-card"><i class="fas fa-keyboard" style="color:#9e9e9e;"></i><h5>Gyorsbillentyűk</h5></a>
-                        <a href="modules/tools/lean_office.html" class="feature-card"><i class="fas fa-seedling" style="color:#4caf50;"></i><h5>Irodai Lean</h5></a>
-                        <a href="modules/tools/efficiency.html" class="feature-card"><i class="fas fa-rocket" style="color:#ff5722;"></i><h5>Hatékonyság</h5></a>
-                        <a href="#" class="feature-card disabled-access"><i class="fas fa-play-circle" style="color:#f44336;"></i><h5>Videótár</h5></a>
-                        <a href="modules/info/regulations.html" class="feature-card"><i class="fas fa-gavel" style="color:#546e7a;"></i><h5>Vonatkozó rendeletek</h5></a>
-                        <a href="modules/tools/iso50001.html" class="feature-card"><i class="fas fa-leaf" style="color:#4caf50;"></i><h5>EIR ISO (50001)</h5></a>
-                        <a href="modules/tools/relax_center.html" class="feature-card"><i class="fas fa-mug-hot" style="color:#ffcc33;"></i><h5>Relax Center</h5></a>
-                    </div>
                 </div>
 
             </main>
