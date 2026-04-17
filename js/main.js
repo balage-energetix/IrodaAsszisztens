@@ -103,7 +103,7 @@ const App = {
                 <div class="nav-cat">ENERGETIKA <i class="fas fa-chevron-down ms-1" style="font-size:0.7rem;"></i>
                     <div class="nav-cat-dropdown">
                         <a href="${p}strategia_gaz_viewer.html" class="nav-dropdown-item"><i class="fas fa-check-circle" style="color:#4caf50;"></i> Gáz Döntéstámogató</a>
-                        <a href="${p}termeles_tervezo_viewer.html" class="nav-dropdown-item"><i class="fas fa-industry" style="color:#4caf50;"></i> Felkészítő ismeretek</a>
+                        <a href="${p}termeles_tervezo_viewer.html" class="nav-dropdown-item"><i class="fas fa-industry" style="color:#4caf50;"></i> Bevezető szakmai ismeretek</a>
                         <a href="${p}modules/tools/gas_evaluator.html" class="nav-dropdown-item"><i class="fas fa-file-invoice-dollar" style="color:#fbc02d;"></i> Gázárajánlat kiértékelő</a>
                         <a href="${p}modules/tools/energy_reports.html" class="nav-dropdown-item"><i class="fas fa-solar-panel" style="color:#d4af37;"></i> Energetikai Riportok</a>
                         <a href="${p}modules/tools/power_optimizer.html" class="nav-dropdown-item"><i class="fas fa-chart-line" style="color:#f44336;"></i> Teljesítmény Optimalizáló</a>
@@ -372,39 +372,21 @@ const App = {
 
         const animate = () => {
             const theme = document.documentElement.getAttribute('data-theme');
-
-            if (theme === 'dark') {
+            if (theme === 'dark' && !this.state.isIdle) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-
                 stars.forEach(star => {
-                    // Twinkling effect
-                    star.opacity += (Math.random() - 0.5) * 0.05;
-                    star.opacity = Math.max(0.2, Math.min(1, star.opacity));
-
+                    star.opacity += (Math.random() - 0.5) * 0.02;
+                    star.opacity = Math.max(0.1, Math.min(0.6, star.opacity));
                     drawStar(star);
                 });
             } else {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
-
-            animationId = requestAnimationFrame(animate);
-        };
-
-        const fastAnimate = () => {
-            const theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark' && !this.state.isIdle) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                stars.forEach(star => {
-                    star.opacity += (Math.random() - 0.5) * 0.05;
-                    star.opacity = Math.max(0.2, Math.min(1, star.opacity));
-                    drawStar(star);
-                });
-            }
-            setTimeout(() => requestAnimationFrame(fastAnimate), 100); // Throttled animation
+            setTimeout(() => requestAnimationFrame(animate), 150);
         };
 
         initCanvas();
-        fastAnimate();
+        animate();
 
         window.addEventListener('resize', initCanvas);
 
@@ -815,32 +797,20 @@ const App = {
     },
 
     initEntryAnimations() {
-        // 1. Header Animations (Slide from sides)
-        const logo = document.querySelector('.logo');
-        const headerInfo = document.querySelector('.header-info');
-
-        if (logo) logo.classList.add('slide-in-left');
-        if (headerInfo) headerInfo.classList.add('slide-in-right');
-
-        // 2. Dashboard & Module Tiles Staggered Entry
-        const cards = document.querySelectorAll('.feature-card, .relax-card, .pro-card, .summary-box');
-        cards.forEach((card, index) => {
-            // Apply delay based on index for "waterfall" effect
-            setTimeout(() => {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-                card.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            }, 100 + (index * 40));
+        // Simple cascade entry using CSS transitions triggered by 'ready' class on body
+        const elements = document.querySelectorAll('.feature-card, .group-title, .section-title, .logo, .header-info');
+        elements.forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translate3d(0, 10px, 0)';
+            el.style.transition = 'opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            el.style.transitionDelay = `${index * 20}ms`;
         });
 
-        // 3. Section Titles Slide
-        const titles = document.querySelectorAll('.section-title, .group-title');
-        titles.forEach((title, index) => {
-            setTimeout(() => {
-                title.style.opacity = '1';
-                title.style.transform = 'translateY(0)';
-                title.style.transition = 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            }, 50 + (index * 100));
+        requestAnimationFrame(() => {
+            elements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'translate3d(0, 0, 0)';
+            });
         });
     }
 };
