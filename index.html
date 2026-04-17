@@ -42,7 +42,7 @@
             <nav class="app-nav">
                 <div class="nav-cat">Energetika
                     <div class="nav-cat-dropdown">
-                        <a href="viewers/strategia_gaz_viewer.html"><i class="fas fa-check-circle"></i> Gáz Döntéstámogató</a>
+                        <a href="viewers/strategia_gaz_viewer.html"><i class="fas fa-check-circle"></i> Gáz Stratégia</a>
                         <a href="viewers/termeles_tervezo_viewer.html"><i class="fas fa-industry"></i> Szakmai ismeretek</a>
                         <a href="modules/tools/gas_evaluator.html"><i class="fas fa-file-invoice-dollar"></i> Gázárajánlat</a>
                         <a href="modules/tools/energy_reports.html"><i class="fas fa-solar-panel"></i> Riportok</a>
@@ -113,20 +113,14 @@
             </nav>
 
             <div class="header-info">
-                <div class="weather-minimal">
-                    <i class="fas fa-cloud-sun"></i>
-                    <div class="w-data">
-                        <span class="w-temp" id="header-temp-val">19°C</span>
-                        <span class="w-city">Nagyatád</span>
-                    </div>
+                <div class="sun-info"><i class="fas fa-sun"></i> 06:00 | 19:39</div>
+                <div class="info-block-mini">
+                    <div class="t-main" id="global-clock-time">19:40:12</div>
+                    <div class="t-sub" id="global-clock-date">2026. 04. 17., Péntek</div>
                 </div>
-                <div class="clock-minimal">
-                    <div class="c-time" id="global-clock-time">19:38:37</div>
-                    <div class="c-date" id="global-clock-date">2026. 04. 17., Péntek</div>
-                </div>
-                <div style="display: flex; gap: 0.5rem; border-left: 1px solid var(--border); padding-left: 1rem;">
-                    <button onclick="App.toggleTheme()" class="icon-btn" title="Sötét/Világos mód"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
-                    <button onclick="App.logout()" class="icon-btn" title="Kijelentkezés"><i class="fas fa-sign-out-alt"></i></button>
+                <div class="header-btns">
+                    <button onclick="App.toggleTheme()" class="icon-btn-mini" title="Sötét/Világos mód"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+                    <button onclick="App.logout()" class="icon-btn-mini" title="Kijelentkezés"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </header>
@@ -148,7 +142,7 @@
                 </div>
 
                 <div class="news-bar">
-                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <div style="display: flex; gap: 0.75rem; justify-content: center;">
                         <a href="https://irattar.vercel.app/" target="_blank" class="btn-premium"><i class="fas fa-archive"></i> Irattár</a>
                         <a href="https://adatb.vercel.app/" target="_blank" class="btn-premium"><i class="fas fa-database"></i> Adatbázis</a>
                     </div>
@@ -243,7 +237,7 @@
             </main>
         </div>
 
-        <footer style="text-align: center; padding: 1.5rem; color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); margin-top: 2rem;">
+        <footer style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.7rem; border-top: 1px solid var(--border); margin-top: 1rem;">
             © 2024-2026 Irodai Asszisztens | V3.60 | Minden jog fenntartva.
         </footer>
     </div>
