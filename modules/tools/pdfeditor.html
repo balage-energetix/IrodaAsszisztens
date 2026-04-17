@@ -4,66 +4,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF szerkesztő - Irodai Asszisztens</title>
+    <title>PDF Szerkesztő - Irodai Asszisztens</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../css/main.css">
     <style>
-        .edit-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .edit-card { background: var(--bg-card); border-radius: 12px; padding: 2rem; border: 1px solid var(--border); }
-        .file-list { margin-top: 1.5rem; border: 1px solid var(--border); border-radius: 8px; min-height: 80px; padding: 0.5rem; }
-        .file-item { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 1rem; background: var(--bg-hover); margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.8rem; }
-        .btn-action { width: 100%; margin-top: 1.5rem; padding: 1rem; border-radius: 10px; border: none; background: var(--accent); color: white; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn-action:hover { filter: brightness(1.1); }
+        .edit-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; }
+        .file-list { margin-top: 1rem; border: 1px dashed var(--border); border-radius: 8px; min-height: 80px; padding: 0.5rem; background: var(--bg-hover); }
+        .file-item { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem; background: var(--bg-card); border: 1px solid var(--border); margin-bottom: 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 600; }
+        .btn-action { width: 100%; margin-top: 1.5rem; padding: 0.75rem; border-radius: 8px; border: none; background: var(--accent); color: white; font-weight: 800; font-size: 0.8rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2); }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-upload { width: 100%; padding: 0.75rem; border-radius: 8px; border: 2px dashed var(--accent); background: transparent; color: var(--accent); font-weight: 700; font-size: 0.75rem; cursor: pointer; transition: 0.2s; }
+        .btn-upload:hover { background: rgba(59, 130, 246, 0.05); }
+        .range-input { width: 100%; padding: 0.6rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); font-size: 0.75rem; outline: none; transition: 0.2s; }
+        .range-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1); }
     </style>
 </head>
 
-<body>
-    <header class="app-header">
-        <a href="../../index.html" class="logo">
-            <i class="fab fa-android"></i>
-            <span>IRODAI<br>ASSZISZTENS</span>
-        </a>
-        <nav class="app-nav">
-            <div class="nav-cat">Energetika</div>
-            <div class="nav-cat">Eszközök</div>
-            <div class="nav-cat">Információ</div>
-        </nav>
-        <div class="header-info"></div>
-    </header>
-
-    <main class="container">
-        <h2 class="section-title" style="margin-bottom: 2rem;"><i class="fas fa-file-pdf"></i> PDF Szerkesztő</h2>
-
-        <div class="edit-layout">
-            <div class="edit-card">
-                <h4 style="margin-bottom:1rem;"><i class="fas fa-layer-group"></i> PDF Összeillesztés</h4>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Válasszon ki több PDF fájlt az egyesítéshez.</p>
-                <input type="file" id="merge-input" multiple accept="application/pdf" style="display:none;" onchange="updateList('merge')">
-                <button class="neo-shiny-btn" style="width:100%; border-style:dashed;" onclick="document.getElementById('merge-input').click()">+ Fájlok hozzáadása</button>
-                <div class="file-list" id="merge-list"></div>
-                <button class="btn-action" onclick="mergePDFs()">EGYESÍTÉS ÉS LETÖLTÉS</button>
+<body class="module-body">
+    <div class="module-container">
+        <header class="module-header">
+            <div class="module-title">
+                <i class="fas fa-file-pdf"></i>
+                <span>PDF Szerkesztő</span>
             </div>
+            <a href="../../index.html" class="module-back">
+                <i class="fas fa-arrow-left"></i>
+                Vissza a főoldalra
+            </a>
+        </header>
 
-            <div class="edit-card">
-                <h4 style="margin-bottom:1rem;"><i class="fas fa-scissors"></i> PDF Darabolás</h4>
-                <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Válasszon egy PDF-et és adja meg az oldalszámokat.</p>
-                <input type="file" id="split-input" accept="application/pdf" style="display:none;" onchange="updateList('split')">
-                <button class="neo-shiny-btn" style="width:100%; border-style:dashed;" onclick="document.getElementById('split-input').click()">Fájl kiválasztása</button>
-                <div class="file-list" id="split-list"></div>
-                <div style="margin-top: 1rem;">
-                    <label style="font-size: 0.6rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Tartomány (pl: 1-3, 5, 8-10)</label>
-                    <input type="text" id="split-range" style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid var(--border); outline: none;" placeholder="1-2, 4...">
+        <div class="module-content">
+            <div class="edit-layout">
+                <!-- Merge Card -->
+                <div class="module-card">
+                    <div class="module-card-title">PDF Összeillesztés</div>
+                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1.25rem;">Töltsön fel több fájlt, hogy egyetlen dokumentummá vonja össze őket.</p>
+                    <input type="file" id="merge-input" multiple accept="application/pdf" style="display:none;" onchange="updateList('merge')">
+                    <button class="btn-upload" onclick="document.getElementById('merge-input').click()">
+                        <i class="fas fa-plus"></i> Fájlok hozzáadása
+                    </button>
+                    <div class="file-list" id="merge-list"></div>
+                    <button class="btn-action" onclick="mergePDFs()">EGYESÍTÉS ÉS LETÖLTÉS</button>
                 </div>
-                <button class="btn-action" style="background:var(--primary);" onclick="splitPDF()">OLDALAK KINYERÉSE</button>
+
+                <!-- Split Card -->
+                <div class="module-card">
+                    <div class="module-card-title">PDF Darabolás</div>
+                    <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1.25rem;">Válasszon egy fájlt és adja meg a kinyerni kívánt oldalszámokat.</p>
+                    <input type="file" id="split-input" accept="application/pdf" style="display:none;" onchange="updateList('split')">
+                    <button class="btn-upload" onclick="document.getElementById('split-input').click()">
+                        <i class="fas fa-file-upload"></i> Fájl kiválasztása
+                    </button>
+                    <div class="file-list" id="split-list"></div>
+                    <div style="margin-top: 1.25rem;">
+                        <label style="font-size: 0.6rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 0.5rem;">Oldaltartomány (pl: 1-3, 5, 8-10)</label>
+                        <input type="text" id="split-range" class="range-input" placeholder="pl: 1-2, 4...">
+                    </div>
+                    <button class="btn-action" style="background:var(--primary);" onclick="splitPDF()">OLDALAK KINYERÉSE</button>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
 
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../js/main.js"></script>
     <script>
         let mergeFiles = [];
@@ -74,10 +80,10 @@
                 const input = document.getElementById('merge-input');
                 mergeFiles = Array.from(input.files);
                 const list = document.getElementById('merge-list');
-                list.innerHTML = mergeFiles.map(f => `<div class="file-item"><span>${f.name}</span> <i class="fas fa-file-pdf"></i></div>`).join('');
+                list.innerHTML = mergeFiles.map(f => `<div class="file-item"><span>${f.name}</span> <i class="fas fa-file-pdf" style="color:#d32f2f;"></i></div>`).join('');
             } else {
                 splitFile = document.getElementById('split-input').files[0];
-                document.getElementById('split-list').innerHTML = `<div class="file-item"><span>${splitFile.name}</span> <i class="fas fa-file-pdf"></i></div>`;
+                document.getElementById('split-list').innerHTML = `<div class="file-item"><span>${splitFile.name}</span> <i class="fas fa-file-pdf" style="color:#d32f2f;"></i></div>`;
             }
         }
 
@@ -144,5 +150,4 @@
         }
     </script>
 </body>
-
 </html>
