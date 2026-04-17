@@ -20,6 +20,7 @@ const App = {
         this.fetchWeather();
         this.initMonitoring();
         this.checkPowerDeadlines();
+        this.initAuth();
         
         requestAnimationFrame(() => {
             document.body.classList.add('ready');
@@ -196,6 +197,16 @@ const App = {
         } else if (pass) {
             alert('Hibás kód!');
             input.value = '';
+            input.focus();
+        }
+    },
+
+    initAuth() {
+        const input = document.getElementById('auth-password-input');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.login();
+            });
             input.focus();
         }
     },

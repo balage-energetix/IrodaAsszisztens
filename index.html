@@ -18,20 +18,24 @@
         #app-main, #auth-overlay { display: none; }
         body.authenticated #app-main { display: block; }
         body:not(.authenticated) #auth-overlay { display: flex; }
-        #auth-overlay { position: fixed; inset: 0; background: #0f172a; z-index: 2000; align-items: center; justify-content: center; }
     </style>
 </head>
 
 <body>
 
     <div id="auth-overlay">
-        <div class="auth-box-modern">
-            <div class="auth-icon-wrapper"><i class="fas fa-shield-halved"></i></div>
-            <h2 class="auth-title">Irodai Asszisztens</h2>
-            <p class="auth-subtitle">Biztonságos belépés a rendszerbe</p>
-            <div class="auth-input-group"><i class="fas fa-lock"></i><input type="password" id="auth-password-input" placeholder="Belépési kód..."></div>
-            <button onclick="App.login()" class="auth-submit-btn"><span>Belépés</span><i class="fas fa-arrow-right"></i></button>
-            <div class="auth-footer-note">V3.60 • Minimalist Professional</div>
+        <div class="auth-card">
+            <div class="auth-logo"><i class="fas fa-shield-halved"></i></div>
+            <h2 class="auth-title">Asszisztens</h2>
+            <p class="auth-subtitle">Kérjük, adja meg a belépési kódot</p>
+            <div class="auth-input-wrapper">
+                <input type="password" id="auth-password-input" class="auth-input" maxlength="4" placeholder="••••" autofocus>
+            </div>
+            <button onclick="App.login()" class="auth-btn">
+                <span>Belépés</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="auth-footer">Irodai Asszisztens • V3.60</div>
         </div>
     </div>
 
