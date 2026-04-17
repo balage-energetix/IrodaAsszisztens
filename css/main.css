@@ -43,10 +43,10 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
 
 .logo { text-decoration: none; display: flex; align-items: center; gap: 0.3rem; color: var(--text-main); flex: 1; justify-content: flex-start; }
 .logo i { font-size: 1rem; color: var(--accent); }
-.logo span { font-family: var(--font-title); font-weight: 800; font-size: 0.5rem; text-transform: uppercase; line-height: 1; }
+.logo span { font-family: var(--font-title); font-weight: 800; font-size: 0.6rem; text-transform: uppercase; line-height: 1; }
 
-.app-nav { display: flex; gap: 1.25rem; flex-shrink: 0; justify-content: center; width: auto; }
-.nav-cat { position: relative; font-family: var(--font-title); font-weight: 700; font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); cursor: pointer; }
+.app-nav { display: flex; gap: 1.25rem; flex-shrink: 0; justify-content: center; width: auto; font-size: 0.75rem; }
+.nav-cat { position: relative; font-family: var(--font-title); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); cursor: pointer; }
 .nav-cat:hover { color: var(--accent); }
 
 .nav-cat-dropdown {
@@ -64,7 +64,7 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
     z-index: 2010;
 }
 .nav-cat:hover .nav-cat-dropdown { display: block; }
-.nav-cat-dropdown a { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.5rem; text-decoration: none; color: var(--text-main); font-size: 0.6rem; font-weight: 600; border-radius: 4px; }
+.nav-cat-dropdown a { display: flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.5rem; text-decoration: none; color: var(--text-main); font-size: 0.7rem; font-weight: 600; border-radius: 4px; }
 .nav-cat-dropdown a i { width: 12px; text-align: center; color: var(--accent); font-size: 0.75rem; }
 .nav-cat-dropdown a:hover { background: var(--bg-hover); color: var(--accent); }
 
@@ -82,24 +82,24 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
     display: flex; 
     align-items: center; 
     gap: 5px; 
-    font-size: 0.55rem; 
+    font-size: 0.65rem; 
     font-weight: 800; 
     color: var(--text-muted); 
     white-space: nowrap;
     font-variant-numeric: tabular-nums; /* Critical: prevents jitter */
 }
-.h-info-item i { font-size: 0.75rem; color: var(--accent); }
+.h-info-item i { font-size: 0.85rem; color: var(--accent); }
 .h-info-val { 
     font-family: var(--font-title); 
     font-weight: 800; 
-    font-size: 0.65rem; 
+    font-size: 0.75rem; 
     color: var(--text-main);
     font-variant-numeric: tabular-nums;
 }
 
 #global-clock-time {
     font-family: 'JetBrains Mono', 'Courier New', monospace; /* Extra stability */
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     letter-spacing: -0.5px;
 }
 
@@ -113,28 +113,28 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--t
 
 .compact-monitoring { display: flex; align-items: center; gap: 1.5rem; }
 .m-item { display: flex; flex-direction: column; }
-.m-label { font-size: 0.45rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px; }
-.m-val-line { display: flex; align-items: center; gap: 10px; font-family: var(--font-title); font-weight: 800; font-size: 0.75rem; }
+.m-label { font-size: 0.55rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px; }
+.m-val-line { display: flex; align-items: center; gap: 10px; font-family: var(--font-title); font-weight: 800; font-size: 0.85rem; }
 .gas { color: #f59e0b; }
 .elec { color: #3b82f6; }
 
 .forecast-strip { display: flex; gap: 0.75rem; }
 .fc-block { display: flex; align-items: center; gap: 4px; }
 .fc-icon { font-size: 0.65rem; color: var(--accent); }
-.fc-txt { font-size: 0.6rem; font-weight: 800; }
+.fc-txt { font-size: 0.7rem; font-weight: 800; }
 
 /* Transposed Columns - NO SCROLL */
 .dashboard-sections-container { display: flex; gap: 0.6rem; justify-content: center; }
 .category-column { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.5rem; }
-.group-title { font-family: var(--font-title); font-weight: 800; font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+.group-title { font-family: var(--font-title); font-weight: 800; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
 
 .news-bar { margin-bottom: 2rem; text-align: center; }
 
 .tiles-grid-2col { display: grid; grid-template-columns: repeat(2, 105px); gap: 0.4rem; justify-content: center; }
 .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.5rem 0.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; text-decoration: none; width: 105px; height: 75px; transition: var(--transition); }
 .feature-card i { font-size: 1rem; margin-bottom: 0.35rem; }
-.feature-card h5 { color: var(--text-main); font-size: 0.55rem; font-weight: 700; text-transform: uppercase; line-height: 1.1; }
+.feature-card h5 { color: var(--text-main); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; line-height: 1.1; }
 .feature-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-.btn-premium { font-family: var(--font-title); font-weight: 700; font-size: 0.7rem; padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
+.btn-premium { font-family: var(--font-title); font-weight: 700; font-size: 0.8rem; padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: 0.2s; }
 .btn-premium:hover { background: var(--bg-hover); color: var(--accent); }
