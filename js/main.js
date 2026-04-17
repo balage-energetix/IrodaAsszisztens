@@ -8,7 +8,7 @@ const App = {
         theme: localStorage.getItem('theme') || 'light',
         bgColor: localStorage.getItem('bg-color') || '#f5f5f5',
         location: { lat: 46.229, lon: 17.365, name: 'Nagyatád' },
-        version: "V3.43",
+        version: "V3.50",
         droneIndex: 1,
         isIdle: false,
         powerAlert: false
@@ -53,8 +53,8 @@ const App = {
             const clockEl = document.getElementById('global-clock');
             if (clockEl) {
                 clockEl.innerHTML = `
-                    <div class="clock-time" style="color:var(--accent-purple); font-family:monospace; font-weight:800; font-size:1.1rem;">${now.toLocaleTimeString('hu-HU')}</div>
-                    <div class="clock-date" style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">${now.toLocaleDateString('hu-HU')}, ${days[now.getDay()]}</div>
+                    <div class="clock-time" style="color:var(--text-main); font-family:monospace; font-weight:700; font-size:1.1rem;">${now.toLocaleTimeString('hu-HU')}</div>
+                    <div class="clock-date" style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">${now.toLocaleDateString('hu-HU')}, ${days[now.getDay()]}</div>
                 `;
             }
         };
@@ -72,7 +72,7 @@ const App = {
                 const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString('hu-HU', { hour: '2-digit', minute: '2-digit' });
                 weatherEl.innerHTML = `
-        <div style="font-weight:900; font-size:1.1rem; color:var(--accent-purple); text-shadow: 0 0 8px rgba(123, 97, 255, 0.2); margin-bottom: 2px;">
+        <div style="font-weight:700; font-size:1.1rem; color:var(--text-main); margin-bottom: 2px;">
             <i class="fas fa-temperature-low" style="margin-right: 2px;"></i>${Math.round(data.current.temperature_2m)}°C
         </div>
                     <div style="font-size:0.65rem; color:var(--text-muted); font-weight:800; display: flex; align-items: center; justify-content: flex-end; gap: 6px; letter-spacing: 0.02em;">
@@ -112,10 +112,9 @@ const App = {
                 const isMatch = q !== "" && title.includes(q);
 
                 card.style.display = (q === "" || isMatch) ? 'flex' : 'none';
-
-                // Pulsing glow for hits
-                if (isMatch) card.classList.add('search-glow');
-                else card.classList.remove('search-glow');
+                
+                if (isMatch) card.style.borderColor = 'var(--accent)';
+                else card.style.borderColor = 'var(--border-color)';
             });
             // Hide empty categories
             document.querySelectorAll('.category-group').forEach(group => {
@@ -302,13 +301,7 @@ const App = {
                             datasets: [{
                                 data: pastValues,
                                 borderColor: '#7b61ff',
-                                backgroundColor: (context) => {
-                                    const ctx = context.chart.ctx;
-                                    const gradient = ctx.createLinearGradient(0, 0, 0, 35);
-                                    gradient.addColorStop(0, 'rgba(123, 97, 255, 0.2)');
-                                    gradient.addColorStop(1, 'rgba(123, 97, 255, 0)');
-                                    return gradient;
-                                },
+                                backgroundColor: 'transparent',
                                 fill: true,
                                 tension: 0.4,
                                 borderWidth: 2,
