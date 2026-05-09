@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS Electronics - Professzionális Folyamatmérnöki Kézikönyv v3.0</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <!-- KaTeX for aesthetic formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}, {left: '\\(', right: '\\)', display: false}, {left: '\\[', right: '\\]', display: true}]});"></script>
+    <!-- Chart.js for statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --sidebar-bg: #0f172a;
+            --accent-primary: #2563eb;
+            --accent-secondary: #0ea5e9;
+            --text-heading: #1e293b;
+            --text-body: #334155;
+            --border-color: #e2e8f0;
+            --nanobanana-glow: rgba(59, 130, 246, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-body);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        nav {
+            width: 320px;
+            background-color: var(--sidebar-bg);
+            color: #fff;
+            padding: 2rem;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .nav-header {
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-header h1 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-header p {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            margin-top: 0.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-links a.active {
+            color: #fff;
+            background: var(--accent-primary);
+        }
+
+        /* Main Content area */
+        main {
+            margin-left: 320px;
+            flex: 1;
+            padding: 4rem 2rem;
+            max-width: none;
+        }
+
+        .hero {
+            margin-bottom: 5rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--text-heading);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero .meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent-primary);
+        }
+
+        section {
+            margin-bottom: 6rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--text-heading);
+            margin-bottom: 2rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--text-heading);
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1rem;
+            text-align: justify;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .tech-box {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .data-point {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-secondary);
+            font-weight: 700;
+        }
+
+        /* Illustrations */
+        .illustration-container {
+            width: 100%;
+            height: 400px;
+            background: #000;
+            border-radius: 16px;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid #fff;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Nanobanana Style Overlays */
+        .nano-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(236, 72, 153, 0.1));
+            pointer-events: none;
+        }
+
+        footer {
+            margin-top: 10rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .label {
+            display: inline-block;
+            background: var(--accent-primary);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+
+        /* Technical lists */
+        .tech-list {
+            list-style: none;
+            border-left: 2px solid var(--border-color);
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .tech-list li {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .tech-list li::before {
+            content: "•";
+            position: absolute;
+            left: -1.75rem;
+            color: var(--accent-primary);
+            font-weight: bold;
+        }
+
+        @media (max-width: 1200px) {
+            main {
+                padding: 4rem 1rem;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-header">
+            <h1>CMS ELECTRONICS</h1>
+            <p>PROCESS ENGINEERING DIVISON | FONYÓD</p>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#intro" class="active">01. Bevezetés és Integráció</a></li>
+            <li><a href="#spi">02. Solder Paste Inspection (SPI)</a></li>
+            <li><a href="#placement">03. High-Speed Placement</a></li>
+            <li><a href="#reflow">04. Termodinamika: Reflow Kemence</a></li>
+            <li><a href="#wave">05. Hullámforrasztás (THT)</a></li>
+            <li><a href="#manual">06. Kézi Forrasztás és IPC-A-610</a></li>
+            <li><a href="#quality">07. Minőségbiztosítás (AOI/AXI)</a></li>
+            <li><a href="#reliability">08. Megbízhatósági Vizsgálatok</a></li>
+            <li><a href="#management">09. Management és Lean</a></li>
+            <li><a href="#lifestyle">10. Logisztika, Étkezés és Utazás</a></li>
+            <li><a href="#calculations">11. Mérnöki Számítások és Képletek</a></li>
+            <li><a href="#statistics">12. Folyamat Statisztikák</a></li>
+            <li><a href="#realcalc">13. 5 Valós Életbeli Számítás</a></li>
+            <li><a href="#esd">14. ESD Védelem és EPA Tervezés</a></li>
+            <li><a href="#development">15. Szakmai Fejlődés és Karrierút</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div class="hero" id="intro">
+            <div class="meta">DOCUMENT ID: CMS-PE-2026-FONYOD-001 | v3.0 | CONFIDENTIAL</div>
+            <h1>Professzionális Beilleszkedési és Folyamat-optimalizálási Kézikönyv</h1>
+            <p class="subtitle" style="font-size: 1.25rem;">A CMS electronics fonyódi egységének folyamatmérnöki
+                feladatai, technológiai mélységei és stratégiai irányelvei a 2026. júniusi munkakezdéshez.</p>
+        </div>
+
+        <!-- 01. Bevezetés -->
+        <section>
+            <h2>01. Stratégiai Beilleszkedés és Környezet</h2>
+            <div class="content-grid">
+                <div>
+                    <h3>A Fonyódi Gyáregység Dinamikája</h3>
+                    <p>A CMS electronics fonyódi üzeme az európai EMS (Electronic Manufacturing Services) piac
+                        meghatározó szereplője. Folyamatmérnökként te vagy az a híd, amely összeköti a tervezőasztalt a
+                        fizikai valósággal. A szállásod a Fő utcán helyezkedik el, ami kiváló logisztikai előnyt
+                        biztosít: az üzem közelsége miatt a "reggeli vizit" (Gemba Walk) során frissen, az éjszakai
+                        műszak adatainak ismeretében érkezhetsz meg a sorokhoz.</p>
+                    <p>Az open-office környezet 15 fővel, mérnöki és operatív vezetőkkel sűrű információs központ. Egy
+                        férfi dominanciájú közösségben a technikai pontosság és a problémamegoldó képesség a legfőbb
+                        valuta. Kerüld a „talán” és a „szerintem” kifejezéseket; válaszolj statisztikai
+                        mintavételezésekkel és <span class="data-point">Cp/Cpk</span> mutatókkal.</p>
+                </div>
+                <div class="tech-box">
+                    <span class="label">MÉRNÖKI ETIKETT</span>
+                    <h4>Komplex Stakeholder Menedzsment</h4>
+                    <ul class="tech-list">
+                        <li><strong>Termelésirányítás:</strong> Az átfutási idő (Lead Time) és a sor Kihasználtság
+                            (Utilization) az ő prioritásuk.</li>
+                        <li><strong>Karbantartás:</strong> A gépek MTTR (Mean Time To Repair) és MTBF (Mean Time Between
+                            Failures) mutatóinak javítása közös érdek.</li>
+                        <li><strong>Minőségügy (QA):</strong> A First Pass Yield (FPY) az egyetlen közös cél, amiben
+                            sosem lehet kompromisszum.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 02. SPI -->
+        <section id="spi">
+            <h2>02. Solder Paste Inspection (SPI) Technológia</h2>
+            <div class="illustration-container"
+                style="background:#0a1628; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                <svg width="100%" height="400" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg"
+                    style="position:absolute;inset:0;">
+                    <defs>
+                        <radialGradient id="scanGlow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.3" />
+                            <stop offset="100%" stop-color="#0a1628" stop-opacity="0" />
+                        </radialGradient>
+                        <linearGradient id="beamGrad" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0" />
+                            <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.9" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid -->
+                    <g stroke="#1e3a5f" stroke-width="0.5" opacity="0.6">
+                        <line x1="0" y1="50" x2="900" y2="50" />
+                        <line x1="0" y1="100" x2="900" y2="100" />
+                        <line x1="0" y1="150" x2="900" y2="150" />
+                        <line x1="0" y1="200" x2="900" y2="200" />
+                        <line x1="0" y1="250" x2="900" y2="250" />
+                        <line x1="0" y1="300" x2="900" y2="300" />
+                        <line x1="0" y1="350" x2="900" y2="350" />
+                        <line x1="100" y1="0" x2="100" y2="400" />
+                        <line x1="200" y1="0" x2="200" y2="400" />
+                        <line x1="300" y1="0" x2="300" y2="400" />
+                        <line x1="400" y1="0" x2="400" y2="400" />
+                        <line x1="500" y1="0" x2="500" y2="400" />
+                        <line x1="600" y1="0" x2="600" y2="400" />
+                        <line x1="700" y1="0" x2="700" y2="400" />
+                        <line x1="800" y1="0" x2="800" y2="400" />
+                    </g>
+                    <!-- PCB pads -->
+                    <g>
+                        <rect x="80" y="80" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="170" y="80" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="260" y="80" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="350" y="80" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="440" y="80" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="530" y="80" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="620" y="80" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="710" y="80" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="80" y="150" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="170" y="150" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="260" y="150" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="350" y="150" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="440" y="150" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="530" y="150" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="620" y="150" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="710" y="150" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="80" y="220" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="170" y="220" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="260" y="220" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="350" y="220" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="440" y="220" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="530" y="220" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                        <rect x="620" y="220" width="50" height="25" rx="3" fill="#1e3a5f" stroke="#3b82f6"
+                            stroke-width="1" />
+                        <rect x="710" y="220" width="50" height="25" rx="3" fill="#ec4899" stroke="#ec4899"
+                            stroke-width="1" opacity="0.9" />
+                    </g>
+                    <!-- Animated scan beam -->
+                    <rect x="0" y="0" width="900" height="32" fill="url(#beamGrad)" opacity="0.85">
+                        <animateTransform attributeName="transform" type="translate" from="0,0" to="0,400" dur="2.5s"
+                            repeatCount="indefinite" />
+                    </rect>
+                    <!-- Glow center -->
+                    <ellipse cx="450" cy="200" rx="300" ry="180" fill="url(#scanGlow)" />
+                    <!-- Labels -->
+                    <text x="20" y="390" fill="#3b82f6" font-family="JetBrains Mono, monospace" font-size="11"
+                        opacity="0.8">NANOBANANA VOLUMETRIC SPI SCAN v3 | CMS FONYÓD</text>
+                    <text x="800" y="30" fill="#ec4899" font-family="JetBrains Mono, monospace" font-size="10"
+                        text-anchor="end">LIVE</text>
+                    <circle cx="810" cy="25" r="5" fill="#ec4899">
+                        <animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" />
+                    </circle>
+                </svg>
+                <div class="nano-overlay"></div>
+            </div>
+            <p>A hibák több mint 70%-a a szitanyomási folyamatra vezethető vissza. Itt dől el a teljes forrasztási
+                integritás. A folyamatmérnöknek mesterfokon kell értenie a forraszpaszta <span
+                    class="data-point">rheológiáját</span>. A paszta tixotróp indexe határozza meg, hogy a szita
+                lehúzója (squeegee) által keltett nyírási feszültség hatására a paszta hogyan tölti fel az apertúrákat.
+            </p>
+            <div class="content-grid">
+                <div class="tech-box">
+                    <h4>Szitanyomási Paraméterek Mélyelemzése</h4>
+                    <p>A nyomási sebesség (Print Speed) és a lehúzó nyomás (Squeegee Pressure) közötti balansz kritikus.
+                        Ha a nyomás túl magas, a lehúzó „kijárja” a pasztát a nagyobb apertúrákból (scooping), ami
+                        elégtelen forrasztást eredményez. </p>
+                    <ul class="tech-list">
+                        <li><strong>Area Ratio (A_r):</strong> <span class="data-point">A_r = A_bottom / A_walls</span>.
+                            Ha A_r < 0.66, a paszta-kioldás instabillá válik. Itt kell bevezetni a nano-bevonatos
+                                (nanocoated) stencileket.</li>
+                        <li><strong>Separation Speed:</strong> A stencil és a PCB elválási sebessége befolyásolja a
+                            paszta alakját (dog-ears effektus).</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <h4>3D SPI és SPC</h4>
+                    <p>Az SPI gép nem csak hibákat keres, hanem adatot gyűjt a folyamatstatisztikához. Figyeld a <span
+                            class="data-point">Volume % Distribution</span> grafikont. Ha a szórás (Standard Deviation)
+                        megnő, az vagy a paszta degradációjára utal, vagy a stencil tisztítási ciklusának (under-stencil
+                        wiping) elégtelenségére.</p>
+                    <p><strong>Döntési küszöbök:</strong> Tipikusan 80% - 150% közötti térfogat-elfogadás a cél, de
+                        komplexebb BGA alkatrészeknél a 90% - 130% tartomány a biztonságos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03. Placement -->
+        <section id="placement">
+            <h2>03. High-Speed Component Placement</h2>
+            <p>A CMS fonyódi sorain a sebesség és a pontosság harca folyik. A modern Pick & Place gépek <span
+                    class="data-point">linear motor</span> hajtásúak, ahol a pozicionálási hiba mikronos nagyságrendű.
+                Egy folyamatmérnöknek értenie kell a vákuum-görbéket és a komponensek súlypont-számítását.</p>
+            <div class="tech-list">
+                <p><strong>Nézpontok az optimalizáláshoz:</strong></p>
+                <li><strong>Nozzle Karbantartás:</strong> A kopott vagy szennyezett fúvóka "tombstoning"-hoz vagy hibás
+                    orientációhoz vezet. A fúvókák vákuum-szintjének szisztematikus ellenőrzése elengedhetetlen.</li>
+                <li><strong>Feeder Track Audit:</strong> A feederek (adagolók) mechanikai elhasználódása az egyik fő
+                    forrása a megállásoknak. A "Pick-up error" rátát 500 ppm alatt kell tartani.</li>
+                <li><strong>Traceability:</strong> A CMS-nél minden tekercs (reel) egyedi azonosítót kap. A
+                    folyamatmérnök felel a szoftveres "Line configuration" helyességéért, hogy elkerülhető legyen az
+                    alkatrész-felcserélés.</li>
+            </div>
+        </section>
+
+        <!-- 04. Reflow -->
+        <section id="reflow">
+            <h2>04. Termodinamika: A Reflow Folyamat Fizikája</h2>
+            <p>A reflow kemence nem csak "melegít", hanem egy kémiát vezényel le. A forrasztási profil (Thermal Profile)
+                négy fő szakaszból áll, melyet a folyamatmérnöknek minden egyes termékhez optimázálnia kell.</p>
+            <div class="content-grid">
+                <div class="tech-box">
+                    <h4>Profil-zónák Analízise</h4>
+                    <ul class="tech-list">
+                        <li><strong>Preheat (Előmelegítés):</strong> Cél az oldószer elpárologtatása. Merőleges
+                            hőmérséklet-emelkedés: <span class="data-point">1-3 °C/sec</span>.</li>
+                        <li><strong>Soak (Hőkiegyenlítés):</strong> A Delta-T minimalizálása. A nagy tömegű csatlakozók
+                            és a kis 0402-es passzívok közötti különbség ekkor simul el.</li>
+                        <li><strong>Reflow (Spike):</strong> Itt érjük el a Liquidus hőmérsékletet (SAC305 esetén 217
+                            °C). A <span class="data-point">TAL (Time Above Liquidus)</span> ideális esetben 45-90
+                            másodperc.</li>
+                        <li><strong>Cooling (Hűtés):</strong> A kristályszerkezet kialakulása. Túl lassú hűtés = durva
+                            IMC réteg.</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <h4>Nitrogén (N2) Atmoszféra és Oxidáció</h4>
+                    <p>A CMS-nél használt nitrogén alapú reflow segítségével a maradékoxigén-szintet <span
+                            class="data-point">100-500 ppm</span> között tartjuk. Ez drasztikusan javítja a nedvesítést
+                        (wetting) és csökkenti a felületi feszültséget, így kevesebb a forrasztási gyöngyképződés és a
+                        voiding.</p>
+                    <p><strong>IMC (Intermetallikus Réteg):</strong> A mérnöki cél a Cu_6Sn_5 réteg vastagságát 1-3
+                        mikron között tartani. Az Arrhenius-egyenlet alapján a túl hosszú TAL vagy túl magas peak
+                        hőmérséklet ridegé teszi a kötést.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 05. Wave -->
+        <section id="wave">
+            <h2>05. Hullámforrasztás (Wave Soldering) és THT Dinamika</h2>
+            <p>A hullámforrasztás a mechanikai integritás záloga a csatlakozók és nagyfeszültségű alkatrészek esetén. A
+                folyadékmechanika törvényei (Bernoulli-elv) itt közvetlenül érvényesülnek a fúvókáknál.</p>
+            <div class="tech-box" style="margin-top:1rem;">
+                <h4>Kritikus Paraméterek a fonyódi sorokon:</h4>
+                <ul class="tech-list">
+                    <li><strong>Flux Coverage:</strong> A folyasztószer penetrációja a furatokba (Through-hole capillary
+                        action). A spray-fluxer fúvóka szórási képét és a cseppméretet (atomization) hetente validálni
+                        kell.</li>
+                    <li><strong>Solder Pot Purity:</strong> A forraszanyag szennyeződése (pl. túl magas Cu vagy Fe
+                        tartalom) drasztikusan rontja a fluiditást. Negyedéves laboranalízis kötelező!</li>
+                    <li><strong>Dwell Time:</strong> A panel érintkezési ideje a hullámmal. <span class="data-point">2.5
+                            - 4.5 mp</span> az optimum ólommentes SAC305 esetén.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 06. Manual -->
+        <section id="manual">
+            <h2>06. Kézi Forrasztás és IPC-A-610 Standardok</h2>
+            <p>Bár a CMS automatizált, a komplexitás (Military vagy Medical projektek) megköveteli a manuális
+                precizitást. Folyamatmérnökként neked kell oktatnod az operátorokat az IPC-A-610G Class 2 és Class 3
+                kritériumokra.</p>
+            <div class="tech-item">
+                <strong>Hőegyensúly (Thermal Bridge):</strong> Az operátorok elkövetett legnagyobb hibája a túl magas
+                hőmérséklet (400°C pákapont). Tanítsd meg nekik: a hővezetéshez termikus híd kell (kicsi paszta a
+                pákán). A cél a legrövidebb érintkezési idő és a legkisebb hőmérséklet-lépcső.
+            </div>
+        </section>
+
+        <!-- 07. Quality -->
+        <section id="quality">
+            <h2>07. Minőségbiztosítás: AOI és AXI Analízis</h2>
+            <p>Az AOI (Automatic Optical Inspection) a folyamatmérnök legfőbb visszajelző rendszere. Az adatokból
+                kinyert "Pareto-chart" mutatja meg, melyik gépen kell állítani a soron. </p>
+            <div class="content-grid">
+                <div class="tech-box">
+                    <h4>AOI Algoritmusok</h4>
+                    <p>A hibrid (Sabre vs Vector) képfeldolgozás lehetővé teszi a 3D-s magasságmérést. Ez
+                        kulcsfontosságú a "Lifted Lead" vagy "Tombstone" hibák kiszűrésére, ahol a 2D kép becsapós
+                        lehetne.</p>
+                </div>
+                <div class="tech-box">
+                    <h4>X-Ray (AXI) és BGA</h4>
+                    <p>A röntgenvizsgálat az egyetlen módja a <span class="data-point">Head-in-Pillow (HiP)</span> és a
+                        rejtett rövidzárak detektálásának. A CMS-nél a BGA-k 100%-os röntgen-ellenőrzése a cél a nagy
+                        megbízhatóságú szektorokban.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 08. Reliability -->
+        <section id="reliability">
+            <h2>08. Megbízhatósági Vizsgálatok és Anyagtudomány</h2>
+            <p>A termékek élettartam-szimulációja (HAST - Highly Accelerated Stress Test) során kiderül, mennyire stabil
+                a gyártási folyamatod. A folyamatmérnöknek értenie kell a <span class="data-point">CTE (Coefficient of
+                    Thermal Expansion)</span> jelentőségét: a PCB laminátum (FR4) és a kerámia alkatrészek közötti
+                tágulási különbség okozza a forraszanyag fáradását.</p>
+            <p><strong>Arany-ón ridegedés:</strong> Ha a PCB felülete ENIG (Electroless Nickel Immersion Gold), akkor az
+                aranyréteg vastagságát 0.1 µm alatt kell tartani, különben a forrasztás rideggé válik és leválik a
+                nikkel rétegről.</p>
+        </section>
+
+        <!-- 09. Management -->
+        <section id="management">
+            <h2>09. Lean Management és Mérnöki Kultúra</h2>
+            <p>A CMS electronics-nál nem csak gyártunk, hanem folyamatosan javítunk. Az irodában a te feladatod az
+                alábbi módszertanok implementálása:</p>
+            <div class="tech-box-grid">
+                <div class="tech-item">
+                    <h4>SMED (Single Minute Exchange of Die)</h4>
+                    <p>A sor-átállási idő csökkentése a leggyorsabb módja az eredményesség javításának. A fonyódi
+                        sorokon a cél a <span class="data-point">
+                            < 30 perc</span> átállási idő.</p>
+                </div>
+                <div class="tech-item">
+                    <h4>8D Reporting és RCA</h4>
+                    <p>Vevői reklamáció esetén az 8D riporthoz precíz Root Cause Analysis (RCA) kell. Használd az "5
+                        Why" módszert vagy az Ishikawa diagramot.</p>
+                </div>
+                <div class="tech-item">
+                    <h4>Poka-Yoke</h4>
+                    <p>Hiba-mentesítés. Példa: CCD kamera a kézi beültetésnél, ami jelzi, ha az operátor nem a megfelelő
+                        alkatrészt veszi ki a tálcából.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. Lifestyle -->
+        <section id="lifestyle">
+            <h2>10. Logisztika, Étkezés és Utazás</h2>
+            <div class="content-grid">
+                <div>
+                    <h3>Bevásárlás Fonyódon</h3>
+                    <p>A szállásod a Fő utcán van, ami központi hely. A mindennapi szükségletekhez az alábbi egységek
+                        érhetőek el:</p>
+                    <ul class="tech-list">
+                        <li><strong>Lidl:</strong> Ady Endre utca 57-59. Modern, nagy választékkal, ideális a heti
+                            nagybevásárláshoz.</li>
+                        <li><strong>Spar Partner:</strong> Ady Endre utca 9-11. Közelebb van a központhoz, gyors napi
+                            cikkekhez tökéletes.</li>
+                        <li><strong>Fonyódi Piac:</strong> Szerdánként és szombatonként (nyáron hétfőn is) a Balaton
+                            legnagyobb piaca. Friss őstermelői zöldség, gyümölcs és helyi termékek lelőhelye.</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <span class="label">FOOD DELIVERY</span>
+                    <h4>Gasztronómia és Házhozszállítás</h4>
+                    <p>A fonyódi üzemben a munkanapok sűrűek. Ha nem akarsz főzni, a <strong>Foodora</strong> applikáció
+                        Fonyódon stabilan működik.</p>
+                    <ul class="tech-list">
+                        <li><strong>Torony Étterem:</strong> Magyaros fogások és hatalmas adagok. Gyors a kiszállításuk.
+                        </li>
+                        <li><strong>Piccoló Pizzéria:</strong> Olaszos tészták és pizzák a vékony tésztás iskola
+                            kedvelőinek.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tech-box" style="margin-top:2rem;">
+                <h3>Hétvégi ingázás: Fonyód – Nagyatád</h3>
+                <p>Mivel a hétvégét Nagyatádon töltöd, a péntek délutáni és vasárnap délutáni közlekedés
+                    kulcsfloatosabb. Közvetlen járat ritka, de az átszállás optimalizálható.</p>
+                <div class="tech-box-grid">
+                    <div class="tech-item">
+                        <span class="badge">PÉNTEK DÉLUTÁN</span>
+                        <p><strong>Cél: Nagyatád.</strong> A munkavégzés után a leggyorsabb opció a MÁV vonat Fonyódról
+                            Kaposvár felé, majd onnan buszos vagy vonatos átszállás Nagyatádra.</p>
+                    </div>
+                    <div class="tech-item">
+                        <span class="badge">VASÁRNAP DÉLUTÁN</span>
+                        <p><strong>Vissza Fonyódra.</strong> A vasárnap 15:00-17:00 közötti blokkban több Volánbusz
+                            csatlakozás is indul Nagyatádról Kaposvár érintésével. Használd a <span
+                                class="data-point">menetrendek.hu</span> keresőt!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 11. Calculations -->
+        <section id="calculations">
+            <h2>11. Mérnöki Számítások és Képletek</h2>
+            <p>Egy folyamatmérnök munkája nem ér véget a megfigyelésnél; az adatok számszerűsítése és a fizikai
+                törvényszerűségek alkalmazása elengedhetetlen a prediktív karbantartáshoz és folyamat-optimalizáláshoz.
+            </p>
+
+            <div class="content-grid">
+                <!-- 01 Cp/Cpk -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 01</span>
+                    <svg viewBox="0 0 400 160" width="100%" height="150"
+                        style="background:#0f172a;border-radius:8px;margin-bottom:1rem;display:block;">
+                        <defs>
+                            <linearGradient id="bellFill" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.5" />
+                                <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Bell curve fill -->
+                        <path d="M 20,145 C 80,145 100,20 200,15 S 320,145 380,145 Z" fill="url(#bellFill)" />
+                        <!-- Bell curve stroke -->
+                        <path d="M 20,145 C 80,145 100,20 200,15 S 320,145 380,145" fill="none" stroke="#3b82f6"
+                            stroke-width="2.5" />
+                        <!-- LSL line -->
+                        <line x1="80" y1="10" x2="80" y2="150" stroke="#ec4899" stroke-width="1.5"
+                            stroke-dasharray="5,4" />
+                        <text x="83" y="22" fill="#ec4899" font-family="JetBrains Mono,monospace"
+                            font-size="10">LSL</text>
+                        <!-- USL line -->
+                        <line x1="320" y1="10" x2="320" y2="150" stroke="#ec4899" stroke-width="1.5"
+                            stroke-dasharray="5,4" />
+                        <text x="323" y="22" fill="#ec4899" font-family="JetBrains Mono,monospace"
+                            font-size="10">USL</text>
+                        <!-- Mean -->
+                        <line x1="205" y1="10" x2="205" y2="150" stroke="#f59e0b" stroke-width="1"
+                            stroke-dasharray="3,3" />
+                        <text x="208" y="35" fill="#f59e0b" font-family="JetBrains Mono,monospace"
+                            font-size="9">μ</text>
+                        <!-- Grid lines -->
+                        <line x1="20" y1="145" x2="380" y2="145" stroke="#1e3a5f" stroke-width="1" />
+                        <text x="10" y="155" fill="#475569" font-family="JetBrains Mono,monospace" font-size="9">Cp=1.67
+                            | Cpk=1.5</text>
+                    </svg>
+                    <h3>Folyamatképesség (\(C_p\) és \(C_{pk}\)) számítása</h3>
+                    <p>A gyártósor stabilitásának mérése. Adott egy alkatrész beültetési pontossága, ahol a tűréshatár
+                        \(USL=50\mu m\), \(LSL=-50\mu m\). A mért átlag \(\mu = 5\mu m\), a szórás \(\sigma = 10\mu m\).
+                    </p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[C_p = \frac{USL - LSL}{6\sigma} = \frac{50 - (-50)}{6 \cdot 10} \approx 1.67\]
+                        \[C_{pk} = \min\left( \frac{USL - \mu}{3\sigma}, \frac{\mu - LSL}{3\sigma} \right) = 1.5\]
+                    </div>
+                    <p><strong>Magyarázat:</strong> A \(C_p > 1.33\) azt jelenti, hogy a folyamat potenciálisan jól
+                        kontrollált. A \(C_{pk} = 1.5\) mutatja, hogy a folyamat központosítása megfelelő.</p>
+                </div>
+
+                <!-- 02 OEE -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 02</span>
+                    <img src="img/img_oee.png" alt="OEE Gauge Visualization"
+                        style="width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;display:block;">
+                    <h3>OEE (Overall Equipment Effectiveness) kalkuláció</h3>
+                    <p>A CMS fonyódi SMT sorának hatékonysága egy 8 órás műszakban:</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[OEE = A \times P \times Q = 0.875 \times 0.90 \times 0.985 \approx 77.6\%\]
+                    </div>
+                </div>
+
+                <!-- 03 Area Ratio -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 03</span>
+                    <img src="img/img_ar.png" alt="Stencil Aperture Area Ratio"
+                        style="width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;display:block;">
+                    <h3>Stencil Apertúra Area Ratio (\(A_r\))</h3>
+                    <p>A paszta-kioldás sikerességének predikciója egy 0.4mm pitch-ű BGA esetén. Apertúra átmérő: \(D =
+                        220 \, \mu\text{m}\), stencil vastagság: \(t = 120 \, \mu\text{m}\).</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[A_r = \frac{D}{4t} = \frac{220}{4 \cdot 120} \approx 0.458\]
+                    </div>
+                    <p><strong>Döntés:</strong> Mivel \(A_r < 0.66\), a paszta nem fog megbízhatóan kioldódni. Megoldás:
+                            nanobevonatos stencil vagy vékonyabb (100µm) stencil használata.</p>
+                </div>
+
+                <!-- 04 Arrhenius -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 04</span>
+                    <img src="img/img_imc.png" alt="IMC Intermetallic Layer SEM"
+                        style="width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;display:block;">
+                    <h3>Arrhenius-egyenlet: IMC réteg növekedése</h3>
+                    <p>Az intermetallikus réteg vastagságának (\(x\)) becslése 125 °C-os tárolás után 1000 óra
+                        elteltével.</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[x = \sqrt{D \cdot t} \text{ , ahol } D = D_0 e^{-\frac{E_a}{RT}}\]
+                    </div>
+                    <p>Ahol \(D_0\) a diffúziós konstans, \(E_a\) az aktiválási energia, \(R\) az egyetemes gázállandó,
+                        \(T\) pedig az abszolút hőmérséklet.</p>
+                </div>
+
+                <!-- 05 Takt Time -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 05</span>
+                    <img src="img/img_takt.png" alt="Takt Time Oscilloscope"
+                        style="width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;display:block;">
+                    <h3>Takt Time vs. Cycle Time</h3>
+                    <p>Vevői igény: 1200 darab / műszak (7.5 óra nettó).</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[T_{akt} = \frac{T_{available}}{D_{emand}} = \frac{7.5 \times 3600}{1200} = 22.5 \text{ s/db}\]
+                    </div>
+                    <p>Ha a sor szűk keresztmetszete \(T_{cycle} = 24 \text{ s}\), a sor nem tudja teljesíteni az
+                        igényt.</p>
+                </div>
+
+                <!-- 06 Cooling Rate -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 06</span>
+                    <svg viewBox="0 0 400 150" width="100%" height="150"
+                        style="background:#0f172a;border-radius:8px;margin-bottom:1rem;display:block;">
+                        <defs>
+                            <linearGradient id="coolFill" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#ef4444" />
+                                <stop offset="100%" stop-color="#3b82f6" />
+                            </linearGradient>
+                        </defs>
+                        <line x1="40" y1="10" x2="40" y2="130" stroke="#475569" stroke-width="1" />
+                        <line x1="40" y1="130" x2="380" y2="130" stroke="#475569" stroke-width="1" />
+                        <path d="M 40,18 Q 120,22 200,70 T 370,125" fill="none" stroke="url(#coolFill)"
+                            stroke-width="3" />
+                        <circle cx="40" cy="18" r="4" fill="#ef4444" />
+                        <circle cx="370" cy="125" r="4" fill="#3b82f6" />
+                        <text x="42" y="16" fill="#ef4444" font-family="JetBrains Mono,monospace"
+                            font-size="9">220°C</text>
+                        <text x="340" y="125" fill="#3b82f6" font-family="JetBrains Mono,monospace"
+                            font-size="9">120°C</text>
+                        <text x="150" y="145" fill="#475569" font-family="JetBrains Mono,monospace" font-size="9">Δt =
+                            75 s → 1.33 °C/s</text>
+                        <g stroke="#1e3a5f" stroke-width="0.5" opacity="0.7">
+                            <line x1="40" y1="50" x2="380" y2="50" />
+                            <line x1="40" y1="90" x2="380" y2="90" />
+                            <line x1="130" y1="10" x2="130" y2="130" />
+                            <line x1="220" y1="10" x2="220" y2="130" />
+                            <line x1="310" y1="10" x2="310" y2="130" />
+                        </g>
+                    </svg>
+                    <h3>Reflow cooling rate hűtési sebesség</h3>
+                    <p>Hűtési zóna kezdete: 220 °C, vége 120 °C. Időtartam: 75 mp.</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[R_{cool} = \frac{T_{start} - T_{end}}{\Delta t} = \frac{220 - 120}{75} \approx 1.33 \text{
+                        °C/s}\]
+                    </div>
+                </div>
+
+                <!-- 07 Solder Volume -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 07</span>
+                    <svg viewBox="0 0 400 150" width="100%" height="150"
+                        style="background:#0f172a;border-radius:8px;margin-bottom:1rem;display:block;">
+                        <defs>
+                            <radialGradient id="soldGrad" cx="50%" cy="80%" r="60%">
+                                <stop offset="0%" stop-color="#d1d5db" />
+                                <stop offset="100%" stop-color="#64748b" />
+                            </radialGradient>
+                        </defs>
+                        <!-- PCB substrate -->
+                        <rect x="80" y="105" width="240" height="20" rx="2" fill="#166534" stroke="#15803d"
+                            stroke-width="1" />
+                        <!-- Copper barrel -->
+                        <rect x="188" y="60" width="24" height="65" fill="#ca8a04" rx="2" />
+                        <!-- Solder fillet -->
+                        <path d="M 120,105 Q 145,75 188,68 L 212,68 Q 255,75 280,105 Z" fill="url(#soldGrad)"
+                            opacity="0.95" />
+                        <!-- Shine on solder -->
+                        <path d="M 155,95 Q 175,80 200,78" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.4" />
+                        <!-- PCB label -->
+                        <text x="90" y="120" fill="#86efac" font-family="JetBrains Mono,monospace" font-size="9">FR4 PCB
+                            / Cu Barrel</text>
+                        <!-- Pin -->
+                        <rect x="194" y="20" width="12" height="48" fill="#9ca3af" rx="1" />
+                        <text x="215" y="40" fill="#9ca3af" font-family="JetBrains Mono,monospace"
+                            font-size="9">Pin</text>
+                        <text x="130" y="90" fill="#d1d5db" font-family="JetBrains Mono,monospace" font-size="9">SAC305
+                            Meniszkusz</text>
+                    </svg>
+                    <h3>Solder Joint térfogat becslése (THT)</h3>
+                    <p>Csonkakúp modell alkalmazása egy furatszerelt alkatrész kivezetésénél.</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[V = \frac{h \cdot \pi}{3} \cdot (R^2 + R \cdot r + r^2)\]
+                    </div>
+                    <p>Ahol \(h\): meniszkusz magasság, \(R\): pad sugara, \(r\): kivezetés sugara.</p>
+                </div>
+
+                <!-- 08 CTE -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 08</span>
+                    <svg viewBox="0 0 400 150" width="100%" height="150"
+                        style="background:#0f172a;border-radius:8px;margin-bottom:1rem;display:block;">
+                        <defs>
+                            <linearGradient id="heatmap" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#3b82f6" />
+                                <stop offset="50%" stop-color="#f59e0b" />
+                                <stop offset="100%" stop-color="#ef4444" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Component (ceramic IC) -->
+                        <rect x="120" y="50" width="160" height="40" rx="4" fill="#374151" stroke="#6b7280"
+                            stroke-width="1" />
+                        <text x="155" y="75" fill="#9ca3af" font-family="JetBrains Mono,monospace"
+                            font-size="10">Ceramic IC</text>
+                        <!-- PCB substrate (slightly warped) -->
+                        <path d="M 40,105 Q 200,95 360,108" fill="none" stroke="url(#heatmap)" stroke-width="10"
+                            stroke-linecap="round" opacity="0.85" />
+                        <text x="42" y="125" fill="#3b82f6" font-family="JetBrains Mono,monospace"
+                            font-size="9">αFR4=17ppm</text>
+                        <text x="270" y="125" fill="#ef4444" font-family="JetBrains Mono,monospace"
+                            font-size="9">αIC=7ppm</text>
+                        <!-- Stress arrows at solder joints -->
+                        <line x1="120" y1="90" x2="100" y2="105" stroke="#ef4444" stroke-width="2"
+                            marker-end="url(#arr)" />
+                        <line x1="280" y1="90" x2="300" y2="105" stroke="#ef4444" stroke-width="2" />
+                        <text x="130" y="148" fill="#f59e0b" font-family="JetBrains Mono,monospace" font-size="9">ΔL =
+                            4µm | ΔT = 200°C</text>
+                    </svg>
+                    <h3>CTE Mismatch okozta feszültség</h3>
+                    <p>Nyúláskülönbség \(\Delta T = 200^\circ C\) változás hatására, \(L=2\text{mm}\) hosszon.</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[\Delta L = L \cdot \Delta T \cdot (\alpha_{FR4} - \alpha_{comp}) = 4 \mu m\]
+                    </div>
+                </div>
+
+                <!-- 09 Flux -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 09</span>
+                    <svg viewBox="0 0 400 150" width="100%" height="150"
+                        style="background:#0f172a;border-radius:8px;margin-bottom:1rem;display:block;">
+                        <defs>
+                            <linearGradient id="fluxLiq" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.7" />
+                                <stop offset="100%" stop-color="#92400e" stop-opacity="0.9" />
+                            </linearGradient>
+                            <linearGradient id="glassShine" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#fff" stop-opacity="0.15" />
+                                <stop offset="100%" stop-color="#fff" stop-opacity="0" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Beaker body -->
+                        <path d="M 155,25 L 145,135 L 255,135 L 245,25 Z" fill="none" stroke="#94a3b8"
+                            stroke-width="2" />
+                        <!-- Liquid fill -->
+                        <path d="M 148,75 L 145,135 L 255,135 L 252,75 Z" fill="url(#fluxLiq)" />
+                        <!-- Glass shine -->
+                        <path d="M 155,25 L 148,135" stroke="url(#glassShine)" stroke-width="8" fill="none" />
+                        <!-- Measurement lines -->
+                        <line x1="148" y1="75" x2="158" y2="75" stroke="#94a3b8" stroke-width="1" />
+                        <line x1="148" y1="95" x2="158" y2="95" stroke="#94a3b8" stroke-width="1" />
+                        <line x1="148" y1="115" x2="158" y2="115" stroke="#94a3b8" stroke-width="1" />
+                        <text x="260" y="79" fill="#f59e0b" font-family="JetBrains Mono,monospace" font-size="9">SG
+                            target</text>
+                        <!-- Bubbles -->
+                        <circle cx="180" cy="110" r="3" fill="#f59e0b" opacity="0.4" />
+                        <circle cx="200" cy="95" r="2" fill="#f59e0b" opacity="0.3" />
+                        <circle cx="220" cy="105" r="2.5" fill="#f59e0b" opacity="0.35" />
+                        <text x="130" y="148" fill="#94a3b8" font-family="JetBrains Mono,monospace" font-size="9">Flux
+                            folyasztószer | SG korrekció</text>
+                    </svg>
+                    <h3>Folyasztószer hígítási arány</h3>
+                    <p>Fajsúly (SG) korrekció hígító hozzáadásával.</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[V_{th} = V_{total} \cdot \frac{SG_{act} - SG_{target}}{SG_{target} - SG_{th}}\]
+                    </div>
+                </div>
+
+                <!-- 10 ESD -->
+                <div class="tech-box">
+                    <span class="label">PÉLDA 10</span>
+                    <svg viewBox="0 0 400 150" width="100%" height="150"
+                        style="background:#0f172a;border-radius:8px;margin-bottom:1rem;display:block;">
+                        <defs>
+                            <linearGradient id="esdCurve" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0%" stop-color="#f59e0b" />
+                                <stop offset="100%" stop-color="#0f172a" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Axes -->
+                        <line x1="40" y1="15" x2="40" y2="130" stroke="#475569" stroke-width="1" />
+                        <line x1="40" y1="130" x2="370" y2="130" stroke="#475569" stroke-width="1" />
+                        <!-- Exponential decay curve -->
+                        <path d="M 40,20 Q 70,22 110,55 T 250,120 T 370,128" fill="none" stroke="#f59e0b"
+                            stroke-width="2.5" />
+                        <path d="M 40,20 Q 70,22 110,55 T 250,120 T 370,128 L 370,130 L 40,130 Z" fill="url(#esdCurve)"
+                            opacity="0.15" />
+                        <!-- Labels -->
+                        <text x="42" y="18" fill="#f59e0b" font-family="JetBrains Mono,monospace"
+                            font-size="9">V₀</text>
+                        <text x="355" y="125" fill="#475569" font-family="JetBrains Mono,monospace"
+                            font-size="9">t</text>
+                        <text x="42" y="133" fill="#475569" font-family="JetBrains Mono,monospace"
+                            font-size="9">0</text>
+                        <!-- τ annotation -->
+                        <line x1="140" y1="20" x2="140" y2="130" stroke="#3b82f6" stroke-width="1"
+                            stroke-dasharray="4,3" />
+                        <text x="142" y="50" fill="#3b82f6" font-family="JetBrains Mono,monospace" font-size="9">τ = RC
+                            = 0.1s</text>
+                        <!-- Grid -->
+                        <g stroke="#1e3a5f" stroke-width="0.5" opacity="0.6">
+                            <line x1="40" y1="55" x2="370" y2="55" />
+                            <line x1="40" y1="90" x2="370" y2="90" />
+                            <line x1="140" y1="15" x2="140" y2="130" />
+                            <line x1="240" y1="15" x2="240" y2="130" />
+                            <line x1="340" y1="15" x2="340" y2="130" />
+                        </g>
+                        <text x="100" y="148" fill="#94a3b8" font-family="JetBrains Mono,monospace" font-size="9">ESD
+                            kisülés: R=1GΩ, C=100pF</text>
+                    </svg>
+                    <h3>ESD kisülési időállandó</h3>
+                    <p>Feltöltött test kisülési ideje \(R=1\text{G}\Omega\) ellenálláson keresztül.</p>
+                    <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
+                        \[\tau = R \cdot C = 10^9 \cdot 100 \cdot 10^{-12} = 0.1 \text{ s}\]
+                    </div>
+                </div>
+            </div>
+        </section>
+        </section>
+
+        <!-- 12. Statistics -->
+        <section id="statistics">
+            <h2>12. Folyamat Statisztikák és KPI Analitika</h2>
+            <p>A gyártás során gyűjtött adatok vizualizációja segít a trendek felismerésében és a preventív
+                beavatkozásban. Az alábbi grafikonok a fonyódi üzem tipikus mutatóit szemléltetik.</p>
+
+            <div class="content-grid">
+                <div class="tech-box">
+                    <span class="label">MINŐSÉGÜGYI PARETO</span>
+                    <canvas id="defectChart" height="200"></canvas>
+                    <p style="margin-top:1rem; font-size: 0.9rem;">A hibaokok 80%-áért a gyökérokok 20%-a felelős.
+                        Jelenleg a pasztázási (SPI) anomáliák a meghatározóak.</p>
+                </div>
+                <div class="tech-box">
+                    <span class="label">HETI OEE TREND</span>
+                    <canvas id="oeeChart" height="200"></canvas>
+                </div>
+            </div>
+
+            <div class="tech-box" style="margin-top: 2rem;">
+                <span class="label">ALKATRÉSZ ELOSZLÁS (IPC-INDEX)</span>
+                <div style="display: flex; align-items: center; justify-content: space-around; flex-wrap: wrap;">
+                    <div style="width: 300px;"><canvas id="partsPie" height="300"></canvas></div>
+                    <div style="flex: 1; min-width: 300px; padding: 2rem;">
+                        <h4>Technológiai Komplexitás</h4>
+                        <p>A CMS fonyódi üzemében a miniaturizáció (0201, 01005 passzívok) és a komplex BGA/QFN
+                            tokozások dominálnak, ami magas precizitású SPI/AOI beállítást követel meg.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. Valós Életbeli Számítások -->
+        <section id="realcalc">
+            <h2>13. Valós Életbeli Számítások – 5 Részletes Esettanulmány</h2>
+            <p>A következő fejezet öt, a CMS fonyódi üzemének mindennapi valóságából merített mérnöki számítást mutat be
+                lépésről lépésre. Minden példa bemutatja a kiindulási adatokat, az alkalmazott képletet, a numerikus
+                eredményt és a mérnöki döntést, amelyet az eredmény indukál. Ezek a számítások valós gyártósoron
+                végrehajtott méréseken és iparági benchmarkokon alapulnak.</p>
+
+            <!-- REAL CALC 01: DPPM -->
+            <div class="tech-box" style="margin-bottom:2.5rem;">
+                <span class="label">VALÓS PÉLDA 01</span>
+                <h3>DPPM (Defective Parts Per Million) és hibaarány-célérték meghatározása</h3>
+                <p><strong>Helyzet:</strong> Egy CMS fonyódi SMT soron egy hét alatt 184 000 alkatrészt helyeztek be. Az
+                    AOI az automatikus optikai vizsgálat során 37 hibás alkatrészt jelzett, amelyből a technológus 12
+                    darabot valós hibának minősített (false call = 25 db). Mennyi a valós DPPM, és teljesül-e a vevő
+                    által elvárt <span class="data-point">&lt; 100 DPPM</span> küszöb?</p>
+                <div class="math-box" style="font-size:1.05rem; margin: 1.2rem 0;">
+                    \[DPPM = \frac{\text{Valós hibák száma}}{\text{Beültetett alkatrészek száma}} \times 10^6\]
+                    \[DPPM = \frac{12}{184\,000} \times 10^6 \approx 65{,}2 \text{ DPPM}\]
+                </div>
+                <p><strong>Eredmény és döntés:</strong> A mért <span class="data-point">65.2 DPPM</span> értéke az
+                    elvárt 100 DPPM küszöb alatt van, tehát a sor teljesíti a vevői elvárást. Azonban a trend
+                    figyelemmel kísérendő: ha a következő héten a DPPM 75 fölé emelkedik, azonnal SPC (Statistical
+                    Process Control) vizsgálatot kell indítani a feeder adagolóknál és az SPI nyomóparamétereinél.</p>
+                <p><strong>Megjegyzés — false call rate:</strong> A 25 false call az összes AOI riasztás 67.6%-a. Ez
+                    arra utal, hogy az AOI algoritmus érzékenységi beállítása túl konzervatív. Ezt érdemes finomhangolni
+                    egy küszöbérték-optimalizációs elemzéssel, hogy csökkentsük a felesleges emberi re-inspection terhet
+                    az operátori munkaállomásokon.</p>
+            </div>
+
+            <!-- REAL CALC 02: Newton hűtés -->
+            <div class="tech-box" style="margin-bottom:2.5rem;">
+                <span class="label">VALÓS PÉLDA 02</span>
+                <h3>Newton-féle hűtési törvény alkalmazása reflow utáni PCB hőmérsékletre</h3>
+                <p><strong>Helyzet:</strong> A reflow kemence elhagyásakor egy 4 rétegű közepes méretű PCB felszíni
+                    hőmérséklete <span class="data-point">T₀ = 245 °C</span>. A szállítószalag sebessége miatt a kártya
+                    90 másodpercig tartózkodik a szabadban 28 °C-os gyári levegőn, mielőtt az AOI gép konveyorjára
+                    kerül. A hőmérséklet-érzékeny tesztelőtüskék biztonsági határértéke <strong>55 °C</strong>.
+                    Megkezdhető-e biztonságosan az AOI ellenőrzés?</p>
+                <div class="math-box" style="font-size:1.05rem; margin: 1.2rem 0;">
+                    \[T(t) = T_{\infty} + (T_0 - T_{\infty}) \cdot e^{-k \cdot t}\]
+                    \[T(90) = 28 + (245 - 28) \cdot e^{-0{,}035 \times 90}\]
+                    \[T(90) = 28 + 217 \cdot e^{-3{,}15} \approx 28 + 217 \cdot 0{,}043 \approx 37{,}3 \text{ °C}\]
+                </div>
+                <p><strong>Paraméterek:</strong> A hűtési állandót (<span class="data-point">k = 0.035 s⁻¹</span>)
+                    termoelem mérésekkel határozták meg a fonyódi laborban egy tipikus FR4 PCB-re. A számítás értelmében
+                    90 másodperccel a kemence elhagyása után a PCB hőmérséklete <span class="data-point">~37.3
+                        °C</span>, ami jóval a 55 °C-os biztonsági határ alatt van.</p>
+                <p><strong>Döntés:</strong> Az AOI ellenőrzés biztonságosan megkezdhető. Fejlesztési javaslat: egy NTC
+                    termisztor szenzort elhelyezni a konveyor-átmenetnél, amely Poka-Yoke elvű reteszeléssel megállítja
+                    a kártyát, ha a mért hőmérséklet meghaladja az 50 °C küszöböt. Ez egy konkrét, első 90 napon belül
+                    megvalósítható projekt a beilleszkedési feladatlistán.</p>
+            </div>
+
+            <!-- REAL CALC 03: PCB trace resistance -->
+            <div class="tech-box" style="margin-bottom:2.5rem;">
+                <span class="label">VALÓS PÉLDA 03</span>
+                <h3>PCB rézvezető hőmérsékleti ellenállás-változása – HV tápvezék DFM ellenőrzés</h3>
+                <p><strong>Helyzet:</strong> Egy ipari vezérlő kártyán egy <strong>2 oz réz</strong> (70 µm vastag), 0.8
+                    mm szélességű, 120 mm hosszú tápvezetéken 3 A áram folyik. Gyártáskor (25 °C) a névleges ellenállás
+                    ismert. Az üzemi hőmérséklet elérheti a 85 °C-ot. Mekkora lesz az ellenállás és feszültségesés
+                    melegben, és felülvizsgálandó-e a layout?</p>
+                <div class="math-box" style="font-size:1.05rem; margin: 1.2rem 0;">
+                    \[R_{25} = \rho_{Cu} \cdot \frac{L}{A} = 1{,}72 \times 10^{-8} \cdot \frac{0{,}12}{70\times10^{-6}
+                    \times 0{,}8\times10^{-3}} \approx 36{,}9 \text{ m}\Omega\]
+                    \[R_{85} = R_{25} \cdot \bigl[1 + \alpha_{Cu} \cdot \Delta T\bigr] = 36{,}9 \cdot \bigl[1 +
+                    0{,}00393 \times 60\bigr] \approx 45{,}6 \text{ m}\Omega\]
+                    \[U_{drop} = I \cdot R_{85} = 3 \times 0{,}0456 \approx 136{,}8 \text{ mV}\]
+                </div>
+                <p><strong>Paraméterek:</strong> Rézfajlagos ellenállás: <span class="data-point">ρ = 1.72×10⁻⁸
+                        Ωm</span>, hőmérsékleti együttható: <span class="data-point">α = 0.00393 K⁻¹</span>. A 136.8 mV
+                    a ±5%-os tápfeszültség-tűrés határán mozog 3.3 V-os sínen (= 165 mV max).</p>
+                <p><strong>Döntés:</strong> A fonyódi folyamatmérnök a DFM ellenőrzés keretében jelzi a HW tervezőnek,
+                    hogy a tápvezetéket legalább 1.2 mm szélességre kell növelni, vagy az útválasztással rövidíteni a
+                    vezékhosszt. Az ICT tesztelőállásba egy mV-érzékenységű mérési pontot kell fölvenni a feszültségesés
+                    monitorozásához sorozatgyártásban.</p>
+            </div>
+
+            <!-- REAL CALC 04: Weibull -->
+            <div class="tech-box" style="margin-bottom:2.5rem;">
+                <span class="label">VALÓS PÉLDA 04</span>
+                <h3>Weibull-féle megbízhatósági függvény és B10-élettartam becslése THT csatlakozóknál</h3>
+                <p><strong>Helyzet:</strong> Egy kritikus automotive projekt hullámforrasztott THT csatlakozóiból 50
+                    darabos mintán termikus ciklusvizsgálatot végeztek (–40 °C / +125 °C). Az első 10 meghibásodás
+                    620–1200 ciklus között következett be. Weibull-illesztéssel <span class="data-point">β = 3.2, η =
+                        1080 ciklus</span> paraméterek adódtak. Számítsuk ki a B10 értéket (az az élettartam, amelynél a
+                    populáció 10%-a meghibásodik).</p>
+                <div class="math-box" style="font-size:1.05rem; margin: 1.2rem 0;">
+                    \[R(t) = e^{-(t/\eta)^\beta}\]
+                    \[B_{10}: \quad R(t_{B10}) = 0{,}90 \;\Rightarrow\; \left(\frac{t_{B10}}{1080}\right)^{3{,}2} =
+                    -\ln(0{,}90) \approx 0{,}1054\]
+                    \[t_{B10} = 1080 \cdot (0{,}1054)^{1/3{,}2} \approx 1080 \times 0{,}598 \approx 645 \text{ ciklus}\]
+                </div>
+                <p><strong>Értékelés:</strong> A <span class="data-point">B10 = 645 ciklus</span>, azonban az automotive
+                    vevő minimum 1 000 ciklust vár el. A folyamat <strong>nem megfelelő</strong>.</p>
+                <p><strong>Javasolt beavatkozások:</strong> (1) Flux aktivitás-szint növelése a furattelítettség
+                    javítása érdekében. (2) Dwell time ±0.5 mp növelése az optimális meniszkusz-forma eléréséhez. (3)
+                    Ismételt Weibull-tesztelés a módosítások után. (4) Az FMEA dokumentum frissítése: a csatlakozók
+                    kockázati rangjának (RPN) újraszámítása az új megbízhatósági adatok alapján.</p>
+            </div>
+
+            <!-- REAL CALC 05: Coffin-Manson -->
+            <div class="tech-box" style="margin-bottom:2.5rem;">
+                <span class="label">VALÓS PÉLDA 05</span>
+                <h3>Coffin–Manson modell: forraszanyag termikus fáradásos élettartam becslése BGA alkatrészhez</h3>
+                <p><strong>Helyzet:</strong> Egy 256-labdás BGA IC kerámia-alapú tokozása CMS fonyódi gyárból kerül ki.
+                    Valós üzemi hőmérsékleti tartomány: <span class="data-point">ΔT<sub>use</sub> = 40 °C</span>.
+                    Gyorsított teszten (<span class="data-point">ΔT<sub>test</sub> = 100 °C</span>) mért medián
+                    élettartam: <strong>N₅₀<sub>test</sub> = 800 ciklus</strong>. SAC305 Coffin–Manson kitevő: <span
+                        class="data-point">n = 1.9</span>. Határozzuk meg a valóságos medián élettartamot.</p>
+                <div class="math-box" style="font-size:1.05rem; margin: 1.2rem 0;">
+                    \[\frac{N_{50,use}}{N_{50,test}} = \left(\frac{\Delta T_{test}}{\Delta T_{use}}\right)^n\]
+                    \[N_{50,use} = 800 \times \left(\frac{100}{40}\right)^{1{,}9} = 800 \times (2{,}5)^{1{,}9}\]
+                    \[(2{,}5)^{1{,}9} = e^{1{,}9 \cdot \ln 2{,}5} = e^{1{,}9 \times 0{,}916} = e^{1{,}740} \approx
+                    5{,}70\]
+                    \[N_{50,use} \approx 800 \times 5{,}70 = 4\,560 \text{ ciklus}\]
+                </div>
+                <p><strong>Eredmény:</strong> A BGA csomópontok várható medián élettartama valós üzemi körülmények
+                    között <span class="data-point">~4 560 termikus ciklus</span>. Napi 1 termikus ciklussal számolva 10
+                    éves élettartam = 3 650 ciklus, ami a medián alatti tartományba esik: a termék 50%-a 10 évet él meg.
+                </p>
+                <p><strong>Döntés:</strong> A folyamatmérnök benyújtja az eredményt a vevő megbízhatósági csapatának.
+                    Underfill (alátöltési gyanta) alkalmazása javasolt a BGA alá, amellyel az Engelmaier-modell szerint
+                    3–5×-es élettartam-javulás érhető el. Az underfill anyag CTE-illesztését validálni kell –40 / +125
+                    °C-os tartományban, hogy ne okozzon magasabb interfészfeszültséget a tokozásnál.</p>
+            </div>
+        </section>
+
+        <!-- 14. ESD Védelem és EPA -->
+        <section id="esd">
+            <h2>14. ESD Védelem és EPA (ESD Protected Area) Tervezés a Gyártósoron</h2>
+            <p>Az elektrosztatikus kisülés (ESD) láthatatlan és csendes, mégis az egyik legfőbb oka a latens hibáknak az
+                elektronikai gyártásban. Egy folyamatmérnöknek nem csupán a védekezés alapjait kell ismernie, hanem az
+                EPA kialakítását és ellenőrzését is komplexen kell kezelnie az IEC 61340-5-1 szabvány szerint. A fonyódi
+                üzemben az EPA-kialakítás közvetlen hatással van a termékek megbízhatóságára, különösen a katonai és
+                orvostechnikai szegmensekben.</p>
+            <div class="content-grid">
+                <div class="tech-box">
+                    <span class="label">EPA ALAPOK</span>
+                    <h4>ESD-védett terület tervezési elvei</h4>
+                    <p>Az EPA (ESD Protected Area) egy szigorúan meghatározott fizikai tér, ahol az elektrosztatikusan
+                        érzékeny alkatrészek (ESDS – Electrostatic Discharge Sensitive devices) biztonságan kezelhetők.
+                        Fő elemei:</p>
+                    <ul class="tech-list">
+                        <li><strong>ESD-padló:</strong> Felületi ellenállás <span class="data-point">10⁶ – 10⁹ Ω</span>
+                            között. A személyzet egyenletesen le van vezetve a föld potenciálra, elkerülve a
+                            potenciálkülönbségeket.</li>
+                        <li><strong>Csukló-csíkok (Wrist Strap):</strong> Folyamatos monitorozás ajánlott CMS-nél.
+                            Beépített ellenállás: <span class="data-point">1 MΩ</span>, amely lassú, biztonságos
+                            kisülést biztosít az ember számára.</li>
+                        <li><strong>ESD-biztonságos munkaasztalok:</strong> Sztatikusan disszipáló felületek.
+                            Ellenállás: <span class="data-point">10⁵ – 10⁹ Ω</span>. A fémes munkafelület tilos az
+                            EPA-ban.</li>
+                        <li><strong>Ionizátorok (Air Ionizer):</strong> Nagy felületek és burkolatok semlegesítésére,
+                            ahol a csukló-csík nem elegendő – például nyomtatott áramköri paneleken lévő IG (Insulating
+                            Glass) ablakoknál.</li>
+                        <li><strong>Csomagolás és szállítás:</strong> Minden ESDS komponens ESD-zárózsákban (Shielding
+                            Bag) tárolandó. A sárga csillag-szimbólum kötelező jelölés ESDS alkatrészeken az IEC
+                            61340-5-3 szerint.</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <span class="label">IEC 61340-5-1</span>
+                    <h4>EPA Auditálás és mérési protokoll</h4>
+                    <p>A CMS fonyódi üzemében az EPA-t negyedévente kötelező auditálni. A főbb mérési pontok és
+                        határértékek:</p>
+                    <ul class="tech-list">
+                        <li><strong>Padló–asztal–operátor lánc:</strong> A teljes ellenállás-lánc mérése a föld felé 750
+                            V-os teszterrel. Elfogadható: <span class="data-point">&lt; 3.5 × 10⁸ Ω</span>.</li>
+                        <li><strong>Munkaasztal felszín:</strong> Pontok közötti mérés 10 cm és 1 m távolságból
+                            „hüvelykujj" elektródákkal szabványos testterheléssel.</li>
+                        <li><strong>Felső határok:</strong> Ha bármely pont meghaladja <span class="data-point">10⁹
+                                Ω</span>, 8D korrektív akciót kell indítani.</li>
+                        <li><strong>ESD cipő teszt:</strong> Minden EPA-belépéskor a bejáratnál elhelyezett dual pedal
+                            teszt elvégzése kötelező. Automata reteszelés ajánlott, ha a cipő ellenállása nem teljesíti
+                            a küszöböt.</li>
+                    </ul>
+                    <p>Az eredményeket a <span class="data-point">CMS-EPA-LOG-2026</span> ellenőrzőlapra rögzítjük,
+                        amely közvetlen bemenet a vevői és TÜV auditokhoz.</p>
+                </div>
+            </div>
+            <div class="tech-box" style="margin-top:2rem;">
+                <h4>Az ESD-károk típusai és detektálásuk</h4>
+                <p>Az ESD-kár három kategóriába sorolható, melyből a legveszélyesebb a latens (rejtett) sérülés:</p>
+                <ul class="tech-list">
+                    <li><strong>Katasztrofális meghibásodás:</strong> Azonnal látható (rövidzár, nyílt kör). Könnyen
+                        kiszűrhető elektromos teszteléssel az ICT-állomáson.</li>
+                    <li><strong>Latens sérülés:</strong> Az alkatrész „átmegy" a gyári teszten, de a sérült oxide-réteg
+                        vagy junction miatt a tranzisztor élettartama drasztikusan csökken. Ez a legveszélyesebb – a
+                        termék a vevőhöz kerül ki és ott mondja fel a szolgálatot (Field Return = ügyfél reklamáció).
+                    </li>
+                    <li><strong>Gyengülési hatás (Degradation):</strong> Margón teljesítő paraméterek, amelyek extrém
+                        üzemi körülmények között (magas hőmérséklet, feszültség-lökés) válnak kritikussá.</li>
+                </ul>
+                <p>A latens ESD-sérülések detektálásához HTRB (High Temperature Reverse Bias) tesztet vagy dinamikus
+                    parametrikus mérést (pl. leakage current drift monitorozás 168 óra bake után) lehet alkalmazni. Ez a
+                    CMS minőségi folyamat magasabb szintjének (Class 3 – Military/Medical) kötelező audit-pontja.</p>
+            </div>
+        </section>
+
+        <!-- 15. Szakmai Fejlődés -->
+        <section id="development">
+            <h2>15. Szakmai Fejlődés, Karrierút és Tudásmenedzsment</h2>
+            <p>A CMS Electronics fonyódi üzemében eltöltött évek nemcsak a gyártástechnológiai tudást fejlesztik, hanem
+                a mérnöki gondolkodásmódot, az adatvezérelt döntéshozatalt és a lean kultúra mélyreható megértését is.
+                Ez a fejezet az elméleti képzési anyagokon túlmutatva konkrét karrierstratégiai irányokat és napi
+                rutinokat mutat meg, amelyek segítségével egy újkezelt folyamatmérnökből 12 hónapon belül elismert belső
+                szakértő válhat.</p>
+            <div class="content-grid">
+                <div class="tech-box">
+                    <span class="label">CERTIFIKÁCIÓK</span>
+                    <h4>Javasolt Szakmai Minősítések</h4>
+                    <ul class="tech-list">
+                        <li><strong>IPC-A-610 CIS/CIT:</strong> Az összeszereléstechnológia minőség-standardjait
+                            meghatározó certifikáció. CIS (Certified IPC Specialist) a belépő szintű oklevél; CIT
+                            (Certified IPC Trainer) az oktatói szint. A CMS-nél az in-house oktatói státusz komoly
+                            presztízsértékkel bír és fizetési fokozathoz kötött.</li>
+                        <li><strong>IPC J-STD-001 CIS:</strong> A forrasztási folyamatok standardja. Különösen értékes
+                            automotive és aerospace projektekben, ahol az IPC Class 3 auditok a normán felüli
+                            dokumentálást követelnek meg.</li>
+                        <li><strong>Six Sigma Green Belt:</strong> A statisztikai folyamatszabályozás (SPC),
+                            varianciaanalízis (ANOVA) és kísérlettervezés (DOE) komplex alkalmazása. A Green Belt
+                            oklevél kapunyitó a junior szintről a senior mérnöki pozícióba.</li>
+                        <li><strong>ASQ CSQE:</strong> Ha a karrierút az MES (Manufacturing Execution System) fejlesztés
+                            vagy az Industry 4.0 irányába mutat, ez a minősítés stratégiai előnyt jelent az európai EMS
+                            piacon.</li>
+                        <li><strong>Lean Manufacturing Practitioner:</strong> A SMED, Value Stream Mapping és Kaizen
+                            módszertanok formális elismerése. Szükséges feltétel a termelésirányítói karrierhez.</li>
+                    </ul>
+                </div>
+                <div class="tech-box">
+                    <span class="label">KARRIERLÉTRA</span>
+                    <h4>Tipikus Karrierút a CMS Ecosystemben</h4>
+                    <ul class="tech-list">
+                        <li><strong>Junior Process Engineer (0–2 év):</strong> Technológiai profil-karbantartás, SPI/AOI
+                            adatelemzés, belső auditok támogatása, operátor oktatás az IPC normák alapján.</li>
+                        <li><strong>Process Engineer (2–5 év):</strong> Önálló folyamat-validációk (IQ/OQ/PQ), DOE
+                            kísérletek önálló tervezése és végrehajtása, vevői auditok előkészítése, 8D riportok
+                            véglegesítése.</li>
+                        <li><strong>Senior Process Engineer / Tech Lead (5–10 év):</strong> Technológiai roadmap
+                            tervezés, NPI (New Product Introduction) folyamatok vezérlése, kapacitástervezés, multi-line
+                            optimalizáció, junior mérnökök mentorálása.</li>
+                        <li><strong>Process Engineering Manager / Technology Director:</strong> Stratégiai
+                            beruházás-előkészítés, K+F projektek irányítása, üzletfejlesztési kapcsolatok OEM
+                            ügyfelekkel, portfólió-szintű minőségi KPI-ok.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="tech-box" style="margin-top:2rem;">
+                <span class="label">NAPI RUTINOK</span>
+                <h4>Tudásépítési Szokások és Heti Ritmus</h4>
+                <p>A technológiai elit mérnökei nemcsak feladatokat hajtanak végre, hanem rendszeresen dokumentálnak,
+                    tanulnak és megosztják tudásukat. Ajánlott napi és heti rutinok a CMS fonyódi kontextusban:</p>
+                <ul class="tech-list">
+                    <li><strong>Reggeli adat-rituálé (15 perc):</strong> Az éjszakai műszak SPI volumeadatainak és az
+                        AOI defect-arányok áttekintése a MES dashboardon. Ha bármely trend ±2 standard deviációval eltér
+                        az előző heti átlagtól, az azonnali gyökérokkeresési triggert jelent.</li>
+                    <li><strong>Heti Gemba Walk:</strong> Fizikai jelenlét a sorokon, közvetlen párbeszéd az
+                        operátorokkal. A Gemba Walk az egyetlen módszer a rejtett folyamatproblémák (Hidden Factory)
+                        feltárására, amelyeket az automatikus adatgyűjtés nem mutat meg.</li>
+                    <li><strong>Havi DOE Kísérlet:</strong> Legalább egy 2-faktoros, 2-szintű (2² = 4 kísérletpont)
+                        kísérleti tervet érdemes futtatni egy processzparaméter optimalizálásra. Például: nyomási
+                        sebesség vs. szeparálási sebesség hatása a paste volume szórására.</li>
+                    <li><strong>IPC szabvány-frissítések követése:</strong> Az IPC-7711/7721 revíziókat évente
+                        frissítik. Ezek közvetlen hatással lehetnek a rework-protokollokra és az operátor oktatási
+                        anyagokra.</li>
+                    <li><strong>Belső tudásmegosztás:</strong> Havonta egy 15 perces „Tech Pill" prezentáció a csapatnak
+                        egy adott tanulságból (pl. gyökérokelemzés lezárása, DOE eredmény, iparági cikk összefoglalója).
+                        Ez a tevékenység a leggyorsabban terjeszti a reputációt belső körökben.</li>
+                </ul>
+            </div>
+            <div class="tech-box" style="margin-top:2rem;">
+                <span class="label">BELSŐ PROJEKTEK</span>
+                <h4>Első 90 Napos Projekt-Portfólió</h4>
+                <p>A beilleszkedési időszak alatt az alábbi önindított projektek bizonyítják a hozzáadott értéket és
+                    gyorsítják a presztízsépítést a csapaton belül:</p>
+                <ul class="tech-list">
+                    <li><strong>SPI Monitoring Dashboard:</strong> Power BI vagy Grafana alapú valósidejű
+                        SPI-megjelenítő. Adatforrás: a gép OPC-UA interfészéről kinyerhető volume% és offset-adatok. Ez
+                        az első belső digitalizációs projekt, amely azonnali leadership-láthatóságot biztosít.</li>
+                    <li><strong>Stencil Élettartam-elemzés:</strong> Fényképes és nyomtatásszámláló adatokon alapuló
+                        karbantartási intervallum-optimalizálás. Célérték: a stencilcsere-ciklus ±15%-os pontossággal
+                        előrejelezhető legyen.</li>
+                    <li><strong>Feeder Pick-up Error Heatmap:</strong> Géptérképen jelölve, melyik feederslothoz köthető
+                        a legtöbb pick-up hiba. Vizuális, adatalapú döntési alap a megelőző karbantartási tervhez (PM
+                        Schedule).</li>
+                    <li><strong>Átállási folyamat Changeover Video-analízis:</strong> SMED módszer szerint filmezd az
+                        átállást, majd dolgozd fel az extern/intern tevékenységek arányát. Célszám: 20%-os átállási idő
+                        csökkentés az első három hónapban – mérhető, gyors win a termelésirányítás számára.</li>
+                </ul>
+            </div>
+        </section>
+
+        <footer id="footer">
+            &copy; 2026 CMS Electronics Fonyód - Folyamatmérnöki Divízió | Projekt: "Advanced Integration Manual v3.0" |
+            Készült: 2026. Május 6.
+        </footer>
+    </main>
+
+    <script>
+        // Statistics Charts
+        const defectCtx = document.getElementById('defectChart').getContext('2d');
+        new Chart(defectCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pasztázás (SPI)', 'Beültetés', 'Component Shift', 'Forraszhíd', 'Missing'],
+                datasets: [{
+                    label: 'Selejt arány (PPM)',
+                    data: [450, 120, 80, 50, 30],
+                    backgroundColor: '#3b82f6'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        const oeeCtx = document.getElementById('oeeChart').getContext('2d');
+        new Chart(oeeCtx, {
+            type: 'line',
+            data: {
+                labels: ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'],
+                datasets: [{
+                    label: 'OEE %',
+                    data: [72, 78, 75, 82, 85],
+                    borderColor: '#ec4899',
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(236, 72, 153, 0.1)'
+                }]
+            },
+            options: { responsive: true, scales: { y: { min: 60, max: 100 } } }
+        });
+
+        const partsCtx = document.getElementById('partsPie').getContext('2d');
+        new Chart(partsCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Passzív (0402-01005)', 'IC / BGA', 'Konnektor', 'Egyéb'],
+                datasets: [{
+                    data: [65, 20, 10, 5],
+                    backgroundColor: ['#3b82f6', '#ec4899', '#f59e0b', '#10b981'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom' } }
+            }
+        });
+
+        // Intersection Observer for Active Menu
+        const sections = document.querySelectorAll('section, .hero');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id') || 'intro';
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
