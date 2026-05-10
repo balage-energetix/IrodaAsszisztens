@@ -19,12 +19,12 @@
         :root {
             --bg-color: #f8fafc;
             --sidebar-bg: #0f172a;
-            --accent-primary: #2563eb;
-            --accent-secondary: #0ea5e9;
-            --text-heading: #1e293b;
-            --text-body: #334155;
+            --accent-primary: #003366;
+            --accent-secondary: #004488;
+            --text-heading: #000000;
+            --text-body: #000000;
             --border-color: #e2e8f0;
-            --nanobanana-glow: rgba(59, 130, 246, 0.4);
+            --nanobanana-glow: rgba(0, 51, 102, 0.4);
         }
 
         * {
@@ -71,8 +71,10 @@
 
         .nav-header p {
             font-size: 0.7rem;
-            opacity: 0.6;
+            color: #ffffff;
+            font-weight: 700;
             margin-top: 0.5rem;
+            opacity: 0.9;
         }
 
         .nav-links {
@@ -84,23 +86,25 @@
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: #ffffff;
             text-decoration: none;
             font-size: 0.85rem;
             transition: color 0.2s;
             display: block;
             padding: 0.5rem 0.75rem;
             border-radius: 6px;
+            font-weight: 700;
         }
 
         .nav-links a:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .nav-links a.active {
-            color: #fff;
+            color: #ffffff;
             background: var(--accent-primary);
+            font-weight: 800;
         }
 
         /* Main Content area */
@@ -272,8 +276,18 @@
         }
 
         .btn-velxio { background: #000; color: #fff; }
-        .btn-blueprint { background: #2563eb; color: #fff; }
+        .btn-blueprint { background: #003366; color: #fff; }
         .btn-tool:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); filter: brightness(1.1); }
+
+        /* Highlight styles */
+        strong, u, .data-point {
+            color: #003366;
+            font-weight: 700;
+        }
+        
+        .label, .badge {
+            background-color: #003366 !important;
+        }
     </style>
 </head>
 
@@ -282,7 +296,7 @@
     <nav>
         <div class="nav-header">
             <h1><strong>Elektronikai gyár</strong></h1>
-            <p>PROCESS ENGINEERING DIVISON | FONYÓD</p>
+            <p>PROCESS ENGINEERING DIVISON</p>
         </div>
         <ul class="nav-links">
             <li><a href="#intro" class="active">01. Bevezetés és Integráció</a></li>
@@ -295,12 +309,11 @@
             <li><a href="#reliability">08. Megbízhatósági Vizsgálatok</a></li>
             <li><a href="#management">09. Management és Lean</a></li>
             <li><a href="#traceability">10. Traceability: Nyomonkövethetőség</a></li>
-            <li><a href="#lifestyle">11. Logisztika, Étkezés és Utazás</a></li>
-            <li><a href="#calculations">12. Mérnöki Számítások és Képletek</a></li>
-            <li><a href="#statistics">13. Folyamat Statisztikák</a></li>
-            <li><a href="#realcalc">14. 5 Valós Életbeli Számítás</a></li>
-            <li><a href="#esd">15. <strong>ESD Védelem</strong> és <strong>EPA</strong> Tervezés</a></li>
-            <li><a href="#development">16. Szakmai Fejlődés és Karrierút</a></li>
+            <li><a href="#calculations">11. Mérnöki Számítások és Képletek</a></li>
+            <li><a href="#statistics">12. Folyamat Statisztikák</a></li>
+            <li><a href="#realcalc">13. 5 Valós Életbeli Számítás</a></li>
+            <li><a href="#esd">14. <strong>ESD Védelem</strong> és <strong>EPA</strong> Tervezés</a></li>
+            <li><a href="#development">15. Szakmai Fejlődés és Karrierút</a></li>
         </ul>
     </nav>
 
@@ -314,12 +327,13 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM9 9l6 6m0-6l-6 6"/></svg>
                 BLUEPRINT.AM
             </a>
+
         </div>
 
         <div class="hero" id="intro">
-            <div class="meta">DOCUMENT ID: <strong>Elektronikai gyár</strong>-PE-2026-FONYOD-001 | v3.0 | CONFIDENTIAL</div>
+            <div class="meta">DOCUMENT ID: <strong>Elektronikai gyár</strong>-PE-2026-001 | v3.0 | CONFIDENTIAL</div>
             <h1>Professzionális Beilleszkedési és Folyamat-optimalizálási Kézikönyv</h1>
-            <p class="subtitle" style="font-size: 1.1rem; margin-top: 0.5rem;">Az <strong>Elektronikai gyár</strong> fonyódi egységének folyamatmérnöki
+            <p class="subtitle" style="font-size: 1.1rem; margin-top: 0.5rem;">Az <strong>Elektronikai gyár</strong> folyamatmérnöki
                 feladatai, technológiai mélységei és stratégiai irányelvei a 2026. júniusi munkakezdéshez.</p>
         </div>
 
@@ -328,15 +342,15 @@
             <h2>01. Stratégiai Beilleszkedés és Környezet</h2>
             <div class="content-grid">
                 <div>
-                    <h3>A Fonyódi Gyáregység Dinamikája</h3>
-                    <p>Az <strong>Elektronikai gyár</strong> fonyódi üzeme az európai <strong>EMS</strong> (Electronic Manufacturing Services) piac
-                        meghatározó szereplője. <strong>folyamatmérnökként</strong> te vagy az a híd, amely összeköti a tervezőaszTALt a
-                        fizikai valósággal. A szállásod a Fő utcán helyezkedik el, ami kiváló logisztikai előnyt
+                    <h3>A Gyáregység Dinamikája</h3>
+                    <p>Az <strong>Elektronikai gyár</strong> üzeme az európai <strong>EMS</strong> (Electronic Manufacturing Services) piac
+                        meghatározó szereplője. <strong>folyamatmérnökként</strong> te vagy az a híd, amely összeköti a tervezőasztalt a
+                        fizikai valósággal. A szállásod központi helyen helyezkedik el, ami kiváló logisztikai előnyt
                         biztosít: az üzem közelsége miatt a "reggeli vizit" (<u>Gemba Walk</u>) során frissen, az éjszakai
                         műszak adatainak ismeretében érkezhetsz meg a sorokhoz.</p>
                     <p>Az open-office környezet 15 fővel, mérnöki és operatív vezetőkkel sűrű információs központ. Egy
                         férfi dominanciájú közösségben a technikai pontosság és a problémamegoldó képesség a legfőbb
-                        valuta. Kerüld a „TALán” és a „szerintem” kifejezéseket; válaszolj statisztikai
+                        valuta. Kerüld a „talán” és a „szerintem” kifejezéseket; válaszolj statisztikai
                         mintavételezésekkel és <span class="data-point"><u>Cp/Cpk</u></span> mutatókkal.</p>
                 </div>
                 <div class="tech-box">
@@ -355,7 +369,7 @@
         </section>
 
         <!-- 02. <strong>SPI</strong> -->
-        <section id="<strong>spi</strong>">
+        <section id="spi">
             <h2>02. <strong>Solder Paste Inspection</strong> (<strong>SPI</strong>) Technológia</h2>
             <div class="illustration-container"
                 style="background:#0a1628; display:flex; align-itEMS:center; justify-content:center; overflow:hidden;">
@@ -449,7 +463,7 @@
                     <ellipse cx="450" cy="200" rx="300" ry="180" fill="url(#scanGlow)" />
                     <!-- Labels -->
                     <text x="20" y="390" fill="#3b82f6" font-family="JetBrains Mono, monospace" font-size="11"
-                        opacity="0.8">NANOBANANA VOLUMETRIC <strong>SPI</strong> SCAN v3 | <strong>Elektronikai gyár</strong> FONYÓD</text>
+                        opacity="0.8">NANOBANANA VOLUMETRIC <strong>SPI</strong> SCAN v3 | <strong>Elektronikai gyár</strong></text>
                     <text x="800" y="30" fill="#ec4899" font-family="JetBrains Mono, monospace" font-size="10"
                         text-anchor="end">LIVE</text>
                     <circle cx="810" cy="25" r="5" fill="#ec4899">
@@ -470,7 +484,7 @@
                         Ha a nyomás túl magas, a lehúzó „kijárja” a pasztát a nagyobb apertúrákból (scooping), ami
                         elégtelen forrasztást eredményez. </p>
                     <ul class="tech-list">
-                        <li><strong>Area Ratio</strong> (A_r): <span class="data-point">A_r = A_bottom / A_walls</span>.
+                        <li><strong>Area Ratio</strong> (A_r): <span class="data-point">\(A_r = \frac{A_{bottom}}{A_{walls}}\)</span>.
                             Ha A_r < 0.66, a paszta-kioldás instabillá válik. Itt kell bevezetni a nano-bevonatos
                                 (nanocoated) stencileket.</li>
                         <li>SEPAration Speed: A stencil és a PCB elválási sebessége befolyásolja a
@@ -492,7 +506,7 @@
         <!-- 03. Placement -->
         <section id="placement">
             <h2>03. High-Speed Component Placement</h2>
-            <p>Az <strong>Elektronikai gyár</strong> fonyódi sorain a sebesség és a pontosság harca folyik. A modern <strong>Pick & Place</strong> gépek <span
+            <p>Az <strong>Elektronikai gyár</strong> sorain a sebesség és a pontosság harca folyik. A modern <strong>Pick & Place</strong> gépek <span
                     class="data-point">linear motor</span> hajtásúak, ahol a pozicionálási hiba mikronos nagyságrendű.
                 Egy folyamatmérnöknek értenie kell a vákuum-görbéket és a komponensek súlypont-számítását.</p>
             <div class="tech-list">
@@ -546,7 +560,7 @@
             <p>A <strong>Hullámforrasztás</strong> a mechanikai integritás záloga a csatlakozók és nagyfeszültségű alkatrészek esetén. A
                 folyadékmechanika törvényei (Bernoulli-elv) itt közvetlenül érvényesülnek a fúvókáknál.</p>
             <div class="tech-box" style="margin-top:1rem;">
-                <h4>Kritikus Paraméterek a fonyódi sorokon:</h4>
+                <h4>Kritikus Paraméterek a sorokon:</h4>
                 <ul class="tech-list">
                     <li>Flux Coverage: A folyasztószer penetrációja a furatokba (Through-hole capillary
                         action). A spray-fluxer fúvóka szórási képét és a cseppméretet (atomization) hetente validálni
@@ -622,8 +636,7 @@
             <div class="tech-box-grid">
                 <div class="tech-item">
                     <h4><strong>SMED</strong> (Single Minute Exchange of Die)</h4>
-                    <p>A sor-átállási idő csökkentése a leggyorsabb módja az eredményesség javításának. A fonyódi
-                        sorokon a cél a <span class="data-point">
+                    <p>A sor-átállási idő csökkentése a leggyorsabb módja az eredményesség javításának. A cél a <span class="data-point">
                             < 30 perc</span> átállási idő.</p>
                 </div>
                 <div class="tech-item">
@@ -642,7 +655,7 @@
         <!-- 10. Traceability -->
         <section id="traceability">
             <h2>11. Traceability: Teljes körű Nyomonkövethetőség a Gyártásban</h2>
-            <p>Az <strong>Elektronikai gyár</strong> fonyódi üzemében a <strong>Traceability</strong> nem csupán egy vevői elvárás, hanem a minőségbiztosítás alapköve. Minden egyes alkatrész (<strong>Article Number</strong>) életútja a raktárba érkezéstől a késztermék kiszállításáig digitálisan rögzített. Ez a rendszer teszi lehetővé, hogy egy esetleges hiba esetén percek alatt behatárolható legyen az érintett <u>Batch</u> vagy <u>Date Code</u>.</p>
+            <p>Az <strong>Elektronikai gyár</strong> üzemében a <strong>Traceability</strong> nem csupán egy vevői elvárás, hanem a minőségbiztosítás alapköve. Minden egyes alkatrész (<strong>Article Number</strong>) életútja a raktárba érkezéstől a késztermék kiszállításáig digitálisan rögzített. Ez a rendszer teszi lehetővé, hogy egy esetleges hiba esetén percek alatt behatárolható legyen az érintett <u>Batch</u> vagy <u>Date Code</u>.</p>
             
             <div class="content-grid">
                 <div class="tech-box">
@@ -683,60 +696,9 @@
             </div>
         </section>
 
-        <!-- 11. Lifestyle -->
-        <section id="lifestyle">
-            <h2>12. Logisztika, Étkezés és Utazás</h2>
-            <div class="content-grid">
-                <div>
-                    <h3>Bevásárlás Fonyódon</h3>
-                    <p>A szállásod a Fő utcán van, ami központi hely. A mindennapi szükségletekhez az alábbi egységek
-                        érhetőek el:</p>
-                    <ul class="tech-list">
-                        <li>Lidl: Ady Endre utca 57-59. Modern, nagy választékkal, ideális a heti
-                            nagybevásárláshoz.</li>
-                        <li>Spar Partner: Ady Endre utca 9-11. Közelebb van a központhoz, gyors napi
-                            cikkekhez tökéletes.</li>
-                        <li>Fonyódi Piac: Szerdánként és szombatonként (nyáron hétfőn is) a Balaton
-                            legnagyobb piaca. Friss őstermelői zöldség, gyümölcs és helyi termékek lelőhelye.</li>
-                    </ul>
-                </div>
-                <div class="tech-box">
-                    <span class="label">FOOD DELIVERY</span>
-                    <h4>Gasztronómia és Házhozszállítás</h4>
-                    <p>A fonyódi üzemben a munkanapok sűrűek. Ha nem akarsz főzni, a Foodora applikáció
-                        Fonyódon stabilan működik.</p>
-                    <ul class="tech-list">
-                        <li>Torony Étterem: Magyaros fogások és haTALmas adagok. Gyors a kiszállításuk.
-                        </li>
-                        <li>Piccoló Pizzéria: Olaszos tészták és pizzák a vékony tésztás iskola
-                            kedvelőinek.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="tech-box" style="margin-top:2rem;">
-                <h3>Hétvégi ingázás: Fonyód – Nagyatád</h3>
-                <p>Mivel a hétvégét Nagyatádon töltöd, a péntek délutáni és vasárnap délutáni közlekedés
-                    kulcsfloatosabb. Közvetlen járat ritka, de az átszállás optimalizálható.</p>
-                <div class="tech-box-grid">
-                    <div class="tech-item">
-                        <span class="badge">PÉNTEK DÉLUTÁN</span>
-                        <p>Cél: Nagyatád. A munkavégzés után a leggyorsabb opció a MÁV vonat Fonyódról
-                            Kaposvár felé, majd onnan buszos vagy vonatos átszállás Nagyatádra.</p>
-                    </div>
-                    <div class="tech-item">
-                        <span class="badge">VASÁRNAP DÉLUTÁN</span>
-                        <p>Vissza Fonyódra. A vasárnap 15:00-17:00 közötti blokkban több Volánbusz
-                            csatlakozás is indul Nagyatádról Kaposvár érintésével. Használd a <span
-                                class="data-point">menetrendek.hu</span> keresőt!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- 12. Calculations -->
         <section id="calculations">
-            <h2>13. Mérnöki Számítások és Képletek</h2>
+            <h2>11. Mérnöki Számítások és Képletek</h2>
             <p>Egy folyamatmérnök munkája nem ér véget a megfigyelésnél; az adatok számszerűsítése és a fizikai
                 törvényszerűségek alkalmazása elengedhetetlen a prediktív karbantartáshoz és folyamat-optimalizáláshoz.
             </p>
@@ -796,9 +758,9 @@
                     <img src="img/img_oee.png" alt="<strong>OEE</strong> Gauge Visualization"
                         style="width:100%;height:150px;object-fit:cover;border-radius:8px;margin-bottom:1rem;display:block;">
                     <h3><strong>OEE</strong> (Overall Equipment Effectiveness) kalkuláció</h3>
-                    <p>Az <strong>Elektronikai gyár</strong> fonyódi SMT sorának hatékonysága egy 8 órás műszakban:</p>
+                    <p>Az <strong>Elektronikai gyár</strong> SMT sorának hatékonysága egy 8 órás műszakban:</p>
                     <div class="math-box" style="font-size:1.1rem; margin-bottom:1rem;">
-                        \[<strong>OEE</strong> = A \times P \times Q = 0.875 \times 0.90 \times 0.985 \approx 77.6\%\]
+                        \[OEE = A \times P \times Q = 0.875 \times 0.90 \times 0.985 \approx 77.6\%\]
                     </div>
                 </div>
 
@@ -1058,9 +1020,9 @@
 
         <!-- 12. Statistics -->
         <section id="statistics">
-            <h2>13. Folyamat Statisztikák és KPI Analitika</h2>
+            <h2>12. Folyamat Statisztikák és KPI Analitika</h2>
             <p>A gyártás során gyűjtött adatok vizualizációja segít a trendek felismerésében és a preventív
-                beavatkozásban. Az alábbi grafikonok a fonyódi üzem tipikus mutatóit szemléltetik.</p>
+                beavatkozásban. Az alábbi grafikonok az üzem tipikus mutatóit szemléltetik.</p>
 
             <div class="content-grid">
                 <div class="tech-box">
@@ -1081,7 +1043,7 @@
                     <div style="width: 300px;"><canvas id="partsPie" height="300"></canvas></div>
                     <div style="flex: 1; min-width: 300px; padding: 2rem;">
                         <h4>Technológiai Komplexitás</h4>
-                        <p>Az <strong>Elektronikai gyár</strong> fonyódi üzemében a miniaturizáció (0201, 01005 passzívok) és a komplex <strong>BGA</strong>/QFN
+                        <p>Az <strong>Elektronikai gyár</strong> üzemében a miniaturizáció (0201, 01005 passzívok) és a komplex <strong>BGA</strong>/QFN
                             tokozások dominálnak, ami magas precizitású <strong>SPI</strong>/<strong>AOI</strong> beállítást követel meg.</p>
                     </div>
                 </div>
@@ -1090,8 +1052,8 @@
 
         <!-- 13. Valós Életbeli Számítások -->
         <section id="realcalc">
-            <h2>14. Valós Életbeli Számítások – 5 Részletes Esettanulmány</h2>
-            <p>A következő fejezet öt, a <strong>Elektronikai gyár</strong> fonyódi üzemének mindennapi valóságából merített mérnöki számítást mutat be
+            <h2>13. Valós Életbeli Számítások – 5 Részletes Esettanulmány</h2>
+            <p>A következő fejezet öt, az <strong>Elektronikai gyár</strong> üzemének mindennapi valóságából merített mérnöki számítást mutat be
                 lépésről lépésre. Minden példa bemutatja a kiindulási adatokat, az alkalmazott képletet, a numerikus
                 eredményt és a mérnöki döntést, amelyet az eredmény indukál. Ezek a számítások valós gyártósoron
                 végrehajtott méréseken és iparági benchmarkokon alapulnak.</p>
@@ -1100,7 +1062,7 @@
             <div class="tech-box" style="margin-bottom:2.5rem;">
                 <span class="label">VALÓS PÉLDA 01</span>
                 <h3>DPPM (Defective Parts Per Million) és hibaarány-célérték meghatározása</h3>
-                <p>Helyzet: Egy <strong>Elektronikai gyár</strong> fonyódi SMT soron egy hét alatt 184 000 alkatrészt helyeztek be. Az
+                <p>Helyzet: Egy <strong>Elektronikai gyár</strong> SMT soron egy hét alatt 184 000 alkatrészt helyeztek be. Az
                     <strong>AOI</strong> az automatikus optikai vizsgálat során 37 hibás alkatrészt jelzett, amelyből a technológus 12
                     darabot valós hibának minősített (false call = 25 db). Mennyi a valós DPPM, és teljesül-e a vevő
                     álTAL elvárt <span class="data-point">&lt; 100 DPPM</span> küszöb?</p>
@@ -1133,7 +1095,7 @@
                     \[T(90) = 28 + 217 \cdot e^{-3{,}15} \approx 28 + 217 \cdot 0{,}043 \approx 37{,}3 \text{ °C}\]
                 </div>
                 <p>Paraméterek: A hűtési állandót (<span class="data-point">k = 0.035 s⁻¹</span>)
-                    termoelem mérésekkel határozták meg a fonyódi laborban egy tipikus FR4 PCB-re. A számítás értelmében
+                    termoelem mérésekkel határozták meg a laborban egy tipikus FR4 PCB-re. A számítás értelmében
                     90 másodperccel a kemence elhagyása után a PCB hőmérséklete <span class="data-point">~37.3
                         °C</span>, ami jóval a 55 °C-os biztonsági határ alatt van.</p>
                 <p>Döntés: Az <strong>AOI</strong> ellenőrzés biztonságosan megkezdhető. Fejlesztési javaslat: egy NTC
@@ -1160,7 +1122,7 @@
                 <p>Paraméterek: Rézfajlagos ellenállás: <span class="data-point">ρ = 1.72×10⁻⁸
                         Ωm</span>, hőmérsékleti együttható: <span class="data-point">α = 0.00393 K⁻¹</span>. A 136.8 mV
                     a ±5%-os tápfeszültség-tűrés határán mozog 3.3 V-os sínen (= 165 mV max).</p>
-                <p>Döntés: A fonyódi folyamatmérnök a DFM ellenőrzés keretében jelzi a HW tervezőnek,
+                <p>Döntés: A folyamatmérnök a DFM ellenőrzés keretében jelzi a HW tervezőnek,
                     hogy a tápvezetéket legalább 1.2 mm szélességre kell növelni, vagy az útválasztással rövidíteni a
                     vezékhosszt. Az ICT tesztelőállásba egy mV-érzékenységű mérési pontot kell fölvenni a feszültségesés
                     monitorozásához sorozatgyártásban.</p>
@@ -1193,7 +1155,7 @@
             <div class="tech-box" style="margin-bottom:2.5rem;">
                 <span class="label">VALÓS PÉLDA 05</span>
                 <h3>Coffin–Manson modell: forraszanyag termikus fáradásos élettartam becslése <strong>BGA</strong> alkatrészhez</h3>
-                <p>Helyzet: Egy 256-labdás <strong>BGA</strong> IC kerámia-alapú tokozása <strong>Elektronikai gyár</strong> fonyódi gyárból kerül ki.
+                <p>Helyzet: Egy 256-labdás <strong>BGA</strong> IC kerámia-alapú tokozása az <strong>Elektronikai gyár</strong> üzeméből kerül ki.
                     Valós üzemi hőmérsékleti tartomány: <span class="data-point">ΔT<sub>use</sub> = 40 °C</span>.
                     Gyorsított teszten (<span class="data-point">ΔT<sub>test</sub> = 100 °C</span>) mért medián
                     élettartam: N₅₀<sub>test</sub> = 800 ciklus. <u>SAC305</u> Coffin–Manson kitevő: <span
@@ -1218,7 +1180,7 @@
 
         <!-- 14. <strong>ESD Védelem</strong> és <strong>EPA</strong> -->
         <section id="esd">
-            <h2>15. <strong>ESD Védelem</strong> és <strong>EPA</strong> (ESD Protected Area) Tervezés a Gyártósoron</h2>
+            <h2>14. <strong>ESD Védelem</strong> és <strong>EPA</strong> (ESD Protected Area) Tervezés a Gyártósoron</h2>
             <p>Az elektrosztatikus kisülés (ESD) láthatatlan és csendes, mégis az egyik legfőbb oka a latens hibáknak az
                 Elektronikai gyártásban. Egy folyamatmérnöknek nem csupán a védekezés alapjait kell ismernie, hanem az
                 <strong>EPA</strong> kialakítását és ellenőrzését is komplexen kell kezelnie az IEC 61340-5-1 szabvány szerint. A fonyódi
@@ -1252,7 +1214,7 @@
                 <div class="tech-box">
                     <span class="label">IEC 61340-5-1</span>
                     <h4><strong>EPA</strong> Auditálás és mérési protokoll</h4>
-                    <p>Az <strong>Elektronikai gyár</strong> fonyódi üzemében az <strong>EPA</strong>-t negyedévente kötelező auditálni. A főbb mérési pontok és
+                    <p>Az <strong>Elektronikai gyár</strong> üzemében az <strong>EPA</strong>-t negyedévente kötelező auditálni. A főbb mérési pontok és
                         határértékek:</p>
                     <ul class="tech-list">
                         <li>Padló–aszTAL–operátor lánc: A teljes ellenállás-lánc mérése a föld felé 750
@@ -1290,9 +1252,9 @@
 
         <!-- 15. Szakmai Fejlődés -->
         <section id="development">
-            <h2>16. Szakmai Fejlődés, Karrierút és Tudásmenedzsment</h2>
-            <p>Az <strong>Elektronikai gyár</strong> fonyódi üzemében eltöltött évek nemcsak a gyártástechnológiai tudást fejlesztik, hanem
-                a mérnöki gondolkodásmódot, az adatvezérelt döntéshozaTALt és a lean kultúra mélyreható megértését is.
+            <h2>15. Szakmai Fejlődés, Karrierút és Tudásmenedzsment</h2>
+            <p>Az <strong>Elektronikai gyár</strong> üzemében eltöltött évek nemcsak a gyártástechnológiai tudást fejlesztik, hanem
+                a mérnöki gondolkodásmódot, az adatvezérelt döntéshozatalt és a lean kultúra mélyreható megértését is.
                 Ez a fejezet az elméleti képzési anyagokon túlmutatva konkrét karrierstratégiai irányokat és napi
                 rutinokat mutat meg, amelyek segítségével egy újkezelt folyamatmérnökből 12 hónapon belül elismert belső
                 szakértő válhat.</p>
@@ -1340,7 +1302,7 @@
                 <span class="label">NAPI RUTINOK</span>
                 <h4>Tudásépítési Szokások és Heti Ritmus</h4>
                 <p>A technológiai elit mérnökei nemcsak feladatokat hajtanak végre, hanem rendszeresen dokumentálnak,
-                    tanulnak és megosztják tudásukat. Ajánlott napi és heti rutinok a <strong>Elektronikai gyár</strong> fonyódi kontextusban:</p>
+                    tanulnak és megosztják tudásukat. Ajánlott napi és heti rutinok a <strong>Elektronikai gyár</strong> kontextusban:</p>
                 <ul class="tech-list">
                     <li>Reggeli adat-rituálé (15 perc): Az éjszakai műszak <strong>SPI</strong> volumeadatainak és az
                         <strong>AOI</strong> defect-arányok áttekintése a MES dashboardon. Ha bármely trend ±2 standard deviációval eltér
@@ -1367,12 +1329,12 @@
                 <ul class="tech-list">
                     <li><strong>SPI</strong> Monitoring Dashboard: Power BI vagy Grafana alapú valósidejű
                         <strong>SPI</strong>-megjelenítő. Adatforrás: a gép OPC-UA interfészéről kinyerhető volume% és offset-adatok. Ez
-                        az első belső digiTALizációs projekt, amely azonnali leadership-láthatóságot biztosít.</li>
+                        az első belső digitalizációs projekt, amely azonnali leadership-láthatóságot biztosít.</li>
                     <li>Stencil Élettartam-elemzés: Fényképes és nyomtatásszámláló adatokon alapuló
                         karbantartási intervallum-optimalizálás. Célérték: a stencilcsere-ciklus ±15%-os pontossággal
                         előrejelezhető legyen.</li>
                     <li>Feeder Pick-up Error Heatmap: Géptérképen jelölve, melyik feederslothoz köthető
-                        a legtöbb pick-up hiba. Vizuális, adaTALapú döntési alap a megelőző karbantartási tervhez (PM
+                        a legtöbb pick-up hiba. Vizuális, adatlapú döntési alap a megelőző karbantartási tervhez (PM
                         Schedule).</li>
                     <li>Átállási folyamat Changeover Video-analízis: <strong>SMED</strong> módszer szerint filmezd az
                         átállást, majd dolgozd fel az extern/intern tevékenységek arányát. Célszám: 20%-os átállási idő
@@ -1382,7 +1344,7 @@
         </section>
 
         <footer id="footer">
-            &copy; 2026 <strong>Elektronikai gyár</strong> Fonyód - Folyamatmérnöki Divízió | Projekt: "Advanced Integration Manual v3.0" |
+            &copy; 2026 <strong>Elektronikai gyár</strong> - Folyamatmérnöki Divízió | Projekt: "Advanced Integration Manual v3.0" |
             Készült: 2026. Május 6.
         </footer>
     </main>
@@ -1393,11 +1355,11 @@
         new Chart(defectCtx, {
             type: 'bar',
             data: {
-                labels: ['Pasztázás (<strong>SPI</strong>)', 'Beültetés', 'Component Shift', 'Forraszhíd', 'Missing'],
+                labels: ['Pasztázás (SPI)', 'Beültetés', 'Component Shift', 'Forraszhíd', 'Missing'],
                 datasets: [{
                     label: 'Selejt arány (PPM)',
                     data: [450, 120, 80, 50, 30],
-                    backgroundColor: '#3b82f6'
+                    backgroundColor: '#003366'
                 }]
             },
             options: {
@@ -1413,12 +1375,12 @@
             data: {
                 labels: ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'],
                 datasets: [{
-                    label: '<strong>OEE</strong> %',
+                    label: 'OEE %',
                     data: [72, 78, 75, 82, 85],
-                    borderColor: '#ec4899',
+                    borderColor: '#003366',
                     tension: 0.4,
                     fill: true,
-                    backgroundColor: 'rgba(236, 72, 153, 0.1)'
+                    backgroundColor: 'rgba(0, 51, 102, 0.1)'
                 }]
             },
             options: { responsive: true, scales: { y: { min: 60, max: 100 } } }
@@ -1428,10 +1390,10 @@
         new Chart(partsCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Passzív (0402-01005)', 'IC / <strong>BGA</strong>', 'Konnektor', 'Egyéb'],
+                labels: ['Passzív (0402-01005)', 'IC / BGA', 'Konnektor', 'Egyéb'],
                 datasets: [{
                     data: [65, 20, 10, 5],
-                    backgroundColor: ['#3b82f6', '#ec4899', '#f59e0b', '#10b981'],
+                    backgroundColor: ['#003366', '#004488', '#0055aa', '#10b981'],
                     borderWidth: 0
                 }]
             },
@@ -1456,7 +1418,7 @@
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
+                if (link.getAttribute('href') && link.getAttribute('href').includes(current)) {
                     link.classList.add('active');
                 }
             });
